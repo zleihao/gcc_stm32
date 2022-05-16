@@ -1,0 +1,433 @@
+ARM GAS  /tmp/ccIkhYDu.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"bsp_debug_usart.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.DEBUG_USART_Config,"ax",%progbits
+  18              		.align	1
+  19              		.global	DEBUG_USART_Config
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	DEBUG_USART_Config:
+  27              	.LFB126:
+  28              		.file 1 "./Hardware/usart/bsp_debug_usart.c"
+   1:./Hardware/usart/bsp_debug_usart.c **** /**
+   2:./Hardware/usart/bsp_debug_usart.c ****   ******************************************************************************
+   3:./Hardware/usart/bsp_debug_usart.c ****   * @file    bsp_debug_usart.c
+   4:./Hardware/usart/bsp_debug_usart.c ****   * @author  fire
+   5:./Hardware/usart/bsp_debug_usart.c ****   * @version V1.0
+   6:./Hardware/usart/bsp_debug_usart.c ****   * @date    2016-xx-xx
+   7:./Hardware/usart/bsp_debug_usart.c ****   * @brief   使用串口1，重定向c库printf函数到usart端口，中断接收模式
+   8:./Hardware/usart/bsp_debug_usart.c ****   ******************************************************************************
+   9:./Hardware/usart/bsp_debug_usart.c ****   * @attention
+  10:./Hardware/usart/bsp_debug_usart.c ****   *
+  11:./Hardware/usart/bsp_debug_usart.c ****   * 实验平台:野火 STM32 F429 开发板  
+  12:./Hardware/usart/bsp_debug_usart.c ****   * 论坛    :http://www.firebbs.cn
+  13:./Hardware/usart/bsp_debug_usart.c ****   * 淘宝    :http://fire-stm32.taobao.com
+  14:./Hardware/usart/bsp_debug_usart.c ****   *
+  15:./Hardware/usart/bsp_debug_usart.c ****   ******************************************************************************
+  16:./Hardware/usart/bsp_debug_usart.c ****   */ 
+  17:./Hardware/usart/bsp_debug_usart.c ****   
+  18:./Hardware/usart/bsp_debug_usart.c **** #include "bsp_debug_usart.h"
+  19:./Hardware/usart/bsp_debug_usart.c **** 
+  20:./Hardware/usart/bsp_debug_usart.c **** UART_HandleTypeDef UartHandle;
+  21:./Hardware/usart/bsp_debug_usart.c ****  
+  22:./Hardware/usart/bsp_debug_usart.c **** 
+  23:./Hardware/usart/bsp_debug_usart.c ****  /**
+  24:./Hardware/usart/bsp_debug_usart.c ****   * @brief  DEBUG_USART GPIO 配置,工作模式配置。115200 8-N-1
+  25:./Hardware/usart/bsp_debug_usart.c ****   * @param  无
+  26:./Hardware/usart/bsp_debug_usart.c ****   * @retval 无
+  27:./Hardware/usart/bsp_debug_usart.c ****   */  
+  28:./Hardware/usart/bsp_debug_usart.c **** void DEBUG_USART_Config(void)
+  29:./Hardware/usart/bsp_debug_usart.c **** { 
+  29              		.loc 1 29 1 view -0
+ARM GAS  /tmp/ccIkhYDu.s 			page 2
+
+
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+  30:./Hardware/usart/bsp_debug_usart.c ****   
+  31:./Hardware/usart/bsp_debug_usart.c ****   UartHandle.Instance          = DEBUG_USART;
+  38              		.loc 1 31 3 view .LVU1
+  39              		.loc 1 31 32 is_stmt 0 view .LVU2
+  40 0002 0848     		ldr	r0, .L3
+  41 0004 084B     		ldr	r3, .L3+4
+  42 0006 0360     		str	r3, [r0]
+  32:./Hardware/usart/bsp_debug_usart.c ****   
+  33:./Hardware/usart/bsp_debug_usart.c ****   UartHandle.Init.BaudRate     = DEBUG_USART_BAUDRATE;
+  43              		.loc 1 33 3 is_stmt 1 view .LVU3
+  44              		.loc 1 33 32 is_stmt 0 view .LVU4
+  45 0008 4FF4E133 		mov	r3, #115200
+  46 000c 4360     		str	r3, [r0, #4]
+  34:./Hardware/usart/bsp_debug_usart.c ****   UartHandle.Init.WordLength   = UART_WORDLENGTH_8B;
+  47              		.loc 1 34 3 is_stmt 1 view .LVU5
+  48              		.loc 1 34 32 is_stmt 0 view .LVU6
+  49 000e 0023     		movs	r3, #0
+  50 0010 8360     		str	r3, [r0, #8]
+  35:./Hardware/usart/bsp_debug_usart.c ****   UartHandle.Init.StopBits     = UART_STOPBITS_1;
+  51              		.loc 1 35 3 is_stmt 1 view .LVU7
+  52              		.loc 1 35 32 is_stmt 0 view .LVU8
+  53 0012 C360     		str	r3, [r0, #12]
+  36:./Hardware/usart/bsp_debug_usart.c ****   UartHandle.Init.Parity       = UART_PARITY_NONE;
+  54              		.loc 1 36 3 is_stmt 1 view .LVU9
+  55              		.loc 1 36 32 is_stmt 0 view .LVU10
+  56 0014 0361     		str	r3, [r0, #16]
+  37:./Hardware/usart/bsp_debug_usart.c ****   UartHandle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
+  57              		.loc 1 37 3 is_stmt 1 view .LVU11
+  58              		.loc 1 37 32 is_stmt 0 view .LVU12
+  59 0016 8361     		str	r3, [r0, #24]
+  38:./Hardware/usart/bsp_debug_usart.c ****   UartHandle.Init.Mode         = UART_MODE_TX_RX;
+  60              		.loc 1 38 3 is_stmt 1 view .LVU13
+  61              		.loc 1 38 32 is_stmt 0 view .LVU14
+  62 0018 0C23     		movs	r3, #12
+  63 001a 4361     		str	r3, [r0, #20]
+  39:./Hardware/usart/bsp_debug_usart.c ****   
+  40:./Hardware/usart/bsp_debug_usart.c ****   //HAL_UART_Init(&UartHandle); 
+  41:./Hardware/usart/bsp_debug_usart.c **** 	HAL_UART_Init(&UartHandle);
+  64              		.loc 1 41 2 is_stmt 1 view .LVU15
+  65 001c FFF7FEFF 		bl	HAL_UART_Init
+  66              	.LVL0:
+  42:./Hardware/usart/bsp_debug_usart.c **** }
+  67              		.loc 1 42 1 is_stmt 0 view .LVU16
+  68 0020 08BD     		pop	{r3, pc}
+  69              	.L4:
+  70 0022 00BF     		.align	2
+  71              	.L3:
+  72 0024 00000000 		.word	.LANCHOR0
+  73 0028 00100140 		.word	1073811456
+ARM GAS  /tmp/ccIkhYDu.s 			page 3
+
+
+  74              		.cfi_endproc
+  75              	.LFE126:
+  77              		.section	.text.HAL_UART_MspInit,"ax",%progbits
+  78              		.align	1
+  79              		.global	HAL_UART_MspInit
+  80              		.syntax unified
+  81              		.thumb
+  82              		.thumb_func
+  83              		.fpu fpv4-sp-d16
+  85              	HAL_UART_MspInit:
+  86              	.LVL1:
+  87              	.LFB127:
+  43:./Hardware/usart/bsp_debug_usart.c **** 
+  44:./Hardware/usart/bsp_debug_usart.c **** 
+  45:./Hardware/usart/bsp_debug_usart.c **** /**
+  46:./Hardware/usart/bsp_debug_usart.c ****   * @brief UART MSP 初始化 
+  47:./Hardware/usart/bsp_debug_usart.c ****   * @param huart: UART handle
+  48:./Hardware/usart/bsp_debug_usart.c ****   * @retval 无
+  49:./Hardware/usart/bsp_debug_usart.c ****   */
+  50:./Hardware/usart/bsp_debug_usart.c **** void HAL_UART_MspInit(UART_HandleTypeDef *huart)
+  51:./Hardware/usart/bsp_debug_usart.c **** {  
+  88              		.loc 1 51 1 is_stmt 1 view -0
+  89              		.cfi_startproc
+  90              		@ args = 0, pretend = 0, frame = 32
+  91              		@ frame_needed = 0, uses_anonymous_args = 0
+  92              		.loc 1 51 1 is_stmt 0 view .LVU18
+  93 0000 30B5     		push	{r4, r5, lr}
+  94              	.LCFI1:
+  95              		.cfi_def_cfa_offset 12
+  96              		.cfi_offset 4, -12
+  97              		.cfi_offset 5, -8
+  98              		.cfi_offset 14, -4
+  99 0002 89B0     		sub	sp, sp, #36
+ 100              	.LCFI2:
+ 101              		.cfi_def_cfa_offset 48
+  52:./Hardware/usart/bsp_debug_usart.c ****   GPIO_InitTypeDef  GPIO_InitStruct;
+ 102              		.loc 1 52 3 is_stmt 1 view .LVU19
+  53:./Hardware/usart/bsp_debug_usart.c ****   
+  54:./Hardware/usart/bsp_debug_usart.c ****   DEBUG_USART_CLK_ENABLE();
+ 103              		.loc 1 54 3 view .LVU20
+ 104              	.LBB2:
+ 105              		.loc 1 54 3 view .LVU21
+ 106 0004 0022     		movs	r2, #0
+ 107 0006 0092     		str	r2, [sp]
+ 108              		.loc 1 54 3 view .LVU22
+ 109 0008 1B4B     		ldr	r3, .L7
+ 110 000a 596C     		ldr	r1, [r3, #68]
+ 111 000c 41F01001 		orr	r1, r1, #16
+ 112 0010 5964     		str	r1, [r3, #68]
+ 113              		.loc 1 54 3 view .LVU23
+ 114 0012 596C     		ldr	r1, [r3, #68]
+ 115 0014 01F01001 		and	r1, r1, #16
+ 116 0018 0091     		str	r1, [sp]
+ 117              		.loc 1 54 3 view .LVU24
+ 118 001a 0099     		ldr	r1, [sp]
+ 119              	.LBE2:
+ 120              		.loc 1 54 3 view .LVU25
+ARM GAS  /tmp/ccIkhYDu.s 			page 4
+
+
+ 121              		.loc 1 54 27 view .LVU26
+  55:./Hardware/usart/bsp_debug_usart.c **** 	
+  56:./Hardware/usart/bsp_debug_usart.c **** 	DEBUG_USART_RX_GPIO_CLK_ENABLE();
+ 122              		.loc 1 56 2 view .LVU27
+ 123              	.LBB3:
+ 124              		.loc 1 56 2 view .LVU28
+ 125 001c 0192     		str	r2, [sp, #4]
+ 126              		.loc 1 56 2 view .LVU29
+ 127 001e 196B     		ldr	r1, [r3, #48]
+ 128 0020 41F00101 		orr	r1, r1, #1
+ 129 0024 1963     		str	r1, [r3, #48]
+ 130              		.loc 1 56 2 view .LVU30
+ 131 0026 196B     		ldr	r1, [r3, #48]
+ 132 0028 01F00101 		and	r1, r1, #1
+ 133 002c 0191     		str	r1, [sp, #4]
+ 134              		.loc 1 56 2 view .LVU31
+ 135 002e 0199     		ldr	r1, [sp, #4]
+ 136              	.LBE3:
+ 137              		.loc 1 56 2 view .LVU32
+  57:./Hardware/usart/bsp_debug_usart.c ****   DEBUG_USART_TX_GPIO_CLK_ENABLE();
+ 138              		.loc 1 57 3 view .LVU33
+ 139              	.LBB4:
+ 140              		.loc 1 57 3 view .LVU34
+ 141 0030 0292     		str	r2, [sp, #8]
+ 142              		.loc 1 57 3 view .LVU35
+ 143 0032 1A6B     		ldr	r2, [r3, #48]
+ 144 0034 42F00102 		orr	r2, r2, #1
+ 145 0038 1A63     		str	r2, [r3, #48]
+ 146              		.loc 1 57 3 view .LVU36
+ 147 003a 1B6B     		ldr	r3, [r3, #48]
+ 148 003c 03F00103 		and	r3, r3, #1
+ 149 0040 0293     		str	r3, [sp, #8]
+ 150              		.loc 1 57 3 view .LVU37
+ 151 0042 029B     		ldr	r3, [sp, #8]
+ 152              	.LBE4:
+ 153              		.loc 1 57 3 view .LVU38
+  58:./Hardware/usart/bsp_debug_usart.c ****   
+  59:./Hardware/usart/bsp_debug_usart.c **** /**USART1 GPIO Configuration    
+  60:./Hardware/usart/bsp_debug_usart.c ****   PA9     ------> USART1_TX
+  61:./Hardware/usart/bsp_debug_usart.c ****   PA10    ------> USART1_RX 
+  62:./Hardware/usart/bsp_debug_usart.c ****   */
+  63:./Hardware/usart/bsp_debug_usart.c ****   /* 配置Tx引脚为复用功能  */
+  64:./Hardware/usart/bsp_debug_usart.c ****   GPIO_InitStruct.Pin = DEBUG_USART_TX_PIN;
+ 154              		.loc 1 64 3 view .LVU39
+ 155              		.loc 1 64 23 is_stmt 0 view .LVU40
+ 156 0044 4FF40073 		mov	r3, #512
+ 157 0048 0393     		str	r3, [sp, #12]
+  65:./Hardware/usart/bsp_debug_usart.c ****   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 158              		.loc 1 65 3 is_stmt 1 view .LVU41
+ 159              		.loc 1 65 24 is_stmt 0 view .LVU42
+ 160 004a 0223     		movs	r3, #2
+ 161 004c 0493     		str	r3, [sp, #16]
+  66:./Hardware/usart/bsp_debug_usart.c ****   GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 162              		.loc 1 66 3 is_stmt 1 view .LVU43
+ 163              		.loc 1 66 24 is_stmt 0 view .LVU44
+ 164 004e 0123     		movs	r3, #1
+ 165 0050 0593     		str	r3, [sp, #20]
+ARM GAS  /tmp/ccIkhYDu.s 			page 5
+
+
+  67:./Hardware/usart/bsp_debug_usart.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 166              		.loc 1 67 3 is_stmt 1 view .LVU45
+ 167              		.loc 1 67 25 is_stmt 0 view .LVU46
+ 168 0052 0323     		movs	r3, #3
+ 169 0054 0693     		str	r3, [sp, #24]
+  68:./Hardware/usart/bsp_debug_usart.c ****   GPIO_InitStruct.Alternate = DEBUG_USART_TX_AF;
+ 170              		.loc 1 68 3 is_stmt 1 view .LVU47
+ 171              		.loc 1 68 29 is_stmt 0 view .LVU48
+ 172 0056 0725     		movs	r5, #7
+ 173 0058 0795     		str	r5, [sp, #28]
+  69:./Hardware/usart/bsp_debug_usart.c ****   HAL_GPIO_Init(DEBUG_USART_TX_GPIO_PORT, &GPIO_InitStruct);
+ 174              		.loc 1 69 3 is_stmt 1 view .LVU49
+ 175 005a 084C     		ldr	r4, .L7+4
+ 176 005c 03A9     		add	r1, sp, #12
+ 177 005e 2046     		mov	r0, r4
+ 178              	.LVL2:
+ 179              		.loc 1 69 3 is_stmt 0 view .LVU50
+ 180 0060 FFF7FEFF 		bl	HAL_GPIO_Init
+ 181              	.LVL3:
+  70:./Hardware/usart/bsp_debug_usart.c ****   
+  71:./Hardware/usart/bsp_debug_usart.c ****   /* 配置Rx引脚为复用功能 */
+  72:./Hardware/usart/bsp_debug_usart.c ****   GPIO_InitStruct.Pin = DEBUG_USART_RX_PIN;
+ 182              		.loc 1 72 3 is_stmt 1 view .LVU51
+ 183              		.loc 1 72 23 is_stmt 0 view .LVU52
+ 184 0064 4FF48063 		mov	r3, #1024
+ 185 0068 0393     		str	r3, [sp, #12]
+  73:./Hardware/usart/bsp_debug_usart.c ****   GPIO_InitStruct.Alternate = DEBUG_USART_RX_AF;
+ 186              		.loc 1 73 3 is_stmt 1 view .LVU53
+ 187              		.loc 1 73 29 is_stmt 0 view .LVU54
+ 188 006a 0795     		str	r5, [sp, #28]
+  74:./Hardware/usart/bsp_debug_usart.c ****   HAL_GPIO_Init(DEBUG_USART_RX_GPIO_PORT, &GPIO_InitStruct); 
+ 189              		.loc 1 74 3 is_stmt 1 view .LVU55
+ 190 006c 03A9     		add	r1, sp, #12
+ 191 006e 2046     		mov	r0, r4
+ 192 0070 FFF7FEFF 		bl	HAL_GPIO_Init
+ 193              	.LVL4:
+  75:./Hardware/usart/bsp_debug_usart.c **** }
+ 194              		.loc 1 75 1 is_stmt 0 view .LVU56
+ 195 0074 09B0     		add	sp, sp, #36
+ 196              	.LCFI3:
+ 197              		.cfi_def_cfa_offset 12
+ 198              		@ sp needed
+ 199 0076 30BD     		pop	{r4, r5, pc}
+ 200              	.L8:
+ 201              		.align	2
+ 202              	.L7:
+ 203 0078 00380240 		.word	1073887232
+ 204 007c 00000240 		.word	1073872896
+ 205              		.cfi_endproc
+ 206              	.LFE127:
+ 208              		.section	.text._write,"ax",%progbits
+ 209              		.align	1
+ 210              		.global	_write
+ 211              		.syntax unified
+ 212              		.thumb
+ 213              		.thumb_func
+ 214              		.fpu fpv4-sp-d16
+ARM GAS  /tmp/ccIkhYDu.s 			page 6
+
+
+ 216              	_write:
+ 217              	.LVL5:
+ 218              	.LFB128:
+  76:./Hardware/usart/bsp_debug_usart.c **** 
+  77:./Hardware/usart/bsp_debug_usart.c ****    int _write(int file, char *data, int len)
+  78:./Hardware/usart/bsp_debug_usart.c ****     {
+ 219              		.loc 1 78 5 is_stmt 1 view -0
+ 220              		.cfi_startproc
+ 221              		@ args = 0, pretend = 0, frame = 0
+ 222              		@ frame_needed = 0, uses_anonymous_args = 0
+ 223              		.loc 1 78 5 is_stmt 0 view .LVU58
+ 224 0000 10B5     		push	{r4, lr}
+ 225              	.LCFI4:
+ 226              		.cfi_def_cfa_offset 8
+ 227              		.cfi_offset 4, -8
+ 228              		.cfi_offset 14, -4
+  79:./Hardware/usart/bsp_debug_usart.c ****        if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
+ 229              		.loc 1 79 8 is_stmt 1 view .LVU59
+ 230              		.loc 1 79 36 is_stmt 0 view .LVU60
+ 231 0002 0138     		subs	r0, r0, #1
+ 232              	.LVL6:
+ 233              		.loc 1 79 11 view .LVU61
+ 234 0004 0128     		cmp	r0, #1
+ 235 0006 09D8     		bhi	.L14
+ 236 0008 1446     		mov	r4, r2
+  80:./Hardware/usart/bsp_debug_usart.c ****        {
+  81:./Hardware/usart/bsp_debug_usart.c ****           errno = EBADF;
+  82:./Hardware/usart/bsp_debug_usart.c ****           return -1;
+  83:./Hardware/usart/bsp_debug_usart.c ****        }
+  84:./Hardware/usart/bsp_debug_usart.c ****        // arbitrary timeout 1000
+  85:./Hardware/usart/bsp_debug_usart.c ****        HAL_StatusTypeDef status = HAL_UART_Transmit(&UartHandle, (uint8_t*)data, len, 1000);
+ 237              		.loc 1 85 8 is_stmt 1 view .LVU62
+ 238              		.loc 1 85 35 is_stmt 0 view .LVU63
+ 239 000a 4FF47A73 		mov	r3, #1000
+ 240 000e 92B2     		uxth	r2, r2
+ 241              	.LVL7:
+ 242              		.loc 1 85 35 view .LVU64
+ 243 0010 0748     		ldr	r0, .L15
+ 244              	.LVL8:
+ 245              		.loc 1 85 35 view .LVU65
+ 246 0012 FFF7FEFF 		bl	HAL_UART_Transmit
+ 247              	.LVL9:
+  86:./Hardware/usart/bsp_debug_usart.c ****     
+  87:./Hardware/usart/bsp_debug_usart.c ****        // return # of bytes written - as best we can tell
+  88:./Hardware/usart/bsp_debug_usart.c ****        return (status == HAL_OK ? len : 0);
+ 248              		.loc 1 88 8 is_stmt 1 view .LVU66
+ 249              		.loc 1 88 39 is_stmt 0 view .LVU67
+ 250 0016 40B9     		cbnz	r0, .L12
+ 251 0018 2046     		mov	r0, r4
+ 252              	.LVL10:
+ 253              	.L9:
+  89:./Hardware/usart/bsp_debug_usart.c ****     }
+ 254              		.loc 1 89 5 view .LVU68
+ 255 001a 10BD     		pop	{r4, pc}
+ 256              	.LVL11:
+ 257              	.L14:
+  81:./Hardware/usart/bsp_debug_usart.c ****           return -1;
+ARM GAS  /tmp/ccIkhYDu.s 			page 7
+
+
+ 258              		.loc 1 81 11 is_stmt 1 view .LVU69
+ 259 001c FFF7FEFF 		bl	__errno
+ 260              	.LVL12:
+  81:./Hardware/usart/bsp_debug_usart.c ****           return -1;
+ 261              		.loc 1 81 17 is_stmt 0 view .LVU70
+ 262 0020 0923     		movs	r3, #9
+ 263 0022 0360     		str	r3, [r0]
+  82:./Hardware/usart/bsp_debug_usart.c ****        }
+ 264              		.loc 1 82 11 is_stmt 1 view .LVU71
+  82:./Hardware/usart/bsp_debug_usart.c ****        }
+ 265              		.loc 1 82 18 is_stmt 0 view .LVU72
+ 266 0024 4FF0FF30 		mov	r0, #-1
+ 267 0028 F7E7     		b	.L9
+ 268              	.LVL13:
+ 269              	.L12:
+  88:./Hardware/usart/bsp_debug_usart.c ****     }
+ 270              		.loc 1 88 39 view .LVU73
+ 271 002a 0020     		movs	r0, #0
+ 272              	.LVL14:
+  88:./Hardware/usart/bsp_debug_usart.c ****     }
+ 273              		.loc 1 88 39 view .LVU74
+ 274 002c F5E7     		b	.L9
+ 275              	.L16:
+ 276 002e 00BF     		.align	2
+ 277              	.L15:
+ 278 0030 00000000 		.word	.LANCHOR0
+ 279              		.cfi_endproc
+ 280              	.LFE128:
+ 282              		.global	UartHandle
+ 283              		.section	.bss.UartHandle,"aw",%nobits
+ 284              		.align	2
+ 285              		.set	.LANCHOR0,. + 0
+ 288              	UartHandle:
+ 289 0000 00000000 		.space	64
+ 289      00000000 
+ 289      00000000 
+ 289      00000000 
+ 289      00000000 
+ 290              		.text
+ 291              	.Letext0:
+ 292              		.file 2 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/machine/_default_types.h"
+ 293              		.file 3 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/sys/_stdint.h"
+ 294              		.file 4 "./Libraries/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h"
+ 295              		.file 5 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 296              		.file 6 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 297              		.file 7 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 298              		.file 8 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h"
+ 299              		.file 9 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/sys/errno.h"
+ARM GAS  /tmp/ccIkhYDu.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 bsp_debug_usart.c
+     /tmp/ccIkhYDu.s:18     .text.DEBUG_USART_Config:0000000000000000 $t
+     /tmp/ccIkhYDu.s:26     .text.DEBUG_USART_Config:0000000000000000 DEBUG_USART_Config
+     /tmp/ccIkhYDu.s:72     .text.DEBUG_USART_Config:0000000000000024 $d
+     /tmp/ccIkhYDu.s:78     .text.HAL_UART_MspInit:0000000000000000 $t
+     /tmp/ccIkhYDu.s:85     .text.HAL_UART_MspInit:0000000000000000 HAL_UART_MspInit
+     /tmp/ccIkhYDu.s:203    .text.HAL_UART_MspInit:0000000000000078 $d
+     /tmp/ccIkhYDu.s:209    .text._write:0000000000000000 $t
+     /tmp/ccIkhYDu.s:216    .text._write:0000000000000000 _write
+     /tmp/ccIkhYDu.s:278    .text._write:0000000000000030 $d
+     /tmp/ccIkhYDu.s:288    .bss.UartHandle:0000000000000000 UartHandle
+     /tmp/ccIkhYDu.s:284    .bss.UartHandle:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+HAL_UART_Init
+HAL_GPIO_Init
+HAL_UART_Transmit
+__errno

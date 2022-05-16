@@ -1,0 +1,3034 @@
+ARM GAS  /tmp/ccTuLRNt.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_hal_dcmi.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.DCMI_DMAXferCplt,"ax",%progbits
+  18              		.align	1
+  19              		.arch armv7e-m
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	DCMI_DMAXferCplt:
+  26              	.LVL0:
+  27              	.LFB144:
+  28              		.file 1 "./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c"
+   1:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+   2:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   ******************************************************************************
+   3:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @file    stm32f4xx_hal_dcmi.c
+   4:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @author  MCD Application Team
+   5:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief   DCMI HAL module driver
+   6:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *          This file provides firmware functions to manage the following
+   7:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *          functionalities of the Digital Camera Interface (DCMI) peripheral:
+   8:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *           + Initialization and de-initialization functions
+   9:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *           + IO operation functions
+  10:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *           + Peripheral Control functions
+  11:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *           + Peripheral State and Error functions
+  12:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *           
+  13:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   @verbatim
+  14:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   ==============================================================================
+  15:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                         ##### How to use this driver #####
+  16:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   ==============================================================================
+  17:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   [..]
+  18:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       The sequence below describes how to use this driver to capture image
+  19:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       from a camera module connected to the DCMI Interface.
+  20:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       This sequence does not take into account the configuration of the
+  21:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       camera module, which should be made before to configure and enable
+  22:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       the DCMI to capture images.
+  23:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+  24:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     (#) Program the required configuration through following parameters:
+  25:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         horizontal and vertical polarity, pixel clock polarity, Capture Rate,
+  26:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         Synchronization Mode, code of the frame delimiter and data width 
+  27:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         using HAL_DCMI_Init() function.
+  28:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+  29:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     (#) Configure the DMA2_Stream1 channel1 to transfer Data from DCMI DR
+  30:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         register to the destination memory buffer.
+ARM GAS  /tmp/ccTuLRNt.s 			page 2
+
+
+  31:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+  32:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     (#) Program the required configuration through following parameters:
+  33:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         DCMI mode, destination memory Buffer address and the data length
+  34:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         and enable capture using HAL_DCMI_Start_DMA() function.
+  35:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+  36:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     (#) Optionally, configure and Enable the CROP feature to select a rectangular
+  37:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         window from the received image using HAL_DCMI_ConfigCrop()
+  38:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         and HAL_DCMI_EnableCROP() functions
+  39:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+  40:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     (#) The capture can be stopped using HAL_DCMI_Stop() function.
+  41:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+  42:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     (#) To control DCMI state you can use the function HAL_DCMI_GetState().
+  43:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+  44:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****      *** DCMI HAL driver macros list ***
+  45:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****      =============================================
+  46:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****      [..]
+  47:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****        Below the list of most used macros in DCMI HAL driver.
+  48:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****        
+  49:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) __HAL_DCMI_ENABLE: Enable the DCMI peripheral.
+  50:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) __HAL_DCMI_DISABLE: Disable the DCMI peripheral.
+  51:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) __HAL_DCMI_GET_FLAG: Get the DCMI pending flags.
+  52:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) __HAL_DCMI_CLEAR_FLAG: Clear the DCMI pending flags.
+  53:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) __HAL_DCMI_ENABLE_IT: Enable the specified DCMI interrupts.
+  54:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) __HAL_DCMI_DISABLE_IT: Disable the specified DCMI interrupts.
+  55:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) __HAL_DCMI_GET_IT_SOURCE: Check whether the specified DCMI interrupt has occurred or not.
+  56:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+  57:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****      [..]
+  58:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****        (@) You can refer to the DCMI HAL driver header file for more useful macros
+  59:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       
+  60:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   @endverbatim
+  61:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   ******************************************************************************
+  62:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @attention
+  63:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *
+  64:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  65:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *
+  66:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  67:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * are permitted provided that the following conditions are met:
+  68:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  69:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *      this list of conditions and the following disclaimer.
+  70:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  71:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *      this list of conditions and the following disclaimer in the documentation
+  72:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *      and/or other materials provided with the distribution.
+  73:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  74:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *      may be used to endorse or promote products derived from this software
+  75:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *      without specific prior written permission.
+  76:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *
+  77:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  78:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  79:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  80:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  81:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  82:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  83:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  84:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  85:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  86:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  87:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *
+ARM GAS  /tmp/ccTuLRNt.s 			page 3
+
+
+  88:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   ******************************************************************************
+  89:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+  90:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+  91:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /* Includes ------------------------------------------------------------------*/
+  92:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** #include "stm32f4xx_hal.h"
+  93:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+  94:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /** @addtogroup STM32F4xx_HAL_Driver
+  95:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @{
+  96:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+  97:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /** @defgroup DCMI DCMI
+  98:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief DCMI HAL module driver
+  99:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @{
+ 100:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 101:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 102:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** #ifdef HAL_DCMI_MODULE_ENABLED
+ 103:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 104:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** #if defined(STM32F407xx) || defined(STM32F417xx) || defined(STM32F427xx) || defined(STM32F437xx) ||
+ 105:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     defined(STM32F429xx) || defined(STM32F439xx) || defined(STM32F446xx) || defined(STM32F469xx) ||
+ 106:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     defined(STM32F479xx)
+ 107:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /* Private typedef -----------------------------------------------------------*/
+ 108:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /* Private define ------------------------------------------------------------*/
+ 109:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** #define HAL_TIMEOUT_DCMI_STOP    14U  /* Set timeout to 1s  */
+ 110:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /* Private macro -------------------------------------------------------------*/
+ 111:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /* Private variables ---------------------------------------------------------*/
+ 112:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /* Private function prototypes -----------------------------------------------*/
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** static void       DCMI_DMAXferCplt(DMA_HandleTypeDef *hdma);
+ 114:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** static void       DCMI_DMAError(DMA_HandleTypeDef *hdma);
+ 115:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 116:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /* Exported functions --------------------------------------------------------*/
+ 117:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 118:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /** @defgroup DCMI_Exported_Functions DCMI Exported Functions
+ 119:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @{
+ 120:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 121:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 122:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /** @defgroup DCMI_Exported_Functions_Group1 Initialization and Configuration functions
+ 123:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *  @brief   Initialization and Configuration functions
+ 124:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *
+ 125:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** @verbatim
+ 126:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****  ===============================================================================
+ 127:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                 ##### Initialization and Configuration functions #####
+ 128:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****  ===============================================================================
+ 129:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     [..]  This section provides functions allowing to:
+ 130:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) Initialize and configure the DCMI
+ 131:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) De-initialize the DCMI 
+ 132:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 133:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** @endverbatim
+ 134:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @{
+ 135:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 136:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 137:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 138:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Initializes the DCMI according to the specified
+ 139:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *         parameters in the DCMI_InitTypeDef and create the associated handle.
+ 140:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 141:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 142:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval HAL status
+ 143:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 144:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** __weak HAL_StatusTypeDef HAL_DCMI_Init(DCMI_HandleTypeDef *hdcmi)
+ARM GAS  /tmp/ccTuLRNt.s 			page 4
+
+
+ 145:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 146:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Check the DCMI peripheral state */
+ 147:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if(hdcmi == NULL)
+ 148:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 149:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****      return HAL_ERROR;
+ 150:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 151:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 152:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Check function parameters */
+ 153:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_ALL_INSTANCE(hdcmi->Instance));
+ 154:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_PCKPOLARITY(hdcmi->Init.PCKPolarity));
+ 155:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_VSPOLARITY(hdcmi->Init.VSPolarity));
+ 156:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_HSPOLARITY(hdcmi->Init.HSPolarity));
+ 157:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_SYNCHRO(hdcmi->Init.SynchroMode));
+ 158:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_CAPTURE_RATE(hdcmi->Init.CaptureRate));
+ 159:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_EXTENDED_DATA(hdcmi->Init.ExtendedDataMode));
+ 160:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_MODE_JPEG(hdcmi->Init.JPEGMode));
+ 161:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 162:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if(hdcmi->State == HAL_DCMI_STATE_RESET)
+ 163:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 164:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Allocate lock resource and initialize it */
+ 165:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->Lock = HAL_UNLOCKED;
+ 166:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Init the low level hardware */
+ 167:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     HAL_DCMI_MspInit(hdcmi);
+ 168:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 169:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 170:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Change the DCMI state */
+ 171:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->State = HAL_DCMI_STATE_BUSY;
+ 172:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 173:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Set DCMI parameters */
+ 174:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Configures the HS, VS, DE and PC polarity */
+ 175:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CR &= ~(DCMI_CR_PCKPOL | DCMI_CR_HSPOL  | DCMI_CR_VSPOL  | DCMI_CR_EDM_0 |
+ 176:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                            DCMI_CR_EDM_1  | DCMI_CR_FCRC_0 | DCMI_CR_FCRC_1 | DCMI_CR_JPEG  |
+ 177:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                            DCMI_CR_ESS);
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CR |=  (uint32_t)(hdcmi->Init.SynchroMode | hdcmi->Init.CaptureRate | \
+ 179:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.VSPolarity  | hdcmi->Init.HSPolarity  | \
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.PCKPolarity | hdcmi->Init.ExtendedDataMode | \
+ 181:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.JPEGMode);
+ 182:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 183:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if(hdcmi->Init.SynchroMode == DCMI_SYNCHRO_EMBEDDED)
+ 184:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 185:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->Instance->ESCR = (((uint32_t)hdcmi->Init.SyncroCode.FrameStartCode)    |
+ 186:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                              ((uint32_t)hdcmi->Init.SyncroCode.LineStartCode << DCMI_POSITION_ESCR_
+ 187:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                              ((uint32_t)hdcmi->Init.SyncroCode.LineEndCode << DCMI_POSITION_ESCR_LE
+ 188:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                              ((uint32_t)hdcmi->Init.SyncroCode.FrameEndCode << DCMI_POSITION_ESCR_F
+ 189:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 190:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 191:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Enable the Line, Vsync, Error and Overrun interrupts */
+ 192:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_DCMI_ENABLE_IT(hdcmi, DCMI_IT_LINE | DCMI_IT_VSYNC | DCMI_IT_ERR | DCMI_IT_OVR);
+ 193:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 194:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Update error code */
+ 195:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->ErrorCode = HAL_DCMI_ERROR_NONE;
+ 196:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 197:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Initialize the DCMI state*/
+ 198:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->State  = HAL_DCMI_STATE_READY;
+ 199:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return HAL_OK;
+ 201:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ARM GAS  /tmp/ccTuLRNt.s 			page 5
+
+
+ 202:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 203:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 204:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Deinitializes the DCMI peripheral registers to their default reset
+ 205:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *         values.
+ 206:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 207:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 208:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval HAL status
+ 209:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 210:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 211:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** HAL_StatusTypeDef HAL_DCMI_DeInit(DCMI_HandleTypeDef *hdcmi)
+ 212:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 213:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* DeInit the low level hardware */
+ 214:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   HAL_DCMI_MspDeInit(hdcmi);
+ 215:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Update error code */
+ 217:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->ErrorCode = HAL_DCMI_ERROR_NONE;
+ 218:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 219:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Initialize the DCMI state*/
+ 220:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->State = HAL_DCMI_STATE_RESET;
+ 221:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 222:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Release Lock */
+ 223:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_UNLOCK(hdcmi);
+ 224:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 225:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return HAL_OK;
+ 226:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 227:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 228:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 229:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Initializes the DCMI MSP.
+ 230:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 231:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 232:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval None
+ 233:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 234:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** __weak void HAL_DCMI_MspInit(DCMI_HandleTypeDef* hdcmi)
+ 235:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 236:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Prevent unused argument(s) compilation warning */
+ 237:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   UNUSED(hdcmi);
+ 238:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 239:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****             the HAL_DCMI_MspInit could be implemented in the user file
+ 240:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****    */ 
+ 241:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 242:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 243:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 244:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  DeInitializes the DCMI MSP.
+ 245:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 246:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 247:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval None
+ 248:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 249:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** __weak void HAL_DCMI_MspDeInit(DCMI_HandleTypeDef* hdcmi)
+ 250:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 251:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Prevent unused argument(s) compilation warning */
+ 252:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   UNUSED(hdcmi);
+ 253:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 254:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****             the HAL_DCMI_MspDeInit could be implemented in the user file
+ 255:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****    */
+ 256:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 257:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 258:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ARM GAS  /tmp/ccTuLRNt.s 			page 6
+
+
+ 259:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @}
+ 260:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 261:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /** @defgroup DCMI_Exported_Functions_Group2 IO operation functions
+ 262:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *  @brief   IO operation functions
+ 263:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *
+ 264:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** @verbatim
+ 265:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****  ===============================================================================
+ 266:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                       #####  IO operation functions  #####
+ 267:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****  ===============================================================================
+ 268:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     [..]  This section provides functions allowing to:
+ 269:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) Configure destination address and data length and
+ 270:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****           Enables DCMI DMA request and enables DCMI capture
+ 271:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) Stop the DCMI capture.
+ 272:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) Handles DCMI interrupt request.
+ 273:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 274:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** @endverbatim
+ 275:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @{
+ 276:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 277:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 278:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 279:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Enables DCMI DMA request and enables DCMI capture
+ 280:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi     pointer to a DCMI_HandleTypeDef structure that contains
+ 281:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                    the configuration information for DCMI.
+ 282:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  DCMI_Mode DCMI capture mode snapshot or continuous grab.
+ 283:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  pData     The destination memory Buffer address (LCD Frame buffer).
+ 284:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  Length    The length of capture to be transferred.
+ 285:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval HAL status
+ 286:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 287:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** HAL_StatusTypeDef HAL_DCMI_Start_DMA(DCMI_HandleTypeDef* hdcmi, uint32_t DCMI_Mode, uint32_t pData,
+ 288:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 289:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Initialize the second memory address */
+ 290:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   uint32_t SecondMemAddress = 0U;
+ 291:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 292:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Check function parameters */
+ 293:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_CAPTURE_MODE(DCMI_Mode));
+ 294:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 295:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Locked */
+ 296:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_LOCK(hdcmi);
+ 297:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 298:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Lock the DCMI peripheral state */
+ 299:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->State = HAL_DCMI_STATE_BUSY;
+ 300:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 301:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Enable DCMI by setting DCMIEN bit */
+ 302:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_DCMI_ENABLE(hdcmi);
+ 303:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 304:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Configure the DCMI Mode */
+ 305:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CR &= ~(DCMI_CR_CM);
+ 306:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CR |=  (uint32_t)(DCMI_Mode);
+ 307:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 308:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Set the DMA memory0 conversion complete callback */
+ 309:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->DMA_Handle->XferCpltCallback = DCMI_DMAXferCplt;
+ 310:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 311:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Set the DMA error callback */
+ 312:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->DMA_Handle->XferErrorCallback = DCMI_DMAError;
+ 313:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 314:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Set the dma abort callback */
+ 315:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->DMA_Handle->XferAbortCallback = NULL;
+ARM GAS  /tmp/ccTuLRNt.s 			page 7
+
+
+ 316:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 317:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Reset transfer counters value */ 
+ 318:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->XferCount = 0U;
+ 319:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->XferTransferNumber = 0U;
+ 320:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 321:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if(Length <= 0xFFFFU)
+ 322:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 323:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Enable the DMA Stream */
+ 324:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     HAL_DMA_Start_IT(hdcmi->DMA_Handle, (uint32_t)&hdcmi->Instance->DR, (uint32_t)pData, Length);
+ 325:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 326:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   else /* DCMI_DOUBLE_BUFFER Mode */
+ 327:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 328:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Set the DMA memory1 conversion complete callback */
+ 329:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->DMA_Handle->XferM1CpltCallback = DCMI_DMAXferCplt;
+ 330:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 331:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Initialize transfer parameters */
+ 332:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferCount = 1U;
+ 333:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferSize = Length;
+ 334:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->pBuffPtr = pData;
+ 335:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 336:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Get the number of buffer */
+ 337:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     while(hdcmi->XferSize > 0xFFFFU)
+ 338:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 339:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferSize = (hdcmi->XferSize/2U);
+ 340:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount = hdcmi->XferCount*2U;
+ 341:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 342:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 343:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Update DCMI counter  and transfer number*/
+ 344:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferCount = (hdcmi->XferCount - 2U);
+ 345:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferTransferNumber = hdcmi->XferCount;
+ 346:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 347:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Update second memory address */
+ 348:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     SecondMemAddress = (uint32_t)(pData + (4U*hdcmi->XferSize));
+ 349:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 350:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Start DMA multi buffer transfer */
+ 351:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     HAL_DMAEx_MultiBufferStart_IT(hdcmi->DMA_Handle, (uint32_t)&hdcmi->Instance->DR, (uint32_t)pDat
+ 352:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 353:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 354:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Enable Capture */
+ 355:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CR |= DCMI_CR_CAPTURE;
+ 356:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 357:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Release Lock */
+ 358:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_UNLOCK(hdcmi);
+ 359:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 360:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Return function status */
+ 361:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return HAL_OK;
+ 362:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 363:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 364:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 365:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Disable DCMI DMA request and Disable DCMI capture
+ 366:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 367:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 368:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval HAL status
+ 369:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 370:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** HAL_StatusTypeDef HAL_DCMI_Stop(DCMI_HandleTypeDef* hdcmi)
+ 371:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 372:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __IO uint32_t count = SystemCoreClock / HAL_TIMEOUT_DCMI_STOP;
+ARM GAS  /tmp/ccTuLRNt.s 			page 8
+
+
+ 373:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 374:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 375:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process locked */
+ 376:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_LOCK(hdcmi);
+ 377:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 378:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Lock the DCMI peripheral state */
+ 379:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->State = HAL_DCMI_STATE_BUSY;
+ 380:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 381:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Disable Capture */
+ 382:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CR &= ~(DCMI_CR_CAPTURE);
+ 383:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 384:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Check if the DCMI capture effectively disabled */
+ 385:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   do
+ 386:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 387:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     if (count-- == 0U)
+ 388:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 389:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       /* Update error code */
+ 390:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->ErrorCode |= HAL_DCMI_ERROR_TIMEOUT;
+ 391:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 392:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       status = HAL_TIMEOUT;
+ 393:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 394:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 395:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   while((hdcmi->Instance->CR & DCMI_CR_CAPTURE) != 0U);
+ 396:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 397:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Disable the DCMI */
+ 398:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_DCMI_DISABLE(hdcmi);
+ 399:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 400:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Disable the DMA */
+ 401:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   HAL_DMA_Abort(hdcmi->DMA_Handle);
+ 402:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 403:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Update error code */
+ 404:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->ErrorCode |= HAL_DCMI_ERROR_NONE;
+ 405:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 406:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Change DCMI state */
+ 407:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->State = HAL_DCMI_STATE_READY;
+ 408:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 409:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Unlocked */
+ 410:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_UNLOCK(hdcmi);
+ 411:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 412:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Return function status */
+ 413:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return status;
+ 414:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 415:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 416:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 417:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Suspend DCMI capture  
+ 418:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 419:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI. 
+ 420:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval HAL status     
+ 421:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 422:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** HAL_StatusTypeDef HAL_DCMI_Suspend(DCMI_HandleTypeDef* hdcmi)
+ 423:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 424:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __IO uint32_t count = SystemCoreClock / HAL_TIMEOUT_DCMI_STOP;
+ 425:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 426:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 427:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process locked */
+ 428:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_LOCK(hdcmi);
+ 429:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ARM GAS  /tmp/ccTuLRNt.s 			page 9
+
+
+ 430:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if(hdcmi->State == HAL_DCMI_STATE_BUSY)
+ 431:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 432:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Change DCMI state */
+ 433:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->State = HAL_DCMI_STATE_SUSPENDED;
+ 434:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 435:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Disable Capture */
+ 436:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->Instance->CR &= ~(DCMI_CR_CAPTURE);
+ 437:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 438:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Check if the DCMI capture effectively disabled */
+ 439:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     do
+ 440:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 441:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       if (count-- == 0U)
+ 442:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       {        
+ 443:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         /* Update error code */
+ 444:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         hdcmi->ErrorCode |= HAL_DCMI_ERROR_TIMEOUT;
+ 445:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         
+ 446:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         /* Change DCMI state */
+ 447:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         hdcmi->State = HAL_DCMI_STATE_READY;
+ 448:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         
+ 449:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         status = HAL_TIMEOUT;
+ 450:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         break;
+ 451:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       }
+ 452:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 453:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     while((hdcmi->Instance->CR & DCMI_CR_CAPTURE) != 0);
+ 454:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }    
+ 455:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Unlocked */
+ 456:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_UNLOCK(hdcmi);
+ 457:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 458:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Return function status */
+ 459:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return status;
+ 460:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 461:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 462:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 463:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Resume DCMI capture  
+ 464:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 465:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI. 
+ 466:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval HAL status     
+ 467:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 468:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** HAL_StatusTypeDef HAL_DCMI_Resume(DCMI_HandleTypeDef* hdcmi)
+ 469:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 470:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process locked */
+ 471:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_LOCK(hdcmi);
+ 472:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 473:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if(hdcmi->State == HAL_DCMI_STATE_SUSPENDED)
+ 474:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 475:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Change DCMI state */
+ 476:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->State = HAL_DCMI_STATE_BUSY;
+ 477:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 478:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Disable Capture */
+ 479:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->Instance->CR |= DCMI_CR_CAPTURE;
+ 480:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   } 
+ 481:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Unlocked */
+ 482:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_UNLOCK(hdcmi);
+ 483:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 484:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Return function status */
+ 485:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return HAL_OK;
+ 486:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ARM GAS  /tmp/ccTuLRNt.s 			page 10
+
+
+ 487:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 488:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 489:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Handles DCMI interrupt request.
+ 490:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 491:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for the DCMI.
+ 492:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval None
+ 493:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 494:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** void HAL_DCMI_IRQHandler(DCMI_HandleTypeDef *hdcmi)
+ 495:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 496:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   uint32_t isr_value = READ_REG(hdcmi->Instance->MISR);
+ 497:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 498:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Synchronization error interrupt management *******************************/
+ 499:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if((isr_value & DCMI_FLAG_ERRRI) == DCMI_FLAG_ERRRI)
+ 500:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 501:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Clear the Synchronization error flag */
+ 502:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     __HAL_DCMI_CLEAR_FLAG(hdcmi, DCMI_FLAG_ERRRI);
+ 503:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 504:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Update error code */
+ 505:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->ErrorCode |= HAL_DCMI_ERROR_SYNC;
+ 506:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 507:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Change DCMI state */
+ 508:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->State = HAL_DCMI_STATE_ERROR;
+ 509:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 510:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Set the synchronization error callback */
+ 511:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->DMA_Handle->XferAbortCallback = DCMI_DMAError;
+ 512:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 513:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Abort the DMA Transfer */
+ 514:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     HAL_DMA_Abort_IT(hdcmi->DMA_Handle);
+ 515:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 516:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Overflow interrupt management ********************************************/
+ 517:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if((isr_value & DCMI_FLAG_OVRRI) == DCMI_FLAG_OVRRI)
+ 518:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 519:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Clear the Overflow flag */
+ 520:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     __HAL_DCMI_CLEAR_FLAG(hdcmi, DCMI_FLAG_OVRRI);
+ 521:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 522:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Update error code */
+ 523:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->ErrorCode |= HAL_DCMI_ERROR_OVR;
+ 524:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 525:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Change DCMI state */
+ 526:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->State = HAL_DCMI_STATE_ERROR;
+ 527:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 528:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Set the overflow callback */
+ 529:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->DMA_Handle->XferAbortCallback = DCMI_DMAError;
+ 530:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 531:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Abort the DMA Transfer */
+ 532:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     HAL_DMA_Abort_IT(hdcmi->DMA_Handle);
+ 533:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 534:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Line Interrupt management ************************************************/
+ 535:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if((isr_value & DCMI_FLAG_LINERI) == DCMI_FLAG_LINERI)
+ 536:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 537:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Clear the Line interrupt flag */
+ 538:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     __HAL_DCMI_CLEAR_FLAG(hdcmi, DCMI_FLAG_LINERI);
+ 539:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 540:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Line interrupt Callback */
+ 541:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     HAL_DCMI_LineEventCallback(hdcmi);
+ 542:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 543:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* VSYNC interrupt management ***********************************************/
+ARM GAS  /tmp/ccTuLRNt.s 			page 11
+
+
+ 544:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if((isr_value & DCMI_FLAG_VSYNCRI) == DCMI_FLAG_VSYNCRI)
+ 545:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 546:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Clear the VSYNC flag */
+ 547:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     __HAL_DCMI_CLEAR_FLAG(hdcmi, DCMI_FLAG_VSYNCRI);
+ 548:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 549:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* VSYNC Callback */
+ 550:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     HAL_DCMI_VsyncEventCallback(hdcmi);
+ 551:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 552:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* FRAME interrupt management ***********************************************/
+ 553:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if((isr_value & DCMI_FLAG_FRAMERI) == DCMI_FLAG_FRAMERI)
+ 554:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 555:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* When snapshot mode, disable Vsync, Error and Overrun interrupts */
+ 556:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     if((hdcmi->Instance->CR & DCMI_CR_CM) == DCMI_MODE_SNAPSHOT)
+ 557:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     { 
+ 558:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       /* Disable the Line, Vsync, Error and Overrun interrupts */
+ 559:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       __HAL_DCMI_DISABLE_IT(hdcmi, DCMI_IT_LINE | DCMI_IT_VSYNC | DCMI_IT_ERR | DCMI_IT_OVR);
+ 560:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 561:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 562:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Disable the Frame interrupt */
+ 563:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     __HAL_DCMI_DISABLE_IT(hdcmi, DCMI_IT_FRAME);
+ 564:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 565:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Frame Callback */
+ 566:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     HAL_DCMI_FrameEventCallback(hdcmi);
+ 567:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 568:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 569:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 570:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 571:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Error DCMI callback.
+ 572:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 573:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 574:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval None
+ 575:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 576:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** __weak void HAL_DCMI_ErrorCallback(DCMI_HandleTypeDef *hdcmi)
+ 577:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 578:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Prevent unused argument(s) compilation warning */
+ 579:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   UNUSED(hdcmi);
+ 580:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 581:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****             the HAL_DCMI_ErrorCallback could be implemented in the user file
+ 582:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****    */
+ 583:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 584:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 585:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 586:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Line Event callback.
+ 587:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 588:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 589:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval None
+ 590:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 591:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** __weak void HAL_DCMI_LineEventCallback(DCMI_HandleTypeDef *hdcmi)
+ 592:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 593:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Prevent unused argument(s) compilation warning */
+ 594:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   UNUSED(hdcmi);
+ 595:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 596:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****             the HAL_DCMI_LineEventCallback could be implemented in the user file
+ 597:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****    */
+ 598:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 599:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 600:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ARM GAS  /tmp/ccTuLRNt.s 			page 12
+
+
+ 601:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  VSYNC Event callback.
+ 602:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 603:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 604:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval None
+ 605:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 606:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** __weak void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
+ 607:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 608:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Prevent unused argument(s) compilation warning */
+ 609:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   UNUSED(hdcmi);
+ 610:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 611:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****             the HAL_DCMI_VsyncEventCallback could be implemented in the user file
+ 612:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****    */
+ 613:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 614:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 615:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 616:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Frame Event callback.
+ 617:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 618:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 619:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval None
+ 620:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 621:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** __weak void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
+ 622:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 623:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Prevent unused argument(s) compilation warning */
+ 624:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   UNUSED(hdcmi);
+ 625:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 626:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****             the HAL_DCMI_FrameEventCallback could be implemented in the user file
+ 627:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****    */
+ 628:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 629:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 630:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 631:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @}
+ 632:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 633:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 634:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /** @defgroup DCMI_Exported_Functions_Group3 Peripheral Control functions
+ 635:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *  @brief    Peripheral Control functions
+ 636:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *
+ 637:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** @verbatim
+ 638:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****  ===============================================================================
+ 639:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                     ##### Peripheral Control functions #####
+ 640:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****  ===============================================================================
+ 641:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** [..]  This section provides functions allowing to:
+ 642:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) Configure the CROP feature.
+ 643:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) Enable/Disable the CROP feature.
+ 644:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 645:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** @endverbatim
+ 646:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @{
+ 647:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 648:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 649:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 650:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Configure the DCMI CROP coordinate.
+ 651:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 652:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 653:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  X0    DCMI window X offset
+ 654:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  Y0    DCMI window Y offset
+ 655:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  XSize DCMI Pixel per line
+ 656:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  YSize DCMI Line number
+ 657:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval HAL status
+ARM GAS  /tmp/ccTuLRNt.s 			page 13
+
+
+ 658:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 659:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** HAL_StatusTypeDef HAL_DCMI_ConfigCrop(DCMI_HandleTypeDef *hdcmi, uint32_t X0, uint32_t Y0, uint32_t
+ 660:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 661:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Locked */
+ 662:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_LOCK(hdcmi);
+ 663:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 664:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Lock the DCMI peripheral state */
+ 665:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->State = HAL_DCMI_STATE_BUSY;
+ 666:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 667:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Check the parameters */
+ 668:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_WINDOW_COORDINATE(X0));
+ 669:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_WINDOW_COORDINATE(YSize));
+ 670:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_WINDOW_COORDINATE(XSize));
+ 671:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_WINDOW_HEIGHT(Y0));
+ 672:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 673:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Configure CROP */
+ 674:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CWSIZER = (XSize | (YSize << DCMI_POSITION_CWSIZE_VLINE));
+ 675:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CWSTRTR = (X0 | (Y0 << DCMI_POSITION_CWSTRT_VST));
+ 676:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 677:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Initialize the DCMI state*/
+ 678:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->State  = HAL_DCMI_STATE_READY;
+ 679:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 680:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Unlocked */
+ 681:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_UNLOCK(hdcmi);
+ 682:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 683:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return HAL_OK;
+ 684:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 685:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 686:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 687:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Disable the Crop feature.
+ 688:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 689:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 690:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval HAL status
+ 691:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 692:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** HAL_StatusTypeDef HAL_DCMI_DisableCrop(DCMI_HandleTypeDef *hdcmi)
+ 693:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 694:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Locked */
+ 695:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_LOCK(hdcmi);
+ 696:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 697:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Lock the DCMI peripheral state */
+ 698:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->State = HAL_DCMI_STATE_BUSY;
+ 699:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 700:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Disable DCMI Crop feature */
+ 701:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CR &= ~(uint32_t)DCMI_CR_CROP;
+ 702:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 703:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Change the DCMI state*/
+ 704:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->State = HAL_DCMI_STATE_READY;
+ 705:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 706:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Unlocked */
+ 707:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_UNLOCK(hdcmi);
+ 708:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 709:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return HAL_OK;
+ 710:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 711:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 712:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 713:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Enable the Crop feature.
+ 714:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ARM GAS  /tmp/ccTuLRNt.s 			page 14
+
+
+ 715:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 716:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval HAL status
+ 717:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 718:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** HAL_StatusTypeDef HAL_DCMI_EnableCrop(DCMI_HandleTypeDef *hdcmi)
+ 719:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 720:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Locked */
+ 721:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_LOCK(hdcmi);
+ 722:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 723:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Lock the DCMI peripheral state */
+ 724:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->State = HAL_DCMI_STATE_BUSY;
+ 725:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 726:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Enable DCMI Crop feature */
+ 727:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CR |= (uint32_t)DCMI_CR_CROP;
+ 728:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 729:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Change the DCMI state*/
+ 730:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->State = HAL_DCMI_STATE_READY;
+ 731:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 732:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Unlocked */
+ 733:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __HAL_UNLOCK(hdcmi);
+ 734:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 735:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return HAL_OK;
+ 736:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 737:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 738:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 739:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @}
+ 740:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 741:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 742:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /** @defgroup DCMI_Exported_Functions_Group4 Peripheral State functions
+ 743:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *  @brief    Peripheral State functions
+ 744:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *
+ 745:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** @verbatim
+ 746:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****  ===============================================================================
+ 747:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                ##### Peripheral State and Errors functions #####
+ 748:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****  ===============================================================================
+ 749:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     [..]
+ 750:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     This subsection provides functions allowing to
+ 751:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) Check the DCMI state.
+ 752:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       (+) Get the specific DCMI error flag.
+ 753:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 754:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** @endverbatim
+ 755:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @{
+ 756:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */ 
+ 757:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 758:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 759:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Return the DCMI state
+ 760:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi pointer to a DCMI_HandleTypeDef structure that contains
+ 761:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for DCMI.
+ 762:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval HAL state
+ 763:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 764:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** HAL_DCMI_StateTypeDef HAL_DCMI_GetState(DCMI_HandleTypeDef *hdcmi)
+ 765:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 766:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return hdcmi->State;
+ 767:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 768:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 769:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 770:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  Return the DCMI error code
+ 771:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdcmi  pointer to a DCMI_HandleTypeDef structure that contains
+ARM GAS  /tmp/ccTuLRNt.s 			page 15
+
+
+ 772:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *               the configuration information for DCMI.
+ 773:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval DCMI Error Code
+ 774:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 775:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** uint32_t HAL_DCMI_GetError(DCMI_HandleTypeDef *hdcmi)
+ 776:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 777:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return hdcmi->ErrorCode;
+ 778:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 779:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 780:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 781:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @}
+ 782:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 783:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 784:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /* Private functions ---------------------------------------------------------*/
+ 785:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /** @defgroup DCMI_Private_Functions DCMI Private Functions
+ 786:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @{
+ 787:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 788:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 789:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 790:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  DMA conversion complete callback.
+ 791:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+ 792:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *               the configuration information for the specified DMA module.
+ 793:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval None
+ 794:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 795:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** static void DCMI_DMAXferCplt(DMA_HandleTypeDef *hdma)
+ 796:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+  29              		.loc 1 796 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		.loc 1 796 1 is_stmt 0 view .LVU1
+  34 0000 10B5     		push	{r4, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 4, -8
+  38              		.cfi_offset 14, -4
+ 797:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   uint32_t tmp = 0U;
+  39              		.loc 1 797 3 is_stmt 1 view .LVU2
+  40              	.LVL1:
+ 798:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****  
+ 799:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   DCMI_HandleTypeDef* hdcmi = ( DCMI_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+  41              		.loc 1 799 3 view .LVU3
+  42              		.loc 1 799 23 is_stmt 0 view .LVU4
+  43 0002 846B     		ldr	r4, [r0, #56]
+  44              	.LVL2:
+ 800:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 801:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if(hdcmi->XferCount != 0U)
+  45              		.loc 1 801 3 is_stmt 1 view .LVU5
+  46              		.loc 1 801 11 is_stmt 0 view .LVU6
+  47 0004 A36A     		ldr	r3, [r4, #40]
+  48              		.loc 1 801 5 view .LVU7
+  49 0006 43B3     		cbz	r3, .L2
+ 802:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 803:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Update memory 0 address location */
+ 804:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     tmp = ((hdcmi->DMA_Handle->Instance->CR) & DMA_SxCR_CT);
+  50              		.loc 1 804 5 is_stmt 1 view .LVU8
+  51              		.loc 1 804 18 is_stmt 0 view .LVU9
+  52 0008 A06B     		ldr	r0, [r4, #56]
+ARM GAS  /tmp/ccTuLRNt.s 			page 16
+
+
+  53              	.LVL3:
+  54              		.loc 1 804 30 view .LVU10
+  55 000a 0268     		ldr	r2, [r0]
+  56              		.loc 1 804 40 view .LVU11
+  57 000c 1368     		ldr	r3, [r2]
+  58              		.loc 1 804 9 view .LVU12
+  59 000e 03F40023 		and	r3, r3, #524288
+  60              	.LVL4:
+ 805:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     if(((hdcmi->XferCount % 2U) == 0U) && (tmp != 0U))
+  61              		.loc 1 805 5 is_stmt 1 view .LVU13
+  62              		.loc 1 805 15 is_stmt 0 view .LVU14
+  63 0012 A16A     		ldr	r1, [r4, #40]
+  64              		.loc 1 805 7 view .LVU15
+  65 0014 11F0010F 		tst	r1, #1
+  66 0018 00D1     		bne	.L3
+  67              		.loc 1 805 40 discriminator 1 view .LVU16
+  68 001a 43B9     		cbnz	r3, .L8
+  69              	.L3:
+ 806:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 807:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       tmp = hdcmi->DMA_Handle->Instance->M0AR;
+ 808:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       HAL_DMAEx_ChangeMemory(hdcmi->DMA_Handle, (tmp + (8U*hdcmi->XferSize)), MEMORY0);
+ 809:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount--;
+ 810:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 811:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Update memory 1 address location */
+ 812:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     else if((hdcmi->DMA_Handle->Instance->CR & DMA_SxCR_CT) == 0U)
+  70              		.loc 1 812 10 is_stmt 1 view .LVU17
+  71              		.loc 1 812 41 is_stmt 0 view .LVU18
+  72 001c 1368     		ldr	r3, [r2]
+  73              	.LVL5:
+  74              		.loc 1 812 12 view .LVU19
+  75 001e 13F4002F 		tst	r3, #524288
+  76 0022 0FD0     		beq	.L9
+  77              	.L4:
+ 813:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 814:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       tmp = hdcmi->DMA_Handle->Instance->M1AR;
+ 815:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       HAL_DMAEx_ChangeMemory(hdcmi->DMA_Handle, (tmp + (8U*hdcmi->XferSize)), MEMORY1);
+ 816:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount--;
+ 817:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 818:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 819:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Update memory 0 address location */
+ 820:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   else if((hdcmi->DMA_Handle->Instance->CR & DMA_SxCR_CT) != 0U)
+ 821:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 822:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->DMA_Handle->Instance->M0AR = hdcmi->pBuffPtr;
+ 823:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 824:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Update memory 1 address location */
+ 825:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   else if((hdcmi->DMA_Handle->Instance->CR & DMA_SxCR_CT) == 0U)
+ 826:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 827:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     tmp = hdcmi->pBuffPtr;
+ 828:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->DMA_Handle->Instance->M1AR = (tmp + (4U*hdcmi->XferSize));
+ 829:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferCount = hdcmi->XferTransferNumber;
+ 830:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 831:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 832:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Check if the frame is transferred */
+ 833:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if(hdcmi->XferCount == hdcmi->XferTransferNumber)
+  78              		.loc 1 833 3 is_stmt 1 view .LVU20
+  79              		.loc 1 833 11 is_stmt 0 view .LVU21
+  80 0024 A26A     		ldr	r2, [r4, #40]
+ARM GAS  /tmp/ccTuLRNt.s 			page 17
+
+
+  81              		.loc 1 833 31 view .LVU22
+  82 0026 236B     		ldr	r3, [r4, #48]
+  83              		.loc 1 833 5 view .LVU23
+  84 0028 9A42     		cmp	r2, r3
+  85 002a 2BD0     		beq	.L10
+  86              	.L1:
+ 834:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 835:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Enable the Frame interrupt */
+ 836:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     __HAL_DCMI_ENABLE_IT(hdcmi, DCMI_IT_FRAME);
+ 837:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 838:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* When snapshot mode, set dcmi state to ready */
+ 839:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     if((hdcmi->Instance->CR & DCMI_CR_CM) == DCMI_MODE_SNAPSHOT)
+ 840:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {  
+ 841:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->State= HAL_DCMI_STATE_READY;
+ 842:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 843:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 844:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+  87              		.loc 1 844 1 view .LVU24
+  88 002c 10BD     		pop	{r4, pc}
+  89              	.LVL6:
+  90              	.L8:
+ 807:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       HAL_DMAEx_ChangeMemory(hdcmi->DMA_Handle, (tmp + (8U*hdcmi->XferSize)), MEMORY0);
+  91              		.loc 1 807 7 is_stmt 1 view .LVU25
+ 807:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       HAL_DMAEx_ChangeMemory(hdcmi->DMA_Handle, (tmp + (8U*hdcmi->XferSize)), MEMORY0);
+  92              		.loc 1 807 11 is_stmt 0 view .LVU26
+  93 002e D368     		ldr	r3, [r2, #12]
+  94              	.LVL7:
+ 808:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount--;
+  95              		.loc 1 808 7 is_stmt 1 view .LVU27
+ 808:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount--;
+  96              		.loc 1 808 65 is_stmt 0 view .LVU28
+  97 0030 E16A     		ldr	r1, [r4, #44]
+ 808:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount--;
+  98              		.loc 1 808 7 view .LVU29
+  99 0032 0022     		movs	r2, #0
+ 100 0034 03EBC101 		add	r1, r3, r1, lsl #3
+ 101 0038 FFF7FEFF 		bl	HAL_DMAEx_ChangeMemory
+ 102              	.LVL8:
+ 809:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 103              		.loc 1 809 7 is_stmt 1 view .LVU30
+ 809:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 104              		.loc 1 809 12 is_stmt 0 view .LVU31
+ 105 003c A36A     		ldr	r3, [r4, #40]
+ 809:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 106              		.loc 1 809 23 view .LVU32
+ 107 003e 013B     		subs	r3, r3, #1
+ 108 0040 A362     		str	r3, [r4, #40]
+ 109 0042 EFE7     		b	.L4
+ 110              	.L9:
+ 814:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       HAL_DMAEx_ChangeMemory(hdcmi->DMA_Handle, (tmp + (8U*hdcmi->XferSize)), MEMORY1);
+ 111              		.loc 1 814 7 is_stmt 1 view .LVU33
+ 814:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       HAL_DMAEx_ChangeMemory(hdcmi->DMA_Handle, (tmp + (8U*hdcmi->XferSize)), MEMORY1);
+ 112              		.loc 1 814 11 is_stmt 0 view .LVU34
+ 113 0044 1369     		ldr	r3, [r2, #16]
+ 114              	.LVL9:
+ 815:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount--;
+ 115              		.loc 1 815 7 is_stmt 1 view .LVU35
+ARM GAS  /tmp/ccTuLRNt.s 			page 18
+
+
+ 815:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount--;
+ 116              		.loc 1 815 65 is_stmt 0 view .LVU36
+ 117 0046 E16A     		ldr	r1, [r4, #44]
+ 815:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount--;
+ 118              		.loc 1 815 7 view .LVU37
+ 119 0048 0122     		movs	r2, #1
+ 120 004a 03EBC101 		add	r1, r3, r1, lsl #3
+ 121 004e FFF7FEFF 		bl	HAL_DMAEx_ChangeMemory
+ 122              	.LVL10:
+ 816:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 123              		.loc 1 816 7 is_stmt 1 view .LVU38
+ 816:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 124              		.loc 1 816 12 is_stmt 0 view .LVU39
+ 125 0052 A36A     		ldr	r3, [r4, #40]
+ 816:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 126              		.loc 1 816 23 view .LVU40
+ 127 0054 013B     		subs	r3, r3, #1
+ 128 0056 A362     		str	r3, [r4, #40]
+ 129 0058 E4E7     		b	.L4
+ 130              	.LVL11:
+ 131              	.L2:
+ 820:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 132              		.loc 1 820 8 is_stmt 1 view .LVU41
+ 820:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 133              		.loc 1 820 17 is_stmt 0 view .LVU42
+ 134 005a A36B     		ldr	r3, [r4, #56]
+ 820:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 135              		.loc 1 820 29 view .LVU43
+ 136 005c 1B68     		ldr	r3, [r3]
+ 820:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 137              		.loc 1 820 39 view .LVU44
+ 138 005e 1A68     		ldr	r2, [r3]
+ 820:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 139              		.loc 1 820 10 view .LVU45
+ 140 0060 12F4002F 		tst	r2, #524288
+ 141 0064 02D0     		beq	.L5
+ 822:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 142              		.loc 1 822 5 is_stmt 1 view .LVU46
+ 822:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 143              		.loc 1 822 46 is_stmt 0 view .LVU47
+ 144 0066 626B     		ldr	r2, [r4, #52]
+ 822:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 145              		.loc 1 822 39 view .LVU48
+ 146 0068 DA60     		str	r2, [r3, #12]
+ 147 006a DBE7     		b	.L4
+ 148              	.L5:
+ 825:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 149              		.loc 1 825 8 is_stmt 1 view .LVU49
+ 825:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 150              		.loc 1 825 39 is_stmt 0 view .LVU50
+ 151 006c 1A68     		ldr	r2, [r3]
+ 825:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 152              		.loc 1 825 10 view .LVU51
+ 153 006e 12F4002F 		tst	r2, #524288
+ 154 0072 D7D1     		bne	.L4
+ 827:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->DMA_Handle->Instance->M1AR = (tmp + (4U*hdcmi->XferSize));
+ 155              		.loc 1 827 5 is_stmt 1 view .LVU52
+ARM GAS  /tmp/ccTuLRNt.s 			page 19
+
+
+ 827:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->DMA_Handle->Instance->M1AR = (tmp + (4U*hdcmi->XferSize));
+ 156              		.loc 1 827 9 is_stmt 0 view .LVU53
+ 157 0074 626B     		ldr	r2, [r4, #52]
+ 158              	.LVL12:
+ 828:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferCount = hdcmi->XferTransferNumber;
+ 159              		.loc 1 828 5 is_stmt 1 view .LVU54
+ 828:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferCount = hdcmi->XferTransferNumber;
+ 160              		.loc 1 828 57 is_stmt 0 view .LVU55
+ 161 0076 E16A     		ldr	r1, [r4, #44]
+ 828:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferCount = hdcmi->XferTransferNumber;
+ 162              		.loc 1 828 46 view .LVU56
+ 163 0078 02EB8102 		add	r2, r2, r1, lsl #2
+ 164              	.LVL13:
+ 828:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferCount = hdcmi->XferTransferNumber;
+ 165              		.loc 1 828 39 view .LVU57
+ 166 007c 1A61     		str	r2, [r3, #16]
+ 167              	.LVL14:
+ 829:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 168              		.loc 1 829 5 is_stmt 1 view .LVU58
+ 829:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 169              		.loc 1 829 29 is_stmt 0 view .LVU59
+ 170 007e 236B     		ldr	r3, [r4, #48]
+ 829:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 171              		.loc 1 829 22 view .LVU60
+ 172 0080 A362     		str	r3, [r4, #40]
+ 173 0082 CFE7     		b	.L4
+ 174              	.LVL15:
+ 175              	.L10:
+ 836:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 176              		.loc 1 836 5 is_stmt 1 view .LVU61
+ 177 0084 2268     		ldr	r2, [r4]
+ 178 0086 D368     		ldr	r3, [r2, #12]
+ 179 0088 43F00103 		orr	r3, r3, #1
+ 180 008c D360     		str	r3, [r2, #12]
+ 839:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {  
+ 181              		.loc 1 839 5 view .LVU62
+ 839:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {  
+ 182              		.loc 1 839 14 is_stmt 0 view .LVU63
+ 183 008e 2368     		ldr	r3, [r4]
+ 839:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {  
+ 184              		.loc 1 839 24 view .LVU64
+ 185 0090 1B68     		ldr	r3, [r3]
+ 839:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {  
+ 186              		.loc 1 839 7 view .LVU65
+ 187 0092 13F0020F 		tst	r3, #2
+ 188 0096 C9D0     		beq	.L1
+ 841:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 189              		.loc 1 841 7 is_stmt 1 view .LVU66
+ 841:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 190              		.loc 1 841 19 is_stmt 0 view .LVU67
+ 191 0098 0123     		movs	r3, #1
+ 192 009a 84F82530 		strb	r3, [r4, #37]
+ 193              		.loc 1 844 1 view .LVU68
+ 194 009e C5E7     		b	.L1
+ 195              		.cfi_endproc
+ 196              	.LFE144:
+ 198              		.section	.text.HAL_DCMI_MspInit,"ax",%progbits
+ARM GAS  /tmp/ccTuLRNt.s 			page 20
+
+
+ 199              		.align	1
+ 200              		.weak	HAL_DCMI_MspInit
+ 201              		.syntax unified
+ 202              		.thumb
+ 203              		.thumb_func
+ 204              		.fpu fpv4-sp-d16
+ 206              	HAL_DCMI_MspInit:
+ 207              	.LVL16:
+ 208              	.LFB128:
+ 235:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Prevent unused argument(s) compilation warning */
+ 209              		.loc 1 235 1 is_stmt 1 view -0
+ 210              		.cfi_startproc
+ 211              		@ args = 0, pretend = 0, frame = 0
+ 212              		@ frame_needed = 0, uses_anonymous_args = 0
+ 213              		@ link register save eliminated.
+ 237:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 214              		.loc 1 237 3 view .LVU70
+ 241:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 215              		.loc 1 241 1 is_stmt 0 view .LVU71
+ 216 0000 7047     		bx	lr
+ 217              		.cfi_endproc
+ 218              	.LFE128:
+ 220              		.section	.text.HAL_DCMI_Init,"ax",%progbits
+ 221              		.align	1
+ 222              		.weak	HAL_DCMI_Init
+ 223              		.syntax unified
+ 224              		.thumb
+ 225              		.thumb_func
+ 226              		.fpu fpv4-sp-d16
+ 228              	HAL_DCMI_Init:
+ 229              	.LVL17:
+ 230              	.LFB126:
+ 145:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Check the DCMI peripheral state */
+ 231              		.loc 1 145 1 is_stmt 1 view -0
+ 232              		.cfi_startproc
+ 233              		@ args = 0, pretend = 0, frame = 0
+ 234              		@ frame_needed = 0, uses_anonymous_args = 0
+ 147:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 235              		.loc 1 147 3 view .LVU73
+ 147:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 236              		.loc 1 147 5 is_stmt 0 view .LVU74
+ 237 0000 0028     		cmp	r0, #0
+ 238 0002 3FD0     		beq	.L16
+ 145:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Check the DCMI peripheral state */
+ 239              		.loc 1 145 1 view .LVU75
+ 240 0004 10B5     		push	{r4, lr}
+ 241              	.LCFI1:
+ 242              		.cfi_def_cfa_offset 8
+ 243              		.cfi_offset 4, -8
+ 244              		.cfi_offset 14, -4
+ 245 0006 0446     		mov	r4, r0
+ 153:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_PCKPOLARITY(hdcmi->Init.PCKPolarity));
+ 246              		.loc 1 153 3 is_stmt 1 view .LVU76
+ 154:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_VSPOLARITY(hdcmi->Init.VSPolarity));
+ 247              		.loc 1 154 3 view .LVU77
+ 155:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_HSPOLARITY(hdcmi->Init.HSPolarity));
+ 248              		.loc 1 155 3 view .LVU78
+ARM GAS  /tmp/ccTuLRNt.s 			page 21
+
+
+ 156:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_SYNCHRO(hdcmi->Init.SynchroMode));
+ 249              		.loc 1 156 3 view .LVU79
+ 157:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_CAPTURE_RATE(hdcmi->Init.CaptureRate));
+ 250              		.loc 1 157 3 view .LVU80
+ 158:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_EXTENDED_DATA(hdcmi->Init.ExtendedDataMode));
+ 251              		.loc 1 158 3 view .LVU81
+ 159:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_MODE_JPEG(hdcmi->Init.JPEGMode));
+ 252              		.loc 1 159 3 view .LVU82
+ 160:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 253              		.loc 1 160 3 view .LVU83
+ 162:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 254              		.loc 1 162 3 view .LVU84
+ 162:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 255              		.loc 1 162 11 is_stmt 0 view .LVU85
+ 256 0008 90F82530 		ldrb	r3, [r0, #37]	@ zero_extendqisi2
+ 162:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 257              		.loc 1 162 5 view .LVU86
+ 258 000c 43B3     		cbz	r3, .L21
+ 259              	.LVL18:
+ 260              	.L14:
+ 171:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 261              		.loc 1 171 3 is_stmt 1 view .LVU87
+ 171:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 262              		.loc 1 171 16 is_stmt 0 view .LVU88
+ 263 000e 0223     		movs	r3, #2
+ 264 0010 84F82530 		strb	r3, [r4, #37]
+ 175:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                            DCMI_CR_EDM_1  | DCMI_CR_FCRC_0 | DCMI_CR_FCRC_1 | DCMI_CR_JPEG  |
+ 265              		.loc 1 175 3 is_stmt 1 view .LVU89
+ 175:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                            DCMI_CR_EDM_1  | DCMI_CR_FCRC_0 | DCMI_CR_FCRC_1 | DCMI_CR_JPEG  |
+ 266              		.loc 1 175 8 is_stmt 0 view .LVU90
+ 267 0014 2268     		ldr	r2, [r4]
+ 175:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                            DCMI_CR_EDM_1  | DCMI_CR_FCRC_0 | DCMI_CR_FCRC_1 | DCMI_CR_JPEG  |
+ 268              		.loc 1 175 23 view .LVU91
+ 269 0016 1368     		ldr	r3, [r2]
+ 270 0018 23F47F63 		bic	r3, r3, #4080
+ 271 001c 23F00803 		bic	r3, r3, #8
+ 272 0020 1360     		str	r3, [r2]
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.VSPolarity  | hdcmi->Init.HSPolarity  | \
+ 273              		.loc 1 178 3 is_stmt 1 view .LVU92
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.VSPolarity  | hdcmi->Init.HSPolarity  | \
+ 274              		.loc 1 178 8 is_stmt 0 view .LVU93
+ 275 0022 2168     		ldr	r1, [r4]
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.VSPolarity  | hdcmi->Init.HSPolarity  | \
+ 276              		.loc 1 178 23 view .LVU94
+ 277 0024 0A68     		ldr	r2, [r1]
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.VSPolarity  | hdcmi->Init.HSPolarity  | \
+ 278              		.loc 1 178 49 view .LVU95
+ 279 0026 6368     		ldr	r3, [r4, #4]
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.VSPolarity  | hdcmi->Init.HSPolarity  | \
+ 280              		.loc 1 178 75 view .LVU96
+ 281 0028 6069     		ldr	r0, [r4, #20]
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.VSPolarity  | hdcmi->Init.HSPolarity  | \
+ 282              		.loc 1 178 62 view .LVU97
+ 283 002a 0343     		orrs	r3, r3, r0
+ 179:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.PCKPolarity | hdcmi->Init.ExtendedDataMode | \
+ 284              		.loc 1 179 49 view .LVU98
+ 285 002c E068     		ldr	r0, [r4, #12]
+ARM GAS  /tmp/ccTuLRNt.s 			page 22
+
+
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.VSPolarity  | hdcmi->Init.HSPolarity  | \
+ 286              		.loc 1 178 88 view .LVU99
+ 287 002e 0343     		orrs	r3, r3, r0
+ 179:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.PCKPolarity | hdcmi->Init.ExtendedDataMode | \
+ 288              		.loc 1 179 75 view .LVU100
+ 289 0030 2069     		ldr	r0, [r4, #16]
+ 179:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.PCKPolarity | hdcmi->Init.ExtendedDataMode | \
+ 290              		.loc 1 179 62 view .LVU101
+ 291 0032 0343     		orrs	r3, r3, r0
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.JPEGMode);
+ 292              		.loc 1 180 49 view .LVU102
+ 293 0034 A068     		ldr	r0, [r4, #8]
+ 179:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.PCKPolarity | hdcmi->Init.ExtendedDataMode | \
+ 294              		.loc 1 179 88 view .LVU103
+ 295 0036 0343     		orrs	r3, r3, r0
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.JPEGMode);
+ 296              		.loc 1 180 75 view .LVU104
+ 297 0038 A069     		ldr	r0, [r4, #24]
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.JPEGMode);
+ 298              		.loc 1 180 62 view .LVU105
+ 299 003a 0343     		orrs	r3, r3, r0
+ 181:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 300              		.loc 1 181 49 view .LVU106
+ 301 003c 206A     		ldr	r0, [r4, #32]
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.JPEGMode);
+ 302              		.loc 1 180 93 view .LVU107
+ 303 003e 0343     		orrs	r3, r3, r0
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                                      hdcmi->Init.VSPolarity  | hdcmi->Init.HSPolarity  | \
+ 304              		.loc 1 178 23 view .LVU108
+ 305 0040 1343     		orrs	r3, r3, r2
+ 306 0042 0B60     		str	r3, [r1]
+ 183:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 307              		.loc 1 183 3 is_stmt 1 view .LVU109
+ 183:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 308              		.loc 1 183 17 is_stmt 0 view .LVU110
+ 309 0044 6368     		ldr	r3, [r4, #4]
+ 183:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 310              		.loc 1 183 5 view .LVU111
+ 311 0046 102B     		cmp	r3, #16
+ 312 0048 0FD0     		beq	.L22
+ 313              	.L15:
+ 192:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 314              		.loc 1 192 3 is_stmt 1 view .LVU112
+ 315 004a 2268     		ldr	r2, [r4]
+ 316 004c D368     		ldr	r3, [r2, #12]
+ 317 004e 43F01E03 		orr	r3, r3, #30
+ 318 0052 D360     		str	r3, [r2, #12]
+ 195:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 319              		.loc 1 195 3 view .LVU113
+ 195:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 320              		.loc 1 195 20 is_stmt 0 view .LVU114
+ 321 0054 0020     		movs	r0, #0
+ 322 0056 E063     		str	r0, [r4, #60]
+ 198:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 323              		.loc 1 198 3 is_stmt 1 view .LVU115
+ 198:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 324              		.loc 1 198 17 is_stmt 0 view .LVU116
+ARM GAS  /tmp/ccTuLRNt.s 			page 23
+
+
+ 325 0058 0123     		movs	r3, #1
+ 326 005a 84F82530 		strb	r3, [r4, #37]
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 327              		.loc 1 200 3 is_stmt 1 view .LVU117
+ 201:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 328              		.loc 1 201 1 is_stmt 0 view .LVU118
+ 329 005e 10BD     		pop	{r4, pc}
+ 330              	.LVL19:
+ 331              	.L21:
+ 165:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Init the low level hardware */
+ 332              		.loc 1 165 5 is_stmt 1 view .LVU119
+ 165:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Init the low level hardware */
+ 333              		.loc 1 165 17 is_stmt 0 view .LVU120
+ 334 0060 80F82430 		strb	r3, [r0, #36]
+ 167:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 335              		.loc 1 167 5 is_stmt 1 view .LVU121
+ 336 0064 FFF7FEFF 		bl	HAL_DCMI_MspInit
+ 337              	.LVL20:
+ 167:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 338              		.loc 1 167 5 is_stmt 0 view .LVU122
+ 339 0068 D1E7     		b	.L14
+ 340              	.L22:
+ 185:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                              ((uint32_t)hdcmi->Init.SyncroCode.LineStartCode << DCMI_POSITION_ESCR_
+ 341              		.loc 1 185 5 is_stmt 1 view .LVU123
+ 185:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                              ((uint32_t)hdcmi->Init.SyncroCode.LineStartCode << DCMI_POSITION_ESCR_
+ 342              		.loc 1 185 63 is_stmt 0 view .LVU124
+ 343 006a 237F     		ldrb	r3, [r4, #28]	@ zero_extendqisi2
+ 186:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                              ((uint32_t)hdcmi->Init.SyncroCode.LineEndCode << DCMI_POSITION_ESCR_LE
+ 344              		.loc 1 186 63 view .LVU125
+ 345 006c 627F     		ldrb	r2, [r4, #29]	@ zero_extendqisi2
+ 185:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                              ((uint32_t)hdcmi->Init.SyncroCode.LineStartCode << DCMI_POSITION_ESCR_
+ 346              		.loc 1 185 83 view .LVU126
+ 347 006e 43EA0223 		orr	r3, r3, r2, lsl #8
+ 187:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                              ((uint32_t)hdcmi->Init.SyncroCode.FrameEndCode << DCMI_POSITION_ESCR_F
+ 348              		.loc 1 187 63 view .LVU127
+ 349 0072 A27F     		ldrb	r2, [r4, #30]	@ zero_extendqisi2
+ 186:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                              ((uint32_t)hdcmi->Init.SyncroCode.LineEndCode << DCMI_POSITION_ESCR_LE
+ 350              		.loc 1 186 104 view .LVU128
+ 351 0074 43EA0243 		orr	r3, r3, r2, lsl #16
+ 188:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 352              		.loc 1 188 63 view .LVU129
+ 353 0078 E17F     		ldrb	r1, [r4, #31]	@ zero_extendqisi2
+ 185:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                              ((uint32_t)hdcmi->Init.SyncroCode.LineStartCode << DCMI_POSITION_ESCR_
+ 354              		.loc 1 185 10 view .LVU130
+ 355 007a 2268     		ldr	r2, [r4]
+ 187:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                              ((uint32_t)hdcmi->Init.SyncroCode.FrameEndCode << DCMI_POSITION_ESCR_F
+ 356              		.loc 1 187 103 view .LVU131
+ 357 007c 43EA0163 		orr	r3, r3, r1, lsl #24
+ 185:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****                              ((uint32_t)hdcmi->Init.SyncroCode.LineStartCode << DCMI_POSITION_ESCR_
+ 358              		.loc 1 185 27 view .LVU132
+ 359 0080 9361     		str	r3, [r2, #24]
+ 360 0082 E2E7     		b	.L15
+ 361              	.LVL21:
+ 362              	.L16:
+ 363              	.LCFI2:
+ 364              		.cfi_def_cfa_offset 0
+ 365              		.cfi_restore 4
+ARM GAS  /tmp/ccTuLRNt.s 			page 24
+
+
+ 366              		.cfi_restore 14
+ 149:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 367              		.loc 1 149 13 view .LVU133
+ 368 0084 0120     		movs	r0, #1
+ 369              	.LVL22:
+ 201:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 370              		.loc 1 201 1 view .LVU134
+ 371 0086 7047     		bx	lr
+ 372              		.cfi_endproc
+ 373              	.LFE126:
+ 375              		.section	.text.HAL_DCMI_MspDeInit,"ax",%progbits
+ 376              		.align	1
+ 377              		.weak	HAL_DCMI_MspDeInit
+ 378              		.syntax unified
+ 379              		.thumb
+ 380              		.thumb_func
+ 381              		.fpu fpv4-sp-d16
+ 383              	HAL_DCMI_MspDeInit:
+ 384              	.LVL23:
+ 385              	.LFB129:
+ 250:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Prevent unused argument(s) compilation warning */
+ 386              		.loc 1 250 1 is_stmt 1 view -0
+ 387              		.cfi_startproc
+ 388              		@ args = 0, pretend = 0, frame = 0
+ 389              		@ frame_needed = 0, uses_anonymous_args = 0
+ 390              		@ link register save eliminated.
+ 252:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 391              		.loc 1 252 3 view .LVU136
+ 256:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 392              		.loc 1 256 1 is_stmt 0 view .LVU137
+ 393 0000 7047     		bx	lr
+ 394              		.cfi_endproc
+ 395              	.LFE129:
+ 397              		.section	.text.HAL_DCMI_DeInit,"ax",%progbits
+ 398              		.align	1
+ 399              		.global	HAL_DCMI_DeInit
+ 400              		.syntax unified
+ 401              		.thumb
+ 402              		.thumb_func
+ 403              		.fpu fpv4-sp-d16
+ 405              	HAL_DCMI_DeInit:
+ 406              	.LVL24:
+ 407              	.LFB127:
+ 212:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* DeInit the low level hardware */
+ 408              		.loc 1 212 1 is_stmt 1 view -0
+ 409              		.cfi_startproc
+ 410              		@ args = 0, pretend = 0, frame = 0
+ 411              		@ frame_needed = 0, uses_anonymous_args = 0
+ 212:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* DeInit the low level hardware */
+ 412              		.loc 1 212 1 is_stmt 0 view .LVU139
+ 413 0000 10B5     		push	{r4, lr}
+ 414              	.LCFI3:
+ 415              		.cfi_def_cfa_offset 8
+ 416              		.cfi_offset 4, -8
+ 417              		.cfi_offset 14, -4
+ 418 0002 0446     		mov	r4, r0
+ 214:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ARM GAS  /tmp/ccTuLRNt.s 			page 25
+
+
+ 419              		.loc 1 214 3 is_stmt 1 view .LVU140
+ 420 0004 FFF7FEFF 		bl	HAL_DCMI_MspDeInit
+ 421              	.LVL25:
+ 217:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 422              		.loc 1 217 3 view .LVU141
+ 217:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 423              		.loc 1 217 20 is_stmt 0 view .LVU142
+ 424 0008 0020     		movs	r0, #0
+ 425 000a E063     		str	r0, [r4, #60]
+ 220:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 426              		.loc 1 220 3 is_stmt 1 view .LVU143
+ 220:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 427              		.loc 1 220 16 is_stmt 0 view .LVU144
+ 428 000c 84F82500 		strb	r0, [r4, #37]
+ 223:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 429              		.loc 1 223 3 is_stmt 1 view .LVU145
+ 223:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 430              		.loc 1 223 3 view .LVU146
+ 431 0010 84F82400 		strb	r0, [r4, #36]
+ 223:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 432              		.loc 1 223 3 view .LVU147
+ 225:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 433              		.loc 1 225 3 view .LVU148
+ 226:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 434              		.loc 1 226 1 is_stmt 0 view .LVU149
+ 435 0014 10BD     		pop	{r4, pc}
+ 226:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 436              		.loc 1 226 1 view .LVU150
+ 437              		.cfi_endproc
+ 438              	.LFE127:
+ 440              		.section	.text.HAL_DCMI_Start_DMA,"ax",%progbits
+ 441              		.align	1
+ 442              		.global	HAL_DCMI_Start_DMA
+ 443              		.syntax unified
+ 444              		.thumb
+ 445              		.thumb_func
+ 446              		.fpu fpv4-sp-d16
+ 448              	HAL_DCMI_Start_DMA:
+ 449              	.LVL26:
+ 450              	.LFB130:
+ 288:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Initialize the second memory address */
+ 451              		.loc 1 288 1 is_stmt 1 view -0
+ 452              		.cfi_startproc
+ 453              		@ args = 0, pretend = 0, frame = 0
+ 454              		@ frame_needed = 0, uses_anonymous_args = 0
+ 288:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Initialize the second memory address */
+ 455              		.loc 1 288 1 is_stmt 0 view .LVU152
+ 456 0000 30B5     		push	{r4, r5, lr}
+ 457              	.LCFI4:
+ 458              		.cfi_def_cfa_offset 12
+ 459              		.cfi_offset 4, -12
+ 460              		.cfi_offset 5, -8
+ 461              		.cfi_offset 14, -4
+ 462 0002 83B0     		sub	sp, sp, #12
+ 463              	.LCFI5:
+ 464              		.cfi_def_cfa_offset 24
+ 465 0004 0446     		mov	r4, r0
+ARM GAS  /tmp/ccTuLRNt.s 			page 26
+
+
+ 290:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 466              		.loc 1 290 3 is_stmt 1 view .LVU153
+ 467              	.LVL27:
+ 293:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 468              		.loc 1 293 3 view .LVU154
+ 296:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 469              		.loc 1 296 3 view .LVU155
+ 296:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 470              		.loc 1 296 3 view .LVU156
+ 471 0006 90F82400 		ldrb	r0, [r0, #36]	@ zero_extendqisi2
+ 472              	.LVL28:
+ 296:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 473              		.loc 1 296 3 is_stmt 0 view .LVU157
+ 474 000a 0128     		cmp	r0, #1
+ 475 000c 52D0     		beq	.L32
+ 296:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 476              		.loc 1 296 3 is_stmt 1 discriminator 2 view .LVU158
+ 477 000e 0120     		movs	r0, #1
+ 478 0010 84F82400 		strb	r0, [r4, #36]
+ 296:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 479              		.loc 1 296 3 discriminator 2 view .LVU159
+ 299:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 480              		.loc 1 299 3 discriminator 2 view .LVU160
+ 299:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 481              		.loc 1 299 16 is_stmt 0 discriminator 2 view .LVU161
+ 482 0014 0220     		movs	r0, #2
+ 483 0016 84F82500 		strb	r0, [r4, #37]
+ 302:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 484              		.loc 1 302 3 is_stmt 1 discriminator 2 view .LVU162
+ 485 001a 2568     		ldr	r5, [r4]
+ 486 001c 2868     		ldr	r0, [r5]
+ 487 001e 40F48040 		orr	r0, r0, #16384
+ 488 0022 2860     		str	r0, [r5]
+ 305:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CR |=  (uint32_t)(DCMI_Mode);
+ 489              		.loc 1 305 3 discriminator 2 view .LVU163
+ 305:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CR |=  (uint32_t)(DCMI_Mode);
+ 490              		.loc 1 305 8 is_stmt 0 discriminator 2 view .LVU164
+ 491 0024 2568     		ldr	r5, [r4]
+ 305:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CR |=  (uint32_t)(DCMI_Mode);
+ 492              		.loc 1 305 23 discriminator 2 view .LVU165
+ 493 0026 2868     		ldr	r0, [r5]
+ 494 0028 20F00200 		bic	r0, r0, #2
+ 495 002c 2860     		str	r0, [r5]
+ 306:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 496              		.loc 1 306 3 is_stmt 1 discriminator 2 view .LVU166
+ 306:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 497              		.loc 1 306 8 is_stmt 0 discriminator 2 view .LVU167
+ 498 002e 2568     		ldr	r5, [r4]
+ 306:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 499              		.loc 1 306 23 discriminator 2 view .LVU168
+ 500 0030 2868     		ldr	r0, [r5]
+ 501 0032 0143     		orrs	r1, r1, r0
+ 502              	.LVL29:
+ 306:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 503              		.loc 1 306 23 discriminator 2 view .LVU169
+ 504 0034 2960     		str	r1, [r5]
+ 309:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ARM GAS  /tmp/ccTuLRNt.s 			page 27
+
+
+ 505              		.loc 1 309 3 is_stmt 1 discriminator 2 view .LVU170
+ 309:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 506              		.loc 1 309 8 is_stmt 0 discriminator 2 view .LVU171
+ 507 0036 A16B     		ldr	r1, [r4, #56]
+ 309:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 508              		.loc 1 309 39 discriminator 2 view .LVU172
+ 509 0038 1F48     		ldr	r0, .L35
+ 510 003a C863     		str	r0, [r1, #60]
+ 312:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 511              		.loc 1 312 3 is_stmt 1 discriminator 2 view .LVU173
+ 312:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 512              		.loc 1 312 8 is_stmt 0 discriminator 2 view .LVU174
+ 513 003c A16B     		ldr	r1, [r4, #56]
+ 312:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 514              		.loc 1 312 40 discriminator 2 view .LVU175
+ 515 003e 1F48     		ldr	r0, .L35+4
+ 516 0040 C864     		str	r0, [r1, #76]
+ 315:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 517              		.loc 1 315 3 is_stmt 1 discriminator 2 view .LVU176
+ 315:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 518              		.loc 1 315 8 is_stmt 0 discriminator 2 view .LVU177
+ 519 0042 A06B     		ldr	r0, [r4, #56]
+ 315:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 520              		.loc 1 315 40 discriminator 2 view .LVU178
+ 521 0044 0021     		movs	r1, #0
+ 522 0046 0165     		str	r1, [r0, #80]
+ 318:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->XferTransferNumber = 0U;
+ 523              		.loc 1 318 3 is_stmt 1 discriminator 2 view .LVU179
+ 318:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->XferTransferNumber = 0U;
+ 524              		.loc 1 318 20 is_stmt 0 discriminator 2 view .LVU180
+ 525 0048 A162     		str	r1, [r4, #40]
+ 319:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 526              		.loc 1 319 3 is_stmt 1 discriminator 2 view .LVU181
+ 319:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 527              		.loc 1 319 29 is_stmt 0 discriminator 2 view .LVU182
+ 528 004a 2163     		str	r1, [r4, #48]
+ 321:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 529              		.loc 1 321 3 is_stmt 1 discriminator 2 view .LVU183
+ 321:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 530              		.loc 1 321 5 is_stmt 0 discriminator 2 view .LVU184
+ 531 004c B3F5803F 		cmp	r3, #65536
+ 532 0050 07D3     		bcc	.L34
+ 329:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 533              		.loc 1 329 5 is_stmt 1 view .LVU185
+ 329:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 534              		.loc 1 329 10 is_stmt 0 view .LVU186
+ 535 0052 A16B     		ldr	r1, [r4, #56]
+ 329:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 536              		.loc 1 329 43 view .LVU187
+ 537 0054 1848     		ldr	r0, .L35
+ 538 0056 4864     		str	r0, [r1, #68]
+ 332:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferSize = Length;
+ 539              		.loc 1 332 5 is_stmt 1 view .LVU188
+ 332:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferSize = Length;
+ 540              		.loc 1 332 22 is_stmt 0 view .LVU189
+ 541 0058 0121     		movs	r1, #1
+ 542 005a A162     		str	r1, [r4, #40]
+ARM GAS  /tmp/ccTuLRNt.s 			page 28
+
+
+ 333:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->pBuffPtr = pData;
+ 543              		.loc 1 333 5 is_stmt 1 view .LVU190
+ 333:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->pBuffPtr = pData;
+ 544              		.loc 1 333 21 is_stmt 0 view .LVU191
+ 545 005c E362     		str	r3, [r4, #44]
+ 334:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 546              		.loc 1 334 5 is_stmt 1 view .LVU192
+ 334:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 547              		.loc 1 334 21 is_stmt 0 view .LVU193
+ 548 005e 6263     		str	r2, [r4, #52]
+ 337:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 549              		.loc 1 337 5 is_stmt 1 view .LVU194
+ 337:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 550              		.loc 1 337 10 is_stmt 0 view .LVU195
+ 551 0060 0BE0     		b	.L30
+ 552              	.L34:
+ 324:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 553              		.loc 1 324 5 is_stmt 1 view .LVU196
+ 324:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 554              		.loc 1 324 57 is_stmt 0 view .LVU197
+ 555 0062 2168     		ldr	r1, [r4]
+ 324:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 556              		.loc 1 324 5 view .LVU198
+ 557 0064 2831     		adds	r1, r1, #40
+ 558 0066 A06B     		ldr	r0, [r4, #56]
+ 559 0068 FFF7FEFF 		bl	HAL_DMA_Start_IT
+ 560              	.LVL30:
+ 324:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 561              		.loc 1 324 5 view .LVU199
+ 562 006c 18E0     		b	.L29
+ 563              	.LVL31:
+ 564              	.L31:
+ 339:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount = hdcmi->XferCount*2U;
+ 565              		.loc 1 339 7 is_stmt 1 view .LVU200
+ 339:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount = hdcmi->XferCount*2U;
+ 566              		.loc 1 339 31 is_stmt 0 view .LVU201
+ 567 006e E36A     		ldr	r3, [r4, #44]
+ 339:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount = hdcmi->XferCount*2U;
+ 568              		.loc 1 339 41 view .LVU202
+ 569 0070 5B08     		lsrs	r3, r3, #1
+ 339:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       hdcmi->XferCount = hdcmi->XferCount*2U;
+ 570              		.loc 1 339 23 view .LVU203
+ 571 0072 E362     		str	r3, [r4, #44]
+ 340:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 572              		.loc 1 340 7 is_stmt 1 view .LVU204
+ 340:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 573              		.loc 1 340 31 is_stmt 0 view .LVU205
+ 574 0074 A36A     		ldr	r3, [r4, #40]
+ 340:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 575              		.loc 1 340 42 view .LVU206
+ 576 0076 5B00     		lsls	r3, r3, #1
+ 340:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 577              		.loc 1 340 24 view .LVU207
+ 578 0078 A362     		str	r3, [r4, #40]
+ 579              	.L30:
+ 337:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 580              		.loc 1 337 10 is_stmt 1 view .LVU208
+ARM GAS  /tmp/ccTuLRNt.s 			page 29
+
+
+ 337:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 581              		.loc 1 337 16 is_stmt 0 view .LVU209
+ 582 007a E36A     		ldr	r3, [r4, #44]
+ 337:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 583              		.loc 1 337 10 view .LVU210
+ 584 007c B3F5803F 		cmp	r3, #65536
+ 585 0080 F5D2     		bcs	.L31
+ 344:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferTransferNumber = hdcmi->XferCount;
+ 586              		.loc 1 344 5 is_stmt 1 view .LVU211
+ 344:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferTransferNumber = hdcmi->XferCount;
+ 587              		.loc 1 344 30 is_stmt 0 view .LVU212
+ 588 0082 A36A     		ldr	r3, [r4, #40]
+ 344:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferTransferNumber = hdcmi->XferCount;
+ 589              		.loc 1 344 42 view .LVU213
+ 590 0084 023B     		subs	r3, r3, #2
+ 344:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->XferTransferNumber = hdcmi->XferCount;
+ 591              		.loc 1 344 22 view .LVU214
+ 592 0086 A362     		str	r3, [r4, #40]
+ 345:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 593              		.loc 1 345 5 is_stmt 1 view .LVU215
+ 345:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 594              		.loc 1 345 38 is_stmt 0 view .LVU216
+ 595 0088 A36A     		ldr	r3, [r4, #40]
+ 345:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 596              		.loc 1 345 31 view .LVU217
+ 597 008a 2363     		str	r3, [r4, #48]
+ 348:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 598              		.loc 1 348 5 is_stmt 1 view .LVU218
+ 348:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 599              		.loc 1 348 52 is_stmt 0 view .LVU219
+ 600 008c E36A     		ldr	r3, [r4, #44]
+ 601              	.LVL32:
+ 351:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 602              		.loc 1 351 5 is_stmt 1 view .LVU220
+ 351:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 603              		.loc 1 351 70 is_stmt 0 view .LVU221
+ 604 008e 2168     		ldr	r1, [r4]
+ 351:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 605              		.loc 1 351 5 view .LVU222
+ 606 0090 E06A     		ldr	r0, [r4, #44]
+ 607 0092 0090     		str	r0, [sp]
+ 608 0094 02EB8303 		add	r3, r2, r3, lsl #2
+ 609              	.LVL33:
+ 351:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 610              		.loc 1 351 5 view .LVU223
+ 611 0098 2831     		adds	r1, r1, #40
+ 612 009a A06B     		ldr	r0, [r4, #56]
+ 613 009c FFF7FEFF 		bl	HAL_DMAEx_MultiBufferStart_IT
+ 614              	.LVL34:
+ 615              	.L29:
+ 355:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 616              		.loc 1 355 3 is_stmt 1 view .LVU224
+ 355:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 617              		.loc 1 355 8 is_stmt 0 view .LVU225
+ 618 00a0 2268     		ldr	r2, [r4]
+ 355:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 619              		.loc 1 355 23 view .LVU226
+ARM GAS  /tmp/ccTuLRNt.s 			page 30
+
+
+ 620 00a2 1368     		ldr	r3, [r2]
+ 621 00a4 43F00103 		orr	r3, r3, #1
+ 622 00a8 1360     		str	r3, [r2]
+ 358:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 623              		.loc 1 358 3 is_stmt 1 view .LVU227
+ 358:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 624              		.loc 1 358 3 view .LVU228
+ 625 00aa 0020     		movs	r0, #0
+ 626 00ac 84F82400 		strb	r0, [r4, #36]
+ 358:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 627              		.loc 1 358 3 view .LVU229
+ 361:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 628              		.loc 1 361 3 view .LVU230
+ 629              	.L27:
+ 362:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 630              		.loc 1 362 1 is_stmt 0 view .LVU231
+ 631 00b0 03B0     		add	sp, sp, #12
+ 632              	.LCFI6:
+ 633              		.cfi_remember_state
+ 634              		.cfi_def_cfa_offset 12
+ 635              		@ sp needed
+ 636 00b2 30BD     		pop	{r4, r5, pc}
+ 637              	.LVL35:
+ 638              	.L32:
+ 639              	.LCFI7:
+ 640              		.cfi_restore_state
+ 296:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 641              		.loc 1 296 3 view .LVU232
+ 642 00b4 0220     		movs	r0, #2
+ 643 00b6 FBE7     		b	.L27
+ 644              	.L36:
+ 645              		.align	2
+ 646              	.L35:
+ 647 00b8 00000000 		.word	DCMI_DMAXferCplt
+ 648 00bc 00000000 		.word	DCMI_DMAError
+ 649              		.cfi_endproc
+ 650              	.LFE130:
+ 652              		.section	.text.HAL_DCMI_Stop,"ax",%progbits
+ 653              		.align	1
+ 654              		.global	HAL_DCMI_Stop
+ 655              		.syntax unified
+ 656              		.thumb
+ 657              		.thumb_func
+ 658              		.fpu fpv4-sp-d16
+ 660              	HAL_DCMI_Stop:
+ 661              	.LVL36:
+ 662              	.LFB131:
+ 371:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __IO uint32_t count = SystemCoreClock / HAL_TIMEOUT_DCMI_STOP;
+ 663              		.loc 1 371 1 is_stmt 1 view -0
+ 664              		.cfi_startproc
+ 665              		@ args = 0, pretend = 0, frame = 8
+ 666              		@ frame_needed = 0, uses_anonymous_args = 0
+ 371:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __IO uint32_t count = SystemCoreClock / HAL_TIMEOUT_DCMI_STOP;
+ 667              		.loc 1 371 1 is_stmt 0 view .LVU234
+ 668 0000 30B5     		push	{r4, r5, lr}
+ 669              	.LCFI8:
+ 670              		.cfi_def_cfa_offset 12
+ARM GAS  /tmp/ccTuLRNt.s 			page 31
+
+
+ 671              		.cfi_offset 4, -12
+ 672              		.cfi_offset 5, -8
+ 673              		.cfi_offset 14, -4
+ 674 0002 83B0     		sub	sp, sp, #12
+ 675              	.LCFI9:
+ 676              		.cfi_def_cfa_offset 24
+ 372:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 677              		.loc 1 372 3 is_stmt 1 view .LVU235
+ 372:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 678              		.loc 1 372 41 is_stmt 0 view .LVU236
+ 679 0004 1E4B     		ldr	r3, .L45
+ 680 0006 1B68     		ldr	r3, [r3]
+ 681 0008 5B08     		lsrs	r3, r3, #1
+ 682 000a 1E4A     		ldr	r2, .L45+4
+ 683 000c A2FB0323 		umull	r2, r3, r2, r3
+ 684 0010 9B08     		lsrs	r3, r3, #2
+ 372:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 685              		.loc 1 372 17 view .LVU237
+ 686 0012 0193     		str	r3, [sp, #4]
+ 373:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 687              		.loc 1 373 3 is_stmt 1 view .LVU238
+ 688              	.LVL37:
+ 376:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 689              		.loc 1 376 3 view .LVU239
+ 376:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 690              		.loc 1 376 3 view .LVU240
+ 691 0014 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 692 0018 012B     		cmp	r3, #1
+ 693 001a 2FD0     		beq	.L41
+ 694 001c 0446     		mov	r4, r0
+ 376:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 695              		.loc 1 376 3 discriminator 2 view .LVU241
+ 696 001e 0123     		movs	r3, #1
+ 697 0020 80F82430 		strb	r3, [r0, #36]
+ 376:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 698              		.loc 1 376 3 discriminator 2 view .LVU242
+ 379:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 699              		.loc 1 379 3 discriminator 2 view .LVU243
+ 379:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 700              		.loc 1 379 16 is_stmt 0 discriminator 2 view .LVU244
+ 701 0024 0223     		movs	r3, #2
+ 702 0026 80F82530 		strb	r3, [r0, #37]
+ 382:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 703              		.loc 1 382 3 is_stmt 1 discriminator 2 view .LVU245
+ 382:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 704              		.loc 1 382 8 is_stmt 0 discriminator 2 view .LVU246
+ 705 002a 0268     		ldr	r2, [r0]
+ 382:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 706              		.loc 1 382 23 discriminator 2 view .LVU247
+ 707 002c 1368     		ldr	r3, [r2]
+ 708 002e 23F00103 		bic	r3, r3, #1
+ 709 0032 1360     		str	r3, [r2]
+ 373:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 710              		.loc 1 373 21 discriminator 2 view .LVU248
+ 711 0034 0025     		movs	r5, #0
+ 712 0036 09E0     		b	.L40
+ 713              	.LVL38:
+ARM GAS  /tmp/ccTuLRNt.s 			page 32
+
+
+ 714              	.L44:
+ 390:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 715              		.loc 1 390 7 is_stmt 1 view .LVU249
+ 390:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 716              		.loc 1 390 24 is_stmt 0 view .LVU250
+ 717 0038 E36B     		ldr	r3, [r4, #60]
+ 718 003a 43F02003 		orr	r3, r3, #32
+ 719 003e E363     		str	r3, [r4, #60]
+ 392:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 720              		.loc 1 392 7 is_stmt 1 view .LVU251
+ 721              	.LVL39:
+ 392:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 722              		.loc 1 392 14 is_stmt 0 view .LVU252
+ 723 0040 0325     		movs	r5, #3
+ 724              	.LVL40:
+ 725              	.L39:
+ 395:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 726              		.loc 1 395 8 is_stmt 1 view .LVU253
+ 395:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 727              		.loc 1 395 15 is_stmt 0 view .LVU254
+ 728 0042 2368     		ldr	r3, [r4]
+ 395:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 729              		.loc 1 395 25 view .LVU255
+ 730 0044 1A68     		ldr	r2, [r3]
+ 395:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 731              		.loc 1 395 3 view .LVU256
+ 732 0046 12F0010F 		tst	r2, #1
+ 733 004a 05D0     		beq	.L43
+ 734              	.LVL41:
+ 735              	.L40:
+ 385:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 736              		.loc 1 385 3 is_stmt 1 view .LVU257
+ 387:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 737              		.loc 1 387 5 view .LVU258
+ 387:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 738              		.loc 1 387 14 is_stmt 0 view .LVU259
+ 739 004c 019B     		ldr	r3, [sp, #4]
+ 740 004e 5A1E     		subs	r2, r3, #1
+ 741 0050 0192     		str	r2, [sp, #4]
+ 387:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 742              		.loc 1 387 8 view .LVU260
+ 743 0052 002B     		cmp	r3, #0
+ 744 0054 F5D1     		bne	.L39
+ 745 0056 EFE7     		b	.L44
+ 746              	.L43:
+ 398:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 747              		.loc 1 398 3 is_stmt 1 view .LVU261
+ 748 0058 1A68     		ldr	r2, [r3]
+ 749 005a 22F48042 		bic	r2, r2, #16384
+ 750 005e 1A60     		str	r2, [r3]
+ 401:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 751              		.loc 1 401 3 view .LVU262
+ 752 0060 A06B     		ldr	r0, [r4, #56]
+ 753              	.LVL42:
+ 401:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 754              		.loc 1 401 3 is_stmt 0 view .LVU263
+ 755 0062 FFF7FEFF 		bl	HAL_DMA_Abort
+ARM GAS  /tmp/ccTuLRNt.s 			page 33
+
+
+ 756              	.LVL43:
+ 404:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 757              		.loc 1 404 3 is_stmt 1 view .LVU264
+ 404:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 758              		.loc 1 404 20 is_stmt 0 view .LVU265
+ 759 0066 E36B     		ldr	r3, [r4, #60]
+ 760 0068 E363     		str	r3, [r4, #60]
+ 407:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 761              		.loc 1 407 3 is_stmt 1 view .LVU266
+ 407:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 762              		.loc 1 407 16 is_stmt 0 view .LVU267
+ 763 006a 0123     		movs	r3, #1
+ 764 006c 84F82530 		strb	r3, [r4, #37]
+ 410:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 765              		.loc 1 410 3 is_stmt 1 view .LVU268
+ 410:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 766              		.loc 1 410 3 view .LVU269
+ 767 0070 0023     		movs	r3, #0
+ 768 0072 84F82430 		strb	r3, [r4, #36]
+ 410:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 769              		.loc 1 410 3 view .LVU270
+ 413:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 770              		.loc 1 413 3 view .LVU271
+ 771              	.LVL44:
+ 772              	.L38:
+ 414:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 773              		.loc 1 414 1 is_stmt 0 view .LVU272
+ 774 0076 2846     		mov	r0, r5
+ 775 0078 03B0     		add	sp, sp, #12
+ 776              	.LCFI10:
+ 777              		.cfi_remember_state
+ 778              		.cfi_def_cfa_offset 12
+ 779              		@ sp needed
+ 780 007a 30BD     		pop	{r4, r5, pc}
+ 781              	.LVL45:
+ 782              	.L41:
+ 783              	.LCFI11:
+ 784              		.cfi_restore_state
+ 376:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 785              		.loc 1 376 3 view .LVU273
+ 786 007c 0225     		movs	r5, #2
+ 787 007e FAE7     		b	.L38
+ 788              	.L46:
+ 789              		.align	2
+ 790              	.L45:
+ 791 0080 00000000 		.word	SystemCoreClock
+ 792 0084 93244992 		.word	-1840700269
+ 793              		.cfi_endproc
+ 794              	.LFE131:
+ 796              		.section	.text.HAL_DCMI_Suspend,"ax",%progbits
+ 797              		.align	1
+ 798              		.global	HAL_DCMI_Suspend
+ 799              		.syntax unified
+ 800              		.thumb
+ 801              		.thumb_func
+ 802              		.fpu fpv4-sp-d16
+ 804              	HAL_DCMI_Suspend:
+ARM GAS  /tmp/ccTuLRNt.s 			page 34
+
+
+ 805              	.LVL46:
+ 806              	.LFB132:
+ 423:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __IO uint32_t count = SystemCoreClock / HAL_TIMEOUT_DCMI_STOP;
+ 807              		.loc 1 423 1 is_stmt 1 view -0
+ 808              		.cfi_startproc
+ 809              		@ args = 0, pretend = 0, frame = 8
+ 810              		@ frame_needed = 0, uses_anonymous_args = 0
+ 811              		@ link register save eliminated.
+ 423:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   __IO uint32_t count = SystemCoreClock / HAL_TIMEOUT_DCMI_STOP;
+ 812              		.loc 1 423 1 is_stmt 0 view .LVU275
+ 813 0000 82B0     		sub	sp, sp, #8
+ 814              	.LCFI12:
+ 815              		.cfi_def_cfa_offset 8
+ 424:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 816              		.loc 1 424 3 is_stmt 1 view .LVU276
+ 424:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 817              		.loc 1 424 41 is_stmt 0 view .LVU277
+ 818 0002 1C4A     		ldr	r2, .L57
+ 819 0004 1268     		ldr	r2, [r2]
+ 820 0006 5208     		lsrs	r2, r2, #1
+ 821 0008 1B49     		ldr	r1, .L57+4
+ 822 000a A1FB0212 		umull	r1, r2, r1, r2
+ 823 000e 9208     		lsrs	r2, r2, #2
+ 424:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 824              		.loc 1 424 17 view .LVU278
+ 825 0010 0192     		str	r2, [sp, #4]
+ 425:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 826              		.loc 1 425 3 is_stmt 1 view .LVU279
+ 827              	.LVL47:
+ 428:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 828              		.loc 1 428 3 view .LVU280
+ 428:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 829              		.loc 1 428 3 view .LVU281
+ 830 0012 90F82420 		ldrb	r2, [r0, #36]	@ zero_extendqisi2
+ 831 0016 012A     		cmp	r2, #1
+ 832 0018 2AD0     		beq	.L52
+ 833 001a 0346     		mov	r3, r0
+ 428:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 834              		.loc 1 428 3 discriminator 2 view .LVU282
+ 835 001c 0122     		movs	r2, #1
+ 836 001e 80F82420 		strb	r2, [r0, #36]
+ 428:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 837              		.loc 1 428 3 discriminator 2 view .LVU283
+ 430:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 838              		.loc 1 430 3 discriminator 2 view .LVU284
+ 430:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 839              		.loc 1 430 11 is_stmt 0 discriminator 2 view .LVU285
+ 840 0022 90F82520 		ldrb	r2, [r0, #37]	@ zero_extendqisi2
+ 841 0026 D2B2     		uxtb	r2, r2
+ 430:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 842              		.loc 1 430 5 discriminator 2 view .LVU286
+ 843 0028 022A     		cmp	r2, #2
+ 844 002a 05D0     		beq	.L55
+ 425:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 845              		.loc 1 425 21 view .LVU287
+ 846 002c 0020     		movs	r0, #0
+ 847              	.LVL48:
+ARM GAS  /tmp/ccTuLRNt.s 			page 35
+
+
+ 848              	.L49:
+ 456:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 849              		.loc 1 456 3 is_stmt 1 view .LVU288
+ 456:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 850              		.loc 1 456 3 view .LVU289
+ 851 002e 0022     		movs	r2, #0
+ 852 0030 83F82420 		strb	r2, [r3, #36]
+ 456:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 853              		.loc 1 456 3 view .LVU290
+ 459:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 854              		.loc 1 459 3 view .LVU291
+ 855              	.LVL49:
+ 856              	.L48:
+ 460:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 857              		.loc 1 460 1 is_stmt 0 view .LVU292
+ 858 0034 02B0     		add	sp, sp, #8
+ 859              	.LCFI13:
+ 860              		.cfi_remember_state
+ 861              		.cfi_def_cfa_offset 0
+ 862              		@ sp needed
+ 863 0036 7047     		bx	lr
+ 864              	.LVL50:
+ 865              	.L55:
+ 866              	.LCFI14:
+ 867              		.cfi_restore_state
+ 433:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 868              		.loc 1 433 5 is_stmt 1 view .LVU293
+ 433:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 869              		.loc 1 433 18 is_stmt 0 view .LVU294
+ 870 0038 0522     		movs	r2, #5
+ 871 003a 80F82520 		strb	r2, [r0, #37]
+ 436:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 872              		.loc 1 436 5 is_stmt 1 view .LVU295
+ 436:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 873              		.loc 1 436 10 is_stmt 0 view .LVU296
+ 874 003e 0168     		ldr	r1, [r0]
+ 436:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 875              		.loc 1 436 25 view .LVU297
+ 876 0040 0A68     		ldr	r2, [r1]
+ 877 0042 22F00102 		bic	r2, r2, #1
+ 878 0046 0A60     		str	r2, [r1]
+ 879              	.L51:
+ 439:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     {
+ 880              		.loc 1 439 5 is_stmt 1 view .LVU298
+ 441:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       {        
+ 881              		.loc 1 441 7 view .LVU299
+ 441:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       {        
+ 882              		.loc 1 441 16 is_stmt 0 view .LVU300
+ 883 0048 019A     		ldr	r2, [sp, #4]
+ 884 004a 511E     		subs	r1, r2, #1
+ 885 004c 0191     		str	r1, [sp, #4]
+ 441:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       {        
+ 886              		.loc 1 441 10 view .LVU301
+ 887 004e 32B1     		cbz	r2, .L56
+ 453:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }    
+ 888              		.loc 1 453 10 is_stmt 1 view .LVU302
+ 453:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }    
+ARM GAS  /tmp/ccTuLRNt.s 			page 36
+
+
+ 889              		.loc 1 453 17 is_stmt 0 view .LVU303
+ 890 0050 1A68     		ldr	r2, [r3]
+ 453:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }    
+ 891              		.loc 1 453 27 view .LVU304
+ 892 0052 1268     		ldr	r2, [r2]
+ 453:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }    
+ 893              		.loc 1 453 5 view .LVU305
+ 894 0054 12F0010F 		tst	r2, #1
+ 895 0058 F6D1     		bne	.L51
+ 425:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 896              		.loc 1 425 21 view .LVU306
+ 897 005a 0020     		movs	r0, #0
+ 898              	.LVL51:
+ 425:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 899              		.loc 1 425 21 view .LVU307
+ 900 005c E7E7     		b	.L49
+ 901              	.LVL52:
+ 902              	.L56:
+ 444:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         
+ 903              		.loc 1 444 9 is_stmt 1 view .LVU308
+ 444:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         
+ 904              		.loc 1 444 26 is_stmt 0 view .LVU309
+ 905 005e DA6B     		ldr	r2, [r3, #60]
+ 906 0060 42F02002 		orr	r2, r2, #32
+ 907 0064 DA63     		str	r2, [r3, #60]
+ 447:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         
+ 908              		.loc 1 447 9 is_stmt 1 view .LVU310
+ 447:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         
+ 909              		.loc 1 447 22 is_stmt 0 view .LVU311
+ 910 0066 0122     		movs	r2, #1
+ 911 0068 83F82520 		strb	r2, [r3, #37]
+ 449:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         break;
+ 912              		.loc 1 449 9 is_stmt 1 view .LVU312
+ 913              	.LVL53:
+ 450:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       }
+ 914              		.loc 1 450 9 view .LVU313
+ 449:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****         break;
+ 915              		.loc 1 449 16 is_stmt 0 view .LVU314
+ 916 006c 0320     		movs	r0, #3
+ 917              	.LVL54:
+ 450:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****       }
+ 918              		.loc 1 450 9 view .LVU315
+ 919 006e DEE7     		b	.L49
+ 920              	.LVL55:
+ 921              	.L52:
+ 428:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 922              		.loc 1 428 3 view .LVU316
+ 923 0070 0220     		movs	r0, #2
+ 924              	.LVL56:
+ 428:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 925              		.loc 1 428 3 view .LVU317
+ 926 0072 DFE7     		b	.L48
+ 927              	.L58:
+ 928              		.align	2
+ 929              	.L57:
+ 930 0074 00000000 		.word	SystemCoreClock
+ 931 0078 93244992 		.word	-1840700269
+ARM GAS  /tmp/ccTuLRNt.s 			page 37
+
+
+ 932              		.cfi_endproc
+ 933              	.LFE132:
+ 935              		.section	.text.HAL_DCMI_Resume,"ax",%progbits
+ 936              		.align	1
+ 937              		.global	HAL_DCMI_Resume
+ 938              		.syntax unified
+ 939              		.thumb
+ 940              		.thumb_func
+ 941              		.fpu fpv4-sp-d16
+ 943              	HAL_DCMI_Resume:
+ 944              	.LVL57:
+ 945              	.LFB133:
+ 469:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process locked */
+ 946              		.loc 1 469 1 is_stmt 1 view -0
+ 947              		.cfi_startproc
+ 948              		@ args = 0, pretend = 0, frame = 0
+ 949              		@ frame_needed = 0, uses_anonymous_args = 0
+ 950              		@ link register save eliminated.
+ 471:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 951              		.loc 1 471 3 view .LVU319
+ 471:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 952              		.loc 1 471 3 view .LVU320
+ 953 0000 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 954 0004 012B     		cmp	r3, #1
+ 955 0006 15D0     		beq	.L62
+ 471:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 956              		.loc 1 471 3 discriminator 2 view .LVU321
+ 957 0008 0123     		movs	r3, #1
+ 958 000a 80F82430 		strb	r3, [r0, #36]
+ 471:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 959              		.loc 1 471 3 discriminator 2 view .LVU322
+ 473:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 960              		.loc 1 473 3 discriminator 2 view .LVU323
+ 473:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 961              		.loc 1 473 11 is_stmt 0 discriminator 2 view .LVU324
+ 962 000e 90F82530 		ldrb	r3, [r0, #37]	@ zero_extendqisi2
+ 963 0012 DBB2     		uxtb	r3, r3
+ 473:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 964              		.loc 1 473 5 discriminator 2 view .LVU325
+ 965 0014 052B     		cmp	r3, #5
+ 966 0016 04D0     		beq	.L63
+ 967              	.L61:
+ 482:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 968              		.loc 1 482 3 is_stmt 1 view .LVU326
+ 482:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 969              		.loc 1 482 3 view .LVU327
+ 970 0018 0023     		movs	r3, #0
+ 971 001a 80F82430 		strb	r3, [r0, #36]
+ 482:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 972              		.loc 1 482 3 view .LVU328
+ 485:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 973              		.loc 1 485 3 view .LVU329
+ 485:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 974              		.loc 1 485 10 is_stmt 0 view .LVU330
+ 975 001e 1846     		mov	r0, r3
+ 976              	.LVL58:
+ 485:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ARM GAS  /tmp/ccTuLRNt.s 			page 38
+
+
+ 977              		.loc 1 485 10 view .LVU331
+ 978 0020 7047     		bx	lr
+ 979              	.LVL59:
+ 980              	.L63:
+ 476:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 981              		.loc 1 476 5 is_stmt 1 view .LVU332
+ 476:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 982              		.loc 1 476 18 is_stmt 0 view .LVU333
+ 983 0022 0223     		movs	r3, #2
+ 984 0024 80F82530 		strb	r3, [r0, #37]
+ 479:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   } 
+ 985              		.loc 1 479 5 is_stmt 1 view .LVU334
+ 479:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   } 
+ 986              		.loc 1 479 10 is_stmt 0 view .LVU335
+ 987 0028 0268     		ldr	r2, [r0]
+ 479:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   } 
+ 988              		.loc 1 479 25 view .LVU336
+ 989 002a 1368     		ldr	r3, [r2]
+ 990 002c 43F00103 		orr	r3, r3, #1
+ 991 0030 1360     		str	r3, [r2]
+ 992 0032 F1E7     		b	.L61
+ 993              	.L62:
+ 471:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 994              		.loc 1 471 3 view .LVU337
+ 995 0034 0220     		movs	r0, #2
+ 996              	.LVL60:
+ 486:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 997              		.loc 1 486 1 view .LVU338
+ 998 0036 7047     		bx	lr
+ 999              		.cfi_endproc
+ 1000              	.LFE133:
+ 1002              		.section	.text.HAL_DCMI_ErrorCallback,"ax",%progbits
+ 1003              		.align	1
+ 1004              		.weak	HAL_DCMI_ErrorCallback
+ 1005              		.syntax unified
+ 1006              		.thumb
+ 1007              		.thumb_func
+ 1008              		.fpu fpv4-sp-d16
+ 1010              	HAL_DCMI_ErrorCallback:
+ 1011              	.LVL61:
+ 1012              	.LFB135:
+ 577:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Prevent unused argument(s) compilation warning */
+ 1013              		.loc 1 577 1 is_stmt 1 view -0
+ 1014              		.cfi_startproc
+ 1015              		@ args = 0, pretend = 0, frame = 0
+ 1016              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1017              		@ link register save eliminated.
+ 579:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 1018              		.loc 1 579 3 view .LVU340
+ 583:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1019              		.loc 1 583 1 is_stmt 0 view .LVU341
+ 1020 0000 7047     		bx	lr
+ 1021              		.cfi_endproc
+ 1022              	.LFE135:
+ 1024              		.section	.text.DCMI_DMAError,"ax",%progbits
+ 1025              		.align	1
+ 1026              		.syntax unified
+ARM GAS  /tmp/ccTuLRNt.s 			page 39
+
+
+ 1027              		.thumb
+ 1028              		.thumb_func
+ 1029              		.fpu fpv4-sp-d16
+ 1031              	DCMI_DMAError:
+ 1032              	.LVL62:
+ 1033              	.LFB145:
+ 845:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 846:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** /**
+ 847:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @brief  DMA error callback 
+ 848:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+ 849:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   *                the configuration information for the specified DMA module.
+ 850:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   * @retval None
+ 851:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   */
+ 852:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** static void DCMI_DMAError(DMA_HandleTypeDef *hdma)
+ 853:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** {
+ 1034              		.loc 1 853 1 is_stmt 1 view -0
+ 1035              		.cfi_startproc
+ 1036              		@ args = 0, pretend = 0, frame = 0
+ 1037              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1038              		.loc 1 853 1 is_stmt 0 view .LVU343
+ 1039 0000 08B5     		push	{r3, lr}
+ 1040              	.LCFI15:
+ 1041              		.cfi_def_cfa_offset 8
+ 1042              		.cfi_offset 3, -8
+ 1043              		.cfi_offset 14, -4
+ 854:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   DCMI_HandleTypeDef* hdcmi = ( DCMI_HandleTypeDef* )((DMA_HandleTypeDef* )hdma)->Parent;
+ 1044              		.loc 1 854 3 is_stmt 1 view .LVU344
+ 1045              		.loc 1 854 23 is_stmt 0 view .LVU345
+ 1046 0002 806B     		ldr	r0, [r0, #56]
+ 1047              	.LVL63:
+ 855:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   
+ 856:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   if(hdcmi->DMA_Handle->ErrorCode != HAL_DMA_ERROR_FE)
+ 1048              		.loc 1 856 3 is_stmt 1 view .LVU346
+ 1049              		.loc 1 856 11 is_stmt 0 view .LVU347
+ 1050 0004 836B     		ldr	r3, [r0, #56]
+ 1051              		.loc 1 856 23 view .LVU348
+ 1052 0006 5B6D     		ldr	r3, [r3, #84]
+ 1053              		.loc 1 856 5 view .LVU349
+ 1054 0008 022B     		cmp	r3, #2
+ 1055 000a 02D0     		beq	.L66
+ 857:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 858:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     /* Initialize the DCMI state*/
+ 859:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     hdcmi->State = HAL_DCMI_STATE_READY;
+ 1056              		.loc 1 859 5 is_stmt 1 view .LVU350
+ 1057              		.loc 1 859 18 is_stmt 0 view .LVU351
+ 1058 000c 0123     		movs	r3, #1
+ 1059 000e 80F82530 		strb	r3, [r0, #37]
+ 1060              	.L66:
+ 860:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 861:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 862:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* DCMI error Callback */
+ 863:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   HAL_DCMI_ErrorCallback(hdcmi);
+ 1061              		.loc 1 863 3 is_stmt 1 view .LVU352
+ 1062 0012 FFF7FEFF 		bl	HAL_DCMI_ErrorCallback
+ 1063              	.LVL64:
+ 864:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1064              		.loc 1 864 1 is_stmt 0 view .LVU353
+ARM GAS  /tmp/ccTuLRNt.s 			page 40
+
+
+ 1065 0016 08BD     		pop	{r3, pc}
+ 1066              		.cfi_endproc
+ 1067              	.LFE145:
+ 1069              		.section	.text.HAL_DCMI_LineEventCallback,"ax",%progbits
+ 1070              		.align	1
+ 1071              		.weak	HAL_DCMI_LineEventCallback
+ 1072              		.syntax unified
+ 1073              		.thumb
+ 1074              		.thumb_func
+ 1075              		.fpu fpv4-sp-d16
+ 1077              	HAL_DCMI_LineEventCallback:
+ 1078              	.LVL65:
+ 1079              	.LFB136:
+ 592:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Prevent unused argument(s) compilation warning */
+ 1080              		.loc 1 592 1 is_stmt 1 view -0
+ 1081              		.cfi_startproc
+ 1082              		@ args = 0, pretend = 0, frame = 0
+ 1083              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1084              		@ link register save eliminated.
+ 594:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 1085              		.loc 1 594 3 view .LVU355
+ 598:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1086              		.loc 1 598 1 is_stmt 0 view .LVU356
+ 1087 0000 7047     		bx	lr
+ 1088              		.cfi_endproc
+ 1089              	.LFE136:
+ 1091              		.section	.text.HAL_DCMI_VsyncEventCallback,"ax",%progbits
+ 1092              		.align	1
+ 1093              		.weak	HAL_DCMI_VsyncEventCallback
+ 1094              		.syntax unified
+ 1095              		.thumb
+ 1096              		.thumb_func
+ 1097              		.fpu fpv4-sp-d16
+ 1099              	HAL_DCMI_VsyncEventCallback:
+ 1100              	.LVL66:
+ 1101              	.LFB137:
+ 607:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Prevent unused argument(s) compilation warning */
+ 1102              		.loc 1 607 1 is_stmt 1 view -0
+ 1103              		.cfi_startproc
+ 1104              		@ args = 0, pretend = 0, frame = 0
+ 1105              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1106              		@ link register save eliminated.
+ 609:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 1107              		.loc 1 609 3 view .LVU358
+ 613:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1108              		.loc 1 613 1 is_stmt 0 view .LVU359
+ 1109 0000 7047     		bx	lr
+ 1110              		.cfi_endproc
+ 1111              	.LFE137:
+ 1113              		.section	.text.HAL_DCMI_FrameEventCallback,"ax",%progbits
+ 1114              		.align	1
+ 1115              		.weak	HAL_DCMI_FrameEventCallback
+ 1116              		.syntax unified
+ 1117              		.thumb
+ 1118              		.thumb_func
+ 1119              		.fpu fpv4-sp-d16
+ 1121              	HAL_DCMI_FrameEventCallback:
+ARM GAS  /tmp/ccTuLRNt.s 			page 41
+
+
+ 1122              	.LVL67:
+ 1123              	.LFB138:
+ 622:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Prevent unused argument(s) compilation warning */
+ 1124              		.loc 1 622 1 is_stmt 1 view -0
+ 1125              		.cfi_startproc
+ 1126              		@ args = 0, pretend = 0, frame = 0
+ 1127              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1128              		@ link register save eliminated.
+ 624:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 1129              		.loc 1 624 3 view .LVU361
+ 628:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1130              		.loc 1 628 1 is_stmt 0 view .LVU362
+ 1131 0000 7047     		bx	lr
+ 1132              		.cfi_endproc
+ 1133              	.LFE138:
+ 1135              		.section	.text.HAL_DCMI_IRQHandler,"ax",%progbits
+ 1136              		.align	1
+ 1137              		.global	HAL_DCMI_IRQHandler
+ 1138              		.syntax unified
+ 1139              		.thumb
+ 1140              		.thumb_func
+ 1141              		.fpu fpv4-sp-d16
+ 1143              	HAL_DCMI_IRQHandler:
+ 1144              	.LVL68:
+ 1145              	.LFB134:
+ 495:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   uint32_t isr_value = READ_REG(hdcmi->Instance->MISR);
+ 1146              		.loc 1 495 1 is_stmt 1 view -0
+ 1147              		.cfi_startproc
+ 1148              		@ args = 0, pretend = 0, frame = 0
+ 1149              		@ frame_needed = 0, uses_anonymous_args = 0
+ 495:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   uint32_t isr_value = READ_REG(hdcmi->Instance->MISR);
+ 1150              		.loc 1 495 1 is_stmt 0 view .LVU364
+ 1151 0000 38B5     		push	{r3, r4, r5, lr}
+ 1152              	.LCFI16:
+ 1153              		.cfi_def_cfa_offset 16
+ 1154              		.cfi_offset 3, -16
+ 1155              		.cfi_offset 4, -12
+ 1156              		.cfi_offset 5, -8
+ 1157              		.cfi_offset 14, -4
+ 1158 0002 0446     		mov	r4, r0
+ 496:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1159              		.loc 1 496 3 is_stmt 1 view .LVU365
+ 496:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1160              		.loc 1 496 24 is_stmt 0 view .LVU366
+ 1161 0004 0368     		ldr	r3, [r0]
+ 496:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1162              		.loc 1 496 12 view .LVU367
+ 1163 0006 1D69     		ldr	r5, [r3, #16]
+ 1164              	.LVL69:
+ 499:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 1165              		.loc 1 499 3 is_stmt 1 view .LVU368
+ 499:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 1166              		.loc 1 499 5 is_stmt 0 view .LVU369
+ 1167 0008 15F0040F 		tst	r5, #4
+ 1168 000c 1DD1     		bne	.L79
+ 1169              	.LVL70:
+ 1170              	.L72:
+ARM GAS  /tmp/ccTuLRNt.s 			page 42
+
+
+ 517:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 1171              		.loc 1 517 3 is_stmt 1 view .LVU370
+ 517:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 1172              		.loc 1 517 5 is_stmt 0 view .LVU371
+ 1173 000e 15F0020F 		tst	r5, #2
+ 1174 0012 29D1     		bne	.L80
+ 1175              	.L73:
+ 535:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 1176              		.loc 1 535 3 is_stmt 1 view .LVU372
+ 535:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 1177              		.loc 1 535 5 is_stmt 0 view .LVU373
+ 1178 0014 15F0100F 		tst	r5, #16
+ 1179 0018 37D1     		bne	.L81
+ 1180              	.L74:
+ 544:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 1181              		.loc 1 544 3 is_stmt 1 view .LVU374
+ 544:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 1182              		.loc 1 544 5 is_stmt 0 view .LVU375
+ 1183 001a 15F0080F 		tst	r5, #8
+ 1184 001e 3BD1     		bne	.L82
+ 1185              	.L75:
+ 553:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 1186              		.loc 1 553 3 is_stmt 1 view .LVU376
+ 553:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   {
+ 1187              		.loc 1 553 5 is_stmt 0 view .LVU377
+ 1188 0020 15F0010F 		tst	r5, #1
+ 1189 0024 10D0     		beq	.L71
+ 556:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     { 
+ 1190              		.loc 1 556 5 is_stmt 1 view .LVU378
+ 556:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     { 
+ 1191              		.loc 1 556 14 is_stmt 0 view .LVU379
+ 1192 0026 2368     		ldr	r3, [r4]
+ 556:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     { 
+ 1193              		.loc 1 556 24 view .LVU380
+ 1194 0028 1A68     		ldr	r2, [r3]
+ 556:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     { 
+ 1195              		.loc 1 556 7 view .LVU381
+ 1196 002a 12F0020F 		tst	r2, #2
+ 1197 002e 03D0     		beq	.L77
+ 559:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     }
+ 1198              		.loc 1 559 7 is_stmt 1 view .LVU382
+ 1199 0030 DA68     		ldr	r2, [r3, #12]
+ 1200 0032 22F01E02 		bic	r2, r2, #30
+ 1201 0036 DA60     		str	r2, [r3, #12]
+ 1202              	.L77:
+ 563:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1203              		.loc 1 563 5 view .LVU383
+ 1204 0038 2268     		ldr	r2, [r4]
+ 1205 003a D368     		ldr	r3, [r2, #12]
+ 1206 003c 23F00103 		bic	r3, r3, #1
+ 1207 0040 D360     		str	r3, [r2, #12]
+ 566:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 1208              		.loc 1 566 5 view .LVU384
+ 1209 0042 2046     		mov	r0, r4
+ 1210 0044 FFF7FEFF 		bl	HAL_DCMI_FrameEventCallback
+ 1211              	.LVL71:
+ 1212              	.L71:
+ARM GAS  /tmp/ccTuLRNt.s 			page 43
+
+
+ 568:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1213              		.loc 1 568 1 is_stmt 0 view .LVU385
+ 1214 0048 38BD     		pop	{r3, r4, r5, pc}
+ 1215              	.LVL72:
+ 1216              	.L79:
+ 502:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1217              		.loc 1 502 5 is_stmt 1 view .LVU386
+ 1218 004a 0422     		movs	r2, #4
+ 1219 004c 5A61     		str	r2, [r3, #20]
+ 505:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1220              		.loc 1 505 5 view .LVU387
+ 505:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1221              		.loc 1 505 22 is_stmt 0 view .LVU388
+ 1222 004e C36B     		ldr	r3, [r0, #60]
+ 1223 0050 43F00203 		orr	r3, r3, #2
+ 1224 0054 C363     		str	r3, [r0, #60]
+ 508:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 1225              		.loc 1 508 5 is_stmt 1 view .LVU389
+ 508:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 1226              		.loc 1 508 18 is_stmt 0 view .LVU390
+ 1227 0056 80F82520 		strb	r2, [r0, #37]
+ 511:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1228              		.loc 1 511 5 is_stmt 1 view .LVU391
+ 511:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1229              		.loc 1 511 10 is_stmt 0 view .LVU392
+ 1230 005a 836B     		ldr	r3, [r0, #56]
+ 511:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1231              		.loc 1 511 42 view .LVU393
+ 1232 005c 124A     		ldr	r2, .L83
+ 1233 005e 1A65     		str	r2, [r3, #80]
+ 514:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 1234              		.loc 1 514 5 is_stmt 1 view .LVU394
+ 1235 0060 806B     		ldr	r0, [r0, #56]
+ 1236              	.LVL73:
+ 514:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 1237              		.loc 1 514 5 is_stmt 0 view .LVU395
+ 1238 0062 FFF7FEFF 		bl	HAL_DMA_Abort_IT
+ 1239              	.LVL74:
+ 1240 0066 D2E7     		b	.L72
+ 1241              	.L80:
+ 520:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1242              		.loc 1 520 5 is_stmt 1 view .LVU396
+ 1243 0068 2368     		ldr	r3, [r4]
+ 1244 006a 0222     		movs	r2, #2
+ 1245 006c 5A61     		str	r2, [r3, #20]
+ 523:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1246              		.loc 1 523 5 view .LVU397
+ 523:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1247              		.loc 1 523 22 is_stmt 0 view .LVU398
+ 1248 006e E36B     		ldr	r3, [r4, #60]
+ 1249 0070 43F00103 		orr	r3, r3, #1
+ 1250 0074 E363     		str	r3, [r4, #60]
+ 526:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 1251              		.loc 1 526 5 is_stmt 1 view .LVU399
+ 526:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 1252              		.loc 1 526 18 is_stmt 0 view .LVU400
+ 1253 0076 0423     		movs	r3, #4
+ARM GAS  /tmp/ccTuLRNt.s 			page 44
+
+
+ 1254 0078 84F82530 		strb	r3, [r4, #37]
+ 529:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1255              		.loc 1 529 5 is_stmt 1 view .LVU401
+ 529:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1256              		.loc 1 529 10 is_stmt 0 view .LVU402
+ 1257 007c A36B     		ldr	r3, [r4, #56]
+ 529:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1258              		.loc 1 529 42 view .LVU403
+ 1259 007e 0A4A     		ldr	r2, .L83
+ 1260 0080 1A65     		str	r2, [r3, #80]
+ 532:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 1261              		.loc 1 532 5 is_stmt 1 view .LVU404
+ 1262 0082 A06B     		ldr	r0, [r4, #56]
+ 1263 0084 FFF7FEFF 		bl	HAL_DMA_Abort_IT
+ 1264              	.LVL75:
+ 1265 0088 C4E7     		b	.L73
+ 1266              	.L81:
+ 538:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 1267              		.loc 1 538 5 view .LVU405
+ 1268 008a 2368     		ldr	r3, [r4]
+ 1269 008c 1022     		movs	r2, #16
+ 1270 008e 5A61     		str	r2, [r3, #20]
+ 541:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 1271              		.loc 1 541 5 view .LVU406
+ 1272 0090 2046     		mov	r0, r4
+ 1273 0092 FFF7FEFF 		bl	HAL_DCMI_LineEventCallback
+ 1274              	.LVL76:
+ 1275 0096 C0E7     		b	.L74
+ 1276              	.L82:
+ 547:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****     
+ 1277              		.loc 1 547 5 view .LVU407
+ 1278 0098 2368     		ldr	r3, [r4]
+ 1279 009a 0822     		movs	r2, #8
+ 1280 009c 5A61     		str	r2, [r3, #20]
+ 550:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   }
+ 1281              		.loc 1 550 5 view .LVU408
+ 1282 009e 2046     		mov	r0, r4
+ 1283 00a0 FFF7FEFF 		bl	HAL_DCMI_VsyncEventCallback
+ 1284              	.LVL77:
+ 1285 00a4 BCE7     		b	.L75
+ 1286              	.L84:
+ 1287 00a6 00BF     		.align	2
+ 1288              	.L83:
+ 1289 00a8 00000000 		.word	DCMI_DMAError
+ 1290              		.cfi_endproc
+ 1291              	.LFE134:
+ 1293              		.section	.text.HAL_DCMI_ConfigCrop,"ax",%progbits
+ 1294              		.align	1
+ 1295              		.global	HAL_DCMI_ConfigCrop
+ 1296              		.syntax unified
+ 1297              		.thumb
+ 1298              		.thumb_func
+ 1299              		.fpu fpv4-sp-d16
+ 1301              	HAL_DCMI_ConfigCrop:
+ 1302              	.LVL78:
+ 1303              	.LFB139:
+ 660:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Locked */
+ARM GAS  /tmp/ccTuLRNt.s 			page 45
+
+
+ 1304              		.loc 1 660 1 view -0
+ 1305              		.cfi_startproc
+ 1306              		@ args = 4, pretend = 0, frame = 0
+ 1307              		@ frame_needed = 0, uses_anonymous_args = 0
+ 662:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1308              		.loc 1 662 3 view .LVU410
+ 662:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1309              		.loc 1 662 3 view .LVU411
+ 1310 0000 90F824C0 		ldrb	ip, [r0, #36]	@ zero_extendqisi2
+ 1311 0004 BCF1010F 		cmp	ip, #1
+ 1312 0008 18D0     		beq	.L87
+ 660:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Locked */
+ 1313              		.loc 1 660 1 is_stmt 0 discriminator 2 view .LVU412
+ 1314 000a 10B5     		push	{r4, lr}
+ 1315              	.LCFI17:
+ 1316              		.cfi_def_cfa_offset 8
+ 1317              		.cfi_offset 4, -8
+ 1318              		.cfi_offset 14, -4
+ 662:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1319              		.loc 1 662 3 is_stmt 1 discriminator 2 view .LVU413
+ 1320 000c 4FF0010C 		mov	ip, #1
+ 1321 0010 80F824C0 		strb	ip, [r0, #36]
+ 662:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1322              		.loc 1 662 3 discriminator 2 view .LVU414
+ 665:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1323              		.loc 1 665 3 discriminator 2 view .LVU415
+ 665:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1324              		.loc 1 665 16 is_stmt 0 discriminator 2 view .LVU416
+ 1325 0014 4FF0020E 		mov	lr, #2
+ 1326 0018 80F825E0 		strb	lr, [r0, #37]
+ 668:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_WINDOW_COORDINATE(YSize));
+ 1327              		.loc 1 668 3 is_stmt 1 discriminator 2 view .LVU417
+ 669:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_WINDOW_COORDINATE(XSize));
+ 1328              		.loc 1 669 3 discriminator 2 view .LVU418
+ 670:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   assert_param(IS_DCMI_WINDOW_HEIGHT(Y0));
+ 1329              		.loc 1 670 3 discriminator 2 view .LVU419
+ 671:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1330              		.loc 1 671 3 discriminator 2 view .LVU420
+ 674:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CWSTRTR = (X0 | (Y0 << DCMI_POSITION_CWSTRT_VST));
+ 1331              		.loc 1 674 3 discriminator 2 view .LVU421
+ 674:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CWSTRTR = (X0 | (Y0 << DCMI_POSITION_CWSTRT_VST));
+ 1332              		.loc 1 674 37 is_stmt 0 discriminator 2 view .LVU422
+ 1333 001c 029C     		ldr	r4, [sp, #8]
+ 1334 001e 43EA0443 		orr	r3, r3, r4, lsl #16
+ 1335              	.LVL79:
+ 674:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   hdcmi->Instance->CWSTRTR = (X0 | (Y0 << DCMI_POSITION_CWSTRT_VST));
+ 1336              		.loc 1 674 28 discriminator 2 view .LVU423
+ 1337 0022 0468     		ldr	r4, [r0]
+ 1338 0024 6362     		str	r3, [r4, #36]
+ 675:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1339              		.loc 1 675 3 is_stmt 1 discriminator 2 view .LVU424
+ 675:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1340              		.loc 1 675 8 is_stmt 0 discriminator 2 view .LVU425
+ 1341 0026 0368     		ldr	r3, [r0]
+ 675:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1342              		.loc 1 675 34 discriminator 2 view .LVU426
+ 1343 0028 41EA0242 		orr	r2, r1, r2, lsl #16
+ARM GAS  /tmp/ccTuLRNt.s 			page 46
+
+
+ 1344              	.LVL80:
+ 675:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1345              		.loc 1 675 28 discriminator 2 view .LVU427
+ 1346 002c 1A62     		str	r2, [r3, #32]
+ 678:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1347              		.loc 1 678 3 is_stmt 1 discriminator 2 view .LVU428
+ 678:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1348              		.loc 1 678 17 is_stmt 0 discriminator 2 view .LVU429
+ 1349 002e 80F825C0 		strb	ip, [r0, #37]
+ 681:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1350              		.loc 1 681 3 is_stmt 1 discriminator 2 view .LVU430
+ 681:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1351              		.loc 1 681 3 discriminator 2 view .LVU431
+ 1352 0032 0023     		movs	r3, #0
+ 1353 0034 80F82430 		strb	r3, [r0, #36]
+ 681:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1354              		.loc 1 681 3 discriminator 2 view .LVU432
+ 683:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1355              		.loc 1 683 3 discriminator 2 view .LVU433
+ 683:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1356              		.loc 1 683 10 is_stmt 0 discriminator 2 view .LVU434
+ 1357 0038 1846     		mov	r0, r3
+ 1358              	.LVL81:
+ 684:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1359              		.loc 1 684 1 discriminator 2 view .LVU435
+ 1360 003a 10BD     		pop	{r4, pc}
+ 1361              	.LVL82:
+ 1362              	.L87:
+ 1363              	.LCFI18:
+ 1364              		.cfi_def_cfa_offset 0
+ 1365              		.cfi_restore 4
+ 1366              		.cfi_restore 14
+ 662:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1367              		.loc 1 662 3 view .LVU436
+ 1368 003c 0220     		movs	r0, #2
+ 1369              	.LVL83:
+ 684:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1370              		.loc 1 684 1 view .LVU437
+ 1371 003e 7047     		bx	lr
+ 1372              		.cfi_endproc
+ 1373              	.LFE139:
+ 1375              		.section	.text.HAL_DCMI_DisableCrop,"ax",%progbits
+ 1376              		.align	1
+ 1377              		.global	HAL_DCMI_DisableCrop
+ 1378              		.syntax unified
+ 1379              		.thumb
+ 1380              		.thumb_func
+ 1381              		.fpu fpv4-sp-d16
+ 1383              	HAL_DCMI_DisableCrop:
+ 1384              	.LVL84:
+ 1385              	.LFB140:
+ 693:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Locked */
+ 1386              		.loc 1 693 1 is_stmt 1 view -0
+ 1387              		.cfi_startproc
+ 1388              		@ args = 0, pretend = 0, frame = 0
+ 1389              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1390              		@ link register save eliminated.
+ARM GAS  /tmp/ccTuLRNt.s 			page 47
+
+
+ 695:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1391              		.loc 1 695 3 view .LVU439
+ 695:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1392              		.loc 1 695 3 view .LVU440
+ 1393 0000 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 1394 0004 012B     		cmp	r3, #1
+ 1395 0006 11D0     		beq	.L94
+ 695:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1396              		.loc 1 695 3 discriminator 2 view .LVU441
+ 1397 0008 0122     		movs	r2, #1
+ 1398 000a 80F82420 		strb	r2, [r0, #36]
+ 695:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1399              		.loc 1 695 3 discriminator 2 view .LVU442
+ 698:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1400              		.loc 1 698 3 discriminator 2 view .LVU443
+ 698:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1401              		.loc 1 698 16 is_stmt 0 discriminator 2 view .LVU444
+ 1402 000e 0223     		movs	r3, #2
+ 1403 0010 80F82530 		strb	r3, [r0, #37]
+ 701:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1404              		.loc 1 701 3 is_stmt 1 discriminator 2 view .LVU445
+ 701:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1405              		.loc 1 701 8 is_stmt 0 discriminator 2 view .LVU446
+ 1406 0014 0168     		ldr	r1, [r0]
+ 701:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1407              		.loc 1 701 23 discriminator 2 view .LVU447
+ 1408 0016 0B68     		ldr	r3, [r1]
+ 1409 0018 23F00403 		bic	r3, r3, #4
+ 1410 001c 0B60     		str	r3, [r1]
+ 704:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1411              		.loc 1 704 3 is_stmt 1 discriminator 2 view .LVU448
+ 704:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1412              		.loc 1 704 16 is_stmt 0 discriminator 2 view .LVU449
+ 1413 001e 80F82520 		strb	r2, [r0, #37]
+ 707:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1414              		.loc 1 707 3 is_stmt 1 discriminator 2 view .LVU450
+ 707:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1415              		.loc 1 707 3 discriminator 2 view .LVU451
+ 1416 0022 0023     		movs	r3, #0
+ 1417 0024 80F82430 		strb	r3, [r0, #36]
+ 707:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1418              		.loc 1 707 3 discriminator 2 view .LVU452
+ 709:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1419              		.loc 1 709 3 discriminator 2 view .LVU453
+ 709:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1420              		.loc 1 709 10 is_stmt 0 discriminator 2 view .LVU454
+ 1421 0028 1846     		mov	r0, r3
+ 1422              	.LVL85:
+ 709:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1423              		.loc 1 709 10 discriminator 2 view .LVU455
+ 1424 002a 7047     		bx	lr
+ 1425              	.LVL86:
+ 1426              	.L94:
+ 695:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1427              		.loc 1 695 3 view .LVU456
+ 1428 002c 0220     		movs	r0, #2
+ 1429              	.LVL87:
+ARM GAS  /tmp/ccTuLRNt.s 			page 48
+
+
+ 710:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1430              		.loc 1 710 1 view .LVU457
+ 1431 002e 7047     		bx	lr
+ 1432              		.cfi_endproc
+ 1433              	.LFE140:
+ 1435              		.section	.text.HAL_DCMI_EnableCrop,"ax",%progbits
+ 1436              		.align	1
+ 1437              		.global	HAL_DCMI_EnableCrop
+ 1438              		.syntax unified
+ 1439              		.thumb
+ 1440              		.thumb_func
+ 1441              		.fpu fpv4-sp-d16
+ 1443              	HAL_DCMI_EnableCrop:
+ 1444              	.LVL88:
+ 1445              	.LFB141:
+ 719:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   /* Process Locked */
+ 1446              		.loc 1 719 1 is_stmt 1 view -0
+ 1447              		.cfi_startproc
+ 1448              		@ args = 0, pretend = 0, frame = 0
+ 1449              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1450              		@ link register save eliminated.
+ 721:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1451              		.loc 1 721 3 view .LVU459
+ 721:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1452              		.loc 1 721 3 view .LVU460
+ 1453 0000 90F82430 		ldrb	r3, [r0, #36]	@ zero_extendqisi2
+ 1454 0004 012B     		cmp	r3, #1
+ 1455 0006 11D0     		beq	.L97
+ 721:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1456              		.loc 1 721 3 discriminator 2 view .LVU461
+ 1457 0008 0122     		movs	r2, #1
+ 1458 000a 80F82420 		strb	r2, [r0, #36]
+ 721:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1459              		.loc 1 721 3 discriminator 2 view .LVU462
+ 724:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1460              		.loc 1 724 3 discriminator 2 view .LVU463
+ 724:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1461              		.loc 1 724 16 is_stmt 0 discriminator 2 view .LVU464
+ 1462 000e 0223     		movs	r3, #2
+ 1463 0010 80F82530 		strb	r3, [r0, #37]
+ 727:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1464              		.loc 1 727 3 is_stmt 1 discriminator 2 view .LVU465
+ 727:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1465              		.loc 1 727 8 is_stmt 0 discriminator 2 view .LVU466
+ 1466 0014 0168     		ldr	r1, [r0]
+ 727:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1467              		.loc 1 727 23 discriminator 2 view .LVU467
+ 1468 0016 0B68     		ldr	r3, [r1]
+ 1469 0018 43F00403 		orr	r3, r3, #4
+ 1470 001c 0B60     		str	r3, [r1]
+ 730:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1471              		.loc 1 730 3 is_stmt 1 discriminator 2 view .LVU468
+ 730:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1472              		.loc 1 730 16 is_stmt 0 discriminator 2 view .LVU469
+ 1473 001e 80F82520 		strb	r2, [r0, #37]
+ 733:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1474              		.loc 1 733 3 is_stmt 1 discriminator 2 view .LVU470
+ARM GAS  /tmp/ccTuLRNt.s 			page 49
+
+
+ 733:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1475              		.loc 1 733 3 discriminator 2 view .LVU471
+ 1476 0022 0023     		movs	r3, #0
+ 1477 0024 80F82430 		strb	r3, [r0, #36]
+ 733:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1478              		.loc 1 733 3 discriminator 2 view .LVU472
+ 735:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1479              		.loc 1 735 3 discriminator 2 view .LVU473
+ 735:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1480              		.loc 1 735 10 is_stmt 0 discriminator 2 view .LVU474
+ 1481 0028 1846     		mov	r0, r3
+ 1482              	.LVL89:
+ 735:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1483              		.loc 1 735 10 discriminator 2 view .LVU475
+ 1484 002a 7047     		bx	lr
+ 1485              	.LVL90:
+ 1486              	.L97:
+ 721:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1487              		.loc 1 721 3 view .LVU476
+ 1488 002c 0220     		movs	r0, #2
+ 1489              	.LVL91:
+ 736:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1490              		.loc 1 736 1 view .LVU477
+ 1491 002e 7047     		bx	lr
+ 1492              		.cfi_endproc
+ 1493              	.LFE141:
+ 1495              		.section	.text.HAL_DCMI_GetState,"ax",%progbits
+ 1496              		.align	1
+ 1497              		.global	HAL_DCMI_GetState
+ 1498              		.syntax unified
+ 1499              		.thumb
+ 1500              		.thumb_func
+ 1501              		.fpu fpv4-sp-d16
+ 1503              	HAL_DCMI_GetState:
+ 1504              	.LVL92:
+ 1505              	.LFB142:
+ 765:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return hdcmi->State;
+ 1506              		.loc 1 765 1 is_stmt 1 view -0
+ 1507              		.cfi_startproc
+ 1508              		@ args = 0, pretend = 0, frame = 0
+ 1509              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1510              		@ link register save eliminated.
+ 766:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1511              		.loc 1 766 3 view .LVU479
+ 766:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1512              		.loc 1 766 15 is_stmt 0 view .LVU480
+ 1513 0000 90F82500 		ldrb	r0, [r0, #37]	@ zero_extendqisi2
+ 1514              	.LVL93:
+ 767:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1515              		.loc 1 767 1 view .LVU481
+ 1516 0004 7047     		bx	lr
+ 1517              		.cfi_endproc
+ 1518              	.LFE142:
+ 1520              		.section	.text.HAL_DCMI_GetError,"ax",%progbits
+ 1521              		.align	1
+ 1522              		.global	HAL_DCMI_GetError
+ 1523              		.syntax unified
+ARM GAS  /tmp/ccTuLRNt.s 			page 50
+
+
+ 1524              		.thumb
+ 1525              		.thumb_func
+ 1526              		.fpu fpv4-sp-d16
+ 1528              	HAL_DCMI_GetError:
+ 1529              	.LVL94:
+ 1530              	.LFB143:
+ 776:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c ****   return hdcmi->ErrorCode;
+ 1531              		.loc 1 776 1 is_stmt 1 view -0
+ 1532              		.cfi_startproc
+ 1533              		@ args = 0, pretend = 0, frame = 0
+ 1534              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1535              		@ link register save eliminated.
+ 777:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1536              		.loc 1 777 3 view .LVU483
+ 777:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** }
+ 1537              		.loc 1 777 15 is_stmt 0 view .LVU484
+ 1538 0000 C06B     		ldr	r0, [r0, #60]
+ 1539              	.LVL95:
+ 778:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dcmi.c **** 
+ 1540              		.loc 1 778 1 view .LVU485
+ 1541 0002 7047     		bx	lr
+ 1542              		.cfi_endproc
+ 1543              	.LFE143:
+ 1545              		.text
+ 1546              	.Letext0:
+ 1547              		.file 2 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/machine/_default_types.h"
+ 1548              		.file 3 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/sys/_stdint.h"
+ 1549              		.file 4 "./Libraries/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h"
+ 1550              		.file 5 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 1551              		.file 6 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 1552              		.file 7 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h"
+ 1553              		.file 8 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dcmi_ex.h"
+ 1554              		.file 9 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dcmi.h"
+ 1555              		.file 10 "./Libraries/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ARM GAS  /tmp/ccTuLRNt.s 			page 51
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_hal_dcmi.c
+     /tmp/ccTuLRNt.s:18     .text.DCMI_DMAXferCplt:0000000000000000 $t
+     /tmp/ccTuLRNt.s:25     .text.DCMI_DMAXferCplt:0000000000000000 DCMI_DMAXferCplt
+     /tmp/ccTuLRNt.s:199    .text.HAL_DCMI_MspInit:0000000000000000 $t
+     /tmp/ccTuLRNt.s:206    .text.HAL_DCMI_MspInit:0000000000000000 HAL_DCMI_MspInit
+     /tmp/ccTuLRNt.s:221    .text.HAL_DCMI_Init:0000000000000000 $t
+     /tmp/ccTuLRNt.s:228    .text.HAL_DCMI_Init:0000000000000000 HAL_DCMI_Init
+     /tmp/ccTuLRNt.s:376    .text.HAL_DCMI_MspDeInit:0000000000000000 $t
+     /tmp/ccTuLRNt.s:383    .text.HAL_DCMI_MspDeInit:0000000000000000 HAL_DCMI_MspDeInit
+     /tmp/ccTuLRNt.s:398    .text.HAL_DCMI_DeInit:0000000000000000 $t
+     /tmp/ccTuLRNt.s:405    .text.HAL_DCMI_DeInit:0000000000000000 HAL_DCMI_DeInit
+     /tmp/ccTuLRNt.s:441    .text.HAL_DCMI_Start_DMA:0000000000000000 $t
+     /tmp/ccTuLRNt.s:448    .text.HAL_DCMI_Start_DMA:0000000000000000 HAL_DCMI_Start_DMA
+     /tmp/ccTuLRNt.s:647    .text.HAL_DCMI_Start_DMA:00000000000000b8 $d
+     /tmp/ccTuLRNt.s:1031   .text.DCMI_DMAError:0000000000000000 DCMI_DMAError
+     /tmp/ccTuLRNt.s:653    .text.HAL_DCMI_Stop:0000000000000000 $t
+     /tmp/ccTuLRNt.s:660    .text.HAL_DCMI_Stop:0000000000000000 HAL_DCMI_Stop
+     /tmp/ccTuLRNt.s:791    .text.HAL_DCMI_Stop:0000000000000080 $d
+     /tmp/ccTuLRNt.s:797    .text.HAL_DCMI_Suspend:0000000000000000 $t
+     /tmp/ccTuLRNt.s:804    .text.HAL_DCMI_Suspend:0000000000000000 HAL_DCMI_Suspend
+     /tmp/ccTuLRNt.s:930    .text.HAL_DCMI_Suspend:0000000000000074 $d
+     /tmp/ccTuLRNt.s:936    .text.HAL_DCMI_Resume:0000000000000000 $t
+     /tmp/ccTuLRNt.s:943    .text.HAL_DCMI_Resume:0000000000000000 HAL_DCMI_Resume
+     /tmp/ccTuLRNt.s:1003   .text.HAL_DCMI_ErrorCallback:0000000000000000 $t
+     /tmp/ccTuLRNt.s:1010   .text.HAL_DCMI_ErrorCallback:0000000000000000 HAL_DCMI_ErrorCallback
+     /tmp/ccTuLRNt.s:1025   .text.DCMI_DMAError:0000000000000000 $t
+     /tmp/ccTuLRNt.s:1070   .text.HAL_DCMI_LineEventCallback:0000000000000000 $t
+     /tmp/ccTuLRNt.s:1077   .text.HAL_DCMI_LineEventCallback:0000000000000000 HAL_DCMI_LineEventCallback
+     /tmp/ccTuLRNt.s:1092   .text.HAL_DCMI_VsyncEventCallback:0000000000000000 $t
+     /tmp/ccTuLRNt.s:1099   .text.HAL_DCMI_VsyncEventCallback:0000000000000000 HAL_DCMI_VsyncEventCallback
+     /tmp/ccTuLRNt.s:1114   .text.HAL_DCMI_FrameEventCallback:0000000000000000 $t
+     /tmp/ccTuLRNt.s:1121   .text.HAL_DCMI_FrameEventCallback:0000000000000000 HAL_DCMI_FrameEventCallback
+     /tmp/ccTuLRNt.s:1136   .text.HAL_DCMI_IRQHandler:0000000000000000 $t
+     /tmp/ccTuLRNt.s:1143   .text.HAL_DCMI_IRQHandler:0000000000000000 HAL_DCMI_IRQHandler
+     /tmp/ccTuLRNt.s:1289   .text.HAL_DCMI_IRQHandler:00000000000000a8 $d
+     /tmp/ccTuLRNt.s:1294   .text.HAL_DCMI_ConfigCrop:0000000000000000 $t
+     /tmp/ccTuLRNt.s:1301   .text.HAL_DCMI_ConfigCrop:0000000000000000 HAL_DCMI_ConfigCrop
+     /tmp/ccTuLRNt.s:1376   .text.HAL_DCMI_DisableCrop:0000000000000000 $t
+     /tmp/ccTuLRNt.s:1383   .text.HAL_DCMI_DisableCrop:0000000000000000 HAL_DCMI_DisableCrop
+     /tmp/ccTuLRNt.s:1436   .text.HAL_DCMI_EnableCrop:0000000000000000 $t
+     /tmp/ccTuLRNt.s:1443   .text.HAL_DCMI_EnableCrop:0000000000000000 HAL_DCMI_EnableCrop
+     /tmp/ccTuLRNt.s:1496   .text.HAL_DCMI_GetState:0000000000000000 $t
+     /tmp/ccTuLRNt.s:1503   .text.HAL_DCMI_GetState:0000000000000000 HAL_DCMI_GetState
+     /tmp/ccTuLRNt.s:1521   .text.HAL_DCMI_GetError:0000000000000000 $t
+     /tmp/ccTuLRNt.s:1528   .text.HAL_DCMI_GetError:0000000000000000 HAL_DCMI_GetError
+
+UNDEFINED SYMBOLS
+HAL_DMAEx_ChangeMemory
+HAL_DMA_Start_IT
+HAL_DMAEx_MultiBufferStart_IT
+HAL_DMA_Abort
+SystemCoreClock
+HAL_DMA_Abort_IT

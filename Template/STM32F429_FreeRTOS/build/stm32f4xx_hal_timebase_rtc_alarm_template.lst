@@ -1,0 +1,997 @@
+ARM GAS  /tmp/ccVeMCZQ.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_hal_timebase_rtc_alarm_template.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_InitTick,"ax",%progbits
+  18              		.align	1
+  19              		.global	HAL_InitTick
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	HAL_InitTick:
+  27              	.LVL0:
+  28              	.LFB126:
+  29              		.file 1 "./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c"
+   1:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /**
+   2:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   ******************************************************************************
+   3:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @file    stm32f4xx_hal_timebase_rtc_alarm_template.c 
+   4:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @author  MCD Application Team
+   5:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @brief   HAL time base based on the hardware RTC_ALARM Template.
+   6:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *
+   7:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *          This file override the native HAL time base functions (defined as weak)
+   8:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *          to use the RTC ALARM for time base generation:
+   9:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *           + Intializes the RTC peripheral to increment the seconds registers each 1ms
+  10:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *           + The alarm is configured to assert an interrupt when the RTC reaches 1ms 
+  11:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *           + HAL_IncTick is called at each Alarm event and the time is reset to 00:00:00
+  12:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *           + HSE (default), LSE or LSI can be selected as RTC clock source  
+  13:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****  @verbatim
+  14:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   ==============================================================================
+  15:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****                         ##### How to use this driver #####
+  16:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   ==============================================================================
+  17:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     [..]
+  18:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     This file must be copied to the application folder and modified as follows:
+  19:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     (#) Rename it to 'stm32f4xx_hal_timebase_rtc_alarm.c'
+  20:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     (#) Add this file and the RTC HAL drivers to your project and uncomment
+  21:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****        HAL_RTC_MODULE_ENABLED define in stm32f4xx_hal_conf.h 
+  22:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+  23:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     [..]
+  24:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     (@) HAL RTC alarm and HAL RTC wakeup drivers can’t be used with low power modes:
+  25:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         The wake up capability of the RTC may be intrusive in case of prior low power mode
+  26:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         configuration requiring different wake up sources.
+  27:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         Application/Example behavior is no more guaranteed 
+  28:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     (@) The stm32f4xx_hal_timebase_tim use is recommended for the Applications/Examples
+  29:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****           requiring low power modes
+ARM GAS  /tmp/ccVeMCZQ.s 			page 2
+
+
+  30:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+  31:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   @endverbatim
+  32:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   ******************************************************************************
+  33:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @attention
+  34:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *
+  35:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  36:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *
+  37:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  38:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * are permitted provided that the following conditions are met:
+  39:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  40:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *      this list of conditions and the following disclaimer.
+  41:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  42:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *      this list of conditions and the following disclaimer in the documentation
+  43:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *      and/or other materials provided with the distribution.
+  44:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  45:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *      may be used to endorse or promote products derived from this software
+  46:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *      without specific prior written permission.
+  47:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *
+  48:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  49:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  50:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  51:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  52:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  53:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  54:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  55:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  56:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  57:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  58:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *
+  59:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   ******************************************************************************
+  60:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   */
+  61:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+  62:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /* Includes ------------------------------------------------------------------*/
+  63:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** #include "stm32f4xx_hal.h"
+  64:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /** @addtogroup STM32F4xx_HAL_Driver
+  65:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @{
+  66:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   */
+  67:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+  68:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /** @defgroup HAL_TimeBase_RTC_Alarm_Template  HAL TimeBase RTC Alarm Template
+  69:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @{
+  70:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   */ 
+  71:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+  72:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /* Private typedef -----------------------------------------------------------*/
+  73:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /* Private define ------------------------------------------------------------*/
+  74:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+  75:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /* Uncomment the line below to select the appropriate RTC Clock source for your application: 
+  76:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   + RTC_CLOCK_SOURCE_HSE: can be selected for applications requiring timing precision.
+  77:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   + RTC_CLOCK_SOURCE_LSE: can be selected for applications with low constraint on timing
+  78:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****                           precision.
+  79:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   + RTC_CLOCK_SOURCE_LSI: can be selected for applications with low constraint on timing
+  80:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****                           precision.
+  81:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   */
+  82:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** #define RTC_CLOCK_SOURCE_HSE
+  83:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /* #define RTC_CLOCK_SOURCE_LSE */
+  84:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /* #define RTC_CLOCK_SOURCE_LSI */
+  85:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+  86:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** #ifdef RTC_CLOCK_SOURCE_HSE
+ARM GAS  /tmp/ccVeMCZQ.s 			page 3
+
+
+  87:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   #define RTC_ASYNCH_PREDIV       99U
+  88:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   #define RTC_SYNCH_PREDIV        9U
+  89:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   #define RCC_RTCCLKSOURCE_1MHZ   ((uint32_t)((uint32_t)RCC_BDCR_RTCSEL | (uint32_t)((HSE_VALUE/100
+  90:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** #else /* RTC_CLOCK_SOURCE_LSE || RTC_CLOCK_SOURCE_LSI */
+  91:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   #define RTC_ASYNCH_PREDIV       0U
+  92:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   #define RTC_SYNCH_PREDIV        31U
+  93:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** #endif /* RTC_CLOCK_SOURCE_HSE */
+  94:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+  95:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /* Private macro -------------------------------------------------------------*/
+  96:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /* Private variables ---------------------------------------------------------*/
+  97:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** RTC_HandleTypeDef        hRTC_Handle;
+  98:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /* Private function prototypes -----------------------------------------------*/
+  99:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** void RTC_Alarm_IRQHandler(void);
+ 100:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /* Private functions ---------------------------------------------------------*/
+ 101:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 102:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /**
+ 103:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @brief  This function configures the RTC_ALARMA as a time base source. 
+ 104:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *         The time source is configured  to have 1ms time base with a dedicated 
+ 105:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *         Tick interrupt priority. 
+ 106:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @note   This function is called  automatically at the beginning of program after
+ 107:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   *         reset by HAL_Init() or at any time when clock is configured, by HAL_RCC_ClockConfig().
+ 108:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @param  TickPriority Tick interrupt priority.
+ 109:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @retval HAL status
+ 110:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   */
+ 111:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** HAL_StatusTypeDef HAL_InitTick (uint32_t TickPriority)
+ 112:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** {
+  30              		.loc 1 112 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 104
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 112 1 is_stmt 0 view .LVU1
+  35 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 20
+  38              		.cfi_offset 4, -20
+  39              		.cfi_offset 5, -16
+  40              		.cfi_offset 6, -12
+  41              		.cfi_offset 7, -8
+  42              		.cfi_offset 14, -4
+  43 0002 9BB0     		sub	sp, sp, #108
+  44              	.LCFI1:
+  45              		.cfi_def_cfa_offset 128
+  46 0004 0446     		mov	r4, r0
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   __IO uint32_t counter = 0U;
+  47              		.loc 1 113 3 is_stmt 1 view .LVU2
+  48              		.loc 1 113 17 is_stmt 0 view .LVU3
+  49 0006 0023     		movs	r3, #0
+  50 0008 1993     		str	r3, [sp, #100]
+ 114:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 115:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   RCC_OscInitTypeDef        RCC_OscInitStruct;
+  51              		.loc 1 115 3 is_stmt 1 view .LVU4
+ 116:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   RCC_PeriphCLKInitTypeDef  PeriphClkInitStruct;
+  52              		.loc 1 116 3 view .LVU5
+ 117:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 118:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** #ifdef RTC_CLOCK_SOURCE_LSE
+ 119:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   /* Configue LSE as RTC clock soucre */
+ 120:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE;
+ARM GAS  /tmp/ccVeMCZQ.s 			page 4
+
+
+ 121:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+ 122:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   RCC_OscInitStruct.LSEState = RCC_LSE_ON;
+ 123:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
+ 124:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** #elif defined (RTC_CLOCK_SOURCE_LSI)
+ 125:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   /* Configue LSI as RTC clock soucre */
+ 126:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI;
+ 127:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+ 128:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   RCC_OscInitStruct.LSIState = RCC_LSI_ON;
+ 129:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
+ 130:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** #elif defined (RTC_CLOCK_SOURCE_HSE)
+ 131:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   /* Configue HSE as RTC clock soucre */
+ 132:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  53              		.loc 1 132 3 view .LVU6
+  54              		.loc 1 132 36 is_stmt 0 view .LVU7
+  55 000a 0122     		movs	r2, #1
+  56 000c 0D92     		str	r2, [sp, #52]
+ 133:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  57              		.loc 1 133 3 is_stmt 1 view .LVU8
+  58              		.loc 1 133 34 is_stmt 0 view .LVU9
+  59 000e 1393     		str	r3, [sp, #76]
+ 134:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  60              		.loc 1 134 3 is_stmt 1 view .LVU10
+  61              		.loc 1 134 30 is_stmt 0 view .LVU11
+  62 0010 4FF48033 		mov	r3, #65536
+  63 0014 0E93     		str	r3, [sp, #56]
+ 135:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   /* Ensure that RTC is clocked by 1MHz */
+ 136:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_1MHZ;
+  64              		.loc 1 136 3 is_stmt 1 view .LVU12
+  65              		.loc 1 136 41 is_stmt 0 view .LVU13
+  66 0016 444B     		ldr	r3, .L16
+  67 0018 0B93     		str	r3, [sp, #44]
+ 137:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** #else
+ 138:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** #error Please select the RTC Clock source
+ 139:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** #endif /* RTC_CLOCK_SOURCE_LSE */
+ 140:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 141:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   if(HAL_RCC_OscConfig(&RCC_OscInitStruct) == HAL_OK)
+  68              		.loc 1 141 3 is_stmt 1 view .LVU14
+  69              		.loc 1 141 6 is_stmt 0 view .LVU15
+  70 001a 0DA8     		add	r0, sp, #52
+  71              	.LVL1:
+  72              		.loc 1 141 6 view .LVU16
+  73 001c FFF7FEFF 		bl	HAL_RCC_OscConfig
+  74              	.LVL2:
+  75              		.loc 1 141 5 view .LVU17
+  76 0020 18B1     		cbz	r0, .L13
+ 142:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   {
+ 143:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC;
+ 144:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     if(HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) == HAL_OK)
+ 145:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     {
+ 146:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* Enable RTC Clock */
+ 147:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       __HAL_RCC_RTC_ENABLE();
+ 148:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* The time base should be 1ms
+ 149:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****          Time base = ((RTC_ASYNCH_PREDIV + 1) * (RTC_SYNCH_PREDIV + 1)) / RTC_CLOCK 
+ 150:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****          HSE as RTC clock 
+ 151:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****            Time base = ((99 + 1) * (9 + 1)) / 1MHz
+ 152:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****                      = 1ms
+ 153:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****          LSE as RTC clock 
+ARM GAS  /tmp/ccVeMCZQ.s 			page 5
+
+
+ 154:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****            Time base = ((31 + 1) * (0 + 1)) / 32.768KHz
+ 155:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****                      = ~1ms
+ 156:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****          LSI as RTC clock 
+ 157:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****            Time base = ((31 + 1) * (0 + 1)) / 32KHz
+ 158:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****                      = 1ms
+ 159:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       */
+ 160:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Instance = RTC;
+ 161:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.HourFormat = RTC_HOURFORMAT_24;
+ 162:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.AsynchPrediv = RTC_ASYNCH_PREDIV;
+ 163:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.SynchPrediv = RTC_SYNCH_PREDIV;
+ 164:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.OutPut = RTC_OUTPUT_DISABLE;
+ 165:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
+ 166:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
+ 167:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       HAL_RTC_Init(&hRTC_Handle);
+ 168:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 169:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* Disable the write protection for RTC registers */
+ 170:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       __HAL_RTC_WRITEPROTECTION_DISABLE(&hRTC_Handle);
+ 171:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 172:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* Disable the Alarm A interrupt */
+ 173:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       __HAL_RTC_ALARMA_DISABLE(&hRTC_Handle);
+ 174:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 175:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* Clear flag alarm A */
+ 176:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       __HAL_RTC_ALARM_CLEAR_FLAG(&hRTC_Handle, RTC_FLAG_ALRAF);
+ 177:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       counter = 0U;
+ 179:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* Wait till RTC ALRAWF flag is set and if Time out is reached exit */
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       while(__HAL_RTC_ALARM_GET_FLAG(&hRTC_Handle, RTC_FLAG_ALRAWF) == RESET)
+ 181:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       {
+ 182:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         if(counter++ == (SystemCoreClock /48U)) /* Timeout = ~ 1s */
+ 183:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         {
+ 184:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****           return HAL_ERROR;
+ 185:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         }
+ 186:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       }
+ 187:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 188:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Instance->ALRMAR = (uint32_t)0x01U;
+ 189:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 190:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* Configure the Alarm state: Enable Alarm */
+ 191:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       __HAL_RTC_ALARMA_ENABLE(&hRTC_Handle);
+ 192:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* Configure the Alarm interrupt */
+ 193:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       __HAL_RTC_ALARM_ENABLE_IT(&hRTC_Handle, RTC_IT_ALRA);
+ 194:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 195:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* RTC Alarm Interrupt Configuration: EXTI configuration */
+ 196:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       __HAL_RTC_ALARM_EXTI_ENABLE_IT();
+ 197:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       __HAL_RTC_ALARM_EXTI_ENABLE_RISING_EDGE();
+ 198:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 199:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* Check if the Initialization mode is set */
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       if((hRTC_Handle.Instance->ISR & RTC_ISR_INITF) == (uint32_t)RESET)
+ 201:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       {
+ 202:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         /* Set the Initialization mode */
+ 203:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         hRTC_Handle.Instance->ISR = (uint32_t)RTC_INIT_MASK;
+ 204:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         counter = 0U;
+ 205:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         while((hRTC_Handle.Instance->ISR & RTC_ISR_INITF) == (uint32_t)RESET)
+ 206:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         {
+ 207:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****           if(counter++ == (SystemCoreClock /48U)) /* Timeout = ~ 1s */
+ 208:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****           {
+ 209:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****             return HAL_ERROR;
+ 210:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****           }
+ARM GAS  /tmp/ccVeMCZQ.s 			page 6
+
+
+ 211:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         }
+ 212:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       }
+ 213:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Instance->DR = 0U;
+ 214:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Instance->TR = 0U;
+ 215:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Instance->ISR &= (uint32_t)~RTC_ISR_INIT;
+ 217:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 218:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* Enable the write protection for RTC registers */
+ 219:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       __HAL_RTC_WRITEPROTECTION_ENABLE(&hRTC_Handle);
+ 220:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 221:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       HAL_NVIC_SetPriority(RTC_Alarm_IRQn, TickPriority, 0U);
+ 222:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
+ 223:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       return HAL_OK;
+ 224:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     }
+ 225:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   }
+ 226:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   return HAL_ERROR;
+  77              		.loc 1 226 10 view .LVU18
+  78 0022 0125     		movs	r5, #1
+  79              	.L2:
+ 227:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** }
+  80              		.loc 1 227 1 view .LVU19
+  81 0024 2846     		mov	r0, r5
+  82 0026 1BB0     		add	sp, sp, #108
+  83              	.LCFI2:
+  84              		.cfi_remember_state
+  85              		.cfi_def_cfa_offset 20
+  86              		@ sp needed
+  87 0028 F0BD     		pop	{r4, r5, r6, r7, pc}
+  88              	.LVL3:
+  89              	.L13:
+  90              	.LCFI3:
+  91              		.cfi_restore_state
+ 143:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     if(HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) == HAL_OK)
+  92              		.loc 1 143 5 is_stmt 1 view .LVU20
+ 143:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     if(HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) == HAL_OK)
+  93              		.loc 1 143 46 is_stmt 0 view .LVU21
+  94 002a 2023     		movs	r3, #32
+  95 002c 0193     		str	r3, [sp, #4]
+ 144:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     {
+  96              		.loc 1 144 5 is_stmt 1 view .LVU22
+ 144:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     {
+  97              		.loc 1 144 8 is_stmt 0 view .LVU23
+  98 002e 01A8     		add	r0, sp, #4
+  99 0030 FFF7FEFF 		bl	HAL_RCCEx_PeriphCLKConfig
+ 100              	.LVL4:
+ 144:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     {
+ 101              		.loc 1 144 7 view .LVU24
+ 102 0034 0546     		mov	r5, r0
+ 103 0036 08B1     		cbz	r0, .L14
+ 226:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** }
+ 104              		.loc 1 226 10 view .LVU25
+ 105 0038 0125     		movs	r5, #1
+ 106 003a F3E7     		b	.L2
+ 107              	.L14:
+ 147:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* The time base should be 1ms
+ 108              		.loc 1 147 7 is_stmt 1 view .LVU26
+ 109 003c 3B4B     		ldr	r3, .L16+4
+ARM GAS  /tmp/ccVeMCZQ.s 			page 7
+
+
+ 110 003e 0122     		movs	r2, #1
+ 111 0040 C3F83C2E 		str	r2, [r3, #3644]
+ 160:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.HourFormat = RTC_HOURFORMAT_24;
+ 112              		.loc 1 160 7 view .LVU27
+ 160:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.HourFormat = RTC_HOURFORMAT_24;
+ 113              		.loc 1 160 28 is_stmt 0 view .LVU28
+ 114 0044 3A4E     		ldr	r6, .L16+8
+ 115 0046 3B4B     		ldr	r3, .L16+12
+ 116 0048 3360     		str	r3, [r6]
+ 161:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.AsynchPrediv = RTC_ASYNCH_PREDIV;
+ 117              		.loc 1 161 7 is_stmt 1 view .LVU29
+ 161:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.AsynchPrediv = RTC_ASYNCH_PREDIV;
+ 118              		.loc 1 161 35 is_stmt 0 view .LVU30
+ 119 004a 0027     		movs	r7, #0
+ 120 004c 7760     		str	r7, [r6, #4]
+ 162:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.SynchPrediv = RTC_SYNCH_PREDIV;
+ 121              		.loc 1 162 7 is_stmt 1 view .LVU31
+ 162:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.SynchPrediv = RTC_SYNCH_PREDIV;
+ 122              		.loc 1 162 37 is_stmt 0 view .LVU32
+ 123 004e 6323     		movs	r3, #99
+ 124 0050 B360     		str	r3, [r6, #8]
+ 163:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.OutPut = RTC_OUTPUT_DISABLE;
+ 125              		.loc 1 163 7 is_stmt 1 view .LVU33
+ 163:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.OutPut = RTC_OUTPUT_DISABLE;
+ 126              		.loc 1 163 36 is_stmt 0 view .LVU34
+ 127 0052 0923     		movs	r3, #9
+ 128 0054 F360     		str	r3, [r6, #12]
+ 164:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
+ 129              		.loc 1 164 7 is_stmt 1 view .LVU35
+ 164:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
+ 130              		.loc 1 164 31 is_stmt 0 view .LVU36
+ 131 0056 3761     		str	r7, [r6, #16]
+ 165:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
+ 132              		.loc 1 165 7 is_stmt 1 view .LVU37
+ 165:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
+ 133              		.loc 1 165 39 is_stmt 0 view .LVU38
+ 134 0058 7761     		str	r7, [r6, #20]
+ 166:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       HAL_RTC_Init(&hRTC_Handle);
+ 135              		.loc 1 166 7 is_stmt 1 view .LVU39
+ 166:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       HAL_RTC_Init(&hRTC_Handle);
+ 136              		.loc 1 166 35 is_stmt 0 view .LVU40
+ 137 005a B761     		str	r7, [r6, #24]
+ 167:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 138              		.loc 1 167 7 is_stmt 1 view .LVU41
+ 139 005c 3046     		mov	r0, r6
+ 140 005e FFF7FEFF 		bl	HAL_RTC_Init
+ 141              	.LVL5:
+ 170:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 142              		.loc 1 170 7 view .LVU42
+ 170:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 143              		.loc 1 170 7 view .LVU43
+ 144 0062 3168     		ldr	r1, [r6]
+ 145 0064 CA23     		movs	r3, #202
+ 146 0066 4B62     		str	r3, [r1, #36]
+ 170:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 147              		.loc 1 170 7 view .LVU44
+ 148 0068 5323     		movs	r3, #83
+ARM GAS  /tmp/ccVeMCZQ.s 			page 8
+
+
+ 149 006a 4B62     		str	r3, [r1, #36]
+ 170:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 150              		.loc 1 170 7 view .LVU45
+ 173:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 151              		.loc 1 173 7 view .LVU46
+ 152 006c 8B68     		ldr	r3, [r1, #8]
+ 153 006e 23F48073 		bic	r3, r3, #256
+ 154 0072 8B60     		str	r3, [r1, #8]
+ 176:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 155              		.loc 1 176 7 view .LVU47
+ 156 0074 CB68     		ldr	r3, [r1, #12]
+ 157 0076 DBB2     		uxtb	r3, r3
+ 158 0078 63F4C073 		orn	r3, r3, #384
+ 159 007c CB60     		str	r3, [r1, #12]
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* Wait till RTC ALRAWF flag is set and if Time out is reached exit */
+ 160              		.loc 1 178 7 view .LVU48
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* Wait till RTC ALRAWF flag is set and if Time out is reached exit */
+ 161              		.loc 1 178 15 is_stmt 0 view .LVU49
+ 162 007e 1997     		str	r7, [sp, #100]
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       {
+ 163              		.loc 1 180 7 is_stmt 1 view .LVU50
+ 164              	.L3:
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       {
+ 165              		.loc 1 180 12 view .LVU51
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       {
+ 166              		.loc 1 180 13 is_stmt 0 view .LVU52
+ 167 0080 CB68     		ldr	r3, [r1, #12]
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       {
+ 168              		.loc 1 180 12 view .LVU53
+ 169 0082 13F0010F 		tst	r3, #1
+ 170 0086 0CD1     		bne	.L15
+ 182:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         {
+ 171              		.loc 1 182 9 is_stmt 1 view .LVU54
+ 182:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         {
+ 172              		.loc 1 182 19 is_stmt 0 view .LVU55
+ 173 0088 199A     		ldr	r2, [sp, #100]
+ 174 008a 531C     		adds	r3, r2, #1
+ 175 008c 1993     		str	r3, [sp, #100]
+ 182:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         {
+ 176              		.loc 1 182 42 view .LVU56
+ 177 008e 2A4B     		ldr	r3, .L16+16
+ 178 0090 1B68     		ldr	r3, [r3]
+ 179 0092 2A48     		ldr	r0, .L16+20
+ 180 0094 A0FB0303 		umull	r0, r3, r0, r3
+ 182:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         {
+ 181              		.loc 1 182 11 view .LVU57
+ 182 0098 B2EB531F 		cmp	r2, r3, lsr #5
+ 183 009c F0D1     		bne	.L3
+ 184:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         }
+ 184              		.loc 1 184 18 view .LVU58
+ 185 009e 0125     		movs	r5, #1
+ 186 00a0 C0E7     		b	.L2
+ 187              	.L15:
+ 188:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 188              		.loc 1 188 7 is_stmt 1 view .LVU59
+ 188:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 189              		.loc 1 188 36 is_stmt 0 view .LVU60
+ARM GAS  /tmp/ccVeMCZQ.s 			page 9
+
+
+ 190 00a2 0123     		movs	r3, #1
+ 191 00a4 CB61     		str	r3, [r1, #28]
+ 191:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       /* Configure the Alarm interrupt */
+ 192              		.loc 1 191 7 is_stmt 1 view .LVU61
+ 193 00a6 8B68     		ldr	r3, [r1, #8]
+ 194 00a8 43F48073 		orr	r3, r3, #256
+ 195 00ac 8B60     		str	r3, [r1, #8]
+ 193:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 196              		.loc 1 193 7 view .LVU62
+ 197 00ae 8B68     		ldr	r3, [r1, #8]
+ 198 00b0 43F48053 		orr	r3, r3, #4096
+ 199 00b4 8B60     		str	r3, [r1, #8]
+ 196:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       __HAL_RTC_ALARM_EXTI_ENABLE_RISING_EDGE();
+ 200              		.loc 1 196 7 view .LVU63
+ 201 00b6 224B     		ldr	r3, .L16+24
+ 202 00b8 1A68     		ldr	r2, [r3]
+ 203 00ba 42F40032 		orr	r2, r2, #131072
+ 204 00be 1A60     		str	r2, [r3]
+ 197:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 205              		.loc 1 197 7 view .LVU64
+ 206 00c0 9A68     		ldr	r2, [r3, #8]
+ 207 00c2 42F40032 		orr	r2, r2, #131072
+ 208 00c6 9A60     		str	r2, [r3, #8]
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       {
+ 209              		.loc 1 200 7 view .LVU65
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       {
+ 210              		.loc 1 200 22 is_stmt 0 view .LVU66
+ 211 00c8 194B     		ldr	r3, .L16+8
+ 212 00ca 1868     		ldr	r0, [r3]
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       {
+ 213              		.loc 1 200 31 view .LVU67
+ 214 00cc C368     		ldr	r3, [r0, #12]
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       {
+ 215              		.loc 1 200 9 view .LVU68
+ 216 00ce 13F0400F 		tst	r3, #64
+ 217 00d2 15D1     		bne	.L5
+ 203:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         counter = 0U;
+ 218              		.loc 1 203 9 is_stmt 1 view .LVU69
+ 203:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         counter = 0U;
+ 219              		.loc 1 203 35 is_stmt 0 view .LVU70
+ 220 00d4 4FF0FF33 		mov	r3, #-1
+ 221 00d8 C360     		str	r3, [r0, #12]
+ 204:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         while((hRTC_Handle.Instance->ISR & RTC_ISR_INITF) == (uint32_t)RESET)
+ 222              		.loc 1 204 9 is_stmt 1 view .LVU71
+ 204:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         while((hRTC_Handle.Instance->ISR & RTC_ISR_INITF) == (uint32_t)RESET)
+ 223              		.loc 1 204 17 is_stmt 0 view .LVU72
+ 224 00da 0023     		movs	r3, #0
+ 225 00dc 1993     		str	r3, [sp, #100]
+ 205:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         {
+ 226              		.loc 1 205 9 is_stmt 1 view .LVU73
+ 227              	.L6:
+ 205:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         {
+ 228              		.loc 1 205 14 view .LVU74
+ 205:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         {
+ 229              		.loc 1 205 36 is_stmt 0 view .LVU75
+ 230 00de C368     		ldr	r3, [r0, #12]
+ 205:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****         {
+ARM GAS  /tmp/ccVeMCZQ.s 			page 10
+
+
+ 231              		.loc 1 205 14 view .LVU76
+ 232 00e0 13F0400F 		tst	r3, #64
+ 233 00e4 0CD1     		bne	.L5
+ 207:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****           {
+ 234              		.loc 1 207 11 is_stmt 1 view .LVU77
+ 207:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****           {
+ 235              		.loc 1 207 21 is_stmt 0 view .LVU78
+ 236 00e6 199A     		ldr	r2, [sp, #100]
+ 237 00e8 531C     		adds	r3, r2, #1
+ 238 00ea 1993     		str	r3, [sp, #100]
+ 207:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****           {
+ 239              		.loc 1 207 44 view .LVU79
+ 240 00ec 124B     		ldr	r3, .L16+16
+ 241 00ee 1B68     		ldr	r3, [r3]
+ 242 00f0 1249     		ldr	r1, .L16+20
+ 243 00f2 A1FB0313 		umull	r1, r3, r1, r3
+ 207:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****           {
+ 244              		.loc 1 207 13 view .LVU80
+ 245 00f6 B2EB531F 		cmp	r2, r3, lsr #5
+ 246 00fa F0D1     		bne	.L6
+ 209:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****           }
+ 247              		.loc 1 209 20 view .LVU81
+ 248 00fc 0125     		movs	r5, #1
+ 249 00fe 91E7     		b	.L2
+ 250              	.L5:
+ 213:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Instance->TR = 0U;
+ 251              		.loc 1 213 7 is_stmt 1 view .LVU82
+ 213:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       hRTC_Handle.Instance->TR = 0U;
+ 252              		.loc 1 213 32 is_stmt 0 view .LVU83
+ 253 0100 0022     		movs	r2, #0
+ 254 0102 4260     		str	r2, [r0, #4]
+ 214:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 255              		.loc 1 214 7 is_stmt 1 view .LVU84
+ 214:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 256              		.loc 1 214 32 is_stmt 0 view .LVU85
+ 257 0104 0260     		str	r2, [r0]
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 258              		.loc 1 216 7 is_stmt 1 view .LVU86
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 259              		.loc 1 216 18 is_stmt 0 view .LVU87
+ 260 0106 0A4B     		ldr	r3, .L16+8
+ 261 0108 1B68     		ldr	r3, [r3]
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 262              		.loc 1 216 33 view .LVU88
+ 263 010a D968     		ldr	r1, [r3, #12]
+ 264 010c 21F08001 		bic	r1, r1, #128
+ 265 0110 D960     		str	r1, [r3, #12]
+ 219:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 266              		.loc 1 219 7 is_stmt 1 view .LVU89
+ 219:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 267              		.loc 1 219 7 view .LVU90
+ 268 0112 FF21     		movs	r1, #255
+ 269 0114 5962     		str	r1, [r3, #36]
+ 219:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 270              		.loc 1 219 7 view .LVU91
+ 221:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       HAL_NVIC_EnableIRQ(RTC_Alarm_IRQn);
+ 271              		.loc 1 221 7 view .LVU92
+ARM GAS  /tmp/ccVeMCZQ.s 			page 11
+
+
+ 272 0116 2146     		mov	r1, r4
+ 273 0118 2920     		movs	r0, #41
+ 274 011a FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 275              	.LVL6:
+ 222:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       return HAL_OK;
+ 276              		.loc 1 222 7 view .LVU93
+ 277 011e 2920     		movs	r0, #41
+ 278 0120 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 279              	.LVL7:
+ 223:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     }
+ 280              		.loc 1 223 7 view .LVU94
+ 223:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     }
+ 281              		.loc 1 223 14 is_stmt 0 view .LVU95
+ 282 0124 7EE7     		b	.L2
+ 283              	.L17:
+ 284 0126 00BF     		.align	2
+ 285              	.L16:
+ 286 0128 00031900 		.word	1639168
+ 287 012c 00004742 		.word	1111949312
+ 288 0130 00000000 		.word	.LANCHOR0
+ 289 0134 00280040 		.word	1073752064
+ 290 0138 00000000 		.word	SystemCoreClock
+ 291 013c ABAAAAAA 		.word	-1431655765
+ 292 0140 003C0140 		.word	1073822720
+ 293              		.cfi_endproc
+ 294              	.LFE126:
+ 296              		.section	.text.HAL_SuspendTick,"ax",%progbits
+ 297              		.align	1
+ 298              		.global	HAL_SuspendTick
+ 299              		.syntax unified
+ 300              		.thumb
+ 301              		.thumb_func
+ 302              		.fpu fpv4-sp-d16
+ 304              	HAL_SuspendTick:
+ 305              	.LFB127:
+ 228:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 229:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /**
+ 230:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @brief  Suspend Tick increment.
+ 231:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @note   Disable the tick increment by disabling RTC ALARM interrupt.
+ 232:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @retval None
+ 233:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   */
+ 234:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** void HAL_SuspendTick(void)
+ 235:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** {
+ 306              		.loc 1 235 1 is_stmt 1 view -0
+ 307              		.cfi_startproc
+ 308              		@ args = 0, pretend = 0, frame = 0
+ 309              		@ frame_needed = 0, uses_anonymous_args = 0
+ 310              		@ link register save eliminated.
+ 236:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   /* Disable the write protection for RTC registers */
+ 237:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   __HAL_RTC_WRITEPROTECTION_DISABLE(&hRTC_Handle);
+ 311              		.loc 1 237 3 view .LVU97
+ 312              		.loc 1 237 3 view .LVU98
+ 313 0000 064B     		ldr	r3, .L19
+ 314 0002 1B68     		ldr	r3, [r3]
+ 315 0004 CA22     		movs	r2, #202
+ 316 0006 5A62     		str	r2, [r3, #36]
+ 317              		.loc 1 237 3 view .LVU99
+ARM GAS  /tmp/ccVeMCZQ.s 			page 12
+
+
+ 318 0008 5322     		movs	r2, #83
+ 319 000a 5A62     		str	r2, [r3, #36]
+ 320              		.loc 1 237 3 view .LVU100
+ 238:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   /* Disable RTC ALARM update Interrupt */
+ 239:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   __HAL_RTC_ALARM_DISABLE_IT(&hRTC_Handle, RTC_IT_ALRA);
+ 321              		.loc 1 239 3 view .LVU101
+ 322 000c 9A68     		ldr	r2, [r3, #8]
+ 323 000e 22F48052 		bic	r2, r2, #4096
+ 324 0012 9A60     		str	r2, [r3, #8]
+ 240:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   /* Enable the write protection for RTC registers */
+ 241:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   __HAL_RTC_WRITEPROTECTION_ENABLE(&hRTC_Handle);
+ 325              		.loc 1 241 3 view .LVU102
+ 326              		.loc 1 241 3 view .LVU103
+ 327 0014 FF22     		movs	r2, #255
+ 328 0016 5A62     		str	r2, [r3, #36]
+ 329              		.loc 1 241 3 view .LVU104
+ 242:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** }
+ 330              		.loc 1 242 1 is_stmt 0 view .LVU105
+ 331 0018 7047     		bx	lr
+ 332              	.L20:
+ 333 001a 00BF     		.align	2
+ 334              	.L19:
+ 335 001c 00000000 		.word	.LANCHOR0
+ 336              		.cfi_endproc
+ 337              	.LFE127:
+ 339              		.section	.text.HAL_ResumeTick,"ax",%progbits
+ 340              		.align	1
+ 341              		.global	HAL_ResumeTick
+ 342              		.syntax unified
+ 343              		.thumb
+ 344              		.thumb_func
+ 345              		.fpu fpv4-sp-d16
+ 347              	HAL_ResumeTick:
+ 348              	.LFB128:
+ 243:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 244:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /**
+ 245:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @brief  Resume Tick increment.
+ 246:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @note   Enable the tick increment by Enabling RTC ALARM interrupt.
+ 247:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @retval None
+ 248:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   */
+ 249:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** void HAL_ResumeTick(void)
+ 250:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** {
+ 349              		.loc 1 250 1 is_stmt 1 view -0
+ 350              		.cfi_startproc
+ 351              		@ args = 0, pretend = 0, frame = 0
+ 352              		@ frame_needed = 0, uses_anonymous_args = 0
+ 353              		@ link register save eliminated.
+ 251:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   /* Disable the write protection for RTC registers */
+ 252:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   __HAL_RTC_WRITEPROTECTION_DISABLE(&hRTC_Handle);
+ 354              		.loc 1 252 3 view .LVU107
+ 355              		.loc 1 252 3 view .LVU108
+ 356 0000 064B     		ldr	r3, .L22
+ 357 0002 1B68     		ldr	r3, [r3]
+ 358 0004 CA22     		movs	r2, #202
+ 359 0006 5A62     		str	r2, [r3, #36]
+ 360              		.loc 1 252 3 view .LVU109
+ 361 0008 5322     		movs	r2, #83
+ARM GAS  /tmp/ccVeMCZQ.s 			page 13
+
+
+ 362 000a 5A62     		str	r2, [r3, #36]
+ 363              		.loc 1 252 3 view .LVU110
+ 253:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   /* Enable RTC ALARM Update interrupt */
+ 254:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   __HAL_RTC_ALARM_ENABLE_IT(&hRTC_Handle, RTC_IT_ALRA);
+ 364              		.loc 1 254 3 view .LVU111
+ 365 000c 9A68     		ldr	r2, [r3, #8]
+ 366 000e 42F48052 		orr	r2, r2, #4096
+ 367 0012 9A60     		str	r2, [r3, #8]
+ 255:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   /* Enable the write protection for RTC registers */
+ 256:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   __HAL_RTC_WRITEPROTECTION_ENABLE(&hRTC_Handle);
+ 368              		.loc 1 256 3 view .LVU112
+ 369              		.loc 1 256 3 view .LVU113
+ 370 0014 FF22     		movs	r2, #255
+ 371 0016 5A62     		str	r2, [r3, #36]
+ 372              		.loc 1 256 3 view .LVU114
+ 257:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** }
+ 373              		.loc 1 257 1 is_stmt 0 view .LVU115
+ 374 0018 7047     		bx	lr
+ 375              	.L23:
+ 376 001a 00BF     		.align	2
+ 377              	.L22:
+ 378 001c 00000000 		.word	.LANCHOR0
+ 379              		.cfi_endproc
+ 380              	.LFE128:
+ 382              		.section	.text.HAL_RTC_AlarmAEventCallback,"ax",%progbits
+ 383              		.align	1
+ 384              		.global	HAL_RTC_AlarmAEventCallback
+ 385              		.syntax unified
+ 386              		.thumb
+ 387              		.thumb_func
+ 388              		.fpu fpv4-sp-d16
+ 390              	HAL_RTC_AlarmAEventCallback:
+ 391              	.LVL8:
+ 392              	.LFB129:
+ 258:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 259:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /**
+ 260:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @brief  ALARM A Event Callback in non blocking mode
+ 261:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @note   This function is called  when RTC_ALARM interrupt took place, inside
+ 262:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * RTC_ALARM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+ 263:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * a global variable "uwTick" used as application time base.
+ 264:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @param  hrtc  RTC handle
+ 265:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @retval None
+ 266:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   */
+ 267:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
+ 268:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** {
+ 393              		.loc 1 268 1 is_stmt 1 view -0
+ 394              		.cfi_startproc
+ 395              		@ args = 0, pretend = 0, frame = 8
+ 396              		@ frame_needed = 0, uses_anonymous_args = 0
+ 397              		.loc 1 268 1 is_stmt 0 view .LVU117
+ 398 0000 10B5     		push	{r4, lr}
+ 399              	.LCFI4:
+ 400              		.cfi_def_cfa_offset 8
+ 401              		.cfi_offset 4, -8
+ 402              		.cfi_offset 14, -4
+ 403 0002 82B0     		sub	sp, sp, #8
+ 404              	.LCFI5:
+ARM GAS  /tmp/ccVeMCZQ.s 			page 14
+
+
+ 405              		.cfi_def_cfa_offset 16
+ 406 0004 0446     		mov	r4, r0
+ 269:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   __IO uint32_t counter = 0U;
+ 407              		.loc 1 269 3 is_stmt 1 view .LVU118
+ 408              		.loc 1 269 17 is_stmt 0 view .LVU119
+ 409 0006 0023     		movs	r3, #0
+ 410 0008 0193     		str	r3, [sp, #4]
+ 270:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 271:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   HAL_IncTick();
+ 411              		.loc 1 271 3 is_stmt 1 view .LVU120
+ 412 000a FFF7FEFF 		bl	HAL_IncTick
+ 413              	.LVL9:
+ 272:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 273:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   __HAL_RTC_WRITEPROTECTION_DISABLE(hrtc);
+ 414              		.loc 1 273 3 view .LVU121
+ 415              		.loc 1 273 3 view .LVU122
+ 416 000e 2368     		ldr	r3, [r4]
+ 417 0010 CA22     		movs	r2, #202
+ 418 0012 5A62     		str	r2, [r3, #36]
+ 419              		.loc 1 273 3 view .LVU123
+ 420 0014 2368     		ldr	r3, [r4]
+ 421 0016 5322     		movs	r2, #83
+ 422 0018 5A62     		str	r2, [r3, #36]
+ 423              		.loc 1 273 3 view .LVU124
+ 274:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 275:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   /* Set the Initialization mode */
+ 276:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   hrtc->Instance->ISR = (uint32_t)RTC_INIT_MASK;
+ 424              		.loc 1 276 3 view .LVU125
+ 425              		.loc 1 276 7 is_stmt 0 view .LVU126
+ 426 001a 2368     		ldr	r3, [r4]
+ 427              		.loc 1 276 23 view .LVU127
+ 428 001c 4FF0FF32 		mov	r2, #-1
+ 429 0020 DA60     		str	r2, [r3, #12]
+ 277:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 278:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   while((hrtc->Instance->ISR & RTC_ISR_INITF) == (uint32_t)RESET)
+ 430              		.loc 1 278 3 is_stmt 1 view .LVU128
+ 431              	.L25:
+ 432              		.loc 1 278 8 view .LVU129
+ 433              		.loc 1 278 14 is_stmt 0 view .LVU130
+ 434 0022 2168     		ldr	r1, [r4]
+ 435              		.loc 1 278 24 view .LVU131
+ 436 0024 CB68     		ldr	r3, [r1, #12]
+ 437              		.loc 1 278 8 view .LVU132
+ 438 0026 13F0400F 		tst	r3, #64
+ 439 002a 0AD1     		bne	.L26
+ 279:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   {
+ 280:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     if(counter++ == (SystemCoreClock /48U)) /* Timeout = ~ 1s */
+ 440              		.loc 1 280 5 is_stmt 1 view .LVU133
+ 441              		.loc 1 280 15 is_stmt 0 view .LVU134
+ 442 002c 019A     		ldr	r2, [sp, #4]
+ 443 002e 531C     		adds	r3, r2, #1
+ 444 0030 0193     		str	r3, [sp, #4]
+ 445              		.loc 1 280 38 view .LVU135
+ 446 0032 0B4B     		ldr	r3, .L29
+ 447 0034 1B68     		ldr	r3, [r3]
+ 448 0036 0B48     		ldr	r0, .L29+4
+ 449 0038 A0FB0303 		umull	r0, r3, r0, r3
+ARM GAS  /tmp/ccVeMCZQ.s 			page 15
+
+
+ 450              		.loc 1 280 7 view .LVU136
+ 451 003c B2EB531F 		cmp	r2, r3, lsr #5
+ 452 0040 EFD1     		bne	.L25
+ 453              	.L26:
+ 281:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     {
+ 282:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****       break;
+ 283:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****     }
+ 284:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   }
+ 285:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 286:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   hrtc->Instance->DR = 0U;
+ 454              		.loc 1 286 3 is_stmt 1 view .LVU137
+ 455              		.loc 1 286 22 is_stmt 0 view .LVU138
+ 456 0042 0023     		movs	r3, #0
+ 457 0044 4B60     		str	r3, [r1, #4]
+ 287:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   hrtc->Instance->TR = 0U;
+ 458              		.loc 1 287 3 is_stmt 1 view .LVU139
+ 459              		.loc 1 287 7 is_stmt 0 view .LVU140
+ 460 0046 2268     		ldr	r2, [r4]
+ 461              		.loc 1 287 22 view .LVU141
+ 462 0048 1360     		str	r3, [r2]
+ 288:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 289:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   hrtc->Instance->ISR &= (uint32_t)~RTC_ISR_INIT;
+ 463              		.loc 1 289 3 is_stmt 1 view .LVU142
+ 464              		.loc 1 289 7 is_stmt 0 view .LVU143
+ 465 004a 2268     		ldr	r2, [r4]
+ 466              		.loc 1 289 23 view .LVU144
+ 467 004c D368     		ldr	r3, [r2, #12]
+ 468 004e 23F08003 		bic	r3, r3, #128
+ 469 0052 D360     		str	r3, [r2, #12]
+ 290:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 291:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   /* Enable the write protection for RTC registers */
+ 292:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   __HAL_RTC_WRITEPROTECTION_ENABLE(hrtc);
+ 470              		.loc 1 292 3 is_stmt 1 view .LVU145
+ 471              		.loc 1 292 3 view .LVU146
+ 472 0054 2368     		ldr	r3, [r4]
+ 473 0056 FF22     		movs	r2, #255
+ 474 0058 5A62     		str	r2, [r3, #36]
+ 475              		.loc 1 292 3 view .LVU147
+ 293:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** }
+ 476              		.loc 1 293 1 is_stmt 0 view .LVU148
+ 477 005a 02B0     		add	sp, sp, #8
+ 478              	.LCFI6:
+ 479              		.cfi_def_cfa_offset 8
+ 480              		@ sp needed
+ 481 005c 10BD     		pop	{r4, pc}
+ 482              	.LVL10:
+ 483              	.L30:
+ 484              		.loc 1 293 1 view .LVU149
+ 485 005e 00BF     		.align	2
+ 486              	.L29:
+ 487 0060 00000000 		.word	SystemCoreClock
+ 488 0064 ABAAAAAA 		.word	-1431655765
+ 489              		.cfi_endproc
+ 490              	.LFE129:
+ 492              		.section	.text.RTC_Alarm_IRQHandler,"ax",%progbits
+ 493              		.align	1
+ 494              		.global	RTC_Alarm_IRQHandler
+ARM GAS  /tmp/ccVeMCZQ.s 			page 16
+
+
+ 495              		.syntax unified
+ 496              		.thumb
+ 497              		.thumb_func
+ 498              		.fpu fpv4-sp-d16
+ 500              	RTC_Alarm_IRQHandler:
+ 501              	.LFB130:
+ 294:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** 
+ 295:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** /**
+ 296:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @brief  This function handles RTC ALARM interrupt request.
+ 297:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   * @retval None
+ 298:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   */
+ 299:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** void RTC_Alarm_IRQHandler(void)
+ 300:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** {
+ 502              		.loc 1 300 1 is_stmt 1 view -0
+ 503              		.cfi_startproc
+ 504              		@ args = 0, pretend = 0, frame = 0
+ 505              		@ frame_needed = 0, uses_anonymous_args = 0
+ 506 0000 08B5     		push	{r3, lr}
+ 507              	.LCFI7:
+ 508              		.cfi_def_cfa_offset 8
+ 509              		.cfi_offset 3, -8
+ 510              		.cfi_offset 14, -4
+ 301:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c ****   HAL_RTC_AlarmIRQHandler(&hRTC_Handle);
+ 511              		.loc 1 301 3 view .LVU151
+ 512 0002 0248     		ldr	r0, .L33
+ 513 0004 FFF7FEFF 		bl	HAL_RTC_AlarmIRQHandler
+ 514              	.LVL11:
+ 302:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_timebase_rtc_alarm_template.c **** }
+ 515              		.loc 1 302 1 is_stmt 0 view .LVU152
+ 516 0008 08BD     		pop	{r3, pc}
+ 517              	.L34:
+ 518 000a 00BF     		.align	2
+ 519              	.L33:
+ 520 000c 00000000 		.word	.LANCHOR0
+ 521              		.cfi_endproc
+ 522              	.LFE130:
+ 524              		.global	hRTC_Handle
+ 525              		.section	.bss.hRTC_Handle,"aw",%nobits
+ 526              		.align	2
+ 527              		.set	.LANCHOR0,. + 0
+ 530              	hRTC_Handle:
+ 531 0000 00000000 		.space	32
+ 531      00000000 
+ 531      00000000 
+ 531      00000000 
+ 531      00000000 
+ 532              		.text
+ 533              	.Letext0:
+ 534              		.file 2 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/machine/_default_types.h"
+ 535              		.file 3 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/sys/_stdint.h"
+ 536              		.file 4 "./Libraries/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h"
+ 537              		.file 5 "./Libraries/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 538              		.file 6 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 539              		.file 7 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h"
+ 540              		.file 8 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h"
+ 541              		.file 9 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rtc.h"
+ 542              		.file 10 "./Libraries/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
+ARM GAS  /tmp/ccVeMCZQ.s 			page 17
+
+
+ 543              		.file 11 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 544              		.file 12 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_cortex.h"
+ARM GAS  /tmp/ccVeMCZQ.s 			page 18
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_hal_timebase_rtc_alarm_template.c
+     /tmp/ccVeMCZQ.s:18     .text.HAL_InitTick:0000000000000000 $t
+     /tmp/ccVeMCZQ.s:26     .text.HAL_InitTick:0000000000000000 HAL_InitTick
+     /tmp/ccVeMCZQ.s:286    .text.HAL_InitTick:0000000000000128 $d
+     /tmp/ccVeMCZQ.s:297    .text.HAL_SuspendTick:0000000000000000 $t
+     /tmp/ccVeMCZQ.s:304    .text.HAL_SuspendTick:0000000000000000 HAL_SuspendTick
+     /tmp/ccVeMCZQ.s:335    .text.HAL_SuspendTick:000000000000001c $d
+     /tmp/ccVeMCZQ.s:340    .text.HAL_ResumeTick:0000000000000000 $t
+     /tmp/ccVeMCZQ.s:347    .text.HAL_ResumeTick:0000000000000000 HAL_ResumeTick
+     /tmp/ccVeMCZQ.s:378    .text.HAL_ResumeTick:000000000000001c $d
+     /tmp/ccVeMCZQ.s:383    .text.HAL_RTC_AlarmAEventCallback:0000000000000000 $t
+     /tmp/ccVeMCZQ.s:390    .text.HAL_RTC_AlarmAEventCallback:0000000000000000 HAL_RTC_AlarmAEventCallback
+     /tmp/ccVeMCZQ.s:487    .text.HAL_RTC_AlarmAEventCallback:0000000000000060 $d
+     /tmp/ccVeMCZQ.s:493    .text.RTC_Alarm_IRQHandler:0000000000000000 $t
+     /tmp/ccVeMCZQ.s:500    .text.RTC_Alarm_IRQHandler:0000000000000000 RTC_Alarm_IRQHandler
+     /tmp/ccVeMCZQ.s:520    .text.RTC_Alarm_IRQHandler:000000000000000c $d
+     /tmp/ccVeMCZQ.s:530    .bss.hRTC_Handle:0000000000000000 hRTC_Handle
+     /tmp/ccVeMCZQ.s:526    .bss.hRTC_Handle:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+HAL_RCC_OscConfig
+HAL_RCCEx_PeriphCLKConfig
+HAL_RTC_Init
+HAL_NVIC_SetPriority
+HAL_NVIC_EnableIRQ
+SystemCoreClock
+HAL_IncTick
+HAL_RTC_AlarmIRQHandler
