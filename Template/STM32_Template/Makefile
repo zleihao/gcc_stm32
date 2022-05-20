@@ -226,9 +226,13 @@ $(BUILD_DIR):
 #######################################
 # clean up
 #######################################
-#linux
+#根据自己的系统选择
+#windows
 clean:
-	rm -rf $(BUILD_DIR)
+	del /s/q $(BUILD_DIR)
+#linux
+# clean:
+# 	rm -rf $(BUILD_DIR)
 
 download:
 	openocd -f $(OPENOCD_DOWN_PATH) -f $(OPENOCD_CHIP_PATH)  -c init -c halt -c "flash write_image erase ./build/$(TARGET).hex" -c reset -c halt -c shutdown
