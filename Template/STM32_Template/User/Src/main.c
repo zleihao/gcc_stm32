@@ -11,7 +11,7 @@
 
 int main(void) {
 	//初始化USART1
-	usart_init(72);
+	USART_Config();
 
     printf("Hello world\n");
 
