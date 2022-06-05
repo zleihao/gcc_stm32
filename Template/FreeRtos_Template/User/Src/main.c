@@ -1,11 +1,11 @@
 /**		 
  * @Date:               2022.3.16 
  * @Revision:           V1.0
- * @Writer:             点灯大师
+ * @author:             点灯大师
  * @Affiliated unit：   黄河科技学院
  * @Description:        基于STM32F103的FreeRtos工程
  * @Email:              im_leihao@163.com
- * @gitee:              https://gitee.com/zleihao/STM32F103.git
+ * @github:             https://github.com/zleihao
  */
 
 #include "Free.h"
