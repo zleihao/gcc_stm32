@@ -1,0 +1,626 @@
+ARM GAS  /tmp/cc1jles4.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_hal_sai_ex.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.SAI_BlockSynchroConfig,"ax",%progbits
+  18              		.align	1
+  19              		.global	SAI_BlockSynchroConfig
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	SAI_BlockSynchroConfig:
+  27              	.LVL0:
+  28              	.LFB126:
+  29              		.file 1 "./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c"
+   1:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /**
+   2:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   ******************************************************************************
+   3:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @file    stm32f4xx_hal_sai_ex.c
+   4:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @author  MCD Application Team
+   5:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @brief   SAI Extension HAL module driver.
+   6:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *          This file provides firmware functions to manage the following 
+   7:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *          functionalities of SAI extension peripheral:
+   8:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *           + Extension features functions
+   9:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *         
+  10:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   @verbatim
+  11:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   ==============================================================================
+  12:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****                ##### SAI peripheral extension features  #####
+  13:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   ==============================================================================
+  14:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****            
+  15:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   [..] Comparing to other previous devices, the SAI interface for STM32F446xx 
+  16:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****        devices contains the following additional features :
+  17:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****        
+  18:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****        (+) Possibility to be clocked from PLLR
+  19:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****    
+  20:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****                      ##### How to use this driver #####
+  21:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   ==============================================================================
+  22:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   [..] This driver provides functions to manage several sources to clock SAI
+  23:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   
+  24:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   @endverbatim
+  25:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   ******************************************************************************
+  26:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @attention
+  27:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *
+  28:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  29:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *
+ARM GAS  /tmp/cc1jles4.s 			page 2
+
+
+  30:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  31:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * are permitted provided that the following conditions are met:
+  32:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  33:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *      this list of conditions and the following disclaimer.
+  34:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  35:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *      this list of conditions and the following disclaimer in the documentation
+  36:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *      and/or other materials provided with the distribution.
+  37:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  38:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *      may be used to endorse or promote products derived from this software
+  39:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *      without specific prior written permission.
+  40:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *
+  41:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  42:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  43:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  44:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  45:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  46:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  47:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  48:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  49:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  50:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  51:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *
+  52:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   ******************************************************************************
+  53:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   */ 
+  54:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+  55:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /* Includes ------------------------------------------------------------------*/
+  56:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #include "stm32f4xx_hal.h"
+  57:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+  58:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /** @addtogroup STM32F4xx_HAL_Driver
+  59:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @{
+  60:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   */
+  61:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+  62:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /** @defgroup SAIEx SAIEx
+  63:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @brief SAI Extension HAL module driver
+  64:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @{
+  65:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   */
+  66:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+  67:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #ifdef HAL_SAI_MODULE_ENABLED
+  68:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+  69:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #if defined(STM32F427xx) || defined(STM32F437xx) || defined(STM32F429xx) || defined(STM32F439xx) ||
+  70:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     defined(STM32F446xx) || defined(STM32F469xx) || defined(STM32F479xx) || defined(STM32F413xx) ||
+  71:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     defined(STM32F423xx)
+  72:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+  73:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /* Private typedef -----------------------------------------------------------*/
+  74:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /* Private define ------------------------------------------------------------*/
+  75:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /* SAI registers Masks */
+  76:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /* Private macro -------------------------------------------------------------*/
+  77:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /* Private variables ---------------------------------------------------------*/
+  78:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /* Private function prototypes -----------------------------------------------*/
+  79:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /* Private functions ---------------------------------------------------------*/
+  80:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+  81:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /** @defgroup SAI_Private_Functions  SAI Private Functions
+  82:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @{
+  83:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   */
+  84:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****  /**
+  85:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @}
+  86:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   */
+ARM GAS  /tmp/cc1jles4.s 			page 3
+
+
+  87:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   
+  88:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /* Exported functions --------------------------------------------------------*/
+  89:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /** @defgroup SAIEx_Exported_Functions SAI Extended Exported Functions
+  90:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @{
+  91:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   */
+  92:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+  93:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /** @defgroup SAIEx_Exported_Functions_Group1 Extension features functions 
+  94:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *  @brief   Extension features functions
+  95:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *
+  96:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** @verbatim    
+  97:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****  ===============================================================================
+  98:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****                        ##### Extension features Functions #####
+  99:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****  ===============================================================================
+ 100:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     [..]
+ 101:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     This subsection provides a set of functions allowing to manage the possible 
+ 102:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     SAI clock sources.
+ 103:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+ 104:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** @endverbatim
+ 105:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @{
+ 106:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   */
+ 107:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+ 108:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** /**
+ 109:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @brief  Configure SAI Block synchronization mode
+ 110:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @param  hsai pointer to a SAI_HandleTypeDef structure that contains
+ 111:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *               the configuration information for SAI module.   
+ 112:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @retval SAI Clock Input 
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   */
+ 114:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** void SAI_BlockSynchroConfig(SAI_HandleTypeDef *hsai)
+ 115:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** {
+  30              		.loc 1 115 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+ 116:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   uint32_t tmpregisterGCR = 0U;
+  35              		.loc 1 116 3 view .LVU1
+ 117:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+ 118:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #if defined(STM32F446xx)  
+ 119:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   /* This setting must be done with both audio block (A & B) disabled         */
+ 120:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   switch(hsai->Init.SynchroExt)
+ 121:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 122:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   case SAI_SYNCEXT_DISABLE :
+ 123:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpregisterGCR = 0U;
+ 124:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     break;
+ 125:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   case SAI_SYNCEXT_OUTBLOCKA_ENABLE :
+ 126:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpregisterGCR = SAI_GCR_SYNCOUT_0;
+ 127:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     break;
+ 128:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   case SAI_SYNCEXT_OUTBLOCKB_ENABLE :
+ 129:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpregisterGCR = SAI_GCR_SYNCOUT_1;
+ 130:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     break;
+ 131:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   default:
+ 132:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     break;
+ 133:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 134:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+ 135:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   if((hsai->Init.Synchro) == SAI_SYNCHRONOUS_EXT_SAI2)
+ 136:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 137:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpregisterGCR |= SAI_GCR_SYNCIN_0;
+ARM GAS  /tmp/cc1jles4.s 			page 4
+
+
+ 138:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 139:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+ 140:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   if((hsai->Instance == SAI1_Block_A) || (hsai->Instance == SAI1_Block_B))
+ 141:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 142:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     SAI1->GCR = tmpregisterGCR;
+ 143:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 144:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   else 
+ 145:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 146:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     SAI2->GCR = tmpregisterGCR;
+ 147:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 148:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #endif /* STM32F446xx */
+ 149:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #if defined(STM32F427xx) || defined(STM32F437xx) || defined(STM32F429xx) || defined(STM32F439xx) ||
+ 150:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     defined(STM32F469xx) || defined(STM32F479xx) || defined(STM32F413xx) || defined(STM32F423xx)
+ 151:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   /* This setting must be done with both audio block (A & B) disabled         */
+ 152:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   switch(hsai->Init.SynchroExt)
+  36              		.loc 1 152 3 view .LVU2
+  37              		.loc 1 152 20 is_stmt 0 view .LVU3
+  38 0000 C368     		ldr	r3, [r0, #12]
+  39              		.loc 1 152 3 view .LVU4
+  40 0002 012B     		cmp	r3, #1
+  41 0004 06D0     		beq	.L3
+  42 0006 022B     		cmp	r3, #2
+  43 0008 06D1     		bne	.L4
+ 153:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 154:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   case SAI_SYNCEXT_DISABLE :
+ 155:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpregisterGCR = 0U;
+ 156:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     break;
+ 157:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   case SAI_SYNCEXT_OUTBLOCKA_ENABLE :
+ 158:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpregisterGCR = SAI_GCR_SYNCOUT_0;
+ 159:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     break;
+ 160:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   case SAI_SYNCEXT_OUTBLOCKB_ENABLE :
+ 161:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpregisterGCR = SAI_GCR_SYNCOUT_1;
+  44              		.loc 1 161 20 view .LVU5
+  45 000a 2023     		movs	r3, #32
+  46              	.L2:
+  47              	.LVL1:
+ 162:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     break;
+ 163:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   default:
+ 164:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     break;
+ 165:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 166:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   SAI1->GCR = tmpregisterGCR;
+  48              		.loc 1 166 3 is_stmt 1 view .LVU6
+  49              		.loc 1 166 13 is_stmt 0 view .LVU7
+  50 000c 034A     		ldr	r2, .L5
+  51 000e C2F80038 		str	r3, [r2, #2048]
+ 167:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #endif /* STM32F427xx || STM32F437xx || STM32F429xx || STM32F439xx || STM32F469xx || STM32F479xx ||
+ 168:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** }
+  52              		.loc 1 168 1 view .LVU8
+  53 0012 7047     		bx	lr
+  54              	.LVL2:
+  55              	.L3:
+ 158:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     break;
+  56              		.loc 1 158 20 view .LVU9
+  57 0014 1023     		movs	r3, #16
+  58 0016 F9E7     		b	.L2
+  59              	.L4:
+ 152:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ARM GAS  /tmp/cc1jles4.s 			page 5
+
+
+  60              		.loc 1 152 3 view .LVU10
+  61 0018 0023     		movs	r3, #0
+  62 001a F7E7     		b	.L2
+  63              	.L6:
+  64              		.align	2
+  65              	.L5:
+  66 001c 00500140 		.word	1073827840
+  67              		.cfi_endproc
+  68              	.LFE126:
+  70              		.section	.text.SAI_GetInputClock,"ax",%progbits
+  71              		.align	1
+  72              		.global	SAI_GetInputClock
+  73              		.syntax unified
+  74              		.thumb
+  75              		.thumb_func
+  76              		.fpu fpv4-sp-d16
+  78              	SAI_GetInputClock:
+  79              	.LVL3:
+  80              	.LFB127:
+ 169:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   /**
+ 170:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @brief  Get SAI Input Clock based on SAI source clock selection
+ 171:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @param  hsai pointer to a SAI_HandleTypeDef structure that contains
+ 172:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   *               the configuration information for SAI module.   
+ 173:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   * @retval SAI Clock Input 
+ 174:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   */
+ 175:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** uint32_t SAI_GetInputClock(SAI_HandleTypeDef *hsai)   
+ 176:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** {
+  81              		.loc 1 176 1 is_stmt 1 view -0
+  82              		.cfi_startproc
+  83              		@ args = 0, pretend = 0, frame = 0
+  84              		@ frame_needed = 0, uses_anonymous_args = 0
+  85              		@ link register save eliminated.
+ 177:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   /* This variable used to store the SAI_CK_x (value in Hz) */
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   uint32_t saiclocksource = 0U;
+  86              		.loc 1 178 3 view .LVU12
+ 179:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #if defined(STM32F446xx)
+ 181:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   if ((hsai->Instance == SAI1_Block_A) || (hsai->Instance == SAI1_Block_B))
+ 182:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 183:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = HAL_RCCEx_GetPeriphCLKFreq(RCC_PERIPHCLK_SAI1);
+ 184:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 185:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   else /* SAI2_Block_A || SAI2_Block_B*/
+ 186:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 187:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = HAL_RCCEx_GetPeriphCLKFreq(RCC_PERIPHCLK_SAI2); 
+ 188:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 189:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #endif /* STM32F446xx */
+ 190:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #if defined(STM32F427xx) || defined(STM32F437xx) || defined(STM32F429xx) || defined(STM32F439xx) ||
+ 191:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   defined(STM32F469xx) || defined(STM32F479xx) || defined(STM32F413xx) || defined(STM32F423xx)
+ 192:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   uint32_t vcoinput = 0U, tmpreg = 0U;
+  87              		.loc 1 192 3 view .LVU13
+ 193:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   
+ 194:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   /* Check the SAI Block parameters */
+ 195:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   assert_param(IS_SAI_CLK_SOURCE(hsai->Init.ClockSource));
+  88              		.loc 1 195 3 view .LVU14
+ 196:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****  
+ 197:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   /* SAI Block clock source selection */
+ 198:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   if(hsai->Instance == SAI1_Block_A)
+ARM GAS  /tmp/cc1jles4.s 			page 6
+
+
+  89              		.loc 1 198 3 view .LVU15
+  90              		.loc 1 198 10 is_stmt 0 view .LVU16
+  91 0000 0268     		ldr	r2, [r0]
+  92              		.loc 1 198 5 view .LVU17
+  93 0002 304B     		ldr	r3, .L17
+  94 0004 9A42     		cmp	r2, r3
+  95 0006 2CD0     		beq	.L15
+ 199:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     __HAL_RCC_SAI_BLOCKACLKSOURCE_CONFIG(hsai->Init.ClockSource);
+ 201:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 202:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   else
+ 203:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 204:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     __HAL_RCC_SAI_BLOCKBCLKSOURCE_CONFIG((uint32_t)(hsai->Init.ClockSource << 2U));
+  96              		.loc 1 204 5 is_stmt 1 view .LVU18
+  97 0008 2F4A     		ldr	r2, .L17+4
+  98 000a D2F88C30 		ldr	r3, [r2, #140]
+  99 000e 23F44003 		bic	r3, r3, #12582912
+ 100 0012 C169     		ldr	r1, [r0, #28]
+ 101 0014 43EA8103 		orr	r3, r3, r1, lsl #2
+ 102 0018 C2F88C30 		str	r3, [r2, #140]
+ 103              	.L9:
+ 205:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 206:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   
+ 207:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   /* VCO Input Clock value calculation */
+ 208:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   if((RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC) == RCC_PLLSOURCE_HSI)
+ 104              		.loc 1 208 3 view .LVU19
+ 105              		.loc 1 208 10 is_stmt 0 view .LVU20
+ 106 001c 2A4B     		ldr	r3, .L17+4
+ 107 001e 5B68     		ldr	r3, [r3, #4]
+ 108              		.loc 1 208 5 view .LVU21
+ 109 0020 13F4800F 		tst	r3, #4194304
+ 110 0024 27D1     		bne	.L10
+ 209:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 210:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* In Case the PLL Source is HSI (Internal Clock) */
+ 211:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     vcoinput = (HSI_VALUE / (uint32_t)(RCC->PLLCFGR & RCC_PLLCFGR_PLLM));
+ 111              		.loc 1 211 5 is_stmt 1 view .LVU22
+ 112              		.loc 1 211 43 is_stmt 0 view .LVU23
+ 113 0026 284B     		ldr	r3, .L17+4
+ 114 0028 5A68     		ldr	r2, [r3, #4]
+ 115              		.loc 1 211 29 view .LVU24
+ 116 002a 02F03F02 		and	r2, r2, #63
+ 117              		.loc 1 211 14 view .LVU25
+ 118 002e 274B     		ldr	r3, .L17+8
+ 119 0030 B3FBF2F3 		udiv	r3, r3, r2
+ 120              	.LVL4:
+ 121              	.L11:
+ 212:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 213:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   else
+ 214:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 215:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* In Case the PLL Source is HSE (External Clock) */
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     vcoinput = ((HSE_VALUE / (uint32_t)(RCC->PLLCFGR & RCC_PLLCFGR_PLLM)));
+ 217:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 218:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #if defined(STM32F413xx) || defined(STM32F423xx)
+ 219:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****  /* SAI_CLK_x : SAI Block Clock configuration for different clock sources selected */
+ 220:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   if(hsai->Init.ClockSource == SAI_CLKSOURCE_PLLR)
+ 221:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 222:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* Configure the PLLI2S division factor */
+ARM GAS  /tmp/cc1jles4.s 			page 7
+
+
+ 223:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* PLL_VCO Input  = PLL_SOURCE/PLLM */
+ 224:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* PLL_VCO Output = PLL_VCO Input * PLLN */
+ 225:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* SAI_CLK(first level) = PLL_VCO Output/PLLR */
+ 226:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpreg = (RCC->PLLCFGR & RCC_PLLCFGR_PLLR) >> 28U;
+ 227:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = (vcoinput * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6U))/(tmpreg);
+ 228:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+ 229:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* SAI_CLK_x = SAI_CLK(first level)/PLLDIVR */
+ 230:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpreg = (((RCC->DCKCFGR & RCC_DCKCFGR_PLLDIVR) >> 8U) + 1U);
+ 231:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****       
+ 232:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = saiclocksource/(tmpreg); 
+ 233:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+ 234:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 235:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   else if(hsai->Init.ClockSource == SAI_CLKSOURCE_PLLI2S)
+ 236:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {        
+ 237:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* Configure the PLLI2S division factor */
+ 238:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* PLLI2S_VCO Input  = PLL_SOURCE/PLLM */
+ 239:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* PLLI2S_VCO Output = PLLI2S_VCO Input * PLLI2SN */
+ 240:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* SAI_CLK(first level) = PLLI2S_VCO Output/PLLI2SR */
+ 241:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpreg = (RCC->PLLI2SCFGR & RCC_PLLI2SCFGR_PLLI2SR) >> 28U;
+ 242:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = (vcoinput * ((RCC->PLLI2SCFGR & RCC_PLLI2SCFGR_PLLI2SN) >> 6U))/(tmpreg);
+ 243:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     
+ 244:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* SAI_CLK_x = SAI_CLK(first level)/PLLI2SDIVR */
+ 245:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpreg = ((RCC->DCKCFGR & RCC_DCKCFGR_PLLI2SDIVR) + 1U); 
+ 246:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = saiclocksource/(tmpreg);
+ 247:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 248:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   else if(hsai->Init.ClockSource == SAI_CLKSOURCE_HS)
+ 249:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 250:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     if((RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC) == RCC_PLLSOURCE_HSE)
+ 251:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     {
+ 252:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****       /* Get the I2S source clock value */
+ 253:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****       saiclocksource = (uint32_t)(HSE_VALUE);
+ 254:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     }
+ 255:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     else
+ 256:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     {
+ 257:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****       /* Get the I2S source clock value */
+ 258:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****       saiclocksource = (uint32_t)(HSI_VALUE);
+ 259:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     }
+ 260:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 261:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   else /* sConfig->ClockSource == SAI_CLKSource_Ext */
+ 262:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 263:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = EXTERNAL_CLOCK_VALUE;
+ 264:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 265:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #else
+ 266:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   /* SAI_CLK_x : SAI Block Clock configuration for different clock sources selected */
+ 267:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   if(hsai->Init.ClockSource == SAI_CLKSOURCE_PLLSAI)
+ 122              		.loc 1 267 3 is_stmt 1 view .LVU26
+ 123              		.loc 1 267 16 is_stmt 0 view .LVU27
+ 124 0034 C269     		ldr	r2, [r0, #28]
+ 125              		.loc 1 267 5 view .LVU28
+ 126 0036 32BB     		cbnz	r2, .L12
+ 268:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 269:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* Configure the PLLI2S division factor */
+ 270:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* PLLSAI_VCO Input  = PLL_SOURCE/PLLM */
+ 271:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* PLLSAI_VCO Output = PLLSAI_VCO Input * PLLSAIN */
+ 272:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* SAI_CLK(first level) = PLLSAI_VCO Output/PLLSAIQ */
+ 273:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpreg = (RCC->PLLSAICFGR & RCC_PLLSAICFGR_PLLSAIQ) >> 24U;
+ 127              		.loc 1 273 5 is_stmt 1 view .LVU29
+ARM GAS  /tmp/cc1jles4.s 			page 8
+
+
+ 128              		.loc 1 273 18 is_stmt 0 view .LVU30
+ 129 0038 234A     		ldr	r2, .L17+4
+ 130 003a D2F88810 		ldr	r1, [r2, #136]
+ 131              		.loc 1 273 12 view .LVU31
+ 132 003e C1F30361 		ubfx	r1, r1, #24, #4
+ 133              	.LVL5:
+ 274:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = (vcoinput * ((RCC->PLLSAICFGR & RCC_PLLSAICFGR_PLLSAIN) >> 6U))/(tmpreg);
+ 134              		.loc 1 274 5 is_stmt 1 view .LVU32
+ 135              		.loc 1 274 39 is_stmt 0 view .LVU33
+ 136 0042 D2F88800 		ldr	r0, [r2, #136]
+ 137              	.LVL6:
+ 138              		.loc 1 274 78 view .LVU34
+ 139 0046 C0F38810 		ubfx	r0, r0, #6, #9
+ 140              		.loc 1 274 32 view .LVU35
+ 141 004a 03FB00F0 		mul	r0, r3, r0
+ 142              		.loc 1 274 20 view .LVU36
+ 143 004e B0FBF1F0 		udiv	r0, r0, r1
+ 144              	.LVL7:
+ 275:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+ 276:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* SAI_CLK_x = SAI_CLK(first level)/PLLSAIDIVQ */
+ 277:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpreg = (((RCC->DCKCFGR & RCC_DCKCFGR_PLLSAIDIVQ) >> 8U) + 1U);
+ 145              		.loc 1 277 5 is_stmt 1 view .LVU37
+ 146              		.loc 1 277 20 is_stmt 0 view .LVU38
+ 147 0052 D2F88C30 		ldr	r3, [r2, #140]
+ 148              	.LVL8:
+ 149              		.loc 1 277 56 view .LVU39
+ 150 0056 C3F30423 		ubfx	r3, r3, #8, #5
+ 151              		.loc 1 277 12 view .LVU40
+ 152 005a 0133     		adds	r3, r3, #1
+ 153              	.LVL9:
+ 278:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = saiclocksource/(tmpreg); 
+ 154              		.loc 1 278 5 is_stmt 1 view .LVU41
+ 155              		.loc 1 278 20 is_stmt 0 view .LVU42
+ 156 005c B0FBF3F0 		udiv	r0, r0, r3
+ 157              	.LVL10:
+ 158              		.loc 1 278 20 view .LVU43
+ 159 0060 7047     		bx	lr
+ 160              	.LVL11:
+ 161              	.L15:
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 162              		.loc 1 200 5 is_stmt 1 view .LVU44
+ 163 0062 194A     		ldr	r2, .L17+4
+ 164 0064 D2F88C30 		ldr	r3, [r2, #140]
+ 165 0068 23F44013 		bic	r3, r3, #3145728
+ 166 006c C169     		ldr	r1, [r0, #28]
+ 167 006e 0B43     		orrs	r3, r3, r1
+ 168 0070 C2F88C30 		str	r3, [r2, #140]
+ 169 0074 D2E7     		b	.L9
+ 170              	.L10:
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 171              		.loc 1 216 5 view .LVU45
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 172              		.loc 1 216 44 is_stmt 0 view .LVU46
+ 173 0076 144B     		ldr	r3, .L17+4
+ 174 0078 5A68     		ldr	r2, [r3, #4]
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 175              		.loc 1 216 30 view .LVU47
+ARM GAS  /tmp/cc1jles4.s 			page 9
+
+
+ 176 007a 02F03F02 		and	r2, r2, #63
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 177              		.loc 1 216 14 view .LVU48
+ 178 007e 144B     		ldr	r3, .L17+12
+ 179 0080 B3FBF2F3 		udiv	r3, r3, r2
+ 180              	.LVL12:
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 181              		.loc 1 216 14 view .LVU49
+ 182 0084 D6E7     		b	.L11
+ 183              	.L12:
+ 279:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** 
+ 280:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 281:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   else if(hsai->Init.ClockSource == SAI_CLKSOURCE_PLLI2S)
+ 184              		.loc 1 281 8 is_stmt 1 view .LVU50
+ 185              		.loc 1 281 10 is_stmt 0 view .LVU51
+ 186 0086 B2F5801F 		cmp	r2, #1048576
+ 187 008a 05D0     		beq	.L16
+ 282:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {        
+ 283:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* Configure the PLLI2S division factor */
+ 284:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* PLLI2S_VCO Input  = PLL_SOURCE/PLLM */
+ 285:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* PLLI2S_VCO Output = PLLI2S_VCO Input * PLLI2SN */
+ 286:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* SAI_CLK(first level) = PLLI2S_VCO Output/PLLI2SQ */
+ 287:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpreg = (RCC->PLLI2SCFGR & RCC_PLLI2SCFGR_PLLI2SQ) >> 24U;
+ 288:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = (vcoinput * ((RCC->PLLI2SCFGR & RCC_PLLI2SCFGR_PLLI2SN) >> 6U))/(tmpreg);
+ 289:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     
+ 290:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* SAI_CLK_x = SAI_CLK(first level)/PLLI2SDIVQ */
+ 291:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     tmpreg = ((RCC->DCKCFGR & RCC_DCKCFGR_PLLI2SDIVQ) + 1U); 
+ 292:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = saiclocksource/(tmpreg);
+ 293:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 294:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   else /* sConfig->ClockSource == SAI_CLKSource_Ext */
+ 295:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   {
+ 296:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     /* Enable the External Clock selection */
+ 297:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     __HAL_RCC_I2S_CONFIG(RCC_I2SCLKSOURCE_EXT);
+ 188              		.loc 1 297 5 is_stmt 1 view .LVU52
+ 189 008c 114B     		ldr	r3, .L17+16
+ 190              	.LVL13:
+ 191              		.loc 1 297 5 is_stmt 0 view .LVU53
+ 192 008e 0122     		movs	r2, #1
+ 193 0090 C3F85C21 		str	r2, [r3, #348]
+ 298:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     
+ 299:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = EXTERNAL_CLOCK_VALUE;
+ 194              		.loc 1 299 5 is_stmt 1 view .LVU54
+ 195              	.LVL14:
+ 196              		.loc 1 299 20 is_stmt 0 view .LVU55
+ 197 0094 1048     		ldr	r0, .L17+20
+ 198              	.LVL15:
+ 300:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 301:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #endif /* STM32F413xx || STM32F423xx */  
+ 302:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** #endif /* STM32F427xx || STM32F437xx || STM32F429xx || STM32F439xx || STM32F469xx || STM32F479xx ||
+ 303:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****        /* the return result is the value of SAI clock */
+ 304:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   return saiclocksource;
+ 199              		.loc 1 304 3 is_stmt 1 view .LVU56
+ 305:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c **** }
+ 200              		.loc 1 305 1 is_stmt 0 view .LVU57
+ 201 0096 7047     		bx	lr
+ 202              	.LVL16:
+ 203              	.L16:
+ARM GAS  /tmp/cc1jles4.s 			page 10
+
+
+ 287:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = (vcoinput * ((RCC->PLLI2SCFGR & RCC_PLLI2SCFGR_PLLI2SN) >> 6U))/(tmpreg);
+ 204              		.loc 1 287 5 is_stmt 1 view .LVU58
+ 287:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = (vcoinput * ((RCC->PLLI2SCFGR & RCC_PLLI2SCFGR_PLLI2SN) >> 6U))/(tmpreg);
+ 205              		.loc 1 287 18 is_stmt 0 view .LVU59
+ 206 0098 0B4A     		ldr	r2, .L17+4
+ 207 009a D2F88410 		ldr	r1, [r2, #132]
+ 287:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = (vcoinput * ((RCC->PLLI2SCFGR & RCC_PLLI2SCFGR_PLLI2SN) >> 6U))/(tmpreg);
+ 208              		.loc 1 287 12 view .LVU60
+ 209 009e C1F30361 		ubfx	r1, r1, #24, #4
+ 210              	.LVL17:
+ 288:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     
+ 211              		.loc 1 288 5 is_stmt 1 view .LVU61
+ 288:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     
+ 212              		.loc 1 288 39 is_stmt 0 view .LVU62
+ 213 00a2 D2F88400 		ldr	r0, [r2, #132]
+ 214              	.LVL18:
+ 288:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     
+ 215              		.loc 1 288 78 view .LVU63
+ 216 00a6 C0F38810 		ubfx	r0, r0, #6, #9
+ 288:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     
+ 217              		.loc 1 288 32 view .LVU64
+ 218 00aa 03FB00F0 		mul	r0, r3, r0
+ 288:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     
+ 219              		.loc 1 288 20 view .LVU65
+ 220 00ae B0FBF1F0 		udiv	r0, r0, r1
+ 221              	.LVL19:
+ 291:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = saiclocksource/(tmpreg);
+ 222              		.loc 1 291 5 is_stmt 1 view .LVU66
+ 291:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = saiclocksource/(tmpreg);
+ 223              		.loc 1 291 19 is_stmt 0 view .LVU67
+ 224 00b2 D2F88C30 		ldr	r3, [r2, #140]
+ 225              	.LVL20:
+ 291:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = saiclocksource/(tmpreg);
+ 226              		.loc 1 291 29 view .LVU68
+ 227 00b6 03F01F03 		and	r3, r3, #31
+ 291:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****     saiclocksource = saiclocksource/(tmpreg);
+ 228              		.loc 1 291 12 view .LVU69
+ 229 00ba 0133     		adds	r3, r3, #1
+ 230              	.LVL21:
+ 292:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 231              		.loc 1 292 5 is_stmt 1 view .LVU70
+ 292:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 232              		.loc 1 292 20 is_stmt 0 view .LVU71
+ 233 00bc B0FBF3F0 		udiv	r0, r0, r3
+ 234              	.LVL22:
+ 292:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_sai_ex.c ****   }
+ 235              		.loc 1 292 20 view .LVU72
+ 236 00c0 7047     		bx	lr
+ 237              	.L18:
+ 238 00c2 00BF     		.align	2
+ 239              	.L17:
+ 240 00c4 04580140 		.word	1073829892
+ 241 00c8 00380240 		.word	1073887232
+ 242 00cc 0024F400 		.word	16000000
+ 243 00d0 40787D01 		.word	25000000
+ 244 00d4 00004742 		.word	1111949312
+ 245 00d8 0080BB00 		.word	12288000
+ARM GAS  /tmp/cc1jles4.s 			page 11
+
+
+ 246              		.cfi_endproc
+ 247              	.LFE127:
+ 249              		.text
+ 250              	.Letext0:
+ 251              		.file 2 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/machine/_default_types.h"
+ 252              		.file 3 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/sys/_stdint.h"
+ 253              		.file 4 "./Libraries/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h"
+ 254              		.file 5 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 255              		.file 6 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 256              		.file 7 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_sai.h"
+ARM GAS  /tmp/cc1jles4.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_hal_sai_ex.c
+     /tmp/cc1jles4.s:18     .text.SAI_BlockSynchroConfig:0000000000000000 $t
+     /tmp/cc1jles4.s:26     .text.SAI_BlockSynchroConfig:0000000000000000 SAI_BlockSynchroConfig
+     /tmp/cc1jles4.s:66     .text.SAI_BlockSynchroConfig:000000000000001c $d
+     /tmp/cc1jles4.s:71     .text.SAI_GetInputClock:0000000000000000 $t
+     /tmp/cc1jles4.s:78     .text.SAI_GetInputClock:0000000000000000 SAI_GetInputClock
+     /tmp/cc1jles4.s:240    .text.SAI_GetInputClock:00000000000000c4 $d
+
+NO UNDEFINED SYMBOLS

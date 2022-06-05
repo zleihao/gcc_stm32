@@ -1,0 +1,414 @@
+ARM GAS  /tmp/ccI8jq09.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_it.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.NMI_Handler,"ax",%progbits
+  18              		.align	1
+  19              		.global	NMI_Handler
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	NMI_Handler:
+  27              	.LFB131:
+  28              		.file 1 "./User/Src/stm32f4xx_it.c"
+   1:./User/Src/stm32f4xx_it.c **** /* USER CODE BEGIN Header */
+   2:./User/Src/stm32f4xx_it.c **** /**
+   3:./User/Src/stm32f4xx_it.c ****   ******************************************************************************
+   4:./User/Src/stm32f4xx_it.c ****   * @file    stm32f4xx_it.c
+   5:./User/Src/stm32f4xx_it.c ****   * @brief   Interrupt Service Routines.
+   6:./User/Src/stm32f4xx_it.c ****   ******************************************************************************
+   7:./User/Src/stm32f4xx_it.c ****   * @attention
+   8:./User/Src/stm32f4xx_it.c ****   *
+   9:./User/Src/stm32f4xx_it.c ****   * Copyright (c) 2022 STMicroelectronics.
+  10:./User/Src/stm32f4xx_it.c ****   * All rights reserved.
+  11:./User/Src/stm32f4xx_it.c ****   *
+  12:./User/Src/stm32f4xx_it.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  13:./User/Src/stm32f4xx_it.c ****   * in the root directory of this software component.
+  14:./User/Src/stm32f4xx_it.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:./User/Src/stm32f4xx_it.c ****   *
+  16:./User/Src/stm32f4xx_it.c ****   ******************************************************************************
+  17:./User/Src/stm32f4xx_it.c ****   */
+  18:./User/Src/stm32f4xx_it.c **** /* USER CODE END Header */
+  19:./User/Src/stm32f4xx_it.c **** 
+  20:./User/Src/stm32f4xx_it.c **** /* Includes ------------------------------------------------------------------*/
+  21:./User/Src/stm32f4xx_it.c **** #include "main.h"
+  22:./User/Src/stm32f4xx_it.c **** #include "stm32f4xx_it.h"
+  23:./User/Src/stm32f4xx_it.c **** /* Private includes ----------------------------------------------------------*/
+  24:./User/Src/stm32f4xx_it.c **** /* USER CODE BEGIN Includes */
+  25:./User/Src/stm32f4xx_it.c **** 
+  26:./User/Src/stm32f4xx_it.c **** #include "FreeRTOS.h"
+  27:./User/Src/stm32f4xx_it.c **** #include "task.h"
+  28:./User/Src/stm32f4xx_it.c **** 
+  29:./User/Src/stm32f4xx_it.c **** /* USER CODE END Includes */
+  30:./User/Src/stm32f4xx_it.c **** 
+ARM GAS  /tmp/ccI8jq09.s 			page 2
+
+
+  31:./User/Src/stm32f4xx_it.c **** /* Private typedef -----------------------------------------------------------*/
+  32:./User/Src/stm32f4xx_it.c **** /* USER CODE BEGIN TD */
+  33:./User/Src/stm32f4xx_it.c **** 
+  34:./User/Src/stm32f4xx_it.c **** /* USER CODE END TD */
+  35:./User/Src/stm32f4xx_it.c **** 
+  36:./User/Src/stm32f4xx_it.c **** /* Private define ------------------------------------------------------------*/
+  37:./User/Src/stm32f4xx_it.c **** /* USER CODE BEGIN PD */
+  38:./User/Src/stm32f4xx_it.c **** 
+  39:./User/Src/stm32f4xx_it.c **** /* USER CODE END PD */
+  40:./User/Src/stm32f4xx_it.c **** 
+  41:./User/Src/stm32f4xx_it.c **** /* Private macro -------------------------------------------------------------*/
+  42:./User/Src/stm32f4xx_it.c **** /* USER CODE BEGIN PM */
+  43:./User/Src/stm32f4xx_it.c **** 
+  44:./User/Src/stm32f4xx_it.c **** /* USER CODE END PM */
+  45:./User/Src/stm32f4xx_it.c **** 
+  46:./User/Src/stm32f4xx_it.c **** /* Private variables ---------------------------------------------------------*/
+  47:./User/Src/stm32f4xx_it.c **** /* USER CODE BEGIN PV */
+  48:./User/Src/stm32f4xx_it.c **** 
+  49:./User/Src/stm32f4xx_it.c **** /* USER CODE END PV */
+  50:./User/Src/stm32f4xx_it.c **** 
+  51:./User/Src/stm32f4xx_it.c **** /* Private function prototypes -----------------------------------------------*/
+  52:./User/Src/stm32f4xx_it.c **** /* USER CODE BEGIN PFP */
+  53:./User/Src/stm32f4xx_it.c **** 
+  54:./User/Src/stm32f4xx_it.c **** /* USER CODE END PFP */
+  55:./User/Src/stm32f4xx_it.c **** 
+  56:./User/Src/stm32f4xx_it.c **** /* Private user code ---------------------------------------------------------*/
+  57:./User/Src/stm32f4xx_it.c **** /* USER CODE BEGIN 0 */
+  58:./User/Src/stm32f4xx_it.c **** 
+  59:./User/Src/stm32f4xx_it.c **** /* USER CODE END 0 */
+  60:./User/Src/stm32f4xx_it.c **** 
+  61:./User/Src/stm32f4xx_it.c **** /* External variables --------------------------------------------------------*/
+  62:./User/Src/stm32f4xx_it.c **** 
+  63:./User/Src/stm32f4xx_it.c **** /* USER CODE BEGIN EV */
+  64:./User/Src/stm32f4xx_it.c **** 
+  65:./User/Src/stm32f4xx_it.c **** /* USER CODE END EV */
+  66:./User/Src/stm32f4xx_it.c **** 
+  67:./User/Src/stm32f4xx_it.c **** /******************************************************************************/
+  68:./User/Src/stm32f4xx_it.c **** /*           Cortex-M4 Processor Interruption and Exception Handlers          */
+  69:./User/Src/stm32f4xx_it.c **** /******************************************************************************/
+  70:./User/Src/stm32f4xx_it.c **** /**
+  71:./User/Src/stm32f4xx_it.c ****   * @brief This function handles Non maskable interrupt.
+  72:./User/Src/stm32f4xx_it.c ****   */
+  73:./User/Src/stm32f4xx_it.c **** void NMI_Handler(void)
+  74:./User/Src/stm32f4xx_it.c **** {
+  29              		.loc 1 74 1 view -0
+  30              		.cfi_startproc
+  31              		@ Volatile: function does not return.
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  35              	.L2:
+  75:./User/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
+  76:./User/Src/stm32f4xx_it.c **** 
+  77:./User/Src/stm32f4xx_it.c ****   /* USER CODE END NonMaskableInt_IRQn 0 */
+  78:./User/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
+  79:./User/Src/stm32f4xx_it.c ****   while (1)
+  36              		.loc 1 79 3 discriminator 1 view .LVU1
+ARM GAS  /tmp/ccI8jq09.s 			page 3
+
+
+  80:./User/Src/stm32f4xx_it.c ****   {
+  81:./User/Src/stm32f4xx_it.c ****   }
+  37              		.loc 1 81 3 discriminator 1 view .LVU2
+  79:./User/Src/stm32f4xx_it.c ****   {
+  38              		.loc 1 79 9 discriminator 1 view .LVU3
+  39 0000 FEE7     		b	.L2
+  40              		.cfi_endproc
+  41              	.LFE131:
+  43              		.section	.text.HardFault_Handler,"ax",%progbits
+  44              		.align	1
+  45              		.global	HardFault_Handler
+  46              		.syntax unified
+  47              		.thumb
+  48              		.thumb_func
+  49              		.fpu fpv4-sp-d16
+  51              	HardFault_Handler:
+  52              	.LFB132:
+  82:./User/Src/stm32f4xx_it.c ****   /* USER CODE END NonMaskableInt_IRQn 1 */
+  83:./User/Src/stm32f4xx_it.c **** }
+  84:./User/Src/stm32f4xx_it.c **** 
+  85:./User/Src/stm32f4xx_it.c **** /**
+  86:./User/Src/stm32f4xx_it.c ****   * @brief This function handles Hard fault interrupt.
+  87:./User/Src/stm32f4xx_it.c ****   */
+  88:./User/Src/stm32f4xx_it.c **** void HardFault_Handler(void)
+  89:./User/Src/stm32f4xx_it.c **** {
+  53              		.loc 1 89 1 view -0
+  54              		.cfi_startproc
+  55              		@ Volatile: function does not return.
+  56              		@ args = 0, pretend = 0, frame = 0
+  57              		@ frame_needed = 0, uses_anonymous_args = 0
+  58              		@ link register save eliminated.
+  59              	.L4:
+  90:./User/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN HardFault_IRQn 0 */
+  91:./User/Src/stm32f4xx_it.c **** 
+  92:./User/Src/stm32f4xx_it.c ****   /* USER CODE END HardFault_IRQn 0 */
+  93:./User/Src/stm32f4xx_it.c ****   while (1)
+  60              		.loc 1 93 3 discriminator 1 view .LVU5
+  94:./User/Src/stm32f4xx_it.c ****   {
+  95:./User/Src/stm32f4xx_it.c ****     /* USER CODE BEGIN W1_HardFault_IRQn 0 */
+  96:./User/Src/stm32f4xx_it.c ****     /* USER CODE END W1_HardFault_IRQn 0 */
+  97:./User/Src/stm32f4xx_it.c ****   }
+  61              		.loc 1 97 3 discriminator 1 view .LVU6
+  93:./User/Src/stm32f4xx_it.c ****   {
+  62              		.loc 1 93 9 discriminator 1 view .LVU7
+  63 0000 FEE7     		b	.L4
+  64              		.cfi_endproc
+  65              	.LFE132:
+  67              		.section	.text.MemManage_Handler,"ax",%progbits
+  68              		.align	1
+  69              		.global	MemManage_Handler
+  70              		.syntax unified
+  71              		.thumb
+  72              		.thumb_func
+  73              		.fpu fpv4-sp-d16
+  75              	MemManage_Handler:
+  76              	.LFB133:
+  98:./User/Src/stm32f4xx_it.c **** }
+ARM GAS  /tmp/ccI8jq09.s 			page 4
+
+
+  99:./User/Src/stm32f4xx_it.c **** 
+ 100:./User/Src/stm32f4xx_it.c **** /**
+ 101:./User/Src/stm32f4xx_it.c ****   * @brief This function handles Memory management fault.
+ 102:./User/Src/stm32f4xx_it.c ****   */
+ 103:./User/Src/stm32f4xx_it.c **** void MemManage_Handler(void)
+ 104:./User/Src/stm32f4xx_it.c **** {
+  77              		.loc 1 104 1 view -0
+  78              		.cfi_startproc
+  79              		@ Volatile: function does not return.
+  80              		@ args = 0, pretend = 0, frame = 0
+  81              		@ frame_needed = 0, uses_anonymous_args = 0
+  82              		@ link register save eliminated.
+  83              	.L6:
+ 105:./User/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN MemoryManagement_IRQn 0 */
+ 106:./User/Src/stm32f4xx_it.c **** 
+ 107:./User/Src/stm32f4xx_it.c ****   /* USER CODE END MemoryManagement_IRQn 0 */
+ 108:./User/Src/stm32f4xx_it.c ****   while (1)
+  84              		.loc 1 108 3 discriminator 1 view .LVU9
+ 109:./User/Src/stm32f4xx_it.c ****   {
+ 110:./User/Src/stm32f4xx_it.c ****     /* USER CODE BEGIN W1_MemoryManagement_IRQn 0 */
+ 111:./User/Src/stm32f4xx_it.c ****     /* USER CODE END W1_MemoryManagement_IRQn 0 */
+ 112:./User/Src/stm32f4xx_it.c ****   }
+  85              		.loc 1 112 3 discriminator 1 view .LVU10
+ 108:./User/Src/stm32f4xx_it.c ****   {
+  86              		.loc 1 108 9 discriminator 1 view .LVU11
+  87 0000 FEE7     		b	.L6
+  88              		.cfi_endproc
+  89              	.LFE133:
+  91              		.section	.text.BusFault_Handler,"ax",%progbits
+  92              		.align	1
+  93              		.global	BusFault_Handler
+  94              		.syntax unified
+  95              		.thumb
+  96              		.thumb_func
+  97              		.fpu fpv4-sp-d16
+  99              	BusFault_Handler:
+ 100              	.LFB134:
+ 113:./User/Src/stm32f4xx_it.c **** }
+ 114:./User/Src/stm32f4xx_it.c **** 
+ 115:./User/Src/stm32f4xx_it.c **** /**
+ 116:./User/Src/stm32f4xx_it.c ****   * @brief This function handles Pre-fetch fault, memory access fault.
+ 117:./User/Src/stm32f4xx_it.c ****   */
+ 118:./User/Src/stm32f4xx_it.c **** void BusFault_Handler(void)
+ 119:./User/Src/stm32f4xx_it.c **** {
+ 101              		.loc 1 119 1 view -0
+ 102              		.cfi_startproc
+ 103              		@ Volatile: function does not return.
+ 104              		@ args = 0, pretend = 0, frame = 0
+ 105              		@ frame_needed = 0, uses_anonymous_args = 0
+ 106              		@ link register save eliminated.
+ 107              	.L8:
+ 120:./User/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN BusFault_IRQn 0 */
+ 121:./User/Src/stm32f4xx_it.c **** 
+ 122:./User/Src/stm32f4xx_it.c ****   /* USER CODE END BusFault_IRQn 0 */
+ 123:./User/Src/stm32f4xx_it.c ****   while (1)
+ 108              		.loc 1 123 3 discriminator 1 view .LVU13
+ 124:./User/Src/stm32f4xx_it.c ****   {
+ARM GAS  /tmp/ccI8jq09.s 			page 5
+
+
+ 125:./User/Src/stm32f4xx_it.c ****     /* USER CODE BEGIN W1_BusFault_IRQn 0 */
+ 126:./User/Src/stm32f4xx_it.c ****     /* USER CODE END W1_BusFault_IRQn 0 */
+ 127:./User/Src/stm32f4xx_it.c ****   }
+ 109              		.loc 1 127 3 discriminator 1 view .LVU14
+ 123:./User/Src/stm32f4xx_it.c ****   {
+ 110              		.loc 1 123 9 discriminator 1 view .LVU15
+ 111 0000 FEE7     		b	.L8
+ 112              		.cfi_endproc
+ 113              	.LFE134:
+ 115              		.section	.text.UsageFault_Handler,"ax",%progbits
+ 116              		.align	1
+ 117              		.global	UsageFault_Handler
+ 118              		.syntax unified
+ 119              		.thumb
+ 120              		.thumb_func
+ 121              		.fpu fpv4-sp-d16
+ 123              	UsageFault_Handler:
+ 124              	.LFB135:
+ 128:./User/Src/stm32f4xx_it.c **** }
+ 129:./User/Src/stm32f4xx_it.c **** 
+ 130:./User/Src/stm32f4xx_it.c **** /**
+ 131:./User/Src/stm32f4xx_it.c ****   * @brief This function handles Undefined instruction or illegal state.
+ 132:./User/Src/stm32f4xx_it.c ****   */
+ 133:./User/Src/stm32f4xx_it.c **** void UsageFault_Handler(void)
+ 134:./User/Src/stm32f4xx_it.c **** {
+ 125              		.loc 1 134 1 view -0
+ 126              		.cfi_startproc
+ 127              		@ Volatile: function does not return.
+ 128              		@ args = 0, pretend = 0, frame = 0
+ 129              		@ frame_needed = 0, uses_anonymous_args = 0
+ 130              		@ link register save eliminated.
+ 131              	.L10:
+ 135:./User/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN UsageFault_IRQn 0 */
+ 136:./User/Src/stm32f4xx_it.c **** 
+ 137:./User/Src/stm32f4xx_it.c ****   /* USER CODE END UsageFault_IRQn 0 */
+ 138:./User/Src/stm32f4xx_it.c ****   while (1)
+ 132              		.loc 1 138 3 discriminator 1 view .LVU17
+ 139:./User/Src/stm32f4xx_it.c ****   {
+ 140:./User/Src/stm32f4xx_it.c ****     /* USER CODE BEGIN W1_UsageFault_IRQn 0 */
+ 141:./User/Src/stm32f4xx_it.c ****     /* USER CODE END W1_UsageFault_IRQn 0 */
+ 142:./User/Src/stm32f4xx_it.c ****   }
+ 133              		.loc 1 142 3 discriminator 1 view .LVU18
+ 138:./User/Src/stm32f4xx_it.c ****   {
+ 134              		.loc 1 138 9 discriminator 1 view .LVU19
+ 135 0000 FEE7     		b	.L10
+ 136              		.cfi_endproc
+ 137              	.LFE135:
+ 139              		.section	.text.DebugMon_Handler,"ax",%progbits
+ 140              		.align	1
+ 141              		.global	DebugMon_Handler
+ 142              		.syntax unified
+ 143              		.thumb
+ 144              		.thumb_func
+ 145              		.fpu fpv4-sp-d16
+ 147              	DebugMon_Handler:
+ 148              	.LFB136:
+ 143:./User/Src/stm32f4xx_it.c **** }
+ARM GAS  /tmp/ccI8jq09.s 			page 6
+
+
+ 144:./User/Src/stm32f4xx_it.c **** 
+ 145:./User/Src/stm32f4xx_it.c **** /**
+ 146:./User/Src/stm32f4xx_it.c ****   * @brief This function handles Debug monitor.
+ 147:./User/Src/stm32f4xx_it.c ****   */
+ 148:./User/Src/stm32f4xx_it.c **** void DebugMon_Handler(void)
+ 149:./User/Src/stm32f4xx_it.c **** {
+ 149              		.loc 1 149 1 view -0
+ 150              		.cfi_startproc
+ 151              		@ args = 0, pretend = 0, frame = 0
+ 152              		@ frame_needed = 0, uses_anonymous_args = 0
+ 153              		@ link register save eliminated.
+ 150:./User/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DebugMonitor_IRQn 0 */
+ 151:./User/Src/stm32f4xx_it.c **** 
+ 152:./User/Src/stm32f4xx_it.c ****   /* USER CODE END DebugMonitor_IRQn 0 */
+ 153:./User/Src/stm32f4xx_it.c ****   /* USER CODE BEGIN DebugMonitor_IRQn 1 */
+ 154:./User/Src/stm32f4xx_it.c **** 
+ 155:./User/Src/stm32f4xx_it.c ****   /* USER CODE END DebugMonitor_IRQn 1 */
+ 156:./User/Src/stm32f4xx_it.c **** }
+ 154              		.loc 1 156 1 view .LVU21
+ 155 0000 7047     		bx	lr
+ 156              		.cfi_endproc
+ 157              	.LFE136:
+ 159              		.section	.text.SysTick_Handler,"ax",%progbits
+ 160              		.align	1
+ 161              		.global	SysTick_Handler
+ 162              		.syntax unified
+ 163              		.thumb
+ 164              		.thumb_func
+ 165              		.fpu fpv4-sp-d16
+ 167              	SysTick_Handler:
+ 168              	.LFB137:
+ 157:./User/Src/stm32f4xx_it.c **** 
+ 158:./User/Src/stm32f4xx_it.c **** /******************************************************************************/
+ 159:./User/Src/stm32f4xx_it.c **** /* STM32F4xx Peripheral Interrupt Handlers                                    */
+ 160:./User/Src/stm32f4xx_it.c **** /* Add here the Interrupt Handlers for the used peripherals.                  */
+ 161:./User/Src/stm32f4xx_it.c **** /* For the available peripheral interrupt handler names,                      */
+ 162:./User/Src/stm32f4xx_it.c **** /* please refer to the startup file (startup_stm32f4xx.s).                    */
+ 163:./User/Src/stm32f4xx_it.c **** /******************************************************************************/
+ 164:./User/Src/stm32f4xx_it.c **** 
+ 165:./User/Src/stm32f4xx_it.c **** /* USER CODE BEGIN 1 */
+ 166:./User/Src/stm32f4xx_it.c **** extern void xPortSysTickHandler(void);
+ 167:./User/Src/stm32f4xx_it.c **** //systick中断服务函数
+ 168:./User/Src/stm32f4xx_it.c **** void SysTick_Handler(void)
+ 169:./User/Src/stm32f4xx_it.c **** {	
+ 169              		.loc 1 169 1 view -0
+ 170              		.cfi_startproc
+ 171              		@ args = 0, pretend = 0, frame = 0
+ 172              		@ frame_needed = 0, uses_anonymous_args = 0
+ 173 0000 08B5     		push	{r3, lr}
+ 174              	.LCFI0:
+ 175              		.cfi_def_cfa_offset 8
+ 176              		.cfi_offset 3, -8
+ 177              		.cfi_offset 14, -4
+ 170:./User/Src/stm32f4xx_it.c ****     #if (INCLUDE_xTaskGetSchedulerState  == 1 )
+ 171:./User/Src/stm32f4xx_it.c ****       if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+ 178              		.loc 1 171 7 view .LVU23
+ 179              		.loc 1 171 11 is_stmt 0 view .LVU24
+ARM GAS  /tmp/ccI8jq09.s 			page 7
+
+
+ 180 0002 FFF7FEFF 		bl	xTaskGetSchedulerState
+ 181              	.LVL0:
+ 182              		.loc 1 171 10 view .LVU25
+ 183 0006 0128     		cmp	r0, #1
+ 184 0008 00D1     		bne	.L15
+ 185              	.L12:
+ 172:./User/Src/stm32f4xx_it.c ****       {
+ 173:./User/Src/stm32f4xx_it.c ****     #endif  /* INCLUDE_xTaskGetSchedulerState */  
+ 174:./User/Src/stm32f4xx_it.c ****         xPortSysTickHandler();
+ 175:./User/Src/stm32f4xx_it.c ****     #if (INCLUDE_xTaskGetSchedulerState  == 1 )
+ 176:./User/Src/stm32f4xx_it.c ****       }
+ 177:./User/Src/stm32f4xx_it.c ****     #endif  /* INCLUDE_xTaskGetSchedulerState */
+ 178:./User/Src/stm32f4xx_it.c **** }
+ 186              		.loc 1 178 1 view .LVU26
+ 187 000a 08BD     		pop	{r3, pc}
+ 188              	.L15:
+ 174:./User/Src/stm32f4xx_it.c ****     #if (INCLUDE_xTaskGetSchedulerState  == 1 )
+ 189              		.loc 1 174 9 is_stmt 1 view .LVU27
+ 190 000c FFF7FEFF 		bl	xPortSysTickHandler
+ 191              	.LVL1:
+ 192              		.loc 1 178 1 is_stmt 0 view .LVU28
+ 193 0010 FBE7     		b	.L12
+ 194              		.cfi_endproc
+ 195              	.LFE137:
+ 197              		.text
+ 198              	.Letext0:
+ 199              		.file 2 "./FreeRtos/port/include/task.h"
+ 200              		.file 3 "./FreeRtos/port/ARM_CM4F/portmacro.h"
+ARM GAS  /tmp/ccI8jq09.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_it.c
+     /tmp/ccI8jq09.s:18     .text.NMI_Handler:0000000000000000 $t
+     /tmp/ccI8jq09.s:26     .text.NMI_Handler:0000000000000000 NMI_Handler
+     /tmp/ccI8jq09.s:44     .text.HardFault_Handler:0000000000000000 $t
+     /tmp/ccI8jq09.s:51     .text.HardFault_Handler:0000000000000000 HardFault_Handler
+     /tmp/ccI8jq09.s:68     .text.MemManage_Handler:0000000000000000 $t
+     /tmp/ccI8jq09.s:75     .text.MemManage_Handler:0000000000000000 MemManage_Handler
+     /tmp/ccI8jq09.s:92     .text.BusFault_Handler:0000000000000000 $t
+     /tmp/ccI8jq09.s:99     .text.BusFault_Handler:0000000000000000 BusFault_Handler
+     /tmp/ccI8jq09.s:116    .text.UsageFault_Handler:0000000000000000 $t
+     /tmp/ccI8jq09.s:123    .text.UsageFault_Handler:0000000000000000 UsageFault_Handler
+     /tmp/ccI8jq09.s:140    .text.DebugMon_Handler:0000000000000000 $t
+     /tmp/ccI8jq09.s:147    .text.DebugMon_Handler:0000000000000000 DebugMon_Handler
+     /tmp/ccI8jq09.s:160    .text.SysTick_Handler:0000000000000000 $t
+     /tmp/ccI8jq09.s:167    .text.SysTick_Handler:0000000000000000 SysTick_Handler
+
+UNDEFINED SYMBOLS
+xTaskGetSchedulerState
+xPortSysTickHandler

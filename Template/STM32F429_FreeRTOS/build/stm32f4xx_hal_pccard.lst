@@ -1,0 +1,2222 @@
+ARM GAS  /tmp/ccrwPr1N.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_hal_pccard.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_PCCARD_MspInit,"ax",%progbits
+  18              		.align	1
+  19              		.weak	HAL_PCCARD_MspInit
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	HAL_PCCARD_MspInit:
+  27              	.LVL0:
+  28              	.LFB128:
+  29              		.file 1 "./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c"
+   1:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+   2:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   ******************************************************************************
+   3:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @file    stm32f4xx_hal_pccard.c
+   4:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @author  MCD Application Team
+   5:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief   PCCARD HAL module driver.
+   6:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *          This file provides a generic firmware to drive PCCARD memories mounted 
+   7:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *          as external device.
+   8:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *         
+   9:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   @verbatim
+  10:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****  ===============================================================================
+  11:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****                         ##### How to use this driver #####
+  12:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****  ===============================================================================  
+  13:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    [..]
+  14:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      This driver is a generic layered driver which contains a set of APIs used to 
+  15:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      control PCCARD/compact flash memories. It uses the FMC/FSMC layer functions 
+  16:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      to interface with PCCARD devices. This driver is used for:
+  17:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     
+  18:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     (+) PCCARD/Compact Flash memory configuration sequence using the function 
+  19:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         HAL_PCCARD_Init()/HAL_CF_Init() with control and timing parameters for
+  20:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         both common and attribute spaces.
+  21:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****             
+  22:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     (+) Read PCCARD/Compact Flash memory maker and device IDs using the function
+  23:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         HAL_PCCARD_Read_ID()/HAL_CF_Read_ID(). The read information is stored in
+  24:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         the CompactFlash_ID structure declared by the function caller. 
+  25:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         
+  26:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     (+) Access PCCARD/Compact Flash memory by read/write operations using the functions
+  27:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         HAL_PCCARD_Read_Sector()/ HAL_PCCARD_Write_Sector() - 
+  28:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         HAL_CF_Read_Sector()/HAL_CF_Write_Sector(), to read/write sector. 
+  29:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         
+ARM GAS  /tmp/ccrwPr1N.s 			page 2
+
+
+  30:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     (+) Perform PCCARD/Compact Flash Reset chip operation using the function
+  31:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         HAL_PCCARD_Reset()/HAL_CF_Reset.
+  32:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         
+  33:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     (+) Perform PCCARD/Compact Flash erase sector operation using the function 
+  34:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         HAL_PCCARD_Erase_Sector()/HAL_CF_Erase_Sector.
+  35:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     
+  36:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     (+) Read the PCCARD/Compact Flash status operation using the function
+  37:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         HAL_PCCARD_ReadStatus()/HAL_CF_ReadStatus().
+  38:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      
+  39:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     (+) You can monitor the PCCARD/Compact Flash  device HAL state by calling
+  40:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         the function HAL_PCCARD_GetState()/HAL_CF_GetState()
+  41:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****         
+  42:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    [..]
+  43:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      (@) This driver is a set of generic APIs which handle standard PCCARD/compact flash 
+  44:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****          operations. If a PCCARD/Compact Flash device contains different operations 
+  45:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****          and/or implementations, it should be implemented separately.
+  46:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    
+  47:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   @endverbatim
+  48:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   ******************************************************************************
+  49:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @attention
+  50:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *
+  51:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  52:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *
+  53:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  54:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * are permitted provided that the following conditions are met:
+  55:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  56:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *      this list of conditions and the following disclaimer.
+  57:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  58:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *      this list of conditions and the following disclaimer in the documentation
+  59:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *      and/or other materials provided with the distribution.
+  60:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  61:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *      may be used to endorse or promote products derived from this software
+  62:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *      without specific prior written permission.
+  63:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *
+  64:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  65:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  66:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  67:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  68:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  69:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  70:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  71:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  72:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  73:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  74:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *
+  75:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   ******************************************************************************
+  76:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */ 
+  77:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+  78:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /* Includes ------------------------------------------------------------------*/
+  79:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** #include "stm32f4xx_hal.h"
+  80:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+  81:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /** @addtogroup STM32F4xx_HAL_Driver
+  82:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @{
+  83:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+  84:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+  85:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** #ifdef HAL_PCCARD_MODULE_ENABLED
+  86:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** #if defined(STM32F405xx) || defined(STM32F415xx) || defined(STM32F407xx) || defined(STM32F417xx) ||
+ARM GAS  /tmp/ccrwPr1N.s 			page 3
+
+
+  87:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     defined(STM32F427xx) || defined(STM32F437xx) || defined(STM32F429xx) || defined(STM32F439xx)
+  88:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /** @defgroup PCCARD PCCARD  
+  89:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief PCCARD HAL module driver
+  90:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @{
+  91:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+  92:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /* Private typedef -----------------------------------------------------------*/
+  93:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /* Private define ------------------------------------------------------------*/
+  94:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     
+  95:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /** @defgroup PCCARD_Private_Defines PCCARD Private Defines
+  96:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @{
+  97:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+  98:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** #define PCCARD_TIMEOUT_READ_ID                 0x0000FFFFU
+  99:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** #define PCCARD_TIMEOUT_READ_WRITE_SECTOR       0x0000FFFFU
+ 100:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** #define PCCARD_TIMEOUT_ERASE_SECTOR            0x00000400U
+ 101:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** #define PCCARD_TIMEOUT_STATUS                  0x01000000U
+ 102:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 103:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** #define PCCARD_STATUS_OK                       (uint8_t)0x58
+ 104:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** #define PCCARD_STATUS_WRITE_OK                 (uint8_t)0x50
+ 105:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 106:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @}
+ 107:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */ 
+ 108:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     
+ 109:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /* Private macro -------------------------------------------------------------*/
+ 110:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /* Private variables ---------------------------------------------------------*/
+ 111:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /* Private function ----------------------------------------------------------*/
+ 112:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /* Exported functions --------------------------------------------------------*/
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /** @defgroup PCCARD_Exported_Functions PCCARD Exported Functions
+ 114:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @{
+ 115:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 116:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 117:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /** @defgroup PCCARD_Exported_Functions_Group1 Initialization and de-initialization functions 
+ 118:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief    Initialization and Configuration functions 
+ 119:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *
+ 120:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   @verbatim    
+ 121:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   ==============================================================================
+ 122:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****           ##### PCCARD Initialization and de-initialization functions #####
+ 123:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   ==============================================================================
+ 124:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   [..]  
+ 125:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     This section provides functions allowing to initialize/de-initialize
+ 126:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     the PCCARD memory
+ 127:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 128:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** @endverbatim
+ 129:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @{
+ 130:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 131:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     
+ 132:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 133:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  Perform the PCCARD memory Initialization sequence
+ 134:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 135:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.
+ 136:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  ComSpaceTiming Common space timing structure
+ 137:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  AttSpaceTiming Attribute space timing structure
+ 138:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  IOSpaceTiming IO space timing structure     
+ 139:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval HAL status
+ 140:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 141:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** HAL_StatusTypeDef HAL_PCCARD_Init(PCCARD_HandleTypeDef *hpccard, FMC_NAND_PCC_TimingTypeDef *ComSpa
+ 142:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 143:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+ARM GAS  /tmp/ccrwPr1N.s 			page 4
+
+
+ 144:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(hpccard == NULL)
+ 145:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 146:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      return HAL_ERROR;
+ 147:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 148:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 149:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(hpccard->State == HAL_PCCARD_STATE_RESET)
+ 150:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {  
+ 151:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* Allocate lock resource and initialize it */
+ 152:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     hpccard->Lock = HAL_UNLOCKED;
+ 153:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* Initialize the low level hardware (MSP) */
+ 154:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     HAL_PCCARD_MspInit(hpccard);
+ 155:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 156:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 157:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Initialize the PCCARD state */
+ 158:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_BUSY;    
+ 159:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 160:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Initialize PCCARD control Interface */
+ 161:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   FMC_PCCARD_Init(hpccard->Instance, &(hpccard->Init));
+ 162:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 163:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Init PCCARD common space timing Interface */
+ 164:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   FMC_PCCARD_CommonSpace_Timing_Init(hpccard->Instance, ComSpaceTiming);
+ 165:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 166:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Init PCCARD attribute space timing Interface */  
+ 167:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   FMC_PCCARD_AttributeSpace_Timing_Init(hpccard->Instance, AttSpaceTiming);
+ 168:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 169:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Init PCCARD IO space timing Interface */  
+ 170:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   FMC_PCCARD_IOSpace_Timing_Init(hpccard->Instance, IOSpaceTiming);
+ 171:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 172:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Enable the PCCARD device */
+ 173:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   __FMC_PCCARD_ENABLE(hpccard->Instance); 
+ 174:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 175:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Update the PCCARD state */
+ 176:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_READY;  
+ 177:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   return HAL_OK;
+ 179:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+ 181:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 182:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 183:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  Perform the PCCARD memory De-initialization sequence
+ 184:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 185:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.
+ 186:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval HAL status
+ 187:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 188:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** HAL_StatusTypeDef  HAL_PCCARD_DeInit(PCCARD_HandleTypeDef *hpccard)
+ 189:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 190:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* De-Initialize the low level hardware (MSP) */
+ 191:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   HAL_PCCARD_MspDeInit(hpccard);
+ 192:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    
+ 193:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Configure the PCCARD registers with their reset values */
+ 194:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   FMC_PCCARD_DeInit(hpccard->Instance);
+ 195:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 196:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Update the PCCARD controller state */
+ 197:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_RESET;
+ 198:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 199:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Release Lock */
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   __HAL_UNLOCK(hpccard);
+ARM GAS  /tmp/ccrwPr1N.s 			page 5
+
+
+ 201:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 202:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   return HAL_OK; 
+ 203:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+ 204:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 205:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 206:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  PCCARD MSP Init
+ 207:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 208:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.
+ 209:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval None
+ 210:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 211:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** __weak void HAL_PCCARD_MspInit(PCCARD_HandleTypeDef *hpccard)
+ 212:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+  30              		.loc 1 212 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+ 213:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Prevent unused argument(s) compilation warning */
+ 214:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   UNUSED(hpccard);
+  35              		.loc 1 214 3 view .LVU1
+ 215:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****             the HAL_PCCARD_MspInit could be implemented in the user file
+ 217:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    */ 
+ 218:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+  36              		.loc 1 218 1 is_stmt 0 view .LVU2
+  37 0000 7047     		bx	lr
+  38              		.cfi_endproc
+  39              	.LFE128:
+  41              		.section	.text.HAL_PCCARD_Init,"ax",%progbits
+  42              		.align	1
+  43              		.global	HAL_PCCARD_Init
+  44              		.syntax unified
+  45              		.thumb
+  46              		.thumb_func
+  47              		.fpu fpv4-sp-d16
+  49              	HAL_PCCARD_Init:
+  50              	.LVL1:
+  51              	.LFB126:
+ 142:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+  52              		.loc 1 142 1 is_stmt 1 view -0
+  53              		.cfi_startproc
+  54              		@ args = 0, pretend = 0, frame = 0
+  55              		@ frame_needed = 0, uses_anonymous_args = 0
+ 144:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+  56              		.loc 1 144 3 view .LVU4
+ 144:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+  57              		.loc 1 144 5 is_stmt 0 view .LVU5
+  58 0000 30B3     		cbz	r0, .L5
+ 142:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+  59              		.loc 1 142 1 view .LVU6
+  60 0002 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  61              	.LCFI0:
+  62              		.cfi_def_cfa_offset 24
+  63              		.cfi_offset 3, -24
+  64              		.cfi_offset 4, -20
+  65              		.cfi_offset 5, -16
+  66              		.cfi_offset 6, -12
+ARM GAS  /tmp/ccrwPr1N.s 			page 6
+
+
+  67              		.cfi_offset 7, -8
+  68              		.cfi_offset 14, -4
+  69 0004 0F46     		mov	r7, r1
+  70 0006 1646     		mov	r6, r2
+  71 0008 1D46     		mov	r5, r3
+  72 000a 0446     		mov	r4, r0
+ 149:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {  
+  73              		.loc 1 149 3 is_stmt 1 view .LVU7
+ 149:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {  
+  74              		.loc 1 149 13 is_stmt 0 view .LVU8
+  75 000c 037C     		ldrb	r3, [r0, #16]	@ zero_extendqisi2
+  76              	.LVL2:
+ 149:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {  
+  77              		.loc 1 149 5 view .LVU9
+  78 000e DBB1     		cbz	r3, .L10
+  79              	.LVL3:
+  80              	.L4:
+ 158:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+  81              		.loc 1 158 3 is_stmt 1 view .LVU10
+ 158:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+  82              		.loc 1 158 18 is_stmt 0 view .LVU11
+  83 0010 0223     		movs	r3, #2
+  84 0012 2374     		strb	r3, [r4, #16]
+ 161:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+  85              		.loc 1 161 3 is_stmt 1 view .LVU12
+  86 0014 2146     		mov	r1, r4
+  87 0016 51F8040B 		ldr	r0, [r1], #4
+  88 001a FFF7FEFF 		bl	FMC_PCCARD_Init
+  89              	.LVL4:
+ 164:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+  90              		.loc 1 164 3 view .LVU13
+  91 001e 3946     		mov	r1, r7
+  92 0020 2068     		ldr	r0, [r4]
+  93 0022 FFF7FEFF 		bl	FMC_PCCARD_CommonSpace_Timing_Init
+  94              	.LVL5:
+ 167:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+  95              		.loc 1 167 3 view .LVU14
+  96 0026 3146     		mov	r1, r6
+  97 0028 2068     		ldr	r0, [r4]
+  98 002a FFF7FEFF 		bl	FMC_PCCARD_AttributeSpace_Timing_Init
+  99              	.LVL6:
+ 170:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 100              		.loc 1 170 3 view .LVU15
+ 101 002e 2946     		mov	r1, r5
+ 102 0030 2068     		ldr	r0, [r4]
+ 103 0032 FFF7FEFF 		bl	FMC_PCCARD_IOSpace_Timing_Init
+ 104              	.LVL7:
+ 173:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 105              		.loc 1 173 3 view .LVU16
+ 106 0036 2268     		ldr	r2, [r4]
+ 107 0038 1368     		ldr	r3, [r2]
+ 108 003a 43F00403 		orr	r3, r3, #4
+ 109 003e 1360     		str	r3, [r2]
+ 176:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 110              		.loc 1 176 3 view .LVU17
+ 176:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 111              		.loc 1 176 18 is_stmt 0 view .LVU18
+ARM GAS  /tmp/ccrwPr1N.s 			page 7
+
+
+ 112 0040 0123     		movs	r3, #1
+ 113 0042 2374     		strb	r3, [r4, #16]
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 114              		.loc 1 178 3 is_stmt 1 view .LVU19
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 115              		.loc 1 178 10 is_stmt 0 view .LVU20
+ 116 0044 0020     		movs	r0, #0
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 117              		.loc 1 180 1 view .LVU21
+ 118 0046 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 119              	.LVL8:
+ 120              	.L10:
+ 152:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* Initialize the low level hardware (MSP) */
+ 121              		.loc 1 152 5 is_stmt 1 view .LVU22
+ 152:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* Initialize the low level hardware (MSP) */
+ 122              		.loc 1 152 19 is_stmt 0 view .LVU23
+ 123 0048 4374     		strb	r3, [r0, #17]
+ 154:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 124              		.loc 1 154 5 is_stmt 1 view .LVU24
+ 125 004a FFF7FEFF 		bl	HAL_PCCARD_MspInit
+ 126              	.LVL9:
+ 154:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 127              		.loc 1 154 5 is_stmt 0 view .LVU25
+ 128 004e DFE7     		b	.L4
+ 129              	.LVL10:
+ 130              	.L5:
+ 131              	.LCFI1:
+ 132              		.cfi_def_cfa_offset 0
+ 133              		.cfi_restore 3
+ 134              		.cfi_restore 4
+ 135              		.cfi_restore 5
+ 136              		.cfi_restore 6
+ 137              		.cfi_restore 7
+ 138              		.cfi_restore 14
+ 146:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 139              		.loc 1 146 13 view .LVU26
+ 140 0050 0120     		movs	r0, #1
+ 141              	.LVL11:
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 142              		.loc 1 180 1 view .LVU27
+ 143 0052 7047     		bx	lr
+ 144              		.cfi_endproc
+ 145              	.LFE126:
+ 147              		.section	.text.HAL_PCCARD_MspDeInit,"ax",%progbits
+ 148              		.align	1
+ 149              		.weak	HAL_PCCARD_MspDeInit
+ 150              		.syntax unified
+ 151              		.thumb
+ 152              		.thumb_func
+ 153              		.fpu fpv4-sp-d16
+ 155              	HAL_PCCARD_MspDeInit:
+ 156              	.LVL12:
+ 157              	.LFB129:
+ 219:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 220:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 221:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  PCCARD MSP DeInit
+ 222:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ARM GAS  /tmp/ccrwPr1N.s 			page 8
+
+
+ 223:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.
+ 224:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval None
+ 225:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 226:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** __weak void HAL_PCCARD_MspDeInit(PCCARD_HandleTypeDef *hpccard)
+ 227:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 158              		.loc 1 227 1 is_stmt 1 view -0
+ 159              		.cfi_startproc
+ 160              		@ args = 0, pretend = 0, frame = 0
+ 161              		@ frame_needed = 0, uses_anonymous_args = 0
+ 162              		@ link register save eliminated.
+ 228:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Prevent unused argument(s) compilation warning */
+ 229:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   UNUSED(hpccard);
+ 163              		.loc 1 229 3 view .LVU29
+ 230:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 231:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****             the HAL_PCCARD_MspDeInit could be implemented in the user file
+ 232:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    */ 
+ 233:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+ 164              		.loc 1 233 1 is_stmt 0 view .LVU30
+ 165 0000 7047     		bx	lr
+ 166              		.cfi_endproc
+ 167              	.LFE129:
+ 169              		.section	.text.HAL_PCCARD_DeInit,"ax",%progbits
+ 170              		.align	1
+ 171              		.global	HAL_PCCARD_DeInit
+ 172              		.syntax unified
+ 173              		.thumb
+ 174              		.thumb_func
+ 175              		.fpu fpv4-sp-d16
+ 177              	HAL_PCCARD_DeInit:
+ 178              	.LVL13:
+ 179              	.LFB127:
+ 189:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* De-Initialize the low level hardware (MSP) */
+ 180              		.loc 1 189 1 is_stmt 1 view -0
+ 181              		.cfi_startproc
+ 182              		@ args = 0, pretend = 0, frame = 0
+ 183              		@ frame_needed = 0, uses_anonymous_args = 0
+ 189:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* De-Initialize the low level hardware (MSP) */
+ 184              		.loc 1 189 1 is_stmt 0 view .LVU32
+ 185 0000 10B5     		push	{r4, lr}
+ 186              	.LCFI2:
+ 187              		.cfi_def_cfa_offset 8
+ 188              		.cfi_offset 4, -8
+ 189              		.cfi_offset 14, -4
+ 190 0002 0446     		mov	r4, r0
+ 191:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    
+ 191              		.loc 1 191 3 is_stmt 1 view .LVU33
+ 192 0004 FFF7FEFF 		bl	HAL_PCCARD_MspDeInit
+ 193              	.LVL14:
+ 194:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 194              		.loc 1 194 3 view .LVU34
+ 195 0008 2068     		ldr	r0, [r4]
+ 196 000a FFF7FEFF 		bl	FMC_PCCARD_DeInit
+ 197              	.LVL15:
+ 197:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 198              		.loc 1 197 3 view .LVU35
+ 197:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 199              		.loc 1 197 18 is_stmt 0 view .LVU36
+ARM GAS  /tmp/ccrwPr1N.s 			page 9
+
+
+ 200 000e 0020     		movs	r0, #0
+ 201 0010 2074     		strb	r0, [r4, #16]
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 202              		.loc 1 200 3 is_stmt 1 view .LVU37
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 203              		.loc 1 200 3 view .LVU38
+ 204 0012 6074     		strb	r0, [r4, #17]
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 205              		.loc 1 200 3 view .LVU39
+ 202:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+ 206              		.loc 1 202 3 view .LVU40
+ 203:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 207              		.loc 1 203 1 is_stmt 0 view .LVU41
+ 208 0014 10BD     		pop	{r4, pc}
+ 203:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 209              		.loc 1 203 1 view .LVU42
+ 210              		.cfi_endproc
+ 211              	.LFE127:
+ 213              		.section	.text.HAL_PCCARD_Read_ID,"ax",%progbits
+ 214              		.align	1
+ 215              		.global	HAL_PCCARD_Read_ID
+ 216              		.syntax unified
+ 217              		.thumb
+ 218              		.thumb_func
+ 219              		.fpu fpv4-sp-d16
+ 221              	HAL_PCCARD_Read_ID:
+ 222              	.LVL16:
+ 223              	.LFB130:
+ 234:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 235:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 236:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @}
+ 237:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 238:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 239:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /** @defgroup PCCARD_Exported_Functions_Group2 Input and Output functions 
+ 240:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief    Input Output and memory control functions 
+ 241:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *
+ 242:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   @verbatim    
+ 243:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   ==============================================================================
+ 244:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****                     ##### PCCARD Input and Output functions #####
+ 245:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   ==============================================================================
+ 246:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   [..]  
+ 247:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     This section provides functions allowing to use and control the PCCARD memory
+ 248:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 249:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** @endverbatim
+ 250:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @{
+ 251:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 252:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 253:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 254:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  Read Compact Flash's ID.
+ 255:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 256:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.
+ 257:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  CompactFlash_ID Compact flash ID structure.  
+ 258:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  pStatus pointer to compact flash status         
+ 259:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval HAL status
+ 260:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *   
+ 261:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */ 
+ 262:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** HAL_StatusTypeDef HAL_PCCARD_Read_ID(PCCARD_HandleTypeDef *hpccard, uint8_t CompactFlash_ID[], uint
+ARM GAS  /tmp/ccrwPr1N.s 			page 10
+
+
+ 263:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 224              		.loc 1 263 1 is_stmt 1 view -0
+ 225              		.cfi_startproc
+ 226              		@ args = 0, pretend = 0, frame = 0
+ 227              		@ frame_needed = 0, uses_anonymous_args = 0
+ 228              		@ link register save eliminated.
+ 264:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint32_t timeout = PCCARD_TIMEOUT_READ_ID, index = 0U;
+ 229              		.loc 1 264 3 view .LVU44
+ 265:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint8_t status = 0;
+ 230              		.loc 1 265 3 view .LVU45
+ 266:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 267:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Process Locked */
+ 268:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   __HAL_LOCK(hpccard);  
+ 231              		.loc 1 268 3 view .LVU46
+ 232              		.loc 1 268 3 view .LVU47
+ 233 0000 437C     		ldrb	r3, [r0, #17]	@ zero_extendqisi2
+ 234 0002 012B     		cmp	r3, #1
+ 235 0004 32D0     		beq	.L21
+ 236 0006 8446     		mov	ip, r0
+ 237              		.loc 1 268 3 discriminator 2 view .LVU48
+ 238 0008 0123     		movs	r3, #1
+ 239 000a 4374     		strb	r3, [r0, #17]
+ 240              		.loc 1 268 3 discriminator 2 view .LVU49
+ 269:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 270:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+ 271:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(hpccard->State == HAL_PCCARD_STATE_BUSY)
+ 241              		.loc 1 271 3 discriminator 2 view .LVU50
+ 242              		.loc 1 271 13 is_stmt 0 discriminator 2 view .LVU51
+ 243 000c 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 244              	.LVL17:
+ 245              		.loc 1 271 13 discriminator 2 view .LVU52
+ 246 000e C0B2     		uxtb	r0, r0
+ 247              		.loc 1 271 5 discriminator 2 view .LVU53
+ 248 0010 0228     		cmp	r0, #2
+ 249 0012 2DD0     		beq	.L24
+ 263:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint32_t timeout = PCCARD_TIMEOUT_READ_ID, index = 0U;
+ 250              		.loc 1 263 1 view .LVU54
+ 251 0014 10B4     		push	{r4}
+ 252              	.LCFI3:
+ 253              		.cfi_def_cfa_offset 4
+ 254              		.cfi_offset 4, -4
+ 272:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 273:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      return HAL_BUSY;
+ 274:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 275:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 276:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Update the PCCARD controller state */
+ 277:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_BUSY;
+ 255              		.loc 1 277 3 is_stmt 1 view .LVU55
+ 256              		.loc 1 277 18 is_stmt 0 view .LVU56
+ 257 0016 0223     		movs	r3, #2
+ 258 0018 8CF81030 		strb	r3, [ip, #16]
+ 278:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 279:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Initialize the PCCARD status */
+ 280:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *pStatus = PCCARD_READY;  
+ 259              		.loc 1 280 3 is_stmt 1 view .LVU57
+ 260              		.loc 1 280 12 is_stmt 0 view .LVU58
+ 261 001c 4023     		movs	r3, #64
+ARM GAS  /tmp/ccrwPr1N.s 			page 11
+
+
+ 262 001e 1370     		strb	r3, [r2]
+ 281:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 282:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Send the Identify Command */
+ 283:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint16_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD)  = 0xECEC;
+ 263              		.loc 1 283 3 is_stmt 1 view .LVU59
+ 264              		.loc 1 283 70 is_stmt 0 view .LVU60
+ 265 0020 144B     		ldr	r3, .L27
+ 266 0022 4EF6EC40 		movw	r0, #60652
+ 267 0026 A3F8F700 		strh	r0, [r3, #247]	@ unaligned
+ 264:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint8_t status = 0;
+ 268              		.loc 1 264 12 view .LVU61
+ 269 002a 4FF6FF74 		movw	r4, #65535
+ 270              	.LVL18:
+ 271              	.L17:
+ 284:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     
+ 285:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Read PCCARD IDs and timeout treatment */
+ 286:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   do 
+ 272              		.loc 1 286 3 is_stmt 1 discriminator 2 view .LVU62
+ 287:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 288:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      /* Read the PCCARD status */
+ 289:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      status = *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD_ALTERNATE);
+ 273              		.loc 1 289 6 discriminator 2 view .LVU63
+ 274              		.loc 1 289 13 is_stmt 0 discriminator 2 view .LVU64
+ 275 002e 114B     		ldr	r3, .L27
+ 276 0030 93F8FE30 		ldrb	r3, [r3, #254]	@ zero_extendqisi2
+ 277 0034 DBB2     		uxtb	r3, r3
+ 278              	.LVL19:
+ 290:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      
+ 291:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      timeout--;
+ 279              		.loc 1 291 6 is_stmt 1 discriminator 2 view .LVU65
+ 280              		.loc 1 291 13 is_stmt 0 discriminator 2 view .LVU66
+ 281 0036 013C     		subs	r4, r4, #1
+ 282              	.LVL20:
+ 292:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }while((status != PCCARD_STATUS_OK) && timeout); 
+ 283              		.loc 1 292 9 is_stmt 1 discriminator 2 view .LVU67
+ 284              		.loc 1 292 3 is_stmt 0 discriminator 2 view .LVU68
+ 285 0038 582B     		cmp	r3, #88
+ 286 003a 01D0     		beq	.L16
+ 287              		.loc 1 292 39 discriminator 1 view .LVU69
+ 288 003c 002C     		cmp	r4, #0
+ 289 003e F6D1     		bne	.L17
+ 290              	.L16:
+ 293:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 294:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(timeout == 0U)
+ 291              		.loc 1 294 3 is_stmt 1 view .LVU70
+ 292              		.loc 1 294 5 is_stmt 0 view .LVU71
+ 293 0040 94B9     		cbnz	r4, .L22
+ 295:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 296:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     *pStatus = PCCARD_TIMEOUT_ERROR;
+ 294              		.loc 1 296 5 is_stmt 1 view .LVU72
+ 295              		.loc 1 296 14 is_stmt 0 view .LVU73
+ 296 0042 6023     		movs	r3, #96
+ 297              	.LVL21:
+ 298              		.loc 1 296 14 view .LVU74
+ 299 0044 1370     		strb	r3, [r2]
+ 300              	.LVL22:
+ 301              	.L19:
+ARM GAS  /tmp/ccrwPr1N.s 			page 12
+
+
+ 297:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 298:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   else
+ 299:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 300:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      /* Read PCCARD ID bytes */
+ 301:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     for(index = 0U; index < 16U; index++)
+ 302:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     {
+ 303:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****       CompactFlash_ID[index] = *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_DATA);
+ 304:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     }    
+ 305:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 306:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 307:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Update the PCCARD controller state */
+ 308:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_READY;
+ 302              		.loc 1 308 3 is_stmt 1 view .LVU75
+ 303              		.loc 1 308 18 is_stmt 0 view .LVU76
+ 304 0046 0123     		movs	r3, #1
+ 305 0048 8CF81030 		strb	r3, [ip, #16]
+ 309:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 310:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Process unlocked */
+ 311:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   __HAL_UNLOCK(hpccard);  
+ 306              		.loc 1 311 3 is_stmt 1 view .LVU77
+ 307              		.loc 1 311 3 view .LVU78
+ 308 004c 0020     		movs	r0, #0
+ 309 004e 8CF81100 		strb	r0, [ip, #17]
+ 310              		.loc 1 311 3 view .LVU79
+ 312:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 313:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   return HAL_OK;
+ 311              		.loc 1 313 3 view .LVU80
+ 314:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+ 312              		.loc 1 314 1 is_stmt 0 view .LVU81
+ 313 0052 5DF8044B 		ldr	r4, [sp], #4
+ 314              	.LCFI4:
+ 315              		.cfi_remember_state
+ 316              		.cfi_restore 4
+ 317              		.cfi_def_cfa_offset 0
+ 318              	.LVL23:
+ 319              		.loc 1 314 1 view .LVU82
+ 320 0056 7047     		bx	lr
+ 321              	.LVL24:
+ 322              	.L20:
+ 323              	.LCFI5:
+ 324              		.cfi_restore_state
+ 303:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     }    
+ 325              		.loc 1 303 7 is_stmt 1 discriminator 3 view .LVU83
+ 303:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     }    
+ 326              		.loc 1 303 32 is_stmt 0 discriminator 3 view .LVU84
+ 327 0058 064A     		ldr	r2, .L27
+ 328 005a 92F8F020 		ldrb	r2, [r2, #240]	@ zero_extendqisi2
+ 303:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     }    
+ 329              		.loc 1 303 30 discriminator 3 view .LVU85
+ 330 005e CA54     		strb	r2, [r1, r3]
+ 301:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     {
+ 331              		.loc 1 301 34 is_stmt 1 discriminator 3 view .LVU86
+ 301:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     {
+ 332              		.loc 1 301 39 is_stmt 0 discriminator 3 view .LVU87
+ 333 0060 0133     		adds	r3, r3, #1
+ 334              	.LVL25:
+ 335              	.L18:
+ARM GAS  /tmp/ccrwPr1N.s 			page 13
+
+
+ 301:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     {
+ 336              		.loc 1 301 21 is_stmt 1 discriminator 1 view .LVU88
+ 301:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     {
+ 337              		.loc 1 301 5 is_stmt 0 discriminator 1 view .LVU89
+ 338 0062 0F2B     		cmp	r3, #15
+ 339 0064 F8D9     		bls	.L20
+ 340 0066 EEE7     		b	.L19
+ 341              	.LVL26:
+ 342              	.L22:
+ 301:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     {
+ 343              		.loc 1 301 15 view .LVU90
+ 344 0068 0023     		movs	r3, #0
+ 345              	.LVL27:
+ 301:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     {
+ 346              		.loc 1 301 15 view .LVU91
+ 347 006a FAE7     		b	.L18
+ 348              	.LVL28:
+ 349              	.L21:
+ 350              	.LCFI6:
+ 351              		.cfi_def_cfa_offset 0
+ 352              		.cfi_restore 4
+ 268:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 353              		.loc 1 268 3 view .LVU92
+ 354 006c 0220     		movs	r0, #2
+ 355              	.LVL29:
+ 268:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 356              		.loc 1 268 3 view .LVU93
+ 357 006e 7047     		bx	lr
+ 358              	.LVL30:
+ 359              	.L24:
+ 360              		.loc 1 314 1 view .LVU94
+ 361 0070 7047     		bx	lr
+ 362              	.L28:
+ 363 0072 00BF     		.align	2
+ 364              	.L27:
+ 365 0074 0001009C 		.word	-1677721344
+ 366              		.cfi_endproc
+ 367              	.LFE130:
+ 369              		.section	.text.HAL_PCCARD_Read_Sector,"ax",%progbits
+ 370              		.align	1
+ 371              		.global	HAL_PCCARD_Read_Sector
+ 372              		.syntax unified
+ 373              		.thumb
+ 374              		.thumb_func
+ 375              		.fpu fpv4-sp-d16
+ 377              	HAL_PCCARD_Read_Sector:
+ 378              	.LVL31:
+ 379              	.LFB131:
+ 315:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    
+ 316:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 317:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  Read sector from PCCARD memory
+ 318:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 319:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.
+ 320:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  pBuffer pointer to destination read buffer
+ 321:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  SectorAddress Sector address to read
+ 322:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  pStatus pointer to PCCARD status
+ 323:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval HAL status
+ARM GAS  /tmp/ccrwPr1N.s 			page 14
+
+
+ 324:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */    
+ 325:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** HAL_StatusTypeDef HAL_PCCARD_Read_Sector(PCCARD_HandleTypeDef *hpccard, uint16_t *pBuffer, uint16_t
+ 326:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 380              		.loc 1 326 1 is_stmt 1 view -0
+ 381              		.cfi_startproc
+ 382              		@ args = 0, pretend = 0, frame = 0
+ 383              		@ frame_needed = 0, uses_anonymous_args = 0
+ 384              		.loc 1 326 1 is_stmt 0 view .LVU96
+ 385 0000 00B5     		push	{lr}
+ 386              	.LCFI7:
+ 387              		.cfi_def_cfa_offset 4
+ 388              		.cfi_offset 14, -4
+ 389 0002 9E46     		mov	lr, r3
+ 327:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint32_t timeout = PCCARD_TIMEOUT_READ_WRITE_SECTOR, index = 0U;
+ 390              		.loc 1 327 3 is_stmt 1 view .LVU97
+ 391              	.LVL32:
+ 328:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint8_t status = 0;
+ 392              		.loc 1 328 3 view .LVU98
+ 329:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 330:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Process Locked */
+ 331:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   __HAL_LOCK(hpccard);
+ 393              		.loc 1 331 3 view .LVU99
+ 394              		.loc 1 331 3 view .LVU100
+ 395 0004 437C     		ldrb	r3, [r0, #17]	@ zero_extendqisi2
+ 396              	.LVL33:
+ 397              		.loc 1 331 3 is_stmt 0 view .LVU101
+ 398 0006 012B     		cmp	r3, #1
+ 399 0008 48D0     		beq	.L39
+ 400 000a 8446     		mov	ip, r0
+ 401              		.loc 1 331 3 is_stmt 1 discriminator 2 view .LVU102
+ 402 000c 0123     		movs	r3, #1
+ 403 000e 4374     		strb	r3, [r0, #17]
+ 404              		.loc 1 331 3 discriminator 2 view .LVU103
+ 332:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 333:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+ 334:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(hpccard->State == HAL_PCCARD_STATE_BUSY)
+ 405              		.loc 1 334 3 discriminator 2 view .LVU104
+ 406              		.loc 1 334 13 is_stmt 0 discriminator 2 view .LVU105
+ 407 0010 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 408              	.LVL34:
+ 409              		.loc 1 334 13 discriminator 2 view .LVU106
+ 410 0012 C0B2     		uxtb	r0, r0
+ 411              		.loc 1 334 5 discriminator 2 view .LVU107
+ 412 0014 0228     		cmp	r0, #2
+ 413 0016 3FD0     		beq	.L30
+ 335:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 336:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      return HAL_BUSY;
+ 337:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 338:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 339:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Update the PCCARD controller state */
+ 340:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_BUSY;
+ 414              		.loc 1 340 3 is_stmt 1 view .LVU108
+ 415              		.loc 1 340 18 is_stmt 0 view .LVU109
+ 416 0018 0223     		movs	r3, #2
+ 417 001a 8CF81030 		strb	r3, [ip, #16]
+ 341:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 342:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Initialize PCCARD status */
+ARM GAS  /tmp/ccrwPr1N.s 			page 15
+
+
+ 343:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *pStatus = PCCARD_READY;
+ 418              		.loc 1 343 3 is_stmt 1 view .LVU110
+ 419              		.loc 1 343 12 is_stmt 0 view .LVU111
+ 420 001e 4023     		movs	r3, #64
+ 421 0020 8EF80030 		strb	r3, [lr]
+ 344:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 345:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Set the parameters to write a sector */
+ 346:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint16_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_CYLINDER_HIGH) = (uint16_t)0x00;
+ 422              		.loc 1 346 3 is_stmt 1 view .LVU112
+ 423              		.loc 1 346 72 is_stmt 0 view .LVU113
+ 424 0024 1E4B     		ldr	r3, .L41
+ 425 0026 0020     		movs	r0, #0
+ 426 0028 A3F8F500 		strh	r0, [r3, #245]	@ unaligned
+ 347:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint16_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_SECTOR_COUNT)  = ((uint16_t)0x0100) | ((uin
+ 427              		.loc 1 347 3 is_stmt 1 view .LVU114
+ 428              		.loc 1 347 72 is_stmt 0 view .LVU115
+ 429 002c 42F48072 		orr	r2, r2, #256
+ 430              	.LVL35:
+ 431              		.loc 1 347 72 view .LVU116
+ 432 0030 A3F8F220 		strh	r2, [r3, #242]	@ movhi
+ 348:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint16_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD)    = (uint16_t)0xE4A0;  
+ 433              		.loc 1 348 3 is_stmt 1 view .LVU117
+ 434              		.loc 1 348 72 is_stmt 0 view .LVU118
+ 435 0034 4EF2A042 		movw	r2, #58528
+ 436 0038 A3F8F720 		strh	r2, [r3, #247]	@ unaligned
+ 327:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint8_t status = 0;
+ 437              		.loc 1 327 12 view .LVU119
+ 438 003c 4FF6FF70 		movw	r0, #65535
+ 439              	.LVL36:
+ 440              	.L32:
+ 349:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 350:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   do
+ 441              		.loc 1 350 3 is_stmt 1 discriminator 2 view .LVU120
+ 351:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 352:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* wait till the Status = 0x80 */
+ 353:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     status =  *(__IO uint16_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD_ALTERNATE);
+ 442              		.loc 1 353 5 discriminator 2 view .LVU121
+ 443              		.loc 1 353 15 is_stmt 0 discriminator 2 view .LVU122
+ 444 0040 174A     		ldr	r2, .L41
+ 445 0042 B2F8FE20 		ldrh	r2, [r2, #254]
+ 446              		.loc 1 353 12 discriminator 2 view .LVU123
+ 447 0046 D2B2     		uxtb	r2, r2
+ 448              	.LVL37:
+ 354:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     timeout--;
+ 449              		.loc 1 354 5 is_stmt 1 discriminator 2 view .LVU124
+ 450              		.loc 1 354 12 is_stmt 0 discriminator 2 view .LVU125
+ 451 0048 0138     		subs	r0, r0, #1
+ 452              	.LVL38:
+ 355:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }while((status == 0x80) && timeout);
+ 453              		.loc 1 355 9 is_stmt 1 discriminator 2 view .LVU126
+ 454              		.loc 1 355 3 is_stmt 0 discriminator 2 view .LVU127
+ 455 004a 802A     		cmp	r2, #128
+ 456 004c 01D1     		bne	.L31
+ 457              		.loc 1 355 27 discriminator 1 view .LVU128
+ 458 004e 0028     		cmp	r0, #0
+ 459 0050 F6D1     		bne	.L32
+ 460              	.L31:
+ARM GAS  /tmp/ccrwPr1N.s 			page 16
+
+
+ 356:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 357:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(timeout == 0U)
+ 461              		.loc 1 357 3 is_stmt 1 view .LVU129
+ 462              		.loc 1 357 5 is_stmt 0 view .LVU130
+ 463 0052 10B9     		cbnz	r0, .L33
+ 358:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 359:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     *pStatus = PCCARD_TIMEOUT_ERROR;
+ 464              		.loc 1 359 5 is_stmt 1 view .LVU131
+ 465              		.loc 1 359 14 is_stmt 0 view .LVU132
+ 466 0054 6023     		movs	r3, #96
+ 467 0056 8EF80030 		strb	r3, [lr]
+ 468              	.L33:
+ 360:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 361:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 362:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   timeout = PCCARD_TIMEOUT_READ_WRITE_SECTOR;
+ 469              		.loc 1 362 3 is_stmt 1 view .LVU133
+ 470              	.LVL39:
+ 471              		.loc 1 362 11 is_stmt 0 view .LVU134
+ 472 005a 4FF6FF73 		movw	r3, #65535
+ 473              	.LVL40:
+ 474              	.L35:
+ 363:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 364:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   do
+ 475              		.loc 1 364 3 is_stmt 1 discriminator 2 view .LVU135
+ 365:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 366:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* wait till the Status = PCCARD_STATUS_OK */
+ 367:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     status =  *(__IO uint16_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD_ALTERNATE);
+ 476              		.loc 1 367 5 discriminator 2 view .LVU136
+ 477              		.loc 1 367 15 is_stmt 0 discriminator 2 view .LVU137
+ 478 005e 104A     		ldr	r2, .L41
+ 479              	.LVL41:
+ 480              		.loc 1 367 15 discriminator 2 view .LVU138
+ 481 0060 B2F8FE20 		ldrh	r2, [r2, #254]
+ 482              		.loc 1 367 12 discriminator 2 view .LVU139
+ 483 0064 D2B2     		uxtb	r2, r2
+ 484              	.LVL42:
+ 368:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     timeout--;
+ 485              		.loc 1 368 5 is_stmt 1 discriminator 2 view .LVU140
+ 486              		.loc 1 368 12 is_stmt 0 discriminator 2 view .LVU141
+ 487 0066 013B     		subs	r3, r3, #1
+ 488              	.LVL43:
+ 369:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }while((status != PCCARD_STATUS_OK) && timeout);
+ 489              		.loc 1 369 9 is_stmt 1 discriminator 2 view .LVU142
+ 490              		.loc 1 369 3 is_stmt 0 discriminator 2 view .LVU143
+ 491 0068 582A     		cmp	r2, #88
+ 492 006a 01D0     		beq	.L34
+ 493              		.loc 1 369 39 discriminator 1 view .LVU144
+ 494 006c 002B     		cmp	r3, #0
+ 495 006e F6D1     		bne	.L35
+ 496              	.L34:
+ 370:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 371:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(timeout == 0U)
+ 497              		.loc 1 371 3 is_stmt 1 view .LVU145
+ 498              		.loc 1 371 5 is_stmt 0 view .LVU146
+ 499 0070 13B9     		cbnz	r3, .L36
+ 372:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 373:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     *pStatus = PCCARD_TIMEOUT_ERROR;
+ARM GAS  /tmp/ccrwPr1N.s 			page 17
+
+
+ 500              		.loc 1 373 5 is_stmt 1 view .LVU147
+ 501              		.loc 1 373 14 is_stmt 0 view .LVU148
+ 502 0072 6023     		movs	r3, #96
+ 503              	.LVL44:
+ 504              		.loc 1 373 14 view .LVU149
+ 505 0074 8EF80030 		strb	r3, [lr]
+ 506              	.L36:
+ 362:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 507              		.loc 1 362 11 discriminator 1 view .LVU150
+ 508 0078 0023     		movs	r3, #0
+ 509 007a 05E0     		b	.L37
+ 510              	.LVL45:
+ 511              	.L38:
+ 374:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 375:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 376:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Read bytes */
+ 377:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   for(; index < PCCARD_SECTOR_SIZE; index++)
+ 378:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 379:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     *(uint16_t *)pBuffer++ = *(uint16_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR);
+ 512              		.loc 1 379 5 is_stmt 1 discriminator 2 view .LVU151
+ 513              		.loc 1 379 30 is_stmt 0 discriminator 2 view .LVU152
+ 514 007c 084A     		ldr	r2, .L41
+ 515 007e B2F8F020 		ldrh	r2, [r2, #240]
+ 516              		.loc 1 379 28 discriminator 2 view .LVU153
+ 517 0082 21F8022B 		strh	r2, [r1], #2	@ movhi
+ 518              	.LVL46:
+ 377:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 519              		.loc 1 377 37 is_stmt 1 discriminator 2 view .LVU154
+ 377:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 520              		.loc 1 377 42 is_stmt 0 discriminator 2 view .LVU155
+ 521 0086 0133     		adds	r3, r3, #1
+ 522              	.LVL47:
+ 523              	.L37:
+ 377:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 524              		.loc 1 377 9 is_stmt 1 discriminator 1 view .LVU156
+ 377:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 525              		.loc 1 377 3 is_stmt 0 discriminator 1 view .LVU157
+ 526 0088 FE2B     		cmp	r3, #254
+ 527 008a F7D9     		bls	.L38
+ 380:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   } 
+ 381:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 382:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Update the PCCARD controller state */
+ 383:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_READY;
+ 528              		.loc 1 383 3 is_stmt 1 view .LVU158
+ 529              		.loc 1 383 18 is_stmt 0 view .LVU159
+ 530 008c 0123     		movs	r3, #1
+ 531              	.LVL48:
+ 532              		.loc 1 383 18 view .LVU160
+ 533 008e 8CF81030 		strb	r3, [ip, #16]
+ 384:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 385:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Process unlocked */
+ 386:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   __HAL_UNLOCK(hpccard);
+ 534              		.loc 1 386 3 is_stmt 1 view .LVU161
+ 535              		.loc 1 386 3 view .LVU162
+ 536 0092 0020     		movs	r0, #0
+ 537 0094 8CF81100 		strb	r0, [ip, #17]
+ 538              		.loc 1 386 3 view .LVU163
+ARM GAS  /tmp/ccrwPr1N.s 			page 18
+
+
+ 387:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****       
+ 388:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   return HAL_OK;
+ 539              		.loc 1 388 3 view .LVU164
+ 540              	.LVL49:
+ 541              	.L30:
+ 389:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+ 542              		.loc 1 389 1 is_stmt 0 view .LVU165
+ 543 0098 5DF804FB 		ldr	pc, [sp], #4
+ 544              	.LVL50:
+ 545              	.L39:
+ 331:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 546              		.loc 1 331 3 view .LVU166
+ 547 009c 0220     		movs	r0, #2
+ 548              	.LVL51:
+ 331:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 549              		.loc 1 331 3 view .LVU167
+ 550 009e FBE7     		b	.L30
+ 551              	.L42:
+ 552              		.align	2
+ 553              	.L41:
+ 554 00a0 0001009C 		.word	-1677721344
+ 555              		.cfi_endproc
+ 556              	.LFE131:
+ 558              		.section	.text.HAL_PCCARD_Write_Sector,"ax",%progbits
+ 559              		.align	1
+ 560              		.global	HAL_PCCARD_Write_Sector
+ 561              		.syntax unified
+ 562              		.thumb
+ 563              		.thumb_func
+ 564              		.fpu fpv4-sp-d16
+ 566              	HAL_PCCARD_Write_Sector:
+ 567              	.LVL52:
+ 568              	.LFB132:
+ 390:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 391:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 392:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 393:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  Write sector to PCCARD memory
+ 394:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 395:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.
+ 396:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  pBuffer pointer to source write buffer
+ 397:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  SectorAddress Sector address to write
+ 398:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  pStatus pointer to PCCARD status
+ 399:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval HAL status
+ 400:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 401:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** HAL_StatusTypeDef HAL_PCCARD_Write_Sector(PCCARD_HandleTypeDef *hpccard, uint16_t *pBuffer, uint16_
+ 402:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 569              		.loc 1 402 1 is_stmt 1 view -0
+ 570              		.cfi_startproc
+ 571              		@ args = 0, pretend = 0, frame = 0
+ 572              		@ frame_needed = 0, uses_anonymous_args = 0
+ 573              		.loc 1 402 1 is_stmt 0 view .LVU169
+ 574 0000 10B5     		push	{r4, lr}
+ 575              	.LCFI8:
+ 576              		.cfi_def_cfa_offset 8
+ 577              		.cfi_offset 4, -8
+ 578              		.cfi_offset 14, -4
+ 579 0002 1C46     		mov	r4, r3
+ARM GAS  /tmp/ccrwPr1N.s 			page 19
+
+
+ 403:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint32_t timeout = PCCARD_TIMEOUT_READ_WRITE_SECTOR, index = 0U;
+ 580              		.loc 1 403 3 is_stmt 1 view .LVU170
+ 581              	.LVL53:
+ 404:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint8_t status = 0;
+ 582              		.loc 1 404 3 view .LVU171
+ 405:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 406:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Process Locked */
+ 407:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   __HAL_LOCK(hpccard);  
+ 583              		.loc 1 407 3 view .LVU172
+ 584              		.loc 1 407 3 view .LVU173
+ 585 0004 437C     		ldrb	r3, [r0, #17]	@ zero_extendqisi2
+ 586              	.LVL54:
+ 587              		.loc 1 407 3 is_stmt 0 view .LVU174
+ 588 0006 012B     		cmp	r3, #1
+ 589 0008 42D0     		beq	.L53
+ 590 000a 8646     		mov	lr, r0
+ 591              		.loc 1 407 3 is_stmt 1 discriminator 2 view .LVU175
+ 592 000c 0123     		movs	r3, #1
+ 593 000e 4374     		strb	r3, [r0, #17]
+ 594              		.loc 1 407 3 discriminator 2 view .LVU176
+ 408:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 409:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+ 410:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(hpccard->State == HAL_PCCARD_STATE_BUSY)
+ 595              		.loc 1 410 3 discriminator 2 view .LVU177
+ 596              		.loc 1 410 13 is_stmt 0 discriminator 2 view .LVU178
+ 597 0010 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 598              	.LVL55:
+ 599              		.loc 1 410 13 discriminator 2 view .LVU179
+ 600 0012 C0B2     		uxtb	r0, r0
+ 601              		.loc 1 410 5 discriminator 2 view .LVU180
+ 602 0014 0228     		cmp	r0, #2
+ 603 0016 3AD0     		beq	.L44
+ 411:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 412:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      return HAL_BUSY;
+ 413:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 414:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    
+ 415:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Update the PCCARD controller state */
+ 416:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_BUSY;
+ 604              		.loc 1 416 3 is_stmt 1 view .LVU181
+ 605              		.loc 1 416 18 is_stmt 0 view .LVU182
+ 606 0018 0223     		movs	r3, #2
+ 607 001a 8EF81030 		strb	r3, [lr, #16]
+ 417:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     
+ 418:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Initialize PCCARD status */
+ 419:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *pStatus = PCCARD_READY;  
+ 608              		.loc 1 419 3 is_stmt 1 view .LVU183
+ 609              		.loc 1 419 12 is_stmt 0 view .LVU184
+ 610 001e 4023     		movs	r3, #64
+ 611 0020 2370     		strb	r3, [r4]
+ 420:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     
+ 421:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Set the parameters to write a sector */
+ 422:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint16_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_CYLINDER_HIGH) = (uint16_t)0x00;
+ 612              		.loc 1 422 3 is_stmt 1 view .LVU185
+ 613              		.loc 1 422 72 is_stmt 0 view .LVU186
+ 614 0022 1C4B     		ldr	r3, .L55
+ 615 0024 0020     		movs	r0, #0
+ 616 0026 A3F8F500 		strh	r0, [r3, #245]	@ unaligned
+ARM GAS  /tmp/ccrwPr1N.s 			page 20
+
+
+ 423:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint16_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_SECTOR_COUNT)  = ((uint16_t)0x0100) | ((uin
+ 617              		.loc 1 423 3 is_stmt 1 view .LVU187
+ 618              		.loc 1 423 72 is_stmt 0 view .LVU188
+ 619 002a 42F48072 		orr	r2, r2, #256
+ 620              	.LVL56:
+ 621              		.loc 1 423 72 view .LVU189
+ 622 002e A3F8F220 		strh	r2, [r3, #242]	@ movhi
+ 424:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint16_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD)    = (uint16_t)0x30A0;
+ 623              		.loc 1 424 3 is_stmt 1 view .LVU190
+ 624              		.loc 1 424 72 is_stmt 0 view .LVU191
+ 625 0032 43F2A002 		movw	r2, #12448
+ 626 0036 A3F8F720 		strh	r2, [r3, #247]	@ unaligned
+ 403:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint8_t status = 0;
+ 627              		.loc 1 403 12 view .LVU192
+ 628 003a 4FF6FF70 		movw	r0, #65535
+ 629              	.LVL57:
+ 630              	.L46:
+ 425:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 426:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   do
+ 631              		.loc 1 426 3 is_stmt 1 discriminator 2 view .LVU193
+ 427:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 428:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* Wait till the Status = PCCARD_STATUS_OK */
+ 429:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     status =  *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD_ALTERNATE);
+ 632              		.loc 1 429 5 discriminator 2 view .LVU194
+ 633              		.loc 1 429 12 is_stmt 0 discriminator 2 view .LVU195
+ 634 003e 154A     		ldr	r2, .L55
+ 635 0040 92F8FE20 		ldrb	r2, [r2, #254]	@ zero_extendqisi2
+ 636 0044 D2B2     		uxtb	r2, r2
+ 637              	.LVL58:
+ 430:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     timeout--;
+ 638              		.loc 1 430 5 is_stmt 1 discriminator 2 view .LVU196
+ 639              		.loc 1 430 12 is_stmt 0 discriminator 2 view .LVU197
+ 640 0046 0138     		subs	r0, r0, #1
+ 641              	.LVL59:
+ 431:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }while((status != PCCARD_STATUS_OK) && timeout);
+ 642              		.loc 1 431 9 is_stmt 1 discriminator 2 view .LVU198
+ 643              		.loc 1 431 3 is_stmt 0 discriminator 2 view .LVU199
+ 644 0048 582A     		cmp	r2, #88
+ 645 004a 01D0     		beq	.L45
+ 646              		.loc 1 431 39 discriminator 1 view .LVU200
+ 647 004c 0028     		cmp	r0, #0
+ 648 004e F6D1     		bne	.L46
+ 649              	.L45:
+ 432:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 433:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(timeout == 0U)
+ 650              		.loc 1 433 3 is_stmt 1 view .LVU201
+ 651              		.loc 1 433 5 is_stmt 0 view .LVU202
+ 652 0050 08B9     		cbnz	r0, .L47
+ 434:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 435:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     *pStatus = PCCARD_TIMEOUT_ERROR;
+ 653              		.loc 1 435 5 is_stmt 1 view .LVU203
+ 654              		.loc 1 435 14 is_stmt 0 view .LVU204
+ 655 0052 6023     		movs	r3, #96
+ 656 0054 2370     		strb	r3, [r4]
+ 657              	.L47:
+ 403:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint8_t status = 0;
+ 658              		.loc 1 403 12 discriminator 1 view .LVU205
+ARM GAS  /tmp/ccrwPr1N.s 			page 21
+
+
+ 659 0056 0022     		movs	r2, #0
+ 660              	.LVL60:
+ 403:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint8_t status = 0;
+ 661              		.loc 1 403 12 discriminator 1 view .LVU206
+ 662 0058 05E0     		b	.L48
+ 663              	.LVL61:
+ 664              	.L49:
+ 436:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 437:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 438:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Write bytes */
+ 439:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   for(; index < PCCARD_SECTOR_SIZE; index++)
+ 440:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 441:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     *(uint16_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR) = *(uint16_t *)pBuffer++;
+ 665              		.loc 1 441 5 is_stmt 1 discriminator 2 view .LVU207
+ 666              		.loc 1 441 51 is_stmt 0 discriminator 2 view .LVU208
+ 667 005a 31F802CB 		ldrh	ip, [r1], #2
+ 668              	.LVL62:
+ 669              		.loc 1 441 49 discriminator 2 view .LVU209
+ 670 005e 0D4B     		ldr	r3, .L55
+ 671 0060 A3F8F0C0 		strh	ip, [r3, #240]	@ movhi
+ 439:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 672              		.loc 1 439 37 is_stmt 1 discriminator 2 view .LVU210
+ 439:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 673              		.loc 1 439 42 is_stmt 0 discriminator 2 view .LVU211
+ 674 0064 0132     		adds	r2, r2, #1
+ 675              	.LVL63:
+ 676              	.L48:
+ 439:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 677              		.loc 1 439 9 is_stmt 1 discriminator 1 view .LVU212
+ 439:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 678              		.loc 1 439 3 is_stmt 0 discriminator 1 view .LVU213
+ 679 0066 FE2A     		cmp	r2, #254
+ 680 0068 F7D9     		bls	.L49
+ 681              	.LVL64:
+ 682              	.L51:
+ 442:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 443:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 444:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   do
+ 683              		.loc 1 444 3 is_stmt 1 discriminator 2 view .LVU214
+ 445:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 446:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* Wait till the Status = PCCARD_STATUS_WRITE_OK */
+ 447:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     status =  *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD_ALTERNATE);
+ 684              		.loc 1 447 5 discriminator 2 view .LVU215
+ 685              		.loc 1 447 12 is_stmt 0 discriminator 2 view .LVU216
+ 686 006a 0A4A     		ldr	r2, .L55
+ 687 006c 92F8FE20 		ldrb	r2, [r2, #254]	@ zero_extendqisi2
+ 688 0070 D2B2     		uxtb	r2, r2
+ 689              	.LVL65:
+ 448:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     timeout--;
+ 690              		.loc 1 448 5 is_stmt 1 discriminator 2 view .LVU217
+ 691              		.loc 1 448 12 is_stmt 0 discriminator 2 view .LVU218
+ 692 0072 0138     		subs	r0, r0, #1
+ 693              	.LVL66:
+ 449:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }while((status != PCCARD_STATUS_WRITE_OK) && timeout);
+ 694              		.loc 1 449 9 is_stmt 1 discriminator 2 view .LVU219
+ 695              		.loc 1 449 3 is_stmt 0 discriminator 2 view .LVU220
+ 696 0074 502A     		cmp	r2, #80
+ARM GAS  /tmp/ccrwPr1N.s 			page 22
+
+
+ 697 0076 01D0     		beq	.L50
+ 698              		.loc 1 449 45 discriminator 1 view .LVU221
+ 699 0078 0028     		cmp	r0, #0
+ 700 007a F6D1     		bne	.L51
+ 701              	.L50:
+ 450:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 451:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(timeout == 0U)
+ 702              		.loc 1 451 3 is_stmt 1 view .LVU222
+ 703              		.loc 1 451 5 is_stmt 0 view .LVU223
+ 704 007c 08B9     		cbnz	r0, .L52
+ 452:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 453:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     *pStatus = PCCARD_TIMEOUT_ERROR;
+ 705              		.loc 1 453 5 is_stmt 1 view .LVU224
+ 706              		.loc 1 453 14 is_stmt 0 view .LVU225
+ 707 007e 6023     		movs	r3, #96
+ 708 0080 2370     		strb	r3, [r4]
+ 709              	.L52:
+ 454:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }  
+ 455:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 456:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Update the PCCARD controller state */
+ 457:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_READY;
+ 710              		.loc 1 457 3 is_stmt 1 view .LVU226
+ 711              		.loc 1 457 18 is_stmt 0 view .LVU227
+ 712 0082 0123     		movs	r3, #1
+ 713 0084 8EF81030 		strb	r3, [lr, #16]
+ 458:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 459:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Process unlocked */
+ 460:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   __HAL_UNLOCK(hpccard);  
+ 714              		.loc 1 460 3 is_stmt 1 view .LVU228
+ 715              		.loc 1 460 3 view .LVU229
+ 716 0088 0020     		movs	r0, #0
+ 717              	.LVL67:
+ 718              		.loc 1 460 3 is_stmt 0 view .LVU230
+ 719 008a 8EF81100 		strb	r0, [lr, #17]
+ 720              		.loc 1 460 3 is_stmt 1 view .LVU231
+ 461:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 462:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   return HAL_OK;
+ 721              		.loc 1 462 3 view .LVU232
+ 722              	.LVL68:
+ 723              	.L44:
+ 463:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+ 724              		.loc 1 463 1 is_stmt 0 view .LVU233
+ 725 008e 10BD     		pop	{r4, pc}
+ 726              	.LVL69:
+ 727              	.L53:
+ 407:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 728              		.loc 1 407 3 view .LVU234
+ 729 0090 0220     		movs	r0, #2
+ 730              	.LVL70:
+ 407:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 731              		.loc 1 407 3 view .LVU235
+ 732 0092 FCE7     		b	.L44
+ 733              	.L56:
+ 734              		.align	2
+ 735              	.L55:
+ 736 0094 0001009C 		.word	-1677721344
+ 737              		.cfi_endproc
+ARM GAS  /tmp/ccrwPr1N.s 			page 23
+
+
+ 738              	.LFE132:
+ 740              		.section	.text.HAL_PCCARD_Erase_Sector,"ax",%progbits
+ 741              		.align	1
+ 742              		.global	HAL_PCCARD_Erase_Sector
+ 743              		.syntax unified
+ 744              		.thumb
+ 745              		.thumb_func
+ 746              		.fpu fpv4-sp-d16
+ 748              	HAL_PCCARD_Erase_Sector:
+ 749              	.LVL71:
+ 750              	.LFB133:
+ 464:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 465:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 466:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 467:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  Erase sector from PCCARD memory 
+ 468:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 469:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.
+ 470:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  SectorAddress Sector address to erase
+ 471:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  pStatus pointer to PCCARD status
+ 472:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval HAL status
+ 473:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 474:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** HAL_StatusTypeDef  HAL_PCCARD_Erase_Sector(PCCARD_HandleTypeDef *hpccard, uint16_t SectorAddress, u
+ 475:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 751              		.loc 1 475 1 is_stmt 1 view -0
+ 752              		.cfi_startproc
+ 753              		@ args = 0, pretend = 0, frame = 0
+ 754              		@ frame_needed = 0, uses_anonymous_args = 0
+ 755              		@ link register save eliminated.
+ 756              		.loc 1 475 1 is_stmt 0 view .LVU237
+ 757 0000 8446     		mov	ip, r0
+ 476:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint32_t timeout = PCCARD_TIMEOUT_ERASE_SECTOR;
+ 758              		.loc 1 476 3 is_stmt 1 view .LVU238
+ 759              	.LVL72:
+ 477:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint8_t status = 0;
+ 760              		.loc 1 477 3 view .LVU239
+ 478:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 479:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Process Locked */
+ 480:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   __HAL_LOCK(hpccard);  
+ 761              		.loc 1 480 3 view .LVU240
+ 762              		.loc 1 480 3 view .LVU241
+ 763 0002 437C     		ldrb	r3, [r0, #17]	@ zero_extendqisi2
+ 764 0004 012B     		cmp	r3, #1
+ 765 0006 35D0     		beq	.L63
+ 766              		.loc 1 480 3 discriminator 2 view .LVU242
+ 767 0008 0123     		movs	r3, #1
+ 768 000a 4374     		strb	r3, [r0, #17]
+ 769              		.loc 1 480 3 discriminator 2 view .LVU243
+ 481:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 482:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+ 483:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(hpccard->State == HAL_PCCARD_STATE_BUSY)
+ 770              		.loc 1 483 3 discriminator 2 view .LVU244
+ 771              		.loc 1 483 13 is_stmt 0 discriminator 2 view .LVU245
+ 772 000c 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 773              	.LVL73:
+ 774              		.loc 1 483 13 discriminator 2 view .LVU246
+ 775 000e C0B2     		uxtb	r0, r0
+ 776              		.loc 1 483 5 discriminator 2 view .LVU247
+ARM GAS  /tmp/ccrwPr1N.s 			page 24
+
+
+ 777 0010 0228     		cmp	r0, #2
+ 778 0012 30D0     		beq	.L58
+ 484:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 485:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      return HAL_BUSY;
+ 486:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 487:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 488:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Update the PCCARD controller state */
+ 489:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_BUSY;
+ 779              		.loc 1 489 3 is_stmt 1 view .LVU248
+ 780              		.loc 1 489 18 is_stmt 0 view .LVU249
+ 781 0014 0223     		movs	r3, #2
+ 782 0016 8CF81030 		strb	r3, [ip, #16]
+ 490:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 491:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Initialize PCCARD status */ 
+ 492:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *pStatus = PCCARD_READY;
+ 783              		.loc 1 492 3 is_stmt 1 view .LVU250
+ 784              		.loc 1 492 12 is_stmt 0 view .LVU251
+ 785 001a 4023     		movs	r3, #64
+ 786 001c 1370     		strb	r3, [r2]
+ 493:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     
+ 494:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Set the parameters to write a sector */
+ 495:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_CYLINDER_LOW)  = 0x00;
+ 787              		.loc 1 495 3 is_stmt 1 view .LVU252
+ 788              		.loc 1 495 71 is_stmt 0 view .LVU253
+ 789 001e 164B     		ldr	r3, .L64
+ 790 0020 0020     		movs	r0, #0
+ 791 0022 83F8F400 		strb	r0, [r3, #244]
+ 496:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_CYLINDER_HIGH) = 0x00;
+ 792              		.loc 1 496 3 is_stmt 1 view .LVU254
+ 793              		.loc 1 496 71 is_stmt 0 view .LVU255
+ 794 0026 83F8F500 		strb	r0, [r3, #245]
+ 497:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_SECTOR_NUMBER) = SectorAddress;
+ 795              		.loc 1 497 3 is_stmt 1 view .LVU256
+ 796              		.loc 1 497 71 is_stmt 0 view .LVU257
+ 797 002a C9B2     		uxtb	r1, r1
+ 798              	.LVL74:
+ 799              		.loc 1 497 71 view .LVU258
+ 800 002c 83F8F310 		strb	r1, [r3, #243]
+ 498:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_SECTOR_COUNT)  = 0x01;
+ 801              		.loc 1 498 3 is_stmt 1 view .LVU259
+ 802              		.loc 1 498 71 is_stmt 0 view .LVU260
+ 803 0030 0121     		movs	r1, #1
+ 804 0032 83F8F210 		strb	r1, [r3, #242]
+ 499:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_CARD_HEAD)     = 0xA0;
+ 805              		.loc 1 499 3 is_stmt 1 view .LVU261
+ 806              		.loc 1 499 71 is_stmt 0 view .LVU262
+ 807 0036 A021     		movs	r1, #160
+ 808 0038 83F8F610 		strb	r1, [r3, #246]
+ 500:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD)    = ATA_ERASE_SECTOR_CMD;
+ 809              		.loc 1 500 3 is_stmt 1 view .LVU263
+ 810              		.loc 1 500 71 is_stmt 0 view .LVU264
+ 811 003c C021     		movs	r1, #192
+ 812 003e 83F8F710 		strb	r1, [r3, #247]
+ 501:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 502:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* wait till the PCCARD is ready */
+ 503:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   status =  *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD_ALTERNATE);
+ 813              		.loc 1 503 3 is_stmt 1 view .LVU265
+ARM GAS  /tmp/ccrwPr1N.s 			page 25
+
+
+ 814              		.loc 1 503 10 is_stmt 0 view .LVU266
+ 815 0042 93F8FE30 		ldrb	r3, [r3, #254]	@ zero_extendqisi2
+ 816 0046 DBB2     		uxtb	r3, r3
+ 817              	.LVL75:
+ 504:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 505:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   while((status != PCCARD_STATUS_WRITE_OK) && timeout)
+ 818              		.loc 1 505 3 is_stmt 1 view .LVU267
+ 476:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint8_t status = 0;
+ 819              		.loc 1 476 12 is_stmt 0 view .LVU268
+ 820 0048 4FF48061 		mov	r1, #1024
+ 821              		.loc 1 505 8 view .LVU269
+ 822 004c 04E0     		b	.L59
+ 823              	.LVL76:
+ 824              	.L61:
+ 506:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 507:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     status =  *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD_ALTERNATE);
+ 825              		.loc 1 507 5 is_stmt 1 view .LVU270
+ 826              		.loc 1 507 12 is_stmt 0 view .LVU271
+ 827 004e 0A4B     		ldr	r3, .L64
+ 828              	.LVL77:
+ 829              		.loc 1 507 12 view .LVU272
+ 830 0050 93F8FE30 		ldrb	r3, [r3, #254]	@ zero_extendqisi2
+ 831 0054 DBB2     		uxtb	r3, r3
+ 832              	.LVL78:
+ 508:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     timeout--;
+ 833              		.loc 1 508 5 is_stmt 1 view .LVU273
+ 834              		.loc 1 508 12 is_stmt 0 view .LVU274
+ 835 0056 0139     		subs	r1, r1, #1
+ 836              	.LVL79:
+ 837              	.L59:
+ 505:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 838              		.loc 1 505 8 is_stmt 1 view .LVU275
+ 839 0058 502B     		cmp	r3, #80
+ 840 005a 01D0     		beq	.L60
+ 505:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 841              		.loc 1 505 44 is_stmt 0 discriminator 1 view .LVU276
+ 842 005c 0029     		cmp	r1, #0
+ 843 005e F6D1     		bne	.L61
+ 844              	.L60:
+ 509:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   } 
+ 510:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 511:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(timeout == 0U)
+ 845              		.loc 1 511 3 is_stmt 1 view .LVU277
+ 846              		.loc 1 511 5 is_stmt 0 view .LVU278
+ 847 0060 09B9     		cbnz	r1, .L62
+ 512:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 513:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     *pStatus = PCCARD_TIMEOUT_ERROR;
+ 848              		.loc 1 513 5 is_stmt 1 view .LVU279
+ 849              		.loc 1 513 14 is_stmt 0 view .LVU280
+ 850 0062 6023     		movs	r3, #96
+ 851              	.LVL80:
+ 852              		.loc 1 513 14 view .LVU281
+ 853 0064 1370     		strb	r3, [r2]
+ 854              	.L62:
+ 514:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 515:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 516:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+ARM GAS  /tmp/ccrwPr1N.s 			page 26
+
+
+ 517:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_READY;
+ 855              		.loc 1 517 3 is_stmt 1 view .LVU282
+ 856              		.loc 1 517 18 is_stmt 0 view .LVU283
+ 857 0066 0123     		movs	r3, #1
+ 858 0068 8CF81030 		strb	r3, [ip, #16]
+ 518:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 519:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Process unlocked */
+ 520:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   __HAL_UNLOCK(hpccard);   
+ 859              		.loc 1 520 3 is_stmt 1 view .LVU284
+ 860              		.loc 1 520 3 view .LVU285
+ 861 006c 0020     		movs	r0, #0
+ 862 006e 8CF81100 		strb	r0, [ip, #17]
+ 863              		.loc 1 520 3 view .LVU286
+ 521:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 522:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   return HAL_OK;
+ 864              		.loc 1 522 3 view .LVU287
+ 865              		.loc 1 522 10 is_stmt 0 view .LVU288
+ 866 0072 7047     		bx	lr
+ 867              	.LVL81:
+ 868              	.L63:
+ 480:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 869              		.loc 1 480 3 view .LVU289
+ 870 0074 0220     		movs	r0, #2
+ 871              	.LVL82:
+ 872              	.L58:
+ 523:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+ 873              		.loc 1 523 1 view .LVU290
+ 874 0076 7047     		bx	lr
+ 875              	.L65:
+ 876              		.align	2
+ 877              	.L64:
+ 878 0078 0001009C 		.word	-1677721344
+ 879              		.cfi_endproc
+ 880              	.LFE133:
+ 882              		.section	.text.HAL_PCCARD_Reset,"ax",%progbits
+ 883              		.align	1
+ 884              		.global	HAL_PCCARD_Reset
+ 885              		.syntax unified
+ 886              		.thumb
+ 887              		.thumb_func
+ 888              		.fpu fpv4-sp-d16
+ 890              	HAL_PCCARD_Reset:
+ 891              	.LVL83:
+ 892              	.LFB134:
+ 524:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 525:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 526:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  Reset the PCCARD memory 
+ 527:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 528:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.
+ 529:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval HAL status
+ 530:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 531:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** HAL_StatusTypeDef HAL_PCCARD_Reset(PCCARD_HandleTypeDef *hpccard)
+ 532:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 893              		.loc 1 532 1 is_stmt 1 view -0
+ 894              		.cfi_startproc
+ 895              		@ args = 0, pretend = 0, frame = 0
+ 896              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccrwPr1N.s 			page 27
+
+
+ 897              		@ link register save eliminated.
+ 898              		.loc 1 532 1 is_stmt 0 view .LVU292
+ 899 0000 0346     		mov	r3, r0
+ 533:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Process Locked */
+ 534:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   __HAL_LOCK(hpccard);  
+ 900              		.loc 1 534 3 is_stmt 1 view .LVU293
+ 901              		.loc 1 534 3 view .LVU294
+ 902 0002 427C     		ldrb	r2, [r0, #17]	@ zero_extendqisi2
+ 903 0004 012A     		cmp	r2, #1
+ 904 0006 0ED0     		beq	.L68
+ 905              		.loc 1 534 3 discriminator 2 view .LVU295
+ 906 0008 0122     		movs	r2, #1
+ 907 000a 4274     		strb	r2, [r0, #17]
+ 908              		.loc 1 534 3 discriminator 2 view .LVU296
+ 535:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 536:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+ 537:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(hpccard->State == HAL_PCCARD_STATE_BUSY)
+ 909              		.loc 1 537 3 discriminator 2 view .LVU297
+ 910              		.loc 1 537 13 is_stmt 0 discriminator 2 view .LVU298
+ 911 000c 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 912              	.LVL84:
+ 913              		.loc 1 537 13 discriminator 2 view .LVU299
+ 914 000e C0B2     		uxtb	r0, r0
+ 915              		.loc 1 537 5 discriminator 2 view .LVU300
+ 916 0010 0228     		cmp	r0, #2
+ 917 0012 09D0     		beq	.L67
+ 538:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 539:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      return HAL_BUSY;
+ 540:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 541:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 542:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Provide a SW reset and Read and verify the:
+ 543:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    - PCCard Configuration Option Register at address 0x98000200 --> 0x80
+ 544:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    - Card Configuration and Status Register at address 0x98000202 --> 0x00
+ 545:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    - Pin Replacement Register at address 0x98000204 --> 0x0C
+ 546:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    - Socket and Copy Register at address 0x98000206 --> 0x00
+ 547:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 548:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 549:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+ 550:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_BUSY;
+ 918              		.loc 1 550 3 is_stmt 1 view .LVU301
+ 919              		.loc 1 550 18 is_stmt 0 view .LVU302
+ 920 0014 0222     		movs	r2, #2
+ 921 0016 1A74     		strb	r2, [r3, #16]
+ 551:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 552:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *(__IO uint8_t *)(PCCARD_ATTRIBUTE_SPACE_ADDRESS | ATA_CARD_CONFIGURATION ) = 0x01;
+ 922              		.loc 1 552 3 is_stmt 1 view .LVU303
+ 923              		.loc 1 552 79 is_stmt 0 view .LVU304
+ 924 0018 0122     		movs	r2, #1
+ 925 001a 0449     		ldr	r1, .L69
+ 926 001c 8A70     		strb	r2, [r1, #2]
+ 553:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     
+ 554:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+ 555:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   hpccard->State = HAL_PCCARD_STATE_READY;
+ 927              		.loc 1 555 3 is_stmt 1 view .LVU305
+ 928              		.loc 1 555 18 is_stmt 0 view .LVU306
+ 929 001e 1A74     		strb	r2, [r3, #16]
+ 556:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ARM GAS  /tmp/ccrwPr1N.s 			page 28
+
+
+ 557:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Process unlocked */
+ 558:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   __HAL_UNLOCK(hpccard);  
+ 930              		.loc 1 558 3 is_stmt 1 view .LVU307
+ 931              		.loc 1 558 3 view .LVU308
+ 932 0020 0020     		movs	r0, #0
+ 933 0022 5874     		strb	r0, [r3, #17]
+ 934              		.loc 1 558 3 view .LVU309
+ 559:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 560:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   return HAL_OK;
+ 935              		.loc 1 560 3 view .LVU310
+ 936              		.loc 1 560 10 is_stmt 0 view .LVU311
+ 937 0024 7047     		bx	lr
+ 938              	.LVL85:
+ 939              	.L68:
+ 534:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 940              		.loc 1 534 3 view .LVU312
+ 941 0026 0220     		movs	r0, #2
+ 942              	.LVL86:
+ 943              	.L67:
+ 561:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+ 944              		.loc 1 561 1 view .LVU313
+ 945 0028 7047     		bx	lr
+ 946              	.L70:
+ 947 002a 00BF     		.align	2
+ 948              	.L69:
+ 949 002c 00020098 		.word	-1744829952
+ 950              		.cfi_endproc
+ 951              	.LFE134:
+ 953              		.section	.text.HAL_PCCARD_ITCallback,"ax",%progbits
+ 954              		.align	1
+ 955              		.weak	HAL_PCCARD_ITCallback
+ 956              		.syntax unified
+ 957              		.thumb
+ 958              		.thumb_func
+ 959              		.fpu fpv4-sp-d16
+ 961              	HAL_PCCARD_ITCallback:
+ 962              	.LVL87:
+ 963              	.LFB136:
+ 562:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 563:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 564:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  This function handles PCCARD device interrupt request.
+ 565:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 566:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.
+ 567:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval HAL status
+ 568:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** */
+ 569:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** void HAL_PCCARD_IRQHandler(PCCARD_HandleTypeDef *hpccard)
+ 570:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 571:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check PCCARD interrupt Rising edge flag */
+ 572:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(__FMC_PCCARD_GET_FLAG(hpccard->Instance, FMC_FLAG_RISING_EDGE))
+ 573:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 574:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* PCCARD interrupt callback*/
+ 575:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     HAL_PCCARD_ITCallback(hpccard);
+ 576:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 577:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* Clear PCCARD interrupt Rising edge pending bit */
+ 578:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     __FMC_PCCARD_CLEAR_FLAG(hpccard->Instance, FMC_FLAG_RISING_EDGE);
+ 579:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 580:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ARM GAS  /tmp/ccrwPr1N.s 			page 29
+
+
+ 581:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check PCCARD interrupt Level flag */
+ 582:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(__FMC_PCCARD_GET_FLAG(hpccard->Instance, FMC_FLAG_LEVEL))
+ 583:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 584:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* PCCARD interrupt callback*/
+ 585:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     HAL_PCCARD_ITCallback(hpccard);
+ 586:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 587:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* Clear PCCARD interrupt Level pending bit */
+ 588:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     __FMC_PCCARD_CLEAR_FLAG(hpccard->Instance, FMC_FLAG_LEVEL);
+ 589:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 590:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 591:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check PCCARD interrupt Falling edge flag */
+ 592:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(__FMC_PCCARD_GET_FLAG(hpccard->Instance, FMC_FLAG_FALLING_EDGE))
+ 593:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 594:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* PCCARD interrupt callback*/
+ 595:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     HAL_PCCARD_ITCallback(hpccard);
+ 596:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 597:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* Clear PCCARD interrupt Falling edge pending bit */
+ 598:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     __FMC_PCCARD_CLEAR_FLAG(hpccard->Instance, FMC_FLAG_FALLING_EDGE);
+ 599:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 600:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 601:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check PCCARD interrupt FIFO empty flag */
+ 602:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(__FMC_PCCARD_GET_FLAG(hpccard->Instance, FMC_FLAG_FEMPT))
+ 603:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 604:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* PCCARD interrupt callback*/
+ 605:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     HAL_PCCARD_ITCallback(hpccard);
+ 606:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 607:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     /* Clear PCCARD interrupt FIFO empty pending bit */
+ 608:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     __FMC_PCCARD_CLEAR_FLAG(hpccard->Instance, FMC_FLAG_FEMPT);
+ 609:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }  
+ 610:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+ 611:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 612:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 613:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  PCCARD interrupt feature callback
+ 614:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 615:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.
+ 616:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval None
+ 617:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 618:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** __weak void HAL_PCCARD_ITCallback(PCCARD_HandleTypeDef *hpccard)
+ 619:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 964              		.loc 1 619 1 is_stmt 1 view -0
+ 965              		.cfi_startproc
+ 966              		@ args = 0, pretend = 0, frame = 0
+ 967              		@ frame_needed = 0, uses_anonymous_args = 0
+ 968              		@ link register save eliminated.
+ 620:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Prevent unused argument(s) compilation warning */
+ 621:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   UNUSED(hpccard);
+ 969              		.loc 1 621 3 view .LVU315
+ 622:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* NOTE : This function Should not be modified, when the callback is needed,
+ 623:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****             the HAL_PCCARD_ITCallback could be implemented in the user file
+ 624:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****    */
+ 625:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+ 970              		.loc 1 625 1 is_stmt 0 view .LVU316
+ 971 0000 7047     		bx	lr
+ 972              		.cfi_endproc
+ 973              	.LFE136:
+ 975              		.section	.text.HAL_PCCARD_IRQHandler,"ax",%progbits
+ 976              		.align	1
+ARM GAS  /tmp/ccrwPr1N.s 			page 30
+
+
+ 977              		.global	HAL_PCCARD_IRQHandler
+ 978              		.syntax unified
+ 979              		.thumb
+ 980              		.thumb_func
+ 981              		.fpu fpv4-sp-d16
+ 983              	HAL_PCCARD_IRQHandler:
+ 984              	.LVL88:
+ 985              	.LFB135:
+ 570:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check PCCARD interrupt Rising edge flag */
+ 986              		.loc 1 570 1 is_stmt 1 view -0
+ 987              		.cfi_startproc
+ 988              		@ args = 0, pretend = 0, frame = 0
+ 989              		@ frame_needed = 0, uses_anonymous_args = 0
+ 570:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check PCCARD interrupt Rising edge flag */
+ 990              		.loc 1 570 1 is_stmt 0 view .LVU318
+ 991 0000 10B5     		push	{r4, lr}
+ 992              	.LCFI9:
+ 993              		.cfi_def_cfa_offset 8
+ 994              		.cfi_offset 4, -8
+ 995              		.cfi_offset 14, -4
+ 996 0002 0446     		mov	r4, r0
+ 572:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 997              		.loc 1 572 3 is_stmt 1 view .LVU319
+ 572:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 998              		.loc 1 572 6 is_stmt 0 view .LVU320
+ 999 0004 0368     		ldr	r3, [r0]
+ 1000 0006 5B68     		ldr	r3, [r3, #4]
+ 572:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 1001              		.loc 1 572 5 view .LVU321
+ 1002 0008 13F0010F 		tst	r3, #1
+ 1003 000c 0FD1     		bne	.L78
+ 1004              	.LVL89:
+ 1005              	.L73:
+ 582:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 1006              		.loc 1 582 3 is_stmt 1 view .LVU322
+ 582:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 1007              		.loc 1 582 6 is_stmt 0 view .LVU323
+ 1008 000e 2368     		ldr	r3, [r4]
+ 1009 0010 5B68     		ldr	r3, [r3, #4]
+ 582:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 1010              		.loc 1 582 5 view .LVU324
+ 1011 0012 13F0020F 		tst	r3, #2
+ 1012 0016 12D1     		bne	.L79
+ 1013              	.L74:
+ 592:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 1014              		.loc 1 592 3 is_stmt 1 view .LVU325
+ 592:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 1015              		.loc 1 592 6 is_stmt 0 view .LVU326
+ 1016 0018 2368     		ldr	r3, [r4]
+ 1017 001a 5B68     		ldr	r3, [r3, #4]
+ 592:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 1018              		.loc 1 592 5 view .LVU327
+ 1019 001c 13F0040F 		tst	r3, #4
+ 1020 0020 16D1     		bne	.L80
+ 1021              	.L75:
+ 602:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 1022              		.loc 1 602 3 is_stmt 1 view .LVU328
+ARM GAS  /tmp/ccrwPr1N.s 			page 31
+
+
+ 602:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 1023              		.loc 1 602 6 is_stmt 0 view .LVU329
+ 1024 0022 2368     		ldr	r3, [r4]
+ 1025 0024 5B68     		ldr	r3, [r3, #4]
+ 602:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 1026              		.loc 1 602 5 view .LVU330
+ 1027 0026 13F0400F 		tst	r3, #64
+ 1028 002a 1AD1     		bne	.L81
+ 1029              	.L72:
+ 610:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 1030              		.loc 1 610 1 view .LVU331
+ 1031 002c 10BD     		pop	{r4, pc}
+ 1032              	.LVL90:
+ 1033              	.L78:
+ 575:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 1034              		.loc 1 575 5 is_stmt 1 view .LVU332
+ 1035 002e FFF7FEFF 		bl	HAL_PCCARD_ITCallback
+ 1036              	.LVL91:
+ 578:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 1037              		.loc 1 578 5 view .LVU333
+ 1038 0032 2268     		ldr	r2, [r4]
+ 1039 0034 5368     		ldr	r3, [r2, #4]
+ 1040 0036 23F00103 		bic	r3, r3, #1
+ 1041 003a 5360     		str	r3, [r2, #4]
+ 1042 003c E7E7     		b	.L73
+ 1043              	.L79:
+ 585:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 1044              		.loc 1 585 5 view .LVU334
+ 1045 003e 2046     		mov	r0, r4
+ 1046 0040 FFF7FEFF 		bl	HAL_PCCARD_ITCallback
+ 1047              	.LVL92:
+ 588:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 1048              		.loc 1 588 5 view .LVU335
+ 1049 0044 2268     		ldr	r2, [r4]
+ 1050 0046 5368     		ldr	r3, [r2, #4]
+ 1051 0048 23F00203 		bic	r3, r3, #2
+ 1052 004c 5360     		str	r3, [r2, #4]
+ 1053 004e E3E7     		b	.L74
+ 1054              	.L80:
+ 595:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 1055              		.loc 1 595 5 view .LVU336
+ 1056 0050 2046     		mov	r0, r4
+ 1057 0052 FFF7FEFF 		bl	HAL_PCCARD_ITCallback
+ 1058              	.LVL93:
+ 598:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 1059              		.loc 1 598 5 view .LVU337
+ 1060 0056 2268     		ldr	r2, [r4]
+ 1061 0058 5368     		ldr	r3, [r2, #4]
+ 1062 005a 23F00403 		bic	r3, r3, #4
+ 1063 005e 5360     		str	r3, [r2, #4]
+ 1064 0060 DFE7     		b	.L75
+ 1065              	.L81:
+ 605:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 1066              		.loc 1 605 5 view .LVU338
+ 1067 0062 2046     		mov	r0, r4
+ 1068 0064 FFF7FEFF 		bl	HAL_PCCARD_ITCallback
+ 1069              	.LVL94:
+ARM GAS  /tmp/ccrwPr1N.s 			page 32
+
+
+ 608:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }  
+ 1070              		.loc 1 608 5 view .LVU339
+ 1071 0068 2268     		ldr	r2, [r4]
+ 1072 006a 5368     		ldr	r3, [r2, #4]
+ 1073 006c 23F04003 		bic	r3, r3, #64
+ 1074 0070 5360     		str	r3, [r2, #4]
+ 610:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 1075              		.loc 1 610 1 is_stmt 0 view .LVU340
+ 1076 0072 DBE7     		b	.L72
+ 1077              		.cfi_endproc
+ 1078              	.LFE135:
+ 1080              		.section	.text.HAL_PCCARD_GetState,"ax",%progbits
+ 1081              		.align	1
+ 1082              		.global	HAL_PCCARD_GetState
+ 1083              		.syntax unified
+ 1084              		.thumb
+ 1085              		.thumb_func
+ 1086              		.fpu fpv4-sp-d16
+ 1088              	HAL_PCCARD_GetState:
+ 1089              	.LVL95:
+ 1090              	.LFB137:
+ 626:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 627:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 628:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @}
+ 629:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 630:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 631:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /** @defgroup PCCARD_Exported_Functions_Group3 State functions 
+ 632:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****  *  @brief   Peripheral State functions 
+ 633:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****  *
+ 634:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** @verbatim   
+ 635:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   ==============================================================================
+ 636:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****                       ##### PCCARD State functions #####
+ 637:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   ==============================================================================  
+ 638:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   [..]
+ 639:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     This subsection permits to get in run-time the status of the PCCARD controller 
+ 640:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     and the data flow.
+ 641:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 642:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** @endverbatim
+ 643:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @{
+ 644:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */ 
+ 645:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 646:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 647:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  return the PCCARD controller state
+ 648:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 649:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.
+ 650:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval HAL state
+ 651:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 652:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** HAL_PCCARD_StateTypeDef HAL_PCCARD_GetState(PCCARD_HandleTypeDef *hpccard)
+ 653:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 1091              		.loc 1 653 1 is_stmt 1 view -0
+ 1092              		.cfi_startproc
+ 1093              		@ args = 0, pretend = 0, frame = 0
+ 1094              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1095              		@ link register save eliminated.
+ 654:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   return hpccard->State;
+ 1096              		.loc 1 654 3 view .LVU342
+ 1097              		.loc 1 654 17 is_stmt 0 view .LVU343
+ARM GAS  /tmp/ccrwPr1N.s 			page 33
+
+
+ 1098 0000 007C     		ldrb	r0, [r0, #16]	@ zero_extendqisi2
+ 1099              	.LVL96:
+ 655:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }  
+ 1100              		.loc 1 655 1 view .LVU344
+ 1101 0002 7047     		bx	lr
+ 1102              		.cfi_endproc
+ 1103              	.LFE137:
+ 1105              		.section	.text.HAL_PCCARD_GetStatus,"ax",%progbits
+ 1106              		.align	1
+ 1107              		.global	HAL_PCCARD_GetStatus
+ 1108              		.syntax unified
+ 1109              		.thumb
+ 1110              		.thumb_func
+ 1111              		.fpu fpv4-sp-d16
+ 1113              	HAL_PCCARD_GetStatus:
+ 1114              	.LVL97:
+ 1115              	.LFB138:
+ 656:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****  
+ 657:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 658:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  Get the compact flash memory status
+ 659:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 660:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.       
+ 661:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval New status of the PCCARD operation. This parameter can be:
+ 662:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *          - CompactFlash_TIMEOUT_ERROR: when the previous operation generate 
+ 663:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *            a Timeout error
+ 664:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *          - CompactFlash_READY: when memory is ready for the next operation          
+ 665:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 666:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** HAL_PCCARD_StatusTypeDef HAL_PCCARD_GetStatus(PCCARD_HandleTypeDef *hpccard)
+ 667:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 1116              		.loc 1 667 1 is_stmt 1 view -0
+ 1117              		.cfi_startproc
+ 1118              		@ args = 0, pretend = 0, frame = 0
+ 1119              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1120              		@ link register save eliminated.
+ 668:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint32_t timeout = PCCARD_TIMEOUT_STATUS, status_pccard = 0U;  
+ 1121              		.loc 1 668 3 view .LVU346
+ 669:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 670:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+ 671:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(hpccard->State == HAL_PCCARD_STATE_BUSY)
+ 1122              		.loc 1 671 3 view .LVU347
+ 1123              		.loc 1 671 13 is_stmt 0 view .LVU348
+ 1124 0000 037C     		ldrb	r3, [r0, #16]	@ zero_extendqisi2
+ 1125 0002 DBB2     		uxtb	r3, r3
+ 1126              		.loc 1 671 5 view .LVU349
+ 1127 0004 022B     		cmp	r3, #2
+ 1128 0006 13D0     		beq	.L89
+ 672:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 673:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      return HAL_PCCARD_STATUS_ONGOING;
+ 674:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 675:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 676:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   status_pccard =  *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD_ALTERNATE);
+ 1129              		.loc 1 676 3 is_stmt 1 view .LVU350
+ 1130              		.loc 1 676 20 is_stmt 0 view .LVU351
+ 1131 0008 0A4B     		ldr	r3, .L91
+ 1132 000a 93F8FE00 		ldrb	r0, [r3, #254]	@ zero_extendqisi2
+ 1133              	.LVL98:
+ 1134              		.loc 1 676 20 view .LVU352
+ARM GAS  /tmp/ccrwPr1N.s 			page 34
+
+
+ 1135 000e C0B2     		uxtb	r0, r0
+ 1136              	.LVL99:
+ 677:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 678:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   while((status_pccard == PCCARD_BUSY) && timeout)
+ 1137              		.loc 1 678 3 is_stmt 1 view .LVU353
+ 668:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 1138              		.loc 1 668 12 is_stmt 0 view .LVU354
+ 1139 0010 4FF08073 		mov	r3, #16777216
+ 1140              		.loc 1 678 8 view .LVU355
+ 1141 0014 04E0     		b	.L85
+ 1142              	.LVL100:
+ 1143              	.L87:
+ 679:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 680:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     status_pccard =  *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD_ALTERNATE);
+ 1144              		.loc 1 680 5 is_stmt 1 view .LVU356
+ 1145              		.loc 1 680 22 is_stmt 0 view .LVU357
+ 1146 0016 074A     		ldr	r2, .L91
+ 1147 0018 92F8FE00 		ldrb	r0, [r2, #254]	@ zero_extendqisi2
+ 1148              	.LVL101:
+ 1149              		.loc 1 680 22 view .LVU358
+ 1150 001c C0B2     		uxtb	r0, r0
+ 1151              	.LVL102:
+ 681:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     timeout--;
+ 1152              		.loc 1 681 5 is_stmt 1 view .LVU359
+ 1153              		.loc 1 681 12 is_stmt 0 view .LVU360
+ 1154 001e 013B     		subs	r3, r3, #1
+ 1155              	.LVL103:
+ 1156              	.L85:
+ 678:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 1157              		.loc 1 678 8 is_stmt 1 view .LVU361
+ 1158 0020 8028     		cmp	r0, #128
+ 1159 0022 01D1     		bne	.L86
+ 678:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 1160              		.loc 1 678 40 is_stmt 0 discriminator 1 view .LVU362
+ 1161 0024 002B     		cmp	r3, #0
+ 1162 0026 F6D1     		bne	.L87
+ 1163              	.L86:
+ 682:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 683:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 684:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(timeout == 0U)
+ 1164              		.loc 1 684 3 is_stmt 1 view .LVU363
+ 1165              		.loc 1 684 5 is_stmt 0 view .LVU364
+ 1166 0028 03B9     		cbnz	r3, .L88
+ 685:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {          
+ 686:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     status_pccard =  PCCARD_TIMEOUT_ERROR;      
+ 1167              		.loc 1 686 19 view .LVU365
+ 1168 002a 6020     		movs	r0, #96
+ 1169              	.LVL104:
+ 1170              	.L88:
+ 687:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }   
+ 688:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 689:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Return the operation status */
+ 690:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   return (HAL_PCCARD_StatusTypeDef) status_pccard;      
+ 1171              		.loc 1 690 3 is_stmt 1 view .LVU366
+ 1172              		.loc 1 690 10 is_stmt 0 view .LVU367
+ 1173 002c C0B2     		uxtb	r0, r0
+ 1174              	.LVL105:
+ARM GAS  /tmp/ccrwPr1N.s 			page 35
+
+
+ 1175              		.loc 1 690 10 view .LVU368
+ 1176 002e 7047     		bx	lr
+ 1177              	.LVL106:
+ 1178              	.L89:
+ 673:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 1179              		.loc 1 673 13 view .LVU369
+ 1180 0030 0120     		movs	r0, #1
+ 1181              	.LVL107:
+ 691:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }
+ 1182              		.loc 1 691 1 view .LVU370
+ 1183 0032 7047     		bx	lr
+ 1184              	.L92:
+ 1185              		.align	2
+ 1186              	.L91:
+ 1187 0034 0001009C 		.word	-1677721344
+ 1188              		.cfi_endproc
+ 1189              	.LFE138:
+ 1191              		.section	.text.HAL_PCCARD_ReadStatus,"ax",%progbits
+ 1192              		.align	1
+ 1193              		.global	HAL_PCCARD_ReadStatus
+ 1194              		.syntax unified
+ 1195              		.thumb
+ 1196              		.thumb_func
+ 1197              		.fpu fpv4-sp-d16
+ 1199              	HAL_PCCARD_ReadStatus:
+ 1200              	.LVL108:
+ 1201              	.LFB139:
+ 692:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 693:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** /**
+ 694:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @brief  Reads the Compact Flash memory status using the Read status command
+ 695:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @param  hpccard pointer to a PCCARD_HandleTypeDef structure that contains
+ 696:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *                the configuration information for PCCARD module.      
+ 697:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   * @retval The status of the Compact Flash memory. This parameter can be:
+ 698:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *          - CompactFlash_BUSY: when memory is busy
+ 699:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *          - CompactFlash_READY: when memory is ready for the next operation    
+ 700:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   *          - CompactFlash_ERROR: when the previous operation generates error                
+ 701:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   */
+ 702:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** HAL_PCCARD_StatusTypeDef HAL_PCCARD_ReadStatus(PCCARD_HandleTypeDef *hpccard)
+ 703:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** {
+ 1202              		.loc 1 703 1 is_stmt 1 view -0
+ 1203              		.cfi_startproc
+ 1204              		@ args = 0, pretend = 0, frame = 0
+ 1205              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1206              		@ link register save eliminated.
+ 704:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   uint8_t data = 0U, status_pccard = PCCARD_BUSY;
+ 1207              		.loc 1 704 3 view .LVU372
+ 705:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 706:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Check the PCCARD controller state */
+ 707:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if(hpccard->State == HAL_PCCARD_STATE_BUSY)
+ 1208              		.loc 1 707 3 view .LVU373
+ 1209              		.loc 1 707 13 is_stmt 0 view .LVU374
+ 1210 0000 037C     		ldrb	r3, [r0, #16]	@ zero_extendqisi2
+ 1211 0002 DBB2     		uxtb	r3, r3
+ 1212              		.loc 1 707 5 view .LVU375
+ 1213 0004 022B     		cmp	r3, #2
+ 1214 0006 0CD0     		beq	.L95
+ 708:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ARM GAS  /tmp/ccrwPr1N.s 			page 36
+
+
+ 709:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****      return HAL_PCCARD_STATUS_ONGOING;
+ 710:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   } 
+ 711:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 712:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   /* Read status operation */
+ 713:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   data =  *(__IO uint8_t *)(PCCARD_IO_SPACE_PRIMARY_ADDR | ATA_STATUS_CMD_ALTERNATE);
+ 1215              		.loc 1 713 3 is_stmt 1 view .LVU376
+ 1216              		.loc 1 713 8 is_stmt 0 view .LVU377
+ 1217 0008 084B     		ldr	r3, .L97
+ 1218 000a 93F8FE00 		ldrb	r0, [r3, #254]	@ zero_extendqisi2
+ 1219              	.LVL109:
+ 1220              		.loc 1 713 8 view .LVU378
+ 1221 000e C3B2     		uxtb	r3, r0
+ 1222              	.LVL110:
+ 714:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** 
+ 715:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   if((data & PCCARD_TIMEOUT_ERROR) == PCCARD_TIMEOUT_ERROR)
+ 1223              		.loc 1 715 3 is_stmt 1 view .LVU379
+ 1224 0010 00F06000 		and	r0, r0, #96
+ 1225              		.loc 1 715 5 is_stmt 0 view .LVU380
+ 1226 0014 6028     		cmp	r0, #96
+ 1227 0016 07D0     		beq	.L94
+ 716:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 717:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     status_pccard = PCCARD_TIMEOUT_ERROR;
+ 718:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   } 
+ 719:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   else if((data & PCCARD_READY) == PCCARD_READY)
+ 1228              		.loc 1 719 8 is_stmt 1 view .LVU381
+ 1229              		.loc 1 719 10 is_stmt 0 view .LVU382
+ 1230 0018 13F0400F 		tst	r3, #64
+ 1231 001c 03D1     		bne	.L96
+ 704:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 1232              		.loc 1 704 22 view .LVU383
+ 1233 001e 8020     		movs	r0, #128
+ 1234 0020 7047     		bx	lr
+ 1235              	.LVL111:
+ 1236              	.L95:
+ 709:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   } 
+ 1237              		.loc 1 709 13 view .LVU384
+ 1238 0022 0120     		movs	r0, #1
+ 1239              	.LVL112:
+ 709:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   } 
+ 1240              		.loc 1 709 13 view .LVU385
+ 1241 0024 7047     		bx	lr
+ 1242              	.LVL113:
+ 1243              	.L96:
+ 720:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   {
+ 721:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****     status_pccard = PCCARD_READY;
+ 1244              		.loc 1 721 19 view .LVU386
+ 1245 0026 4020     		movs	r0, #64
+ 1246              	.L94:
+ 1247              	.LVL114:
+ 722:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   }
+ 723:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   
+ 724:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c ****   return (HAL_PCCARD_StatusTypeDef) status_pccard;
+ 725:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pccard.c **** }  
+ 1248              		.loc 1 725 1 view .LVU387
+ 1249 0028 7047     		bx	lr
+ 1250              	.L98:
+ 1251 002a 00BF     		.align	2
+ARM GAS  /tmp/ccrwPr1N.s 			page 37
+
+
+ 1252              	.L97:
+ 1253 002c 0001009C 		.word	-1677721344
+ 1254              		.cfi_endproc
+ 1255              	.LFE139:
+ 1257              		.text
+ 1258              	.Letext0:
+ 1259              		.file 2 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/machine/_default_types.h"
+ 1260              		.file 3 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/sys/_stdint.h"
+ 1261              		.file 4 "./Libraries/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h"
+ 1262              		.file 5 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 1263              		.file 6 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_fmc.h"
+ 1264              		.file 7 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pccard.h"
+ARM GAS  /tmp/ccrwPr1N.s 			page 38
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_hal_pccard.c
+     /tmp/ccrwPr1N.s:18     .text.HAL_PCCARD_MspInit:0000000000000000 $t
+     /tmp/ccrwPr1N.s:26     .text.HAL_PCCARD_MspInit:0000000000000000 HAL_PCCARD_MspInit
+     /tmp/ccrwPr1N.s:42     .text.HAL_PCCARD_Init:0000000000000000 $t
+     /tmp/ccrwPr1N.s:49     .text.HAL_PCCARD_Init:0000000000000000 HAL_PCCARD_Init
+     /tmp/ccrwPr1N.s:148    .text.HAL_PCCARD_MspDeInit:0000000000000000 $t
+     /tmp/ccrwPr1N.s:155    .text.HAL_PCCARD_MspDeInit:0000000000000000 HAL_PCCARD_MspDeInit
+     /tmp/ccrwPr1N.s:170    .text.HAL_PCCARD_DeInit:0000000000000000 $t
+     /tmp/ccrwPr1N.s:177    .text.HAL_PCCARD_DeInit:0000000000000000 HAL_PCCARD_DeInit
+     /tmp/ccrwPr1N.s:214    .text.HAL_PCCARD_Read_ID:0000000000000000 $t
+     /tmp/ccrwPr1N.s:221    .text.HAL_PCCARD_Read_ID:0000000000000000 HAL_PCCARD_Read_ID
+     /tmp/ccrwPr1N.s:365    .text.HAL_PCCARD_Read_ID:0000000000000074 $d
+     /tmp/ccrwPr1N.s:370    .text.HAL_PCCARD_Read_Sector:0000000000000000 $t
+     /tmp/ccrwPr1N.s:377    .text.HAL_PCCARD_Read_Sector:0000000000000000 HAL_PCCARD_Read_Sector
+     /tmp/ccrwPr1N.s:554    .text.HAL_PCCARD_Read_Sector:00000000000000a0 $d
+     /tmp/ccrwPr1N.s:559    .text.HAL_PCCARD_Write_Sector:0000000000000000 $t
+     /tmp/ccrwPr1N.s:566    .text.HAL_PCCARD_Write_Sector:0000000000000000 HAL_PCCARD_Write_Sector
+     /tmp/ccrwPr1N.s:736    .text.HAL_PCCARD_Write_Sector:0000000000000094 $d
+     /tmp/ccrwPr1N.s:741    .text.HAL_PCCARD_Erase_Sector:0000000000000000 $t
+     /tmp/ccrwPr1N.s:748    .text.HAL_PCCARD_Erase_Sector:0000000000000000 HAL_PCCARD_Erase_Sector
+     /tmp/ccrwPr1N.s:878    .text.HAL_PCCARD_Erase_Sector:0000000000000078 $d
+     /tmp/ccrwPr1N.s:883    .text.HAL_PCCARD_Reset:0000000000000000 $t
+     /tmp/ccrwPr1N.s:890    .text.HAL_PCCARD_Reset:0000000000000000 HAL_PCCARD_Reset
+     /tmp/ccrwPr1N.s:949    .text.HAL_PCCARD_Reset:000000000000002c $d
+     /tmp/ccrwPr1N.s:954    .text.HAL_PCCARD_ITCallback:0000000000000000 $t
+     /tmp/ccrwPr1N.s:961    .text.HAL_PCCARD_ITCallback:0000000000000000 HAL_PCCARD_ITCallback
+     /tmp/ccrwPr1N.s:976    .text.HAL_PCCARD_IRQHandler:0000000000000000 $t
+     /tmp/ccrwPr1N.s:983    .text.HAL_PCCARD_IRQHandler:0000000000000000 HAL_PCCARD_IRQHandler
+     /tmp/ccrwPr1N.s:1081   .text.HAL_PCCARD_GetState:0000000000000000 $t
+     /tmp/ccrwPr1N.s:1088   .text.HAL_PCCARD_GetState:0000000000000000 HAL_PCCARD_GetState
+     /tmp/ccrwPr1N.s:1106   .text.HAL_PCCARD_GetStatus:0000000000000000 $t
+     /tmp/ccrwPr1N.s:1113   .text.HAL_PCCARD_GetStatus:0000000000000000 HAL_PCCARD_GetStatus
+     /tmp/ccrwPr1N.s:1187   .text.HAL_PCCARD_GetStatus:0000000000000034 $d
+     /tmp/ccrwPr1N.s:1192   .text.HAL_PCCARD_ReadStatus:0000000000000000 $t
+     /tmp/ccrwPr1N.s:1199   .text.HAL_PCCARD_ReadStatus:0000000000000000 HAL_PCCARD_ReadStatus
+     /tmp/ccrwPr1N.s:1253   .text.HAL_PCCARD_ReadStatus:000000000000002c $d
+
+UNDEFINED SYMBOLS
+FMC_PCCARD_Init
+FMC_PCCARD_CommonSpace_Timing_Init
+FMC_PCCARD_AttributeSpace_Timing_Init
+FMC_PCCARD_IOSpace_Timing_Init
+FMC_PCCARD_DeInit

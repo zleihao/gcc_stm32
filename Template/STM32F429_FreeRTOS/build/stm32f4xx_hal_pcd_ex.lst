@@ -1,0 +1,338 @@
+ARM GAS  /tmp/ccAAuUlL.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_hal_pcd_ex.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_PCDEx_SetTxFiFo,"ax",%progbits
+  18              		.align	1
+  19              		.global	HAL_PCDEx_SetTxFiFo
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	HAL_PCDEx_SetTxFiFo:
+  27              	.LVL0:
+  28              	.LFB126:
+  29              		.file 1 "./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c"
+   1:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /**
+   2:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   ******************************************************************************
+   3:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @file    stm32f4xx_hal_pcd_ex.c
+   4:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @author  MCD Application Team
+   5:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @brief   PCD HAL module driver.
+   6:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *          This file provides firmware functions to manage the following 
+   7:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *          functionalities of the USB Peripheral Controller:
+   8:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *           + Extended features functions
+   9:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *
+  10:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   ******************************************************************************
+  11:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @attention
+  12:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *
+  13:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  14:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *
+  15:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  16:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * are permitted provided that the following conditions are met:
+  17:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  18:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *      this list of conditions and the following disclaimer.
+  19:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  20:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *      this list of conditions and the following disclaimer in the documentation
+  21:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *      and/or other materials provided with the distribution.
+  22:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  23:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *      may be used to endorse or promote products derived from this software
+  24:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *      without specific prior written permission.
+  25:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *
+  26:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  27:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  28:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  29:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ARM GAS  /tmp/ccAAuUlL.s 			page 2
+
+
+  30:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  31:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  32:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  33:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  34:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  35:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  36:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *
+  37:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   ******************************************************************************
+  38:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   */ 
+  39:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** 
+  40:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /* Includes ------------------------------------------------------------------*/
+  41:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** #include "stm32f4xx_hal.h"
+  42:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** 
+  43:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /** @addtogroup STM32F4xx_HAL_Driver
+  44:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @{
+  45:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   */
+  46:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** 
+  47:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /** @defgroup PCDEx PCDEx
+  48:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @brief PCD Extended HAL module driver
+  49:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @{
+  50:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   */
+  51:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** #ifdef HAL_PCD_MODULE_ENABLED
+  52:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** #if defined(STM32F405xx) || defined(STM32F415xx) || defined(STM32F407xx) || defined(STM32F417xx) ||
+  53:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     defined(STM32F427xx) || defined(STM32F437xx) || defined(STM32F429xx) || defined(STM32F439xx) ||
+  54:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     defined(STM32F401xC) || defined(STM32F401xE) || defined(STM32F411xE) || defined(STM32F446xx) ||
+  55:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     defined(STM32F469xx) || defined(STM32F479xx) || defined(STM32F412Zx) || defined(STM32F412Vx) ||
+  56:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     defined(STM32F412Rx) || defined(STM32F412Cx) || defined(STM32F413xx) || defined(STM32F423xx)
+  57:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /* Private types -------------------------------------------------------------*/
+  58:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /* Private variables ---------------------------------------------------------*/
+  59:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /* Private constants ---------------------------------------------------------*/
+  60:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /* Private macros ------------------------------------------------------------*/
+  61:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /* Private functions ---------------------------------------------------------*/
+  62:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /* Exported functions --------------------------------------------------------*/
+  63:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** 
+  64:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /** @defgroup PCDEx_Exported_Functions PCD Extended Exported Functions
+  65:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @{
+  66:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   */
+  67:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** 
+  68:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /** @defgroup PCDEx_Exported_Functions_Group1 Peripheral Control functions
+  69:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @brief    PCDEx control functions 
+  70:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   *
+  71:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** @verbatim  
+  72:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****  ===============================================================================
+  73:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****                  ##### Extended features functions #####
+  74:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****  ===============================================================================  
+  75:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     [..]  This section provides functions allowing to:
+  76:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****       (+) Update FIFO configuration
+  77:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** 
+  78:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** @endverbatim
+  79:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @{
+  80:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   */
+  81:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** 
+  82:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /**
+  83:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @brief  Set Tx FIFO
+  84:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @param  hpcd PCD handle
+  85:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @param  fifo The number of Tx fifo
+  86:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @param  size Fifo size
+ARM GAS  /tmp/ccAAuUlL.s 			page 3
+
+
+  87:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @retval HAL status
+  88:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   */
+  89:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** HAL_StatusTypeDef HAL_PCDEx_SetTxFiFo(PCD_HandleTypeDef *hpcd, uint8_t fifo, uint16_t size)
+  90:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** {
+  30              		.loc 1 90 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  35              		.loc 1 90 1 is_stmt 0 view .LVU1
+  36 0000 10B4     		push	{r4}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 4
+  39              		.cfi_offset 4, -4
+  91:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   uint8_t i = 0;
+  40              		.loc 1 91 3 is_stmt 1 view .LVU2
+  41              	.LVL1:
+  92:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   uint32_t Tx_Offset = 0U;
+  42              		.loc 1 92 3 view .LVU3
+  93:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** 
+  94:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   /*  TXn min size = 16 words. (n  : Transmit FIFO index)
+  95:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****       When a TxFIFO is not used, the Configuration should be as follows: 
+  96:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****           case 1 :  n > m    and Txn is not used    (n,m  : Transmit FIFO indexes)
+  97:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****          --> Txm can use the space allocated for Txn.
+  98:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****          case2  :  n < m    and Txn is not used    (n,m  : Transmit FIFO indexes)
+  99:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****          --> Txn should be configured with the minimum space of 16 words
+ 100:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****      The FIFO is used optimally when used TxFIFOs are allocated in the top 
+ 101:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****          of the FIFO.Ex: use EP1 and EP2 as IN instead of EP1 and EP3 as IN ones.
+ 102:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****      When DMA is used 3n * FIFO locations should be reserved for internal DMA registers */
+ 103:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   
+ 104:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   Tx_Offset = hpcd->Instance->GRXFSIZ;
+  43              		.loc 1 104 3 view .LVU4
+  44              		.loc 1 104 19 is_stmt 0 view .LVU5
+  45 0002 0468     		ldr	r4, [r0]
+  46              		.loc 1 104 13 view .LVU6
+  47 0004 606A     		ldr	r0, [r4, #36]
+  48              	.LVL2:
+ 105:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   
+ 106:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   if(fifo == 0)
+  49              		.loc 1 106 3 is_stmt 1 view .LVU7
+  50              		.loc 1 106 5 is_stmt 0 view .LVU8
+  51 0006 31B9     		cbnz	r1, .L2
+ 107:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   {
+ 108:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     hpcd->Instance->DIEPTXF0_HNPTXFSIZ = (uint32_t)(((uint32_t)size << 16U) | Tx_Offset);
+  52              		.loc 1 108 5 is_stmt 1 view .LVU9
+  53              		.loc 1 108 42 is_stmt 0 view .LVU10
+  54 0008 40EA0240 		orr	r0, r0, r2, lsl #16
+  55              	.LVL3:
+  56              		.loc 1 108 40 view .LVU11
+  57 000c A062     		str	r0, [r4, #40]
+  58              	.LVL4:
+  59              	.L3:
+ 109:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   }
+ 110:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   else
+ 111:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   {
+ 112:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     Tx_Offset += (hpcd->Instance->DIEPTXF0_HNPTXFSIZ) >> 16U;
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     for (i = 0; i < (fifo - 1); i++)
+ARM GAS  /tmp/ccAAuUlL.s 			page 4
+
+
+ 114:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     {
+ 115:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****       Tx_Offset += (hpcd->Instance->DIEPTXF[i] >> 16U);
+ 116:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     }
+ 117:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     
+ 118:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     /* Multiply Tx_Size by 2 to get higher performance */
+ 119:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     hpcd->Instance->DIEPTXF[fifo - 1] = (uint32_t)(((uint32_t)size << 16U) | Tx_Offset);        
+ 120:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   }
+ 121:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   
+ 122:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   return HAL_OK;
+  60              		.loc 1 122 3 is_stmt 1 view .LVU12
+ 123:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** }
+  61              		.loc 1 123 1 is_stmt 0 view .LVU13
+  62 000e 0020     		movs	r0, #0
+  63 0010 5DF8044B 		ldr	r4, [sp], #4
+  64              	.LCFI1:
+  65              		.cfi_remember_state
+  66              		.cfi_restore 4
+  67              		.cfi_def_cfa_offset 0
+  68 0014 7047     		bx	lr
+  69              	.LVL5:
+  70              	.L2:
+  71              	.LCFI2:
+  72              		.cfi_restore_state
+  73              		.loc 1 123 1 view .LVU14
+  74 0016 8C46     		mov	ip, r1
+ 112:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     for (i = 0; i < (fifo - 1); i++)
+  75              		.loc 1 112 5 is_stmt 1 view .LVU15
+ 112:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     for (i = 0; i < (fifo - 1); i++)
+  76              		.loc 1 112 33 is_stmt 0 view .LVU16
+  77 0018 A36A     		ldr	r3, [r4, #40]
+ 112:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     for (i = 0; i < (fifo - 1); i++)
+  78              		.loc 1 112 15 view .LVU17
+  79 001a 00EB1340 		add	r0, r0, r3, lsr #16
+  80              	.LVL6:
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     {
+  81              		.loc 1 113 5 is_stmt 1 view .LVU18
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     {
+  82              		.loc 1 113 12 is_stmt 0 view .LVU19
+  83 001e 0023     		movs	r3, #0
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     {
+  84              		.loc 1 113 5 view .LVU20
+  85 0020 08E0     		b	.L4
+  86              	.LVL7:
+  87              	.L5:
+ 115:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     }
+  88              		.loc 1 115 7 is_stmt 1 discriminator 3 view .LVU21
+ 115:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     }
+  89              		.loc 1 115 44 is_stmt 0 discriminator 3 view .LVU22
+  90 0022 03F14001 		add	r1, r3, #64
+  91 0026 04EB8101 		add	r1, r4, r1, lsl #2
+  92 002a 4968     		ldr	r1, [r1, #4]
+ 115:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     }
+  93              		.loc 1 115 17 discriminator 3 view .LVU23
+  94 002c 00EB1140 		add	r0, r0, r1, lsr #16
+  95              	.LVL8:
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     {
+  96              		.loc 1 113 33 is_stmt 1 discriminator 3 view .LVU24
+ARM GAS  /tmp/ccAAuUlL.s 			page 5
+
+
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     {
+  97              		.loc 1 113 34 is_stmt 0 discriminator 3 view .LVU25
+  98 0030 0133     		adds	r3, r3, #1
+  99              	.LVL9:
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     {
+ 100              		.loc 1 113 34 discriminator 3 view .LVU26
+ 101 0032 DBB2     		uxtb	r3, r3
+ 102              	.LVL10:
+ 103              	.L4:
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     {
+ 104              		.loc 1 113 17 is_stmt 1 discriminator 1 view .LVU27
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     {
+ 105              		.loc 1 113 27 is_stmt 0 discriminator 1 view .LVU28
+ 106 0034 0CF1FF31 		add	r1, ip, #-1
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****     {
+ 107              		.loc 1 113 5 discriminator 1 view .LVU29
+ 108 0038 8B42     		cmp	r3, r1
+ 109 003a F2DB     		blt	.L5
+ 119:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   }
+ 110              		.loc 1 119 5 is_stmt 1 view .LVU30
+ 119:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   }
+ 111              		.loc 1 119 41 is_stmt 0 view .LVU31
+ 112 003c 40EA0240 		orr	r0, r0, r2, lsl #16
+ 113              	.LVL11:
+ 119:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   }
+ 114              		.loc 1 119 39 view .LVU32
+ 115 0040 0CF13F01 		add	r1, ip, #63
+ 116 0044 04EB8101 		add	r1, r4, r1, lsl #2
+ 117 0048 4860     		str	r0, [r1, #4]
+ 118 004a E0E7     		b	.L3
+ 119              		.cfi_endproc
+ 120              	.LFE126:
+ 122              		.section	.text.HAL_PCDEx_SetRxFiFo,"ax",%progbits
+ 123              		.align	1
+ 124              		.global	HAL_PCDEx_SetRxFiFo
+ 125              		.syntax unified
+ 126              		.thumb
+ 127              		.thumb_func
+ 128              		.fpu fpv4-sp-d16
+ 130              	HAL_PCDEx_SetRxFiFo:
+ 131              	.LVL12:
+ 132              	.LFB127:
+ 124:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** 
+ 125:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** /**
+ 126:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @brief  Set Rx FIFO
+ 127:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @param  hpcd PCD handle
+ 128:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @param  size Size of Rx fifo
+ 129:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   * @retval HAL status
+ 130:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   */
+ 131:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** HAL_StatusTypeDef HAL_PCDEx_SetRxFiFo(PCD_HandleTypeDef *hpcd, uint16_t size)
+ 132:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** {
+ 133              		.loc 1 132 1 is_stmt 1 view -0
+ 134              		.cfi_startproc
+ 135              		@ args = 0, pretend = 0, frame = 0
+ 136              		@ frame_needed = 0, uses_anonymous_args = 0
+ 137              		@ link register save eliminated.
+ 133:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   hpcd->Instance->GRXFSIZ = size;
+ARM GAS  /tmp/ccAAuUlL.s 			page 6
+
+
+ 138              		.loc 1 133 3 view .LVU34
+ 139              		.loc 1 133 7 is_stmt 0 view .LVU35
+ 140 0000 0368     		ldr	r3, [r0]
+ 141              		.loc 1 133 27 view .LVU36
+ 142 0002 5962     		str	r1, [r3, #36]
+ 134:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   
+ 135:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c ****   return HAL_OK;
+ 143              		.loc 1 135 3 is_stmt 1 view .LVU37
+ 136:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pcd_ex.c **** }
+ 144              		.loc 1 136 1 is_stmt 0 view .LVU38
+ 145 0004 0020     		movs	r0, #0
+ 146              	.LVL13:
+ 147              		.loc 1 136 1 view .LVU39
+ 148 0006 7047     		bx	lr
+ 149              		.cfi_endproc
+ 150              	.LFE127:
+ 152              		.text
+ 153              	.Letext0:
+ 154              		.file 2 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/machine/_default_types.h"
+ 155              		.file 3 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/sys/_stdint.h"
+ 156              		.file 4 "./Libraries/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h"
+ 157              		.file 5 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 158              		.file 6 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h"
+ 159              		.file 7 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h"
+ARM GAS  /tmp/ccAAuUlL.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_hal_pcd_ex.c
+     /tmp/ccAAuUlL.s:18     .text.HAL_PCDEx_SetTxFiFo:0000000000000000 $t
+     /tmp/ccAAuUlL.s:26     .text.HAL_PCDEx_SetTxFiFo:0000000000000000 HAL_PCDEx_SetTxFiFo
+     /tmp/ccAAuUlL.s:123    .text.HAL_PCDEx_SetRxFiFo:0000000000000000 $t
+     /tmp/ccAAuUlL.s:130    .text.HAL_PCDEx_SetRxFiFo:0000000000000000 HAL_PCDEx_SetRxFiFo
+
+NO UNDEFINED SYMBOLS

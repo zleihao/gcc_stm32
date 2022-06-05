@@ -1,0 +1,2352 @@
+ARM GAS  /tmp/cc2QYl5T.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.Error_Handler,"ax",%progbits
+  18              		.align	1
+  19              		.global	Error_Handler
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	Error_Handler:
+  27              	.LFB134:
+  28              		.file 1 "./User/Src/main.c"
+   1:./User/Src/main.c **** /**		 
+   2:./User/Src/main.c ****  * @Date:               2022.3.16 
+   3:./User/Src/main.c ****  * @Revision:           V1.0
+   4:./User/Src/main.c ****  * @author:             点灯大师
+   5:./User/Src/main.c ****  * @Affiliated unit：   黄河科技学院
+   6:./User/Src/main.c ****  * @Description:        基于STM32F429的FreeRtos工程
+   7:./User/Src/main.c ****  * @Email:              im_leihao@163.com
+   8:./User/Src/main.c ****  * @github:             https://github.com/zleihao/stm32_drive.git
+   9:./User/Src/main.c ****  */
+  10:./User/Src/main.c **** 
+  11:./User/Src/main.c **** #include "main.h"
+  12:./User/Src/main.c **** 
+  13:./User/Src/main.c **** #include "FreeRTOS.h"
+  14:./User/Src/main.c **** #include "task.h"
+  15:./User/Src/main.c **** #include "bsp_debug_usart.h"
+  16:./User/Src/main.c **** 
+  17:./User/Src/main.c **** //板级支持包
+  18:./User/Src/main.c **** static void BSP_Init(void)
+  19:./User/Src/main.c **** {
+  20:./User/Src/main.c ****   NVIC_SetPriorityGrouping(4);
+  21:./User/Src/main.c **** 	 
+  22:./User/Src/main.c **** 	/***********系统时钟 勿删************************/
+  23:./User/Src/main.c **** 	HAL_Init();
+  24:./User/Src/main.c ****   SystemClock_Config();
+  25:./User/Src/main.c **** 	/************************************************/
+  26:./User/Src/main.c **** 	
+  27:./User/Src/main.c **** 	//初始化 USART1
+  28:./User/Src/main.c **** 	DEBUG_USART_Config();
+  29:./User/Src/main.c **** }
+  30:./User/Src/main.c **** 
+ARM GAS  /tmp/cc2QYl5T.s 			page 2
+
+
+  31:./User/Src/main.c **** /************************************ END *******************************************/
+  32:./User/Src/main.c **** 
+  33:./User/Src/main.c **** 
+  34:./User/Src/main.c **** int main(void)
+  35:./User/Src/main.c **** {
+  36:./User/Src/main.c **** 	
+  37:./User/Src/main.c ****   BSP_Init();
+  38:./User/Src/main.c **** 	printf("FreeRtos 模板\n");
+  39:./User/Src/main.c ****   
+  40:./User/Src/main.c ****   while (1)
+  41:./User/Src/main.c ****   {
+  42:./User/Src/main.c ****   
+  43:./User/Src/main.c ****   }
+  44:./User/Src/main.c **** 
+  45:./User/Src/main.c **** }
+  46:./User/Src/main.c **** 
+  47:./User/Src/main.c **** 
+  48:./User/Src/main.c **** 
+  49:./User/Src/main.c **** 
+  50:./User/Src/main.c **** 
+  51:./User/Src/main.c **** /*****************************************************************************/
+  52:./User/Src/main.c **** //以下为配置系统时钟，请不要删除
+  53:./User/Src/main.c **** /**
+  54:./User/Src/main.c ****   * @brief System Clock Configuration
+  55:./User/Src/main.c ****   * @retval None
+  56:./User/Src/main.c ****   */
+  57:./User/Src/main.c **** void SystemClock_Config(void)
+  58:./User/Src/main.c **** {
+  59:./User/Src/main.c ****   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  60:./User/Src/main.c ****   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  61:./User/Src/main.c **** 
+  62:./User/Src/main.c ****   /** Configure the main internal regulator output voltage
+  63:./User/Src/main.c ****   */
+  64:./User/Src/main.c ****   __HAL_RCC_PWR_CLK_ENABLE();
+  65:./User/Src/main.c ****   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+  66:./User/Src/main.c ****   /** Initializes the RCC Oscillators according to the specified parameters
+  67:./User/Src/main.c ****   * in the RCC_OscInitTypeDef structure.
+  68:./User/Src/main.c ****   */
+  69:./User/Src/main.c ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  70:./User/Src/main.c ****   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  71:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  72:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  73:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLM = 15;
+  74:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLN = 216;
+  75:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  76:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLQ = 4;
+  77:./User/Src/main.c ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  78:./User/Src/main.c ****   {
+  79:./User/Src/main.c ****     Error_Handler();
+  80:./User/Src/main.c ****   }
+  81:./User/Src/main.c ****   /** Activate the Over-Drive mode
+  82:./User/Src/main.c ****   */
+  83:./User/Src/main.c ****   if (HAL_PWREx_EnableOverDrive() != HAL_OK)
+  84:./User/Src/main.c ****   {
+  85:./User/Src/main.c ****     Error_Handler();
+  86:./User/Src/main.c ****   }
+  87:./User/Src/main.c ****   /** Initializes the CPU, AHB and APB buses clocks
+ARM GAS  /tmp/cc2QYl5T.s 			page 3
+
+
+  88:./User/Src/main.c ****   */
+  89:./User/Src/main.c ****   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+  90:./User/Src/main.c ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  91:./User/Src/main.c ****   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  92:./User/Src/main.c ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  93:./User/Src/main.c ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+  94:./User/Src/main.c ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+  95:./User/Src/main.c **** 
+  96:./User/Src/main.c ****   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
+  97:./User/Src/main.c ****   {
+  98:./User/Src/main.c ****     Error_Handler();
+  99:./User/Src/main.c ****   }
+ 100:./User/Src/main.c **** }
+ 101:./User/Src/main.c **** 
+ 102:./User/Src/main.c **** /**
+ 103:./User/Src/main.c ****   * @brief  This function is executed in case of error occurrence.
+ 104:./User/Src/main.c ****   * @retval None
+ 105:./User/Src/main.c ****   */
+ 106:./User/Src/main.c **** void Error_Handler(void)
+ 107:./User/Src/main.c **** {
+  29              		.loc 1 107 1 view -0
+  30              		.cfi_startproc
+  31              		@ Volatile: function does not return.
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+ 108:./User/Src/main.c ****   /* USER CODE BEGIN Error_Handler_Debug */
+ 109:./User/Src/main.c ****   /* User can add his own implementation to report the HAL error return state */
+ 110:./User/Src/main.c ****   __disable_irq();
+  35              		.loc 1 110 3 view .LVU1
+  36              	.LBB6:
+  37              	.LBI6:
+  38              		.file 2 "./Libraries/CMSIS/Include/cmsis_gcc.h"
+   1:./Libraries/CMSIS/Include/cmsis_gcc.h **** /**************************************************************************//**
+   2:./Libraries/CMSIS/Include/cmsis_gcc.h ****  * @file     cmsis_gcc.h
+   3:./Libraries/CMSIS/Include/cmsis_gcc.h ****  * @brief    CMSIS Cortex-M Core Function/Instruction Header File
+   4:./Libraries/CMSIS/Include/cmsis_gcc.h ****  * @version  V4.30
+   5:./Libraries/CMSIS/Include/cmsis_gcc.h ****  * @date     20. October 2015
+   6:./Libraries/CMSIS/Include/cmsis_gcc.h ****  ******************************************************************************/
+   7:./Libraries/CMSIS/Include/cmsis_gcc.h **** /* Copyright (c) 2009 - 2015 ARM LIMITED
+   8:./Libraries/CMSIS/Include/cmsis_gcc.h **** 
+   9:./Libraries/CMSIS/Include/cmsis_gcc.h ****    All rights reserved.
+  10:./Libraries/CMSIS/Include/cmsis_gcc.h ****    Redistribution and use in source and binary forms, with or without
+  11:./Libraries/CMSIS/Include/cmsis_gcc.h ****    modification, are permitted provided that the following conditions are met:
+  12:./Libraries/CMSIS/Include/cmsis_gcc.h ****    - Redistributions of source code must retain the above copyright
+  13:./Libraries/CMSIS/Include/cmsis_gcc.h ****      notice, this list of conditions and the following disclaimer.
+  14:./Libraries/CMSIS/Include/cmsis_gcc.h ****    - Redistributions in binary form must reproduce the above copyright
+  15:./Libraries/CMSIS/Include/cmsis_gcc.h ****      notice, this list of conditions and the following disclaimer in the
+  16:./Libraries/CMSIS/Include/cmsis_gcc.h ****      documentation and/or other materials provided with the distribution.
+  17:./Libraries/CMSIS/Include/cmsis_gcc.h ****    - Neither the name of ARM nor the names of its contributors may be used
+  18:./Libraries/CMSIS/Include/cmsis_gcc.h ****      to endorse or promote products derived from this software without
+  19:./Libraries/CMSIS/Include/cmsis_gcc.h ****      specific prior written permission.
+  20:./Libraries/CMSIS/Include/cmsis_gcc.h ****    *
+  21:./Libraries/CMSIS/Include/cmsis_gcc.h ****    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:./Libraries/CMSIS/Include/cmsis_gcc.h ****    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:./Libraries/CMSIS/Include/cmsis_gcc.h ****    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:./Libraries/CMSIS/Include/cmsis_gcc.h ****    ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+ARM GAS  /tmp/cc2QYl5T.s 			page 4
+
+
+  25:./Libraries/CMSIS/Include/cmsis_gcc.h ****    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:./Libraries/CMSIS/Include/cmsis_gcc.h ****    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:./Libraries/CMSIS/Include/cmsis_gcc.h ****    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:./Libraries/CMSIS/Include/cmsis_gcc.h ****    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:./Libraries/CMSIS/Include/cmsis_gcc.h ****    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:./Libraries/CMSIS/Include/cmsis_gcc.h ****    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:./Libraries/CMSIS/Include/cmsis_gcc.h ****    POSSIBILITY OF SUCH DAMAGE.
+  32:./Libraries/CMSIS/Include/cmsis_gcc.h ****    ---------------------------------------------------------------------------*/
+  33:./Libraries/CMSIS/Include/cmsis_gcc.h **** 
+  34:./Libraries/CMSIS/Include/cmsis_gcc.h **** 
+  35:./Libraries/CMSIS/Include/cmsis_gcc.h **** #ifndef __CMSIS_GCC_H
+  36:./Libraries/CMSIS/Include/cmsis_gcc.h **** #define __CMSIS_GCC_H
+  37:./Libraries/CMSIS/Include/cmsis_gcc.h **** 
+  38:./Libraries/CMSIS/Include/cmsis_gcc.h **** /* ignore some GCC warnings */
+  39:./Libraries/CMSIS/Include/cmsis_gcc.h **** #if defined ( __GNUC__ )
+  40:./Libraries/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic push
+  41:./Libraries/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wsign-conversion"
+  42:./Libraries/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wconversion"
+  43:./Libraries/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wunused-parameter"
+  44:./Libraries/CMSIS/Include/cmsis_gcc.h **** #endif
+  45:./Libraries/CMSIS/Include/cmsis_gcc.h **** 
+  46:./Libraries/CMSIS/Include/cmsis_gcc.h **** 
+  47:./Libraries/CMSIS/Include/cmsis_gcc.h **** /* ###########################  Core Function Access  ########################### */
+  48:./Libraries/CMSIS/Include/cmsis_gcc.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+  49:./Libraries/CMSIS/Include/cmsis_gcc.h ****     \defgroup CMSIS_Core_RegAccFunctions CMSIS Core Register Access Functions
+  50:./Libraries/CMSIS/Include/cmsis_gcc.h ****   @{
+  51:./Libraries/CMSIS/Include/cmsis_gcc.h ****  */
+  52:./Libraries/CMSIS/Include/cmsis_gcc.h **** 
+  53:./Libraries/CMSIS/Include/cmsis_gcc.h **** /**
+  54:./Libraries/CMSIS/Include/cmsis_gcc.h ****   \brief   Enable IRQ Interrupts
+  55:./Libraries/CMSIS/Include/cmsis_gcc.h ****   \details Enables IRQ interrupts by clearing the I-bit in the CPSR.
+  56:./Libraries/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+  57:./Libraries/CMSIS/Include/cmsis_gcc.h ****  */
+  58:./Libraries/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_irq(void)
+  59:./Libraries/CMSIS/Include/cmsis_gcc.h **** {
+  60:./Libraries/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsie i" : : : "memory");
+  61:./Libraries/CMSIS/Include/cmsis_gcc.h **** }
+  62:./Libraries/CMSIS/Include/cmsis_gcc.h **** 
+  63:./Libraries/CMSIS/Include/cmsis_gcc.h **** 
+  64:./Libraries/CMSIS/Include/cmsis_gcc.h **** /**
+  65:./Libraries/CMSIS/Include/cmsis_gcc.h ****   \brief   Disable IRQ Interrupts
+  66:./Libraries/CMSIS/Include/cmsis_gcc.h ****   \details Disables IRQ interrupts by setting the I-bit in the CPSR.
+  67:./Libraries/CMSIS/Include/cmsis_gcc.h ****   Can only be executed in Privileged modes.
+  68:./Libraries/CMSIS/Include/cmsis_gcc.h ****  */
+  69:./Libraries/CMSIS/Include/cmsis_gcc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_irq(void)
+  39              		.loc 2 69 57 view .LVU2
+  40              	.LBB7:
+  70:./Libraries/CMSIS/Include/cmsis_gcc.h **** {
+  71:./Libraries/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsid i" : : : "memory");
+  41              		.loc 2 71 3 view .LVU3
+  42              		.syntax unified
+  43              	@ 71 "./Libraries/CMSIS/Include/cmsis_gcc.h" 1
+  44 0000 72B6     		cpsid i
+  45              	@ 0 "" 2
+  46              		.thumb
+  47              		.syntax unified
+  48              	.L2:
+ARM GAS  /tmp/cc2QYl5T.s 			page 5
+
+
+  49              	.LBE7:
+  50              	.LBE6:
+ 111:./User/Src/main.c ****   while (1)
+  51              		.loc 1 111 3 discriminator 1 view .LVU4
+ 112:./User/Src/main.c ****   {
+ 113:./User/Src/main.c ****   }
+  52              		.loc 1 113 3 discriminator 1 view .LVU5
+ 111:./User/Src/main.c ****   while (1)
+  53              		.loc 1 111 9 discriminator 1 view .LVU6
+  54 0002 FEE7     		b	.L2
+  55              		.cfi_endproc
+  56              	.LFE134:
+  58              		.section	.text.SystemClock_Config,"ax",%progbits
+  59              		.align	1
+  60              		.global	SystemClock_Config
+  61              		.syntax unified
+  62              		.thumb
+  63              		.thumb_func
+  64              		.fpu fpv4-sp-d16
+  66              	SystemClock_Config:
+  67              	.LFB133:
+  58:./User/Src/main.c ****   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  68              		.loc 1 58 1 view -0
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 80
+  71              		@ frame_needed = 0, uses_anonymous_args = 0
+  72 0000 00B5     		push	{lr}
+  73              	.LCFI0:
+  74              		.cfi_def_cfa_offset 4
+  75              		.cfi_offset 14, -4
+  76 0002 95B0     		sub	sp, sp, #84
+  77              	.LCFI1:
+  78              		.cfi_def_cfa_offset 88
+  59:./User/Src/main.c ****   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  79              		.loc 1 59 3 view .LVU8
+  59:./User/Src/main.c ****   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  80              		.loc 1 59 22 is_stmt 0 view .LVU9
+  81 0004 3022     		movs	r2, #48
+  82 0006 0021     		movs	r1, #0
+  83 0008 08A8     		add	r0, sp, #32
+  84 000a FFF7FEFF 		bl	memset
+  85              	.LVL0:
+  60:./User/Src/main.c **** 
+  86              		.loc 1 60 3 is_stmt 1 view .LVU10
+  60:./User/Src/main.c **** 
+  87              		.loc 1 60 22 is_stmt 0 view .LVU11
+  88 000e 0023     		movs	r3, #0
+  89 0010 0393     		str	r3, [sp, #12]
+  90 0012 0493     		str	r3, [sp, #16]
+  91 0014 0593     		str	r3, [sp, #20]
+  92 0016 0693     		str	r3, [sp, #24]
+  93 0018 0793     		str	r3, [sp, #28]
+  64:./User/Src/main.c ****   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+  94              		.loc 1 64 3 is_stmt 1 view .LVU12
+  95              	.LBB8:
+  64:./User/Src/main.c ****   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+  96              		.loc 1 64 3 view .LVU13
+ARM GAS  /tmp/cc2QYl5T.s 			page 6
+
+
+  97 001a 0193     		str	r3, [sp, #4]
+  64:./User/Src/main.c ****   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+  98              		.loc 1 64 3 view .LVU14
+  99 001c 234A     		ldr	r2, .L11
+ 100 001e 116C     		ldr	r1, [r2, #64]
+ 101 0020 41F08051 		orr	r1, r1, #268435456
+ 102 0024 1164     		str	r1, [r2, #64]
+  64:./User/Src/main.c ****   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+ 103              		.loc 1 64 3 view .LVU15
+ 104 0026 126C     		ldr	r2, [r2, #64]
+ 105 0028 02F08052 		and	r2, r2, #268435456
+ 106 002c 0192     		str	r2, [sp, #4]
+  64:./User/Src/main.c ****   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+ 107              		.loc 1 64 3 view .LVU16
+ 108 002e 019A     		ldr	r2, [sp, #4]
+ 109              	.LBE8:
+  64:./User/Src/main.c ****   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+ 110              		.loc 1 64 3 view .LVU17
+  65:./User/Src/main.c ****   /** Initializes the RCC Oscillators according to the specified parameters
+ 111              		.loc 1 65 3 view .LVU18
+ 112              	.LBB9:
+  65:./User/Src/main.c ****   /** Initializes the RCC Oscillators according to the specified parameters
+ 113              		.loc 1 65 3 view .LVU19
+ 114 0030 0293     		str	r3, [sp, #8]
+  65:./User/Src/main.c ****   /** Initializes the RCC Oscillators according to the specified parameters
+ 115              		.loc 1 65 3 view .LVU20
+ 116 0032 1F4B     		ldr	r3, .L11+4
+ 117 0034 1A68     		ldr	r2, [r3]
+ 118 0036 42F44042 		orr	r2, r2, #49152
+ 119 003a 1A60     		str	r2, [r3]
+  65:./User/Src/main.c ****   /** Initializes the RCC Oscillators according to the specified parameters
+ 120              		.loc 1 65 3 view .LVU21
+ 121 003c 1B68     		ldr	r3, [r3]
+ 122 003e 03F44043 		and	r3, r3, #49152
+ 123 0042 0293     		str	r3, [sp, #8]
+  65:./User/Src/main.c ****   /** Initializes the RCC Oscillators according to the specified parameters
+ 124              		.loc 1 65 3 view .LVU22
+ 125 0044 029B     		ldr	r3, [sp, #8]
+ 126              	.LBE9:
+  65:./User/Src/main.c ****   /** Initializes the RCC Oscillators according to the specified parameters
+ 127              		.loc 1 65 3 view .LVU23
+  69:./User/Src/main.c ****   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+ 128              		.loc 1 69 3 view .LVU24
+  69:./User/Src/main.c ****   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+ 129              		.loc 1 69 36 is_stmt 0 view .LVU25
+ 130 0046 0123     		movs	r3, #1
+ 131 0048 0893     		str	r3, [sp, #32]
+  70:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+ 132              		.loc 1 70 3 is_stmt 1 view .LVU26
+  70:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+ 133              		.loc 1 70 30 is_stmt 0 view .LVU27
+ 134 004a 4FF48033 		mov	r3, #65536
+ 135 004e 0993     		str	r3, [sp, #36]
+  71:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+ 136              		.loc 1 71 3 is_stmt 1 view .LVU28
+  71:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+ 137              		.loc 1 71 34 is_stmt 0 view .LVU29
+ARM GAS  /tmp/cc2QYl5T.s 			page 7
+
+
+ 138 0050 0223     		movs	r3, #2
+ 139 0052 0E93     		str	r3, [sp, #56]
+  72:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLM = 15;
+ 140              		.loc 1 72 3 is_stmt 1 view .LVU30
+  72:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLM = 15;
+ 141              		.loc 1 72 35 is_stmt 0 view .LVU31
+ 142 0054 4FF48002 		mov	r2, #4194304
+ 143 0058 0F92     		str	r2, [sp, #60]
+  73:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLN = 216;
+ 144              		.loc 1 73 3 is_stmt 1 view .LVU32
+  73:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLN = 216;
+ 145              		.loc 1 73 30 is_stmt 0 view .LVU33
+ 146 005a 0F22     		movs	r2, #15
+ 147 005c 1092     		str	r2, [sp, #64]
+  74:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+ 148              		.loc 1 74 3 is_stmt 1 view .LVU34
+  74:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+ 149              		.loc 1 74 30 is_stmt 0 view .LVU35
+ 150 005e D822     		movs	r2, #216
+ 151 0060 1192     		str	r2, [sp, #68]
+  75:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLQ = 4;
+ 152              		.loc 1 75 3 is_stmt 1 view .LVU36
+  75:./User/Src/main.c ****   RCC_OscInitStruct.PLL.PLLQ = 4;
+ 153              		.loc 1 75 30 is_stmt 0 view .LVU37
+ 154 0062 1293     		str	r3, [sp, #72]
+  76:./User/Src/main.c ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+ 155              		.loc 1 76 3 is_stmt 1 view .LVU38
+  76:./User/Src/main.c ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+ 156              		.loc 1 76 30 is_stmt 0 view .LVU39
+ 157 0064 0423     		movs	r3, #4
+ 158 0066 1393     		str	r3, [sp, #76]
+  77:./User/Src/main.c ****   {
+ 159              		.loc 1 77 3 is_stmt 1 view .LVU40
+  77:./User/Src/main.c ****   {
+ 160              		.loc 1 77 7 is_stmt 0 view .LVU41
+ 161 0068 08A8     		add	r0, sp, #32
+ 162 006a FFF7FEFF 		bl	HAL_RCC_OscConfig
+ 163              	.LVL1:
+  77:./User/Src/main.c ****   {
+ 164              		.loc 1 77 6 view .LVU42
+ 165 006e B0B9     		cbnz	r0, .L8
+  83:./User/Src/main.c ****   {
+ 166              		.loc 1 83 3 is_stmt 1 view .LVU43
+  83:./User/Src/main.c ****   {
+ 167              		.loc 1 83 7 is_stmt 0 view .LVU44
+ 168 0070 FFF7FEFF 		bl	HAL_PWREx_EnableOverDrive
+ 169              	.LVL2:
+  83:./User/Src/main.c ****   {
+ 170              		.loc 1 83 6 view .LVU45
+ 171 0074 A8B9     		cbnz	r0, .L9
+  89:./User/Src/main.c ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+ 172              		.loc 1 89 3 is_stmt 1 view .LVU46
+  89:./User/Src/main.c ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+ 173              		.loc 1 89 31 is_stmt 0 view .LVU47
+ 174 0076 0F23     		movs	r3, #15
+ 175 0078 0393     		str	r3, [sp, #12]
+  91:./User/Src/main.c ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ARM GAS  /tmp/cc2QYl5T.s 			page 8
+
+
+ 176              		.loc 1 91 3 is_stmt 1 view .LVU48
+  91:./User/Src/main.c ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ 177              		.loc 1 91 34 is_stmt 0 view .LVU49
+ 178 007a 0223     		movs	r3, #2
+ 179 007c 0493     		str	r3, [sp, #16]
+  92:./User/Src/main.c ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+ 180              		.loc 1 92 3 is_stmt 1 view .LVU50
+  92:./User/Src/main.c ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+ 181              		.loc 1 92 35 is_stmt 0 view .LVU51
+ 182 007e 0023     		movs	r3, #0
+ 183 0080 0593     		str	r3, [sp, #20]
+  93:./User/Src/main.c ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+ 184              		.loc 1 93 3 is_stmt 1 view .LVU52
+  93:./User/Src/main.c ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+ 185              		.loc 1 93 36 is_stmt 0 view .LVU53
+ 186 0082 4FF4A053 		mov	r3, #5120
+ 187 0086 0693     		str	r3, [sp, #24]
+  94:./User/Src/main.c **** 
+ 188              		.loc 1 94 3 is_stmt 1 view .LVU54
+  94:./User/Src/main.c **** 
+ 189              		.loc 1 94 36 is_stmt 0 view .LVU55
+ 190 0088 4FF48053 		mov	r3, #4096
+ 191 008c 0793     		str	r3, [sp, #28]
+  96:./User/Src/main.c ****   {
+ 192              		.loc 1 96 3 is_stmt 1 view .LVU56
+  96:./User/Src/main.c ****   {
+ 193              		.loc 1 96 7 is_stmt 0 view .LVU57
+ 194 008e 0521     		movs	r1, #5
+ 195 0090 03A8     		add	r0, sp, #12
+ 196 0092 FFF7FEFF 		bl	HAL_RCC_ClockConfig
+ 197              	.LVL3:
+  96:./User/Src/main.c ****   {
+ 198              		.loc 1 96 6 view .LVU58
+ 199 0096 30B9     		cbnz	r0, .L10
+ 100:./User/Src/main.c **** 
+ 200              		.loc 1 100 1 view .LVU59
+ 201 0098 15B0     		add	sp, sp, #84
+ 202              	.LCFI2:
+ 203              		.cfi_remember_state
+ 204              		.cfi_def_cfa_offset 4
+ 205              		@ sp needed
+ 206 009a 5DF804FB 		ldr	pc, [sp], #4
+ 207              	.L8:
+ 208              	.LCFI3:
+ 209              		.cfi_restore_state
+  79:./User/Src/main.c ****   }
+ 210              		.loc 1 79 5 is_stmt 1 view .LVU60
+ 211 009e FFF7FEFF 		bl	Error_Handler
+ 212              	.LVL4:
+ 213              	.L9:
+  85:./User/Src/main.c ****   }
+ 214              		.loc 1 85 5 view .LVU61
+ 215 00a2 FFF7FEFF 		bl	Error_Handler
+ 216              	.LVL5:
+ 217              	.L10:
+  98:./User/Src/main.c ****   }
+ 218              		.loc 1 98 5 view .LVU62
+ARM GAS  /tmp/cc2QYl5T.s 			page 9
+
+
+ 219 00a6 FFF7FEFF 		bl	Error_Handler
+ 220              	.LVL6:
+ 221              	.L12:
+ 222 00aa 00BF     		.align	2
+ 223              	.L11:
+ 224 00ac 00380240 		.word	1073887232
+ 225 00b0 00700040 		.word	1073770496
+ 226              		.cfi_endproc
+ 227              	.LFE133:
+ 229              		.section	.text.BSP_Init,"ax",%progbits
+ 230              		.align	1
+ 231              		.syntax unified
+ 232              		.thumb
+ 233              		.thumb_func
+ 234              		.fpu fpv4-sp-d16
+ 236              	BSP_Init:
+ 237              	.LFB131:
+  19:./User/Src/main.c ****   NVIC_SetPriorityGrouping(4);
+ 238              		.loc 1 19 1 view -0
+ 239              		.cfi_startproc
+ 240              		@ args = 0, pretend = 0, frame = 0
+ 241              		@ frame_needed = 0, uses_anonymous_args = 0
+ 242 0000 08B5     		push	{r3, lr}
+ 243              	.LCFI4:
+ 244              		.cfi_def_cfa_offset 8
+ 245              		.cfi_offset 3, -8
+ 246              		.cfi_offset 14, -4
+  20:./User/Src/main.c **** 	 
+ 247              		.loc 1 20 3 view .LVU64
+ 248              	.LVL7:
+ 249              	.LBB10:
+ 250              	.LBI10:
+ 251              		.file 3 "./Libraries/CMSIS/Include/core_cm4.h"
+   1:./Libraries/CMSIS/Include/core_cm4.h **** /**************************************************************************//**
+   2:./Libraries/CMSIS/Include/core_cm4.h ****  * @file     core_cm4.h
+   3:./Libraries/CMSIS/Include/core_cm4.h ****  * @brief    CMSIS Cortex-M4 Core Peripheral Access Layer Header File
+   4:./Libraries/CMSIS/Include/core_cm4.h ****  * @version  V4.30
+   5:./Libraries/CMSIS/Include/core_cm4.h ****  * @date     20. October 2015
+   6:./Libraries/CMSIS/Include/core_cm4.h ****  ******************************************************************************/
+   7:./Libraries/CMSIS/Include/core_cm4.h **** /* Copyright (c) 2009 - 2015 ARM LIMITED
+   8:./Libraries/CMSIS/Include/core_cm4.h **** 
+   9:./Libraries/CMSIS/Include/core_cm4.h ****    All rights reserved.
+  10:./Libraries/CMSIS/Include/core_cm4.h ****    Redistribution and use in source and binary forms, with or without
+  11:./Libraries/CMSIS/Include/core_cm4.h ****    modification, are permitted provided that the following conditions are met:
+  12:./Libraries/CMSIS/Include/core_cm4.h ****    - Redistributions of source code must retain the above copyright
+  13:./Libraries/CMSIS/Include/core_cm4.h ****      notice, this list of conditions and the following disclaimer.
+  14:./Libraries/CMSIS/Include/core_cm4.h ****    - Redistributions in binary form must reproduce the above copyright
+  15:./Libraries/CMSIS/Include/core_cm4.h ****      notice, this list of conditions and the following disclaimer in the
+  16:./Libraries/CMSIS/Include/core_cm4.h ****      documentation and/or other materials provided with the distribution.
+  17:./Libraries/CMSIS/Include/core_cm4.h ****    - Neither the name of ARM nor the names of its contributors may be used
+  18:./Libraries/CMSIS/Include/core_cm4.h ****      to endorse or promote products derived from this software without
+  19:./Libraries/CMSIS/Include/core_cm4.h ****      specific prior written permission.
+  20:./Libraries/CMSIS/Include/core_cm4.h ****    *
+  21:./Libraries/CMSIS/Include/core_cm4.h ****    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:./Libraries/CMSIS/Include/core_cm4.h ****    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:./Libraries/CMSIS/Include/core_cm4.h ****    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:./Libraries/CMSIS/Include/core_cm4.h ****    ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+ARM GAS  /tmp/cc2QYl5T.s 			page 10
+
+
+  25:./Libraries/CMSIS/Include/core_cm4.h ****    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:./Libraries/CMSIS/Include/core_cm4.h ****    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:./Libraries/CMSIS/Include/core_cm4.h ****    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:./Libraries/CMSIS/Include/core_cm4.h ****    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:./Libraries/CMSIS/Include/core_cm4.h ****    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:./Libraries/CMSIS/Include/core_cm4.h ****    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:./Libraries/CMSIS/Include/core_cm4.h ****    POSSIBILITY OF SUCH DAMAGE.
+  32:./Libraries/CMSIS/Include/core_cm4.h ****    ---------------------------------------------------------------------------*/
+  33:./Libraries/CMSIS/Include/core_cm4.h **** 
+  34:./Libraries/CMSIS/Include/core_cm4.h **** 
+  35:./Libraries/CMSIS/Include/core_cm4.h **** #if   defined ( __ICCARM__ )
+  36:./Libraries/CMSIS/Include/core_cm4.h ****  #pragma system_include         /* treat file as system include file for MISRA check */
+  37:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+  38:./Libraries/CMSIS/Include/core_cm4.h ****   #pragma clang system_header   /* treat file as system include file */
+  39:./Libraries/CMSIS/Include/core_cm4.h **** #endif
+  40:./Libraries/CMSIS/Include/core_cm4.h **** 
+  41:./Libraries/CMSIS/Include/core_cm4.h **** #ifndef __CORE_CM4_H_GENERIC
+  42:./Libraries/CMSIS/Include/core_cm4.h **** #define __CORE_CM4_H_GENERIC
+  43:./Libraries/CMSIS/Include/core_cm4.h **** 
+  44:./Libraries/CMSIS/Include/core_cm4.h **** #include <stdint.h>
+  45:./Libraries/CMSIS/Include/core_cm4.h **** 
+  46:./Libraries/CMSIS/Include/core_cm4.h **** #ifdef __cplusplus
+  47:./Libraries/CMSIS/Include/core_cm4.h ****  extern "C" {
+  48:./Libraries/CMSIS/Include/core_cm4.h **** #endif
+  49:./Libraries/CMSIS/Include/core_cm4.h **** 
+  50:./Libraries/CMSIS/Include/core_cm4.h **** /**
+  51:./Libraries/CMSIS/Include/core_cm4.h ****   \page CMSIS_MISRA_Exceptions  MISRA-C:2004 Compliance Exceptions
+  52:./Libraries/CMSIS/Include/core_cm4.h ****   CMSIS violates the following MISRA-C:2004 rules:
+  53:./Libraries/CMSIS/Include/core_cm4.h **** 
+  54:./Libraries/CMSIS/Include/core_cm4.h ****    \li Required Rule 8.5, object/function definition in header file.<br>
+  55:./Libraries/CMSIS/Include/core_cm4.h ****      Function definitions in header files are used to allow 'inlining'.
+  56:./Libraries/CMSIS/Include/core_cm4.h **** 
+  57:./Libraries/CMSIS/Include/core_cm4.h ****    \li Required Rule 18.4, declaration of union type or object of union type: '{...}'.<br>
+  58:./Libraries/CMSIS/Include/core_cm4.h ****      Unions are used for effective representation of core registers.
+  59:./Libraries/CMSIS/Include/core_cm4.h **** 
+  60:./Libraries/CMSIS/Include/core_cm4.h ****    \li Advisory Rule 19.7, Function-like macro defined.<br>
+  61:./Libraries/CMSIS/Include/core_cm4.h ****      Function-like macros are used to allow more efficient code.
+  62:./Libraries/CMSIS/Include/core_cm4.h ****  */
+  63:./Libraries/CMSIS/Include/core_cm4.h **** 
+  64:./Libraries/CMSIS/Include/core_cm4.h **** 
+  65:./Libraries/CMSIS/Include/core_cm4.h **** /*******************************************************************************
+  66:./Libraries/CMSIS/Include/core_cm4.h ****  *                 CMSIS definitions
+  67:./Libraries/CMSIS/Include/core_cm4.h ****  ******************************************************************************/
+  68:./Libraries/CMSIS/Include/core_cm4.h **** /**
+  69:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup Cortex_M4
+  70:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+  71:./Libraries/CMSIS/Include/core_cm4.h ****  */
+  72:./Libraries/CMSIS/Include/core_cm4.h **** 
+  73:./Libraries/CMSIS/Include/core_cm4.h **** /*  CMSIS CM4 definitions */
+  74:./Libraries/CMSIS/Include/core_cm4.h **** #define __CM4_CMSIS_VERSION_MAIN  (0x04U)                                      /*!< [31:16] CMSIS H
+  75:./Libraries/CMSIS/Include/core_cm4.h **** #define __CM4_CMSIS_VERSION_SUB   (0x1EU)                                      /*!< [15:0]  CMSIS H
+  76:./Libraries/CMSIS/Include/core_cm4.h **** #define __CM4_CMSIS_VERSION       ((__CM4_CMSIS_VERSION_MAIN << 16U) | \
+  77:./Libraries/CMSIS/Include/core_cm4.h ****                                     __CM4_CMSIS_VERSION_SUB           )        /*!< CMSIS HAL versi
+  78:./Libraries/CMSIS/Include/core_cm4.h **** 
+  79:./Libraries/CMSIS/Include/core_cm4.h **** #define __CORTEX_M                (0x04U)                                      /*!< Cortex-M Core *
+  80:./Libraries/CMSIS/Include/core_cm4.h **** 
+  81:./Libraries/CMSIS/Include/core_cm4.h **** 
+ARM GAS  /tmp/cc2QYl5T.s 			page 11
+
+
+  82:./Libraries/CMSIS/Include/core_cm4.h **** #if   defined ( __CC_ARM )
+  83:./Libraries/CMSIS/Include/core_cm4.h ****   #define __ASM            __asm                                      /*!< asm keyword for ARM Comp
+  84:./Libraries/CMSIS/Include/core_cm4.h ****   #define __INLINE         __inline                                   /*!< inline keyword for ARM C
+  85:./Libraries/CMSIS/Include/core_cm4.h ****   #define __STATIC_INLINE  static __inline
+  86:./Libraries/CMSIS/Include/core_cm4.h **** 
+  87:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+  88:./Libraries/CMSIS/Include/core_cm4.h ****   #define __ASM            __asm                                      /*!< asm keyword for ARM Comp
+  89:./Libraries/CMSIS/Include/core_cm4.h ****   #define __INLINE         __inline                                   /*!< inline keyword for ARM C
+  90:./Libraries/CMSIS/Include/core_cm4.h ****   #define __STATIC_INLINE  static __inline
+  91:./Libraries/CMSIS/Include/core_cm4.h **** 
+  92:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined ( __GNUC__ )
+  93:./Libraries/CMSIS/Include/core_cm4.h ****   #define __ASM            __asm                                      /*!< asm keyword for GNU Comp
+  94:./Libraries/CMSIS/Include/core_cm4.h ****   #define __INLINE         inline                                     /*!< inline keyword for GNU C
+  95:./Libraries/CMSIS/Include/core_cm4.h ****   #define __STATIC_INLINE  static inline
+  96:./Libraries/CMSIS/Include/core_cm4.h **** 
+  97:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined ( __ICCARM__ )
+  98:./Libraries/CMSIS/Include/core_cm4.h ****   #define __ASM            __asm                                      /*!< asm keyword for IAR Comp
+  99:./Libraries/CMSIS/Include/core_cm4.h ****   #define __INLINE         inline                                     /*!< inline keyword for IAR C
+ 100:./Libraries/CMSIS/Include/core_cm4.h ****   #define __STATIC_INLINE  static inline
+ 101:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 102:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined ( __TMS470__ )
+ 103:./Libraries/CMSIS/Include/core_cm4.h ****   #define __ASM            __asm                                      /*!< asm keyword for TI CCS C
+ 104:./Libraries/CMSIS/Include/core_cm4.h ****   #define __STATIC_INLINE  static inline
+ 105:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 106:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined ( __TASKING__ )
+ 107:./Libraries/CMSIS/Include/core_cm4.h ****   #define __ASM            __asm                                      /*!< asm keyword for TASKING 
+ 108:./Libraries/CMSIS/Include/core_cm4.h ****   #define __INLINE         inline                                     /*!< inline keyword for TASKI
+ 109:./Libraries/CMSIS/Include/core_cm4.h ****   #define __STATIC_INLINE  static inline
+ 110:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 111:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined ( __CSMC__ )
+ 112:./Libraries/CMSIS/Include/core_cm4.h ****   #define __packed
+ 113:./Libraries/CMSIS/Include/core_cm4.h ****   #define __ASM            _asm                                      /*!< asm keyword for COSMIC Co
+ 114:./Libraries/CMSIS/Include/core_cm4.h ****   #define __INLINE         inline                                    /*!< inline keyword for COSMIC
+ 115:./Libraries/CMSIS/Include/core_cm4.h ****   #define __STATIC_INLINE  static inline
+ 116:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 117:./Libraries/CMSIS/Include/core_cm4.h **** #else
+ 118:./Libraries/CMSIS/Include/core_cm4.h ****   #error Unknown compiler
+ 119:./Libraries/CMSIS/Include/core_cm4.h **** #endif
+ 120:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 121:./Libraries/CMSIS/Include/core_cm4.h **** /** __FPU_USED indicates whether an FPU is used or not.
+ 122:./Libraries/CMSIS/Include/core_cm4.h ****     For this, __FPU_PRESENT has to be checked prior to making use of FPU specific registers and fun
+ 123:./Libraries/CMSIS/Include/core_cm4.h **** */
+ 124:./Libraries/CMSIS/Include/core_cm4.h **** #if defined ( __CC_ARM )
+ 125:./Libraries/CMSIS/Include/core_cm4.h ****   #if defined __TARGET_FPU_VFP
+ 126:./Libraries/CMSIS/Include/core_cm4.h ****     #if (__FPU_PRESENT == 1U)
+ 127:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       1U
+ 128:./Libraries/CMSIS/Include/core_cm4.h ****     #else
+ 129:./Libraries/CMSIS/Include/core_cm4.h ****       #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
+ 130:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       0U
+ 131:./Libraries/CMSIS/Include/core_cm4.h ****     #endif
+ 132:./Libraries/CMSIS/Include/core_cm4.h ****   #else
+ 133:./Libraries/CMSIS/Include/core_cm4.h ****     #define __FPU_USED         0U
+ 134:./Libraries/CMSIS/Include/core_cm4.h ****   #endif
+ 135:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 136:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+ 137:./Libraries/CMSIS/Include/core_cm4.h ****   #if defined __ARM_PCS_VFP
+ 138:./Libraries/CMSIS/Include/core_cm4.h ****     #if (__FPU_PRESENT == 1)
+ARM GAS  /tmp/cc2QYl5T.s 			page 12
+
+
+ 139:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       1U
+ 140:./Libraries/CMSIS/Include/core_cm4.h ****     #else
+ 141:./Libraries/CMSIS/Include/core_cm4.h ****       #warning "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESEN
+ 142:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       0U
+ 143:./Libraries/CMSIS/Include/core_cm4.h ****     #endif
+ 144:./Libraries/CMSIS/Include/core_cm4.h ****   #else
+ 145:./Libraries/CMSIS/Include/core_cm4.h ****     #define __FPU_USED         0U
+ 146:./Libraries/CMSIS/Include/core_cm4.h ****   #endif
+ 147:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 148:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined ( __GNUC__ )
+ 149:./Libraries/CMSIS/Include/core_cm4.h ****   #if defined (__VFP_FP__) && !defined(__SOFTFP__)
+ 150:./Libraries/CMSIS/Include/core_cm4.h ****     #if (__FPU_PRESENT == 1U)
+ 151:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       1U
+ 152:./Libraries/CMSIS/Include/core_cm4.h ****     #else
+ 153:./Libraries/CMSIS/Include/core_cm4.h ****       #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
+ 154:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       0U
+ 155:./Libraries/CMSIS/Include/core_cm4.h ****     #endif
+ 156:./Libraries/CMSIS/Include/core_cm4.h ****   #else
+ 157:./Libraries/CMSIS/Include/core_cm4.h ****     #define __FPU_USED         0U
+ 158:./Libraries/CMSIS/Include/core_cm4.h ****   #endif
+ 159:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 160:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined ( __ICCARM__ )
+ 161:./Libraries/CMSIS/Include/core_cm4.h ****   #if defined __ARMVFP__
+ 162:./Libraries/CMSIS/Include/core_cm4.h ****     #if (__FPU_PRESENT == 1U)
+ 163:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       1U
+ 164:./Libraries/CMSIS/Include/core_cm4.h ****     #else
+ 165:./Libraries/CMSIS/Include/core_cm4.h ****       #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
+ 166:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       0U
+ 167:./Libraries/CMSIS/Include/core_cm4.h ****     #endif
+ 168:./Libraries/CMSIS/Include/core_cm4.h ****   #else
+ 169:./Libraries/CMSIS/Include/core_cm4.h ****     #define __FPU_USED         0U
+ 170:./Libraries/CMSIS/Include/core_cm4.h ****   #endif
+ 171:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 172:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined ( __TMS470__ )
+ 173:./Libraries/CMSIS/Include/core_cm4.h ****   #if defined __TI_VFP_SUPPORT__
+ 174:./Libraries/CMSIS/Include/core_cm4.h ****     #if (__FPU_PRESENT == 1U)
+ 175:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       1U
+ 176:./Libraries/CMSIS/Include/core_cm4.h ****     #else
+ 177:./Libraries/CMSIS/Include/core_cm4.h ****       #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
+ 178:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       0U
+ 179:./Libraries/CMSIS/Include/core_cm4.h ****     #endif
+ 180:./Libraries/CMSIS/Include/core_cm4.h ****   #else
+ 181:./Libraries/CMSIS/Include/core_cm4.h ****     #define __FPU_USED         0U
+ 182:./Libraries/CMSIS/Include/core_cm4.h ****   #endif
+ 183:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 184:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined ( __TASKING__ )
+ 185:./Libraries/CMSIS/Include/core_cm4.h ****   #if defined __FPU_VFP__
+ 186:./Libraries/CMSIS/Include/core_cm4.h ****     #if (__FPU_PRESENT == 1U)
+ 187:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       1U
+ 188:./Libraries/CMSIS/Include/core_cm4.h ****     #else
+ 189:./Libraries/CMSIS/Include/core_cm4.h ****       #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
+ 190:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       0U
+ 191:./Libraries/CMSIS/Include/core_cm4.h ****     #endif
+ 192:./Libraries/CMSIS/Include/core_cm4.h ****   #else
+ 193:./Libraries/CMSIS/Include/core_cm4.h ****     #define __FPU_USED         0U
+ 194:./Libraries/CMSIS/Include/core_cm4.h ****   #endif
+ 195:./Libraries/CMSIS/Include/core_cm4.h **** 
+ARM GAS  /tmp/cc2QYl5T.s 			page 13
+
+
+ 196:./Libraries/CMSIS/Include/core_cm4.h **** #elif defined ( __CSMC__ )
+ 197:./Libraries/CMSIS/Include/core_cm4.h ****   #if ( __CSMC__ & 0x400U)
+ 198:./Libraries/CMSIS/Include/core_cm4.h ****     #if (__FPU_PRESENT == 1U)
+ 199:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       1U
+ 200:./Libraries/CMSIS/Include/core_cm4.h ****     #else
+ 201:./Libraries/CMSIS/Include/core_cm4.h ****       #error "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)
+ 202:./Libraries/CMSIS/Include/core_cm4.h ****       #define __FPU_USED       0U
+ 203:./Libraries/CMSIS/Include/core_cm4.h ****     #endif
+ 204:./Libraries/CMSIS/Include/core_cm4.h ****   #else
+ 205:./Libraries/CMSIS/Include/core_cm4.h ****     #define __FPU_USED         0U
+ 206:./Libraries/CMSIS/Include/core_cm4.h ****   #endif
+ 207:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 208:./Libraries/CMSIS/Include/core_cm4.h **** #endif
+ 209:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 210:./Libraries/CMSIS/Include/core_cm4.h **** #include "core_cmInstr.h"                /* Core Instruction Access */
+ 211:./Libraries/CMSIS/Include/core_cm4.h **** #include "core_cmFunc.h"                 /* Core Function Access */
+ 212:./Libraries/CMSIS/Include/core_cm4.h **** #include "core_cmSimd.h"                 /* Compiler specific SIMD Intrinsics */
+ 213:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 214:./Libraries/CMSIS/Include/core_cm4.h **** #ifdef __cplusplus
+ 215:./Libraries/CMSIS/Include/core_cm4.h **** }
+ 216:./Libraries/CMSIS/Include/core_cm4.h **** #endif
+ 217:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 218:./Libraries/CMSIS/Include/core_cm4.h **** #endif /* __CORE_CM4_H_GENERIC */
+ 219:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 220:./Libraries/CMSIS/Include/core_cm4.h **** #ifndef __CMSIS_GENERIC
+ 221:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 222:./Libraries/CMSIS/Include/core_cm4.h **** #ifndef __CORE_CM4_H_DEPENDANT
+ 223:./Libraries/CMSIS/Include/core_cm4.h **** #define __CORE_CM4_H_DEPENDANT
+ 224:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 225:./Libraries/CMSIS/Include/core_cm4.h **** #ifdef __cplusplus
+ 226:./Libraries/CMSIS/Include/core_cm4.h ****  extern "C" {
+ 227:./Libraries/CMSIS/Include/core_cm4.h **** #endif
+ 228:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 229:./Libraries/CMSIS/Include/core_cm4.h **** /* check device defines and use defaults */
+ 230:./Libraries/CMSIS/Include/core_cm4.h **** #if defined __CHECK_DEVICE_DEFINES
+ 231:./Libraries/CMSIS/Include/core_cm4.h ****   #ifndef __CM4_REV
+ 232:./Libraries/CMSIS/Include/core_cm4.h ****     #define __CM4_REV               0x0000U
+ 233:./Libraries/CMSIS/Include/core_cm4.h ****     #warning "__CM4_REV not defined in device header file; using default!"
+ 234:./Libraries/CMSIS/Include/core_cm4.h ****   #endif
+ 235:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 236:./Libraries/CMSIS/Include/core_cm4.h ****   #ifndef __FPU_PRESENT
+ 237:./Libraries/CMSIS/Include/core_cm4.h ****     #define __FPU_PRESENT             0U
+ 238:./Libraries/CMSIS/Include/core_cm4.h ****     #warning "__FPU_PRESENT not defined in device header file; using default!"
+ 239:./Libraries/CMSIS/Include/core_cm4.h ****   #endif
+ 240:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 241:./Libraries/CMSIS/Include/core_cm4.h ****   #ifndef __MPU_PRESENT
+ 242:./Libraries/CMSIS/Include/core_cm4.h ****     #define __MPU_PRESENT             0U
+ 243:./Libraries/CMSIS/Include/core_cm4.h ****     #warning "__MPU_PRESENT not defined in device header file; using default!"
+ 244:./Libraries/CMSIS/Include/core_cm4.h ****   #endif
+ 245:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 246:./Libraries/CMSIS/Include/core_cm4.h ****   #ifndef __NVIC_PRIO_BITS
+ 247:./Libraries/CMSIS/Include/core_cm4.h ****     #define __NVIC_PRIO_BITS          4U
+ 248:./Libraries/CMSIS/Include/core_cm4.h ****     #warning "__NVIC_PRIO_BITS not defined in device header file; using default!"
+ 249:./Libraries/CMSIS/Include/core_cm4.h ****   #endif
+ 250:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 251:./Libraries/CMSIS/Include/core_cm4.h ****   #ifndef __Vendor_SysTickConfig
+ 252:./Libraries/CMSIS/Include/core_cm4.h ****     #define __Vendor_SysTickConfig    0U
+ARM GAS  /tmp/cc2QYl5T.s 			page 14
+
+
+ 253:./Libraries/CMSIS/Include/core_cm4.h ****     #warning "__Vendor_SysTickConfig not defined in device header file; using default!"
+ 254:./Libraries/CMSIS/Include/core_cm4.h ****   #endif
+ 255:./Libraries/CMSIS/Include/core_cm4.h **** #endif
+ 256:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 257:./Libraries/CMSIS/Include/core_cm4.h **** /* IO definitions (access restrictions to peripheral registers) */
+ 258:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 259:./Libraries/CMSIS/Include/core_cm4.h ****     \defgroup CMSIS_glob_defs CMSIS Global Defines
+ 260:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 261:./Libraries/CMSIS/Include/core_cm4.h ****     <strong>IO Type Qualifiers</strong> are used
+ 262:./Libraries/CMSIS/Include/core_cm4.h ****     \li to specify the access to peripheral variables.
+ 263:./Libraries/CMSIS/Include/core_cm4.h ****     \li for automatic generation of peripheral register debug information.
+ 264:./Libraries/CMSIS/Include/core_cm4.h **** */
+ 265:./Libraries/CMSIS/Include/core_cm4.h **** #ifdef __cplusplus
+ 266:./Libraries/CMSIS/Include/core_cm4.h ****   #define   __I     volatile             /*!< Defines 'read only' permissions */
+ 267:./Libraries/CMSIS/Include/core_cm4.h **** #else
+ 268:./Libraries/CMSIS/Include/core_cm4.h ****   #define   __I     volatile const       /*!< Defines 'read only' permissions */
+ 269:./Libraries/CMSIS/Include/core_cm4.h **** #endif
+ 270:./Libraries/CMSIS/Include/core_cm4.h **** #define     __O     volatile             /*!< Defines 'write only' permissions */
+ 271:./Libraries/CMSIS/Include/core_cm4.h **** #define     __IO    volatile             /*!< Defines 'read / write' permissions */
+ 272:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 273:./Libraries/CMSIS/Include/core_cm4.h **** /* following defines should be used for structure members */
+ 274:./Libraries/CMSIS/Include/core_cm4.h **** #define     __IM     volatile const      /*! Defines 'read only' structure member permissions */
+ 275:./Libraries/CMSIS/Include/core_cm4.h **** #define     __OM     volatile            /*! Defines 'write only' structure member permissions */
+ 276:./Libraries/CMSIS/Include/core_cm4.h **** #define     __IOM    volatile            /*! Defines 'read / write' structure member permissions */
+ 277:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 278:./Libraries/CMSIS/Include/core_cm4.h **** /*@} end of group Cortex_M4 */
+ 279:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 280:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 281:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 282:./Libraries/CMSIS/Include/core_cm4.h **** /*******************************************************************************
+ 283:./Libraries/CMSIS/Include/core_cm4.h ****  *                 Register Abstraction
+ 284:./Libraries/CMSIS/Include/core_cm4.h ****   Core Register contain:
+ 285:./Libraries/CMSIS/Include/core_cm4.h ****   - Core Register
+ 286:./Libraries/CMSIS/Include/core_cm4.h ****   - Core NVIC Register
+ 287:./Libraries/CMSIS/Include/core_cm4.h ****   - Core SCB Register
+ 288:./Libraries/CMSIS/Include/core_cm4.h ****   - Core SysTick Register
+ 289:./Libraries/CMSIS/Include/core_cm4.h ****   - Core Debug Register
+ 290:./Libraries/CMSIS/Include/core_cm4.h ****   - Core MPU Register
+ 291:./Libraries/CMSIS/Include/core_cm4.h ****   - Core FPU Register
+ 292:./Libraries/CMSIS/Include/core_cm4.h ****  ******************************************************************************/
+ 293:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 294:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_core_register Defines and Type Definitions
+ 295:./Libraries/CMSIS/Include/core_cm4.h ****   \brief Type definitions and defines for Cortex-M processor based devices.
+ 296:./Libraries/CMSIS/Include/core_cm4.h **** */
+ 297:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 298:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 299:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup    CMSIS_core_register
+ 300:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup   CMSIS_CORE  Status and Control Registers
+ 301:./Libraries/CMSIS/Include/core_cm4.h ****   \brief      Core Register type definitions.
+ 302:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+ 303:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 304:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 305:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 306:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Union type to access the Application Program Status Register (APSR).
+ 307:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 308:./Libraries/CMSIS/Include/core_cm4.h **** typedef union
+ 309:./Libraries/CMSIS/Include/core_cm4.h **** {
+ARM GAS  /tmp/cc2QYl5T.s 			page 15
+
+
+ 310:./Libraries/CMSIS/Include/core_cm4.h ****   struct
+ 311:./Libraries/CMSIS/Include/core_cm4.h ****   {
+ 312:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t _reserved0:16;              /*!< bit:  0..15  Reserved */
+ 313:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t GE:4;                       /*!< bit: 16..19  Greater than or Equal flags */
+ 314:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t _reserved1:7;               /*!< bit: 20..26  Reserved */
+ 315:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t Q:1;                        /*!< bit:     27  Saturation condition flag */
+ 316:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag */
+ 317:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag */
+ 318:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag */
+ 319:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag */
+ 320:./Libraries/CMSIS/Include/core_cm4.h ****   } b;                                   /*!< Structure used for bit  access */
+ 321:./Libraries/CMSIS/Include/core_cm4.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 322:./Libraries/CMSIS/Include/core_cm4.h **** } APSR_Type;
+ 323:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 324:./Libraries/CMSIS/Include/core_cm4.h **** /* APSR Register Definitions */
+ 325:./Libraries/CMSIS/Include/core_cm4.h **** #define APSR_N_Pos                         31U                                            /*!< APSR
+ 326:./Libraries/CMSIS/Include/core_cm4.h **** #define APSR_N_Msk                         (1UL << APSR_N_Pos)                            /*!< APSR
+ 327:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 328:./Libraries/CMSIS/Include/core_cm4.h **** #define APSR_Z_Pos                         30U                                            /*!< APSR
+ 329:./Libraries/CMSIS/Include/core_cm4.h **** #define APSR_Z_Msk                         (1UL << APSR_Z_Pos)                            /*!< APSR
+ 330:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 331:./Libraries/CMSIS/Include/core_cm4.h **** #define APSR_C_Pos                         29U                                            /*!< APSR
+ 332:./Libraries/CMSIS/Include/core_cm4.h **** #define APSR_C_Msk                         (1UL << APSR_C_Pos)                            /*!< APSR
+ 333:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 334:./Libraries/CMSIS/Include/core_cm4.h **** #define APSR_V_Pos                         28U                                            /*!< APSR
+ 335:./Libraries/CMSIS/Include/core_cm4.h **** #define APSR_V_Msk                         (1UL << APSR_V_Pos)                            /*!< APSR
+ 336:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 337:./Libraries/CMSIS/Include/core_cm4.h **** #define APSR_Q_Pos                         27U                                            /*!< APSR
+ 338:./Libraries/CMSIS/Include/core_cm4.h **** #define APSR_Q_Msk                         (1UL << APSR_Q_Pos)                            /*!< APSR
+ 339:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 340:./Libraries/CMSIS/Include/core_cm4.h **** #define APSR_GE_Pos                        16U                                            /*!< APSR
+ 341:./Libraries/CMSIS/Include/core_cm4.h **** #define APSR_GE_Msk                        (0xFUL << APSR_GE_Pos)                         /*!< APSR
+ 342:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 343:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 344:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 345:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Union type to access the Interrupt Program Status Register (IPSR).
+ 346:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 347:./Libraries/CMSIS/Include/core_cm4.h **** typedef union
+ 348:./Libraries/CMSIS/Include/core_cm4.h **** {
+ 349:./Libraries/CMSIS/Include/core_cm4.h ****   struct
+ 350:./Libraries/CMSIS/Include/core_cm4.h ****   {
+ 351:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number */
+ 352:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t _reserved0:23;              /*!< bit:  9..31  Reserved */
+ 353:./Libraries/CMSIS/Include/core_cm4.h ****   } b;                                   /*!< Structure used for bit  access */
+ 354:./Libraries/CMSIS/Include/core_cm4.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 355:./Libraries/CMSIS/Include/core_cm4.h **** } IPSR_Type;
+ 356:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 357:./Libraries/CMSIS/Include/core_cm4.h **** /* IPSR Register Definitions */
+ 358:./Libraries/CMSIS/Include/core_cm4.h **** #define IPSR_ISR_Pos                        0U                                            /*!< IPSR
+ 359:./Libraries/CMSIS/Include/core_cm4.h **** #define IPSR_ISR_Msk                       (0x1FFUL /*<< IPSR_ISR_Pos*/)                  /*!< IPSR
+ 360:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 361:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 362:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 363:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Union type to access the Special-Purpose Program Status Registers (xPSR).
+ 364:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 365:./Libraries/CMSIS/Include/core_cm4.h **** typedef union
+ 366:./Libraries/CMSIS/Include/core_cm4.h **** {
+ARM GAS  /tmp/cc2QYl5T.s 			page 16
+
+
+ 367:./Libraries/CMSIS/Include/core_cm4.h ****   struct
+ 368:./Libraries/CMSIS/Include/core_cm4.h ****   {
+ 369:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t ISR:9;                      /*!< bit:  0.. 8  Exception number */
+ 370:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t _reserved0:7;               /*!< bit:  9..15  Reserved */
+ 371:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t GE:4;                       /*!< bit: 16..19  Greater than or Equal flags */
+ 372:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t _reserved1:4;               /*!< bit: 20..23  Reserved */
+ 373:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t T:1;                        /*!< bit:     24  Thumb bit        (read 0) */
+ 374:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t IT:2;                       /*!< bit: 25..26  saved IT state   (read 0) */
+ 375:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t Q:1;                        /*!< bit:     27  Saturation condition flag */
+ 376:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t V:1;                        /*!< bit:     28  Overflow condition code flag */
+ 377:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t C:1;                        /*!< bit:     29  Carry condition code flag */
+ 378:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t Z:1;                        /*!< bit:     30  Zero condition code flag */
+ 379:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t N:1;                        /*!< bit:     31  Negative condition code flag */
+ 380:./Libraries/CMSIS/Include/core_cm4.h ****   } b;                                   /*!< Structure used for bit  access */
+ 381:./Libraries/CMSIS/Include/core_cm4.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 382:./Libraries/CMSIS/Include/core_cm4.h **** } xPSR_Type;
+ 383:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 384:./Libraries/CMSIS/Include/core_cm4.h **** /* xPSR Register Definitions */
+ 385:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_N_Pos                         31U                                            /*!< xPSR
+ 386:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_N_Msk                         (1UL << xPSR_N_Pos)                            /*!< xPSR
+ 387:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 388:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_Z_Pos                         30U                                            /*!< xPSR
+ 389:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_Z_Msk                         (1UL << xPSR_Z_Pos)                            /*!< xPSR
+ 390:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 391:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_C_Pos                         29U                                            /*!< xPSR
+ 392:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_C_Msk                         (1UL << xPSR_C_Pos)                            /*!< xPSR
+ 393:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 394:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_V_Pos                         28U                                            /*!< xPSR
+ 395:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_V_Msk                         (1UL << xPSR_V_Pos)                            /*!< xPSR
+ 396:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 397:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_Q_Pos                         27U                                            /*!< xPSR
+ 398:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_Q_Msk                         (1UL << xPSR_Q_Pos)                            /*!< xPSR
+ 399:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 400:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_IT_Pos                        25U                                            /*!< xPSR
+ 401:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_IT_Msk                        (3UL << xPSR_IT_Pos)                           /*!< xPSR
+ 402:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 403:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_T_Pos                         24U                                            /*!< xPSR
+ 404:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_T_Msk                         (1UL << xPSR_T_Pos)                            /*!< xPSR
+ 405:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 406:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_GE_Pos                        16U                                            /*!< xPSR
+ 407:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_GE_Msk                        (0xFUL << xPSR_GE_Pos)                         /*!< xPSR
+ 408:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 409:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_ISR_Pos                        0U                                            /*!< xPSR
+ 410:./Libraries/CMSIS/Include/core_cm4.h **** #define xPSR_ISR_Msk                       (0x1FFUL /*<< xPSR_ISR_Pos*/)                  /*!< xPSR
+ 411:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 412:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 413:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 414:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Union type to access the Control Registers (CONTROL).
+ 415:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 416:./Libraries/CMSIS/Include/core_cm4.h **** typedef union
+ 417:./Libraries/CMSIS/Include/core_cm4.h **** {
+ 418:./Libraries/CMSIS/Include/core_cm4.h ****   struct
+ 419:./Libraries/CMSIS/Include/core_cm4.h ****   {
+ 420:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t nPRIV:1;                    /*!< bit:      0  Execution privilege in Thread mode */
+ 421:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t SPSEL:1;                    /*!< bit:      1  Stack to be used */
+ 422:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t FPCA:1;                     /*!< bit:      2  FP extension active flag */
+ 423:./Libraries/CMSIS/Include/core_cm4.h ****     uint32_t _reserved0:29;              /*!< bit:  3..31  Reserved */
+ARM GAS  /tmp/cc2QYl5T.s 			page 17
+
+
+ 424:./Libraries/CMSIS/Include/core_cm4.h ****   } b;                                   /*!< Structure used for bit  access */
+ 425:./Libraries/CMSIS/Include/core_cm4.h ****   uint32_t w;                            /*!< Type      used for word access */
+ 426:./Libraries/CMSIS/Include/core_cm4.h **** } CONTROL_Type;
+ 427:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 428:./Libraries/CMSIS/Include/core_cm4.h **** /* CONTROL Register Definitions */
+ 429:./Libraries/CMSIS/Include/core_cm4.h **** #define CONTROL_FPCA_Pos                    2U                                            /*!< CONT
+ 430:./Libraries/CMSIS/Include/core_cm4.h **** #define CONTROL_FPCA_Msk                   (1UL << CONTROL_FPCA_Pos)                      /*!< CONT
+ 431:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 432:./Libraries/CMSIS/Include/core_cm4.h **** #define CONTROL_SPSEL_Pos                   1U                                            /*!< CONT
+ 433:./Libraries/CMSIS/Include/core_cm4.h **** #define CONTROL_SPSEL_Msk                  (1UL << CONTROL_SPSEL_Pos)                     /*!< CONT
+ 434:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 435:./Libraries/CMSIS/Include/core_cm4.h **** #define CONTROL_nPRIV_Pos                   0U                                            /*!< CONT
+ 436:./Libraries/CMSIS/Include/core_cm4.h **** #define CONTROL_nPRIV_Msk                  (1UL /*<< CONTROL_nPRIV_Pos*/)                 /*!< CONT
+ 437:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 438:./Libraries/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_CORE */
+ 439:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 440:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 441:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 442:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup    CMSIS_core_register
+ 443:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup   CMSIS_NVIC  Nested Vectored Interrupt Controller (NVIC)
+ 444:./Libraries/CMSIS/Include/core_cm4.h ****   \brief      Type definitions for the NVIC Registers
+ 445:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+ 446:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 447:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 448:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 449:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Structure type to access the Nested Vectored Interrupt Controller (NVIC).
+ 450:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 451:./Libraries/CMSIS/Include/core_cm4.h **** typedef struct
+ 452:./Libraries/CMSIS/Include/core_cm4.h **** {
+ 453:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t ISER[8U];               /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register */
+ 454:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED0[24U];
+ 455:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t ICER[8U];               /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register 
+ 456:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RSERVED1[24U];
+ 457:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t ISPR[8U];               /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register *
+ 458:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED2[24U];
+ 459:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t ICPR[8U];               /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register
+ 460:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED3[24U];
+ 461:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t IABR[8U];               /*!< Offset: 0x200 (R/W)  Interrupt Active bit Register */
+ 462:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED4[56U];
+ 463:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint8_t  IP[240U];               /*!< Offset: 0x300 (R/W)  Interrupt Priority Register (8Bi
+ 464:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED5[644U];
+ 465:./Libraries/CMSIS/Include/core_cm4.h ****   __OM  uint32_t STIR;                   /*!< Offset: 0xE00 ( /W)  Software Trigger Interrupt Regis
+ 466:./Libraries/CMSIS/Include/core_cm4.h **** }  NVIC_Type;
+ 467:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 468:./Libraries/CMSIS/Include/core_cm4.h **** /* Software Triggered Interrupt Register Definitions */
+ 469:./Libraries/CMSIS/Include/core_cm4.h **** #define NVIC_STIR_INTID_Pos                 0U                                         /*!< STIR: I
+ 470:./Libraries/CMSIS/Include/core_cm4.h **** #define NVIC_STIR_INTID_Msk                (0x1FFUL /*<< NVIC_STIR_INTID_Pos*/)        /*!< STIR: I
+ 471:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 472:./Libraries/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_NVIC */
+ 473:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 474:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 475:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 476:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_core_register
+ 477:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_SCB     System Control Block (SCB)
+ 478:./Libraries/CMSIS/Include/core_cm4.h ****   \brief    Type definitions for the System Control Block Registers
+ 479:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+ 480:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ARM GAS  /tmp/cc2QYl5T.s 			page 18
+
+
+ 481:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 482:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 483:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Structure type to access the System Control Block (SCB).
+ 484:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 485:./Libraries/CMSIS/Include/core_cm4.h **** typedef struct
+ 486:./Libraries/CMSIS/Include/core_cm4.h **** {
+ 487:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t CPUID;                  /*!< Offset: 0x000 (R/ )  CPUID Base Register */
+ 488:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t ICSR;                   /*!< Offset: 0x004 (R/W)  Interrupt Control and State Regi
+ 489:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t VTOR;                   /*!< Offset: 0x008 (R/W)  Vector Table Offset Register */
+ 490:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t AIRCR;                  /*!< Offset: 0x00C (R/W)  Application Interrupt and Reset 
+ 491:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t SCR;                    /*!< Offset: 0x010 (R/W)  System Control Register */
+ 492:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t CCR;                    /*!< Offset: 0x014 (R/W)  Configuration Control Register *
+ 493:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint8_t  SHP[12U];               /*!< Offset: 0x018 (R/W)  System Handlers Priority Registe
+ 494:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t SHCSR;                  /*!< Offset: 0x024 (R/W)  System Handler Control and State
+ 495:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t CFSR;                   /*!< Offset: 0x028 (R/W)  Configurable Fault Status Regist
+ 496:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t HFSR;                   /*!< Offset: 0x02C (R/W)  HardFault Status Register */
+ 497:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t DFSR;                   /*!< Offset: 0x030 (R/W)  Debug Fault Status Register */
+ 498:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t MMFAR;                  /*!< Offset: 0x034 (R/W)  MemManage Fault Address Register
+ 499:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t BFAR;                   /*!< Offset: 0x038 (R/W)  BusFault Address Register */
+ 500:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t AFSR;                   /*!< Offset: 0x03C (R/W)  Auxiliary Fault Status Register 
+ 501:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t PFR[2U];                /*!< Offset: 0x040 (R/ )  Processor Feature Register */
+ 502:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t DFR;                    /*!< Offset: 0x048 (R/ )  Debug Feature Register */
+ 503:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t ADR;                    /*!< Offset: 0x04C (R/ )  Auxiliary Feature Register */
+ 504:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t MMFR[4U];               /*!< Offset: 0x050 (R/ )  Memory Model Feature Register */
+ 505:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t ISAR[5U];               /*!< Offset: 0x060 (R/ )  Instruction Set Attributes Regis
+ 506:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED0[5U];
+ 507:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t CPACR;                  /*!< Offset: 0x088 (R/W)  Coprocessor Access Control Regis
+ 508:./Libraries/CMSIS/Include/core_cm4.h **** } SCB_Type;
+ 509:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 510:./Libraries/CMSIS/Include/core_cm4.h **** /* SCB CPUID Register Definitions */
+ 511:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_IMPLEMENTER_Pos          24U                                            /*!< SCB 
+ 512:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_IMPLEMENTER_Msk          (0xFFUL << SCB_CPUID_IMPLEMENTER_Pos)          /*!< SCB 
+ 513:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 514:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_VARIANT_Pos              20U                                            /*!< SCB 
+ 515:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_VARIANT_Msk              (0xFUL << SCB_CPUID_VARIANT_Pos)               /*!< SCB 
+ 516:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 517:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_ARCHITECTURE_Pos         16U                                            /*!< SCB 
+ 518:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_ARCHITECTURE_Msk         (0xFUL << SCB_CPUID_ARCHITECTURE_Pos)          /*!< SCB 
+ 519:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 520:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_PARTNO_Pos                4U                                            /*!< SCB 
+ 521:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_PARTNO_Msk               (0xFFFUL << SCB_CPUID_PARTNO_Pos)              /*!< SCB 
+ 522:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 523:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_REVISION_Pos              0U                                            /*!< SCB 
+ 524:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CPUID_REVISION_Msk             (0xFUL /*<< SCB_CPUID_REVISION_Pos*/)          /*!< SCB 
+ 525:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 526:./Libraries/CMSIS/Include/core_cm4.h **** /* SCB Interrupt Control State Register Definitions */
+ 527:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_NMIPENDSET_Pos            31U                                            /*!< SCB 
+ 528:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_NMIPENDSET_Msk            (1UL << SCB_ICSR_NMIPENDSET_Pos)               /*!< SCB 
+ 529:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 530:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSVSET_Pos             28U                                            /*!< SCB 
+ 531:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSVSET_Msk             (1UL << SCB_ICSR_PENDSVSET_Pos)                /*!< SCB 
+ 532:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 533:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSVCLR_Pos             27U                                            /*!< SCB 
+ 534:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSVCLR_Msk             (1UL << SCB_ICSR_PENDSVCLR_Pos)                /*!< SCB 
+ 535:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 536:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSTSET_Pos             26U                                            /*!< SCB 
+ 537:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSTSET_Msk             (1UL << SCB_ICSR_PENDSTSET_Pos)                /*!< SCB 
+ARM GAS  /tmp/cc2QYl5T.s 			page 19
+
+
+ 538:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 539:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSTCLR_Pos             25U                                            /*!< SCB 
+ 540:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_PENDSTCLR_Msk             (1UL << SCB_ICSR_PENDSTCLR_Pos)                /*!< SCB 
+ 541:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 542:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_ISRPREEMPT_Pos            23U                                            /*!< SCB 
+ 543:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_ISRPREEMPT_Msk            (1UL << SCB_ICSR_ISRPREEMPT_Pos)               /*!< SCB 
+ 544:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 545:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_ISRPENDING_Pos            22U                                            /*!< SCB 
+ 546:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_ISRPENDING_Msk            (1UL << SCB_ICSR_ISRPENDING_Pos)               /*!< SCB 
+ 547:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 548:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_VECTPENDING_Pos           12U                                            /*!< SCB 
+ 549:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_VECTPENDING_Msk           (0x1FFUL << SCB_ICSR_VECTPENDING_Pos)          /*!< SCB 
+ 550:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 551:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_RETTOBASE_Pos             11U                                            /*!< SCB 
+ 552:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_RETTOBASE_Msk             (1UL << SCB_ICSR_RETTOBASE_Pos)                /*!< SCB 
+ 553:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 554:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_VECTACTIVE_Pos             0U                                            /*!< SCB 
+ 555:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_ICSR_VECTACTIVE_Msk            (0x1FFUL /*<< SCB_ICSR_VECTACTIVE_Pos*/)       /*!< SCB 
+ 556:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 557:./Libraries/CMSIS/Include/core_cm4.h **** /* SCB Vector Table Offset Register Definitions */
+ 558:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_VTOR_TBLOFF_Pos                 7U                                            /*!< SCB 
+ 559:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_VTOR_TBLOFF_Msk                (0x1FFFFFFUL << SCB_VTOR_TBLOFF_Pos)           /*!< SCB 
+ 560:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 561:./Libraries/CMSIS/Include/core_cm4.h **** /* SCB Application Interrupt and Reset Control Register Definitions */
+ 562:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTKEY_Pos              16U                                            /*!< SCB 
+ 563:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTKEY_Msk              (0xFFFFUL << SCB_AIRCR_VECTKEY_Pos)            /*!< SCB 
+ 564:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 565:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTKEYSTAT_Pos          16U                                            /*!< SCB 
+ 566:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTKEYSTAT_Msk          (0xFFFFUL << SCB_AIRCR_VECTKEYSTAT_Pos)        /*!< SCB 
+ 567:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 568:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_ENDIANESS_Pos            15U                                            /*!< SCB 
+ 569:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_ENDIANESS_Msk            (1UL << SCB_AIRCR_ENDIANESS_Pos)               /*!< SCB 
+ 570:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 571:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_PRIGROUP_Pos              8U                                            /*!< SCB 
+ 572:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_PRIGROUP_Msk             (7UL << SCB_AIRCR_PRIGROUP_Pos)                /*!< SCB 
+ 573:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 574:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_SYSRESETREQ_Pos           2U                                            /*!< SCB 
+ 575:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_SYSRESETREQ_Msk          (1UL << SCB_AIRCR_SYSRESETREQ_Pos)             /*!< SCB 
+ 576:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 577:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTCLRACTIVE_Pos         1U                                            /*!< SCB 
+ 578:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTCLRACTIVE_Msk        (1UL << SCB_AIRCR_VECTCLRACTIVE_Pos)           /*!< SCB 
+ 579:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 580:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTRESET_Pos             0U                                            /*!< SCB 
+ 581:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_AIRCR_VECTRESET_Msk            (1UL /*<< SCB_AIRCR_VECTRESET_Pos*/)           /*!< SCB 
+ 582:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 583:./Libraries/CMSIS/Include/core_cm4.h **** /* SCB System Control Register Definitions */
+ 584:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SCR_SEVONPEND_Pos               4U                                            /*!< SCB 
+ 585:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SCR_SEVONPEND_Msk              (1UL << SCB_SCR_SEVONPEND_Pos)                 /*!< SCB 
+ 586:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 587:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SCR_SLEEPDEEP_Pos               2U                                            /*!< SCB 
+ 588:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SCR_SLEEPDEEP_Msk              (1UL << SCB_SCR_SLEEPDEEP_Pos)                 /*!< SCB 
+ 589:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 590:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SCR_SLEEPONEXIT_Pos             1U                                            /*!< SCB 
+ 591:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SCR_SLEEPONEXIT_Msk            (1UL << SCB_SCR_SLEEPONEXIT_Pos)               /*!< SCB 
+ 592:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 593:./Libraries/CMSIS/Include/core_cm4.h **** /* SCB Configuration Control Register Definitions */
+ 594:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CCR_STKALIGN_Pos                9U                                            /*!< SCB 
+ARM GAS  /tmp/cc2QYl5T.s 			page 20
+
+
+ 595:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CCR_STKALIGN_Msk               (1UL << SCB_CCR_STKALIGN_Pos)                  /*!< SCB 
+ 596:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 597:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CCR_BFHFNMIGN_Pos               8U                                            /*!< SCB 
+ 598:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CCR_BFHFNMIGN_Msk              (1UL << SCB_CCR_BFHFNMIGN_Pos)                 /*!< SCB 
+ 599:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 600:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CCR_DIV_0_TRP_Pos               4U                                            /*!< SCB 
+ 601:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CCR_DIV_0_TRP_Msk              (1UL << SCB_CCR_DIV_0_TRP_Pos)                 /*!< SCB 
+ 602:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 603:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CCR_UNALIGN_TRP_Pos             3U                                            /*!< SCB 
+ 604:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CCR_UNALIGN_TRP_Msk            (1UL << SCB_CCR_UNALIGN_TRP_Pos)               /*!< SCB 
+ 605:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 606:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CCR_USERSETMPEND_Pos            1U                                            /*!< SCB 
+ 607:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CCR_USERSETMPEND_Msk           (1UL << SCB_CCR_USERSETMPEND_Pos)              /*!< SCB 
+ 608:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 609:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CCR_NONBASETHRDENA_Pos          0U                                            /*!< SCB 
+ 610:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CCR_NONBASETHRDENA_Msk         (1UL /*<< SCB_CCR_NONBASETHRDENA_Pos*/)        /*!< SCB 
+ 611:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 612:./Libraries/CMSIS/Include/core_cm4.h **** /* SCB System Handler Control and State Register Definitions */
+ 613:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTENA_Pos          18U                                            /*!< SCB 
+ 614:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTENA_Msk          (1UL << SCB_SHCSR_USGFAULTENA_Pos)             /*!< SCB 
+ 615:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 616:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_BUSFAULTENA_Pos          17U                                            /*!< SCB 
+ 617:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_BUSFAULTENA_Msk          (1UL << SCB_SHCSR_BUSFAULTENA_Pos)             /*!< SCB 
+ 618:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 619:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MEMFAULTENA_Pos          16U                                            /*!< SCB 
+ 620:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MEMFAULTENA_Msk          (1UL << SCB_SHCSR_MEMFAULTENA_Pos)             /*!< SCB 
+ 621:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 622:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SVCALLPENDED_Pos         15U                                            /*!< SCB 
+ 623:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SVCALLPENDED_Msk         (1UL << SCB_SHCSR_SVCALLPENDED_Pos)            /*!< SCB 
+ 624:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 625:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_BUSFAULTPENDED_Pos       14U                                            /*!< SCB 
+ 626:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_BUSFAULTPENDED_Msk       (1UL << SCB_SHCSR_BUSFAULTPENDED_Pos)          /*!< SCB 
+ 627:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 628:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MEMFAULTPENDED_Pos       13U                                            /*!< SCB 
+ 629:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MEMFAULTPENDED_Msk       (1UL << SCB_SHCSR_MEMFAULTPENDED_Pos)          /*!< SCB 
+ 630:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 631:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTPENDED_Pos       12U                                            /*!< SCB 
+ 632:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTPENDED_Msk       (1UL << SCB_SHCSR_USGFAULTPENDED_Pos)          /*!< SCB 
+ 633:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 634:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SYSTICKACT_Pos           11U                                            /*!< SCB 
+ 635:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SYSTICKACT_Msk           (1UL << SCB_SHCSR_SYSTICKACT_Pos)              /*!< SCB 
+ 636:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 637:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_PENDSVACT_Pos            10U                                            /*!< SCB 
+ 638:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_PENDSVACT_Msk            (1UL << SCB_SHCSR_PENDSVACT_Pos)               /*!< SCB 
+ 639:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 640:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MONITORACT_Pos            8U                                            /*!< SCB 
+ 641:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MONITORACT_Msk           (1UL << SCB_SHCSR_MONITORACT_Pos)              /*!< SCB 
+ 642:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 643:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SVCALLACT_Pos             7U                                            /*!< SCB 
+ 644:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_SVCALLACT_Msk            (1UL << SCB_SHCSR_SVCALLACT_Pos)               /*!< SCB 
+ 645:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 646:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTACT_Pos           3U                                            /*!< SCB 
+ 647:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_USGFAULTACT_Msk          (1UL << SCB_SHCSR_USGFAULTACT_Pos)             /*!< SCB 
+ 648:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 649:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_BUSFAULTACT_Pos           1U                                            /*!< SCB 
+ 650:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_BUSFAULTACT_Msk          (1UL << SCB_SHCSR_BUSFAULTACT_Pos)             /*!< SCB 
+ 651:./Libraries/CMSIS/Include/core_cm4.h **** 
+ARM GAS  /tmp/cc2QYl5T.s 			page 21
+
+
+ 652:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MEMFAULTACT_Pos           0U                                            /*!< SCB 
+ 653:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_SHCSR_MEMFAULTACT_Msk          (1UL /*<< SCB_SHCSR_MEMFAULTACT_Pos*/)         /*!< SCB 
+ 654:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 655:./Libraries/CMSIS/Include/core_cm4.h **** /* SCB Configurable Fault Status Register Definitions */
+ 656:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CFSR_USGFAULTSR_Pos            16U                                            /*!< SCB 
+ 657:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CFSR_USGFAULTSR_Msk            (0xFFFFUL << SCB_CFSR_USGFAULTSR_Pos)          /*!< SCB 
+ 658:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 659:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CFSR_BUSFAULTSR_Pos             8U                                            /*!< SCB 
+ 660:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CFSR_BUSFAULTSR_Msk            (0xFFUL << SCB_CFSR_BUSFAULTSR_Pos)            /*!< SCB 
+ 661:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 662:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CFSR_MEMFAULTSR_Pos             0U                                            /*!< SCB 
+ 663:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_CFSR_MEMFAULTSR_Msk            (0xFFUL /*<< SCB_CFSR_MEMFAULTSR_Pos*/)        /*!< SCB 
+ 664:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 665:./Libraries/CMSIS/Include/core_cm4.h **** /* SCB Hard Fault Status Register Definitions */
+ 666:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_HFSR_DEBUGEVT_Pos              31U                                            /*!< SCB 
+ 667:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_HFSR_DEBUGEVT_Msk              (1UL << SCB_HFSR_DEBUGEVT_Pos)                 /*!< SCB 
+ 668:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 669:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_HFSR_FORCED_Pos                30U                                            /*!< SCB 
+ 670:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_HFSR_FORCED_Msk                (1UL << SCB_HFSR_FORCED_Pos)                   /*!< SCB 
+ 671:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 672:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_HFSR_VECTTBL_Pos                1U                                            /*!< SCB 
+ 673:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_HFSR_VECTTBL_Msk               (1UL << SCB_HFSR_VECTTBL_Pos)                  /*!< SCB 
+ 674:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 675:./Libraries/CMSIS/Include/core_cm4.h **** /* SCB Debug Fault Status Register Definitions */
+ 676:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_EXTERNAL_Pos               4U                                            /*!< SCB 
+ 677:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_EXTERNAL_Msk              (1UL << SCB_DFSR_EXTERNAL_Pos)                 /*!< SCB 
+ 678:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 679:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_VCATCH_Pos                 3U                                            /*!< SCB 
+ 680:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_VCATCH_Msk                (1UL << SCB_DFSR_VCATCH_Pos)                   /*!< SCB 
+ 681:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 682:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_DWTTRAP_Pos                2U                                            /*!< SCB 
+ 683:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_DWTTRAP_Msk               (1UL << SCB_DFSR_DWTTRAP_Pos)                  /*!< SCB 
+ 684:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 685:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_BKPT_Pos                   1U                                            /*!< SCB 
+ 686:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_BKPT_Msk                  (1UL << SCB_DFSR_BKPT_Pos)                     /*!< SCB 
+ 687:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 688:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_HALTED_Pos                 0U                                            /*!< SCB 
+ 689:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_DFSR_HALTED_Msk                (1UL /*<< SCB_DFSR_HALTED_Pos*/)               /*!< SCB 
+ 690:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 691:./Libraries/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_SCB */
+ 692:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 693:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 694:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 695:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_core_register
+ 696:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_SCnSCB System Controls not in SCB (SCnSCB)
+ 697:./Libraries/CMSIS/Include/core_cm4.h ****   \brief    Type definitions for the System Control and ID Register not in the SCB
+ 698:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+ 699:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 700:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 701:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 702:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Structure type to access the System Control and ID Register not in the SCB.
+ 703:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 704:./Libraries/CMSIS/Include/core_cm4.h **** typedef struct
+ 705:./Libraries/CMSIS/Include/core_cm4.h **** {
+ 706:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED0[1U];
+ 707:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t ICTR;                   /*!< Offset: 0x004 (R/ )  Interrupt Controller Type Regist
+ 708:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t ACTLR;                  /*!< Offset: 0x008 (R/W)  Auxiliary Control Register */
+ARM GAS  /tmp/cc2QYl5T.s 			page 22
+
+
+ 709:./Libraries/CMSIS/Include/core_cm4.h **** } SCnSCB_Type;
+ 710:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 711:./Libraries/CMSIS/Include/core_cm4.h **** /* Interrupt Controller Type Register Definitions */
+ 712:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB_ICTR_INTLINESNUM_Pos         0U                                         /*!< ICTR: I
+ 713:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB_ICTR_INTLINESNUM_Msk        (0xFUL /*<< SCnSCB_ICTR_INTLINESNUM_Pos*/)  /*!< ICTR: I
+ 714:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 715:./Libraries/CMSIS/Include/core_cm4.h **** /* Auxiliary Control Register Definitions */
+ 716:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISOOFP_Pos            9U                                         /*!< ACTLR: 
+ 717:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISOOFP_Msk           (1UL << SCnSCB_ACTLR_DISOOFP_Pos)           /*!< ACTLR: 
+ 718:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 719:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISFPCA_Pos            8U                                         /*!< ACTLR: 
+ 720:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISFPCA_Msk           (1UL << SCnSCB_ACTLR_DISFPCA_Pos)           /*!< ACTLR: 
+ 721:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 722:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISFOLD_Pos            2U                                         /*!< ACTLR: 
+ 723:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISFOLD_Msk           (1UL << SCnSCB_ACTLR_DISFOLD_Pos)           /*!< ACTLR: 
+ 724:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 725:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISDEFWBUF_Pos         1U                                         /*!< ACTLR: 
+ 726:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISDEFWBUF_Msk        (1UL << SCnSCB_ACTLR_DISDEFWBUF_Pos)        /*!< ACTLR: 
+ 727:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 728:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISMCYCINT_Pos         0U                                         /*!< ACTLR: 
+ 729:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB_ACTLR_DISMCYCINT_Msk        (1UL /*<< SCnSCB_ACTLR_DISMCYCINT_Pos*/)    /*!< ACTLR: 
+ 730:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 731:./Libraries/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_SCnotSCB */
+ 732:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 733:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 734:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 735:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_core_register
+ 736:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_SysTick     System Tick Timer (SysTick)
+ 737:./Libraries/CMSIS/Include/core_cm4.h ****   \brief    Type definitions for the System Timer Registers.
+ 738:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+ 739:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 740:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 741:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 742:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Structure type to access the System Timer (SysTick).
+ 743:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 744:./Libraries/CMSIS/Include/core_cm4.h **** typedef struct
+ 745:./Libraries/CMSIS/Include/core_cm4.h **** {
+ 746:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x000 (R/W)  SysTick Control and Status Regis
+ 747:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t LOAD;                   /*!< Offset: 0x004 (R/W)  SysTick Reload Value Register */
+ 748:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t VAL;                    /*!< Offset: 0x008 (R/W)  SysTick Current Value Register *
+ 749:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t CALIB;                  /*!< Offset: 0x00C (R/ )  SysTick Calibration Register */
+ 750:./Libraries/CMSIS/Include/core_cm4.h **** } SysTick_Type;
+ 751:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 752:./Libraries/CMSIS/Include/core_cm4.h **** /* SysTick Control / Status Register Definitions */
+ 753:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_COUNTFLAG_Pos         16U                                            /*!< SysT
+ 754:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_COUNTFLAG_Msk         (1UL << SysTick_CTRL_COUNTFLAG_Pos)            /*!< SysT
+ 755:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 756:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_CLKSOURCE_Pos          2U                                            /*!< SysT
+ 757:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_CLKSOURCE_Msk         (1UL << SysTick_CTRL_CLKSOURCE_Pos)            /*!< SysT
+ 758:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 759:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_TICKINT_Pos            1U                                            /*!< SysT
+ 760:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_TICKINT_Msk           (1UL << SysTick_CTRL_TICKINT_Pos)              /*!< SysT
+ 761:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 762:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_ENABLE_Pos             0U                                            /*!< SysT
+ 763:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CTRL_ENABLE_Msk            (1UL /*<< SysTick_CTRL_ENABLE_Pos*/)           /*!< SysT
+ 764:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 765:./Libraries/CMSIS/Include/core_cm4.h **** /* SysTick Reload Register Definitions */
+ARM GAS  /tmp/cc2QYl5T.s 			page 23
+
+
+ 766:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_LOAD_RELOAD_Pos             0U                                            /*!< SysT
+ 767:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_LOAD_RELOAD_Msk            (0xFFFFFFUL /*<< SysTick_LOAD_RELOAD_Pos*/)    /*!< SysT
+ 768:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 769:./Libraries/CMSIS/Include/core_cm4.h **** /* SysTick Current Register Definitions */
+ 770:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_VAL_CURRENT_Pos             0U                                            /*!< SysT
+ 771:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_VAL_CURRENT_Msk            (0xFFFFFFUL /*<< SysTick_VAL_CURRENT_Pos*/)    /*!< SysT
+ 772:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 773:./Libraries/CMSIS/Include/core_cm4.h **** /* SysTick Calibration Register Definitions */
+ 774:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CALIB_NOREF_Pos            31U                                            /*!< SysT
+ 775:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CALIB_NOREF_Msk            (1UL << SysTick_CALIB_NOREF_Pos)               /*!< SysT
+ 776:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 777:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CALIB_SKEW_Pos             30U                                            /*!< SysT
+ 778:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CALIB_SKEW_Msk             (1UL << SysTick_CALIB_SKEW_Pos)                /*!< SysT
+ 779:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 780:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CALIB_TENMS_Pos             0U                                            /*!< SysT
+ 781:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_CALIB_TENMS_Msk            (0xFFFFFFUL /*<< SysTick_CALIB_TENMS_Pos*/)    /*!< SysT
+ 782:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 783:./Libraries/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_SysTick */
+ 784:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 785:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 786:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 787:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_core_register
+ 788:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_ITM     Instrumentation Trace Macrocell (ITM)
+ 789:./Libraries/CMSIS/Include/core_cm4.h ****   \brief    Type definitions for the Instrumentation Trace Macrocell (ITM)
+ 790:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+ 791:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 792:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 793:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 794:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Structure type to access the Instrumentation Trace Macrocell Register (ITM).
+ 795:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 796:./Libraries/CMSIS/Include/core_cm4.h **** typedef struct
+ 797:./Libraries/CMSIS/Include/core_cm4.h **** {
+ 798:./Libraries/CMSIS/Include/core_cm4.h ****   __OM  union
+ 799:./Libraries/CMSIS/Include/core_cm4.h ****   {
+ 800:./Libraries/CMSIS/Include/core_cm4.h ****     __OM  uint8_t    u8;                 /*!< Offset: 0x000 ( /W)  ITM Stimulus Port 8-bit */
+ 801:./Libraries/CMSIS/Include/core_cm4.h ****     __OM  uint16_t   u16;                /*!< Offset: 0x000 ( /W)  ITM Stimulus Port 16-bit */
+ 802:./Libraries/CMSIS/Include/core_cm4.h ****     __OM  uint32_t   u32;                /*!< Offset: 0x000 ( /W)  ITM Stimulus Port 32-bit */
+ 803:./Libraries/CMSIS/Include/core_cm4.h ****   }  PORT [32U];                         /*!< Offset: 0x000 ( /W)  ITM Stimulus Port Registers */
+ 804:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED0[864U];
+ 805:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t TER;                    /*!< Offset: 0xE00 (R/W)  ITM Trace Enable Register */
+ 806:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED1[15U];
+ 807:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t TPR;                    /*!< Offset: 0xE40 (R/W)  ITM Trace Privilege Register */
+ 808:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED2[15U];
+ 809:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t TCR;                    /*!< Offset: 0xE80 (R/W)  ITM Trace Control Register */
+ 810:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED3[29U];
+ 811:./Libraries/CMSIS/Include/core_cm4.h ****   __OM  uint32_t IWR;                    /*!< Offset: 0xEF8 ( /W)  ITM Integration Write Register *
+ 812:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t IRR;                    /*!< Offset: 0xEFC (R/ )  ITM Integration Read Register */
+ 813:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t IMCR;                   /*!< Offset: 0xF00 (R/W)  ITM Integration Mode Control Reg
+ 814:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED4[43U];
+ 815:./Libraries/CMSIS/Include/core_cm4.h ****   __OM  uint32_t LAR;                    /*!< Offset: 0xFB0 ( /W)  ITM Lock Access Register */
+ 816:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t LSR;                    /*!< Offset: 0xFB4 (R/ )  ITM Lock Status Register */
+ 817:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED5[6U];
+ 818:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t PID4;                   /*!< Offset: 0xFD0 (R/ )  ITM Peripheral Identification Re
+ 819:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t PID5;                   /*!< Offset: 0xFD4 (R/ )  ITM Peripheral Identification Re
+ 820:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t PID6;                   /*!< Offset: 0xFD8 (R/ )  ITM Peripheral Identification Re
+ 821:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t PID7;                   /*!< Offset: 0xFDC (R/ )  ITM Peripheral Identification Re
+ 822:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t PID0;                   /*!< Offset: 0xFE0 (R/ )  ITM Peripheral Identification Re
+ARM GAS  /tmp/cc2QYl5T.s 			page 24
+
+
+ 823:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t PID1;                   /*!< Offset: 0xFE4 (R/ )  ITM Peripheral Identification Re
+ 824:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t PID2;                   /*!< Offset: 0xFE8 (R/ )  ITM Peripheral Identification Re
+ 825:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t PID3;                   /*!< Offset: 0xFEC (R/ )  ITM Peripheral Identification Re
+ 826:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t CID0;                   /*!< Offset: 0xFF0 (R/ )  ITM Component  Identification Re
+ 827:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t CID1;                   /*!< Offset: 0xFF4 (R/ )  ITM Component  Identification Re
+ 828:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t CID2;                   /*!< Offset: 0xFF8 (R/ )  ITM Component  Identification Re
+ 829:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t CID3;                   /*!< Offset: 0xFFC (R/ )  ITM Component  Identification Re
+ 830:./Libraries/CMSIS/Include/core_cm4.h **** } ITM_Type;
+ 831:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 832:./Libraries/CMSIS/Include/core_cm4.h **** /* ITM Trace Privilege Register Definitions */
+ 833:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TPR_PRIVMASK_Pos                0U                                            /*!< ITM 
+ 834:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TPR_PRIVMASK_Msk               (0xFUL /*<< ITM_TPR_PRIVMASK_Pos*/)            /*!< ITM 
+ 835:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 836:./Libraries/CMSIS/Include/core_cm4.h **** /* ITM Trace Control Register Definitions */
+ 837:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_BUSY_Pos                   23U                                            /*!< ITM 
+ 838:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_BUSY_Msk                   (1UL << ITM_TCR_BUSY_Pos)                      /*!< ITM 
+ 839:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 840:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TraceBusID_Pos             16U                                            /*!< ITM 
+ 841:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TraceBusID_Msk             (0x7FUL << ITM_TCR_TraceBusID_Pos)             /*!< ITM 
+ 842:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 843:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_GTSFREQ_Pos                10U                                            /*!< ITM 
+ 844:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_GTSFREQ_Msk                (3UL << ITM_TCR_GTSFREQ_Pos)                   /*!< ITM 
+ 845:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 846:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TSPrescale_Pos              8U                                            /*!< ITM 
+ 847:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TSPrescale_Msk             (3UL << ITM_TCR_TSPrescale_Pos)                /*!< ITM 
+ 848:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 849:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_SWOENA_Pos                  4U                                            /*!< ITM 
+ 850:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_SWOENA_Msk                 (1UL << ITM_TCR_SWOENA_Pos)                    /*!< ITM 
+ 851:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 852:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_DWTENA_Pos                  3U                                            /*!< ITM 
+ 853:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_DWTENA_Msk                 (1UL << ITM_TCR_DWTENA_Pos)                    /*!< ITM 
+ 854:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 855:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_SYNCENA_Pos                 2U                                            /*!< ITM 
+ 856:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_SYNCENA_Msk                (1UL << ITM_TCR_SYNCENA_Pos)                   /*!< ITM 
+ 857:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 858:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TSENA_Pos                   1U                                            /*!< ITM 
+ 859:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_TSENA_Msk                  (1UL << ITM_TCR_TSENA_Pos)                     /*!< ITM 
+ 860:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 861:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_ITMENA_Pos                  0U                                            /*!< ITM 
+ 862:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_TCR_ITMENA_Msk                 (1UL /*<< ITM_TCR_ITMENA_Pos*/)                /*!< ITM 
+ 863:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 864:./Libraries/CMSIS/Include/core_cm4.h **** /* ITM Integration Write Register Definitions */
+ 865:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_IWR_ATVALIDM_Pos                0U                                            /*!< ITM 
+ 866:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_IWR_ATVALIDM_Msk               (1UL /*<< ITM_IWR_ATVALIDM_Pos*/)              /*!< ITM 
+ 867:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 868:./Libraries/CMSIS/Include/core_cm4.h **** /* ITM Integration Read Register Definitions */
+ 869:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_IRR_ATREADYM_Pos                0U                                            /*!< ITM 
+ 870:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_IRR_ATREADYM_Msk               (1UL /*<< ITM_IRR_ATREADYM_Pos*/)              /*!< ITM 
+ 871:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 872:./Libraries/CMSIS/Include/core_cm4.h **** /* ITM Integration Mode Control Register Definitions */
+ 873:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_IMCR_INTEGRATION_Pos            0U                                            /*!< ITM 
+ 874:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_IMCR_INTEGRATION_Msk           (1UL /*<< ITM_IMCR_INTEGRATION_Pos*/)          /*!< ITM 
+ 875:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 876:./Libraries/CMSIS/Include/core_cm4.h **** /* ITM Lock Status Register Definitions */
+ 877:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_LSR_ByteAcc_Pos                 2U                                            /*!< ITM 
+ 878:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_LSR_ByteAcc_Msk                (1UL << ITM_LSR_ByteAcc_Pos)                   /*!< ITM 
+ 879:./Libraries/CMSIS/Include/core_cm4.h **** 
+ARM GAS  /tmp/cc2QYl5T.s 			page 25
+
+
+ 880:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_LSR_Access_Pos                  1U                                            /*!< ITM 
+ 881:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_LSR_Access_Msk                 (1UL << ITM_LSR_Access_Pos)                    /*!< ITM 
+ 882:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 883:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_LSR_Present_Pos                 0U                                            /*!< ITM 
+ 884:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_LSR_Present_Msk                (1UL /*<< ITM_LSR_Present_Pos*/)               /*!< ITM 
+ 885:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 886:./Libraries/CMSIS/Include/core_cm4.h **** /*@}*/ /* end of group CMSIS_ITM */
+ 887:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 888:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 889:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 890:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_core_register
+ 891:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_DWT     Data Watchpoint and Trace (DWT)
+ 892:./Libraries/CMSIS/Include/core_cm4.h ****   \brief    Type definitions for the Data Watchpoint and Trace (DWT)
+ 893:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+ 894:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 895:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 896:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ 897:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Structure type to access the Data Watchpoint and Trace Register (DWT).
+ 898:./Libraries/CMSIS/Include/core_cm4.h ****  */
+ 899:./Libraries/CMSIS/Include/core_cm4.h **** typedef struct
+ 900:./Libraries/CMSIS/Include/core_cm4.h **** {
+ 901:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x000 (R/W)  Control Register */
+ 902:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t CYCCNT;                 /*!< Offset: 0x004 (R/W)  Cycle Count Register */
+ 903:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t CPICNT;                 /*!< Offset: 0x008 (R/W)  CPI Count Register */
+ 904:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t EXCCNT;                 /*!< Offset: 0x00C (R/W)  Exception Overhead Count Registe
+ 905:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t SLEEPCNT;               /*!< Offset: 0x010 (R/W)  Sleep Count Register */
+ 906:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t LSUCNT;                 /*!< Offset: 0x014 (R/W)  LSU Count Register */
+ 907:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t FOLDCNT;                /*!< Offset: 0x018 (R/W)  Folded-instruction Count Registe
+ 908:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t PCSR;                   /*!< Offset: 0x01C (R/ )  Program Counter Sample Register 
+ 909:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t COMP0;                  /*!< Offset: 0x020 (R/W)  Comparator Register 0 */
+ 910:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t MASK0;                  /*!< Offset: 0x024 (R/W)  Mask Register 0 */
+ 911:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t FUNCTION0;              /*!< Offset: 0x028 (R/W)  Function Register 0 */
+ 912:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED0[1U];
+ 913:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t COMP1;                  /*!< Offset: 0x030 (R/W)  Comparator Register 1 */
+ 914:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t MASK1;                  /*!< Offset: 0x034 (R/W)  Mask Register 1 */
+ 915:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t FUNCTION1;              /*!< Offset: 0x038 (R/W)  Function Register 1 */
+ 916:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED1[1U];
+ 917:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t COMP2;                  /*!< Offset: 0x040 (R/W)  Comparator Register 2 */
+ 918:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t MASK2;                  /*!< Offset: 0x044 (R/W)  Mask Register 2 */
+ 919:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t FUNCTION2;              /*!< Offset: 0x048 (R/W)  Function Register 2 */
+ 920:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED2[1U];
+ 921:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t COMP3;                  /*!< Offset: 0x050 (R/W)  Comparator Register 3 */
+ 922:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t MASK3;                  /*!< Offset: 0x054 (R/W)  Mask Register 3 */
+ 923:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t FUNCTION3;              /*!< Offset: 0x058 (R/W)  Function Register 3 */
+ 924:./Libraries/CMSIS/Include/core_cm4.h **** } DWT_Type;
+ 925:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 926:./Libraries/CMSIS/Include/core_cm4.h **** /* DWT Control Register Definitions */
+ 927:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_NUMCOMP_Pos               28U                                         /*!< DWT CTR
+ 928:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_NUMCOMP_Msk               (0xFUL << DWT_CTRL_NUMCOMP_Pos)             /*!< DWT CTR
+ 929:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 930:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_NOTRCPKT_Pos              27U                                         /*!< DWT CTR
+ 931:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_NOTRCPKT_Msk              (0x1UL << DWT_CTRL_NOTRCPKT_Pos)            /*!< DWT CTR
+ 932:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 933:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_NOEXTTRIG_Pos             26U                                         /*!< DWT CTR
+ 934:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_NOEXTTRIG_Msk             (0x1UL << DWT_CTRL_NOEXTTRIG_Pos)           /*!< DWT CTR
+ 935:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 936:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_NOCYCCNT_Pos              25U                                         /*!< DWT CTR
+ARM GAS  /tmp/cc2QYl5T.s 			page 26
+
+
+ 937:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_NOCYCCNT_Msk              (0x1UL << DWT_CTRL_NOCYCCNT_Pos)            /*!< DWT CTR
+ 938:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 939:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_NOPRFCNT_Pos              24U                                         /*!< DWT CTR
+ 940:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_NOPRFCNT_Msk              (0x1UL << DWT_CTRL_NOPRFCNT_Pos)            /*!< DWT CTR
+ 941:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 942:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_CYCEVTENA_Pos             22U                                         /*!< DWT CTR
+ 943:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_CYCEVTENA_Msk             (0x1UL << DWT_CTRL_CYCEVTENA_Pos)           /*!< DWT CTR
+ 944:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 945:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_FOLDEVTENA_Pos            21U                                         /*!< DWT CTR
+ 946:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_FOLDEVTENA_Msk            (0x1UL << DWT_CTRL_FOLDEVTENA_Pos)          /*!< DWT CTR
+ 947:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 948:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_LSUEVTENA_Pos             20U                                         /*!< DWT CTR
+ 949:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_LSUEVTENA_Msk             (0x1UL << DWT_CTRL_LSUEVTENA_Pos)           /*!< DWT CTR
+ 950:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 951:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_SLEEPEVTENA_Pos           19U                                         /*!< DWT CTR
+ 952:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_SLEEPEVTENA_Msk           (0x1UL << DWT_CTRL_SLEEPEVTENA_Pos)         /*!< DWT CTR
+ 953:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 954:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_EXCEVTENA_Pos             18U                                         /*!< DWT CTR
+ 955:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_EXCEVTENA_Msk             (0x1UL << DWT_CTRL_EXCEVTENA_Pos)           /*!< DWT CTR
+ 956:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 957:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_CPIEVTENA_Pos             17U                                         /*!< DWT CTR
+ 958:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_CPIEVTENA_Msk             (0x1UL << DWT_CTRL_CPIEVTENA_Pos)           /*!< DWT CTR
+ 959:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 960:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_EXCTRCENA_Pos             16U                                         /*!< DWT CTR
+ 961:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_EXCTRCENA_Msk             (0x1UL << DWT_CTRL_EXCTRCENA_Pos)           /*!< DWT CTR
+ 962:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 963:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_PCSAMPLENA_Pos            12U                                         /*!< DWT CTR
+ 964:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_PCSAMPLENA_Msk            (0x1UL << DWT_CTRL_PCSAMPLENA_Pos)          /*!< DWT CTR
+ 965:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 966:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_SYNCTAP_Pos               10U                                         /*!< DWT CTR
+ 967:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_SYNCTAP_Msk               (0x3UL << DWT_CTRL_SYNCTAP_Pos)             /*!< DWT CTR
+ 968:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 969:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_CYCTAP_Pos                 9U                                         /*!< DWT CTR
+ 970:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_CYCTAP_Msk                (0x1UL << DWT_CTRL_CYCTAP_Pos)              /*!< DWT CTR
+ 971:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 972:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_POSTINIT_Pos               5U                                         /*!< DWT CTR
+ 973:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_POSTINIT_Msk              (0xFUL << DWT_CTRL_POSTINIT_Pos)            /*!< DWT CTR
+ 974:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 975:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_POSTPRESET_Pos             1U                                         /*!< DWT CTR
+ 976:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_POSTPRESET_Msk            (0xFUL << DWT_CTRL_POSTPRESET_Pos)          /*!< DWT CTR
+ 977:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 978:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_CYCCNTENA_Pos              0U                                         /*!< DWT CTR
+ 979:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CTRL_CYCCNTENA_Msk             (0x1UL /*<< DWT_CTRL_CYCCNTENA_Pos*/)       /*!< DWT CTR
+ 980:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 981:./Libraries/CMSIS/Include/core_cm4.h **** /* DWT CPI Count Register Definitions */
+ 982:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CPICNT_CPICNT_Pos               0U                                         /*!< DWT CPI
+ 983:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_CPICNT_CPICNT_Msk              (0xFFUL /*<< DWT_CPICNT_CPICNT_Pos*/)       /*!< DWT CPI
+ 984:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 985:./Libraries/CMSIS/Include/core_cm4.h **** /* DWT Exception Overhead Count Register Definitions */
+ 986:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_EXCCNT_EXCCNT_Pos               0U                                         /*!< DWT EXC
+ 987:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_EXCCNT_EXCCNT_Msk              (0xFFUL /*<< DWT_EXCCNT_EXCCNT_Pos*/)       /*!< DWT EXC
+ 988:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 989:./Libraries/CMSIS/Include/core_cm4.h **** /* DWT Sleep Count Register Definitions */
+ 990:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_SLEEPCNT_SLEEPCNT_Pos           0U                                         /*!< DWT SLE
+ 991:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_SLEEPCNT_SLEEPCNT_Msk          (0xFFUL /*<< DWT_SLEEPCNT_SLEEPCNT_Pos*/)   /*!< DWT SLE
+ 992:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 993:./Libraries/CMSIS/Include/core_cm4.h **** /* DWT LSU Count Register Definitions */
+ARM GAS  /tmp/cc2QYl5T.s 			page 27
+
+
+ 994:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_LSUCNT_LSUCNT_Pos               0U                                         /*!< DWT LSU
+ 995:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_LSUCNT_LSUCNT_Msk              (0xFFUL /*<< DWT_LSUCNT_LSUCNT_Pos*/)       /*!< DWT LSU
+ 996:./Libraries/CMSIS/Include/core_cm4.h **** 
+ 997:./Libraries/CMSIS/Include/core_cm4.h **** /* DWT Folded-instruction Count Register Definitions */
+ 998:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FOLDCNT_FOLDCNT_Pos             0U                                         /*!< DWT FOL
+ 999:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FOLDCNT_FOLDCNT_Msk            (0xFFUL /*<< DWT_FOLDCNT_FOLDCNT_Pos*/)     /*!< DWT FOL
+1000:./Libraries/CMSIS/Include/core_cm4.h **** 
+1001:./Libraries/CMSIS/Include/core_cm4.h **** /* DWT Comparator Mask Register Definitions */
+1002:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_MASK_MASK_Pos                   0U                                         /*!< DWT MAS
+1003:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_MASK_MASK_Msk                  (0x1FUL /*<< DWT_MASK_MASK_Pos*/)           /*!< DWT MAS
+1004:./Libraries/CMSIS/Include/core_cm4.h **** 
+1005:./Libraries/CMSIS/Include/core_cm4.h **** /* DWT Comparator Function Register Definitions */
+1006:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_MATCHED_Pos           24U                                         /*!< DWT FUN
+1007:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_MATCHED_Msk           (0x1UL << DWT_FUNCTION_MATCHED_Pos)         /*!< DWT FUN
+1008:./Libraries/CMSIS/Include/core_cm4.h **** 
+1009:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_DATAVADDR1_Pos        16U                                         /*!< DWT FUN
+1010:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_DATAVADDR1_Msk        (0xFUL << DWT_FUNCTION_DATAVADDR1_Pos)      /*!< DWT FUN
+1011:./Libraries/CMSIS/Include/core_cm4.h **** 
+1012:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_DATAVADDR0_Pos        12U                                         /*!< DWT FUN
+1013:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_DATAVADDR0_Msk        (0xFUL << DWT_FUNCTION_DATAVADDR0_Pos)      /*!< DWT FUN
+1014:./Libraries/CMSIS/Include/core_cm4.h **** 
+1015:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_DATAVSIZE_Pos         10U                                         /*!< DWT FUN
+1016:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_DATAVSIZE_Msk         (0x3UL << DWT_FUNCTION_DATAVSIZE_Pos)       /*!< DWT FUN
+1017:./Libraries/CMSIS/Include/core_cm4.h **** 
+1018:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_LNK1ENA_Pos            9U                                         /*!< DWT FUN
+1019:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_LNK1ENA_Msk           (0x1UL << DWT_FUNCTION_LNK1ENA_Pos)         /*!< DWT FUN
+1020:./Libraries/CMSIS/Include/core_cm4.h **** 
+1021:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_DATAVMATCH_Pos         8U                                         /*!< DWT FUN
+1022:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_DATAVMATCH_Msk        (0x1UL << DWT_FUNCTION_DATAVMATCH_Pos)      /*!< DWT FUN
+1023:./Libraries/CMSIS/Include/core_cm4.h **** 
+1024:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_CYCMATCH_Pos           7U                                         /*!< DWT FUN
+1025:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_CYCMATCH_Msk          (0x1UL << DWT_FUNCTION_CYCMATCH_Pos)        /*!< DWT FUN
+1026:./Libraries/CMSIS/Include/core_cm4.h **** 
+1027:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_EMITRANGE_Pos          5U                                         /*!< DWT FUN
+1028:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_EMITRANGE_Msk         (0x1UL << DWT_FUNCTION_EMITRANGE_Pos)       /*!< DWT FUN
+1029:./Libraries/CMSIS/Include/core_cm4.h **** 
+1030:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_FUNCTION_Pos           0U                                         /*!< DWT FUN
+1031:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_FUNCTION_FUNCTION_Msk          (0xFUL /*<< DWT_FUNCTION_FUNCTION_Pos*/)    /*!< DWT FUN
+1032:./Libraries/CMSIS/Include/core_cm4.h **** 
+1033:./Libraries/CMSIS/Include/core_cm4.h **** /*@}*/ /* end of group CMSIS_DWT */
+1034:./Libraries/CMSIS/Include/core_cm4.h **** 
+1035:./Libraries/CMSIS/Include/core_cm4.h **** 
+1036:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1037:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_core_register
+1038:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_TPI     Trace Port Interface (TPI)
+1039:./Libraries/CMSIS/Include/core_cm4.h ****   \brief    Type definitions for the Trace Port Interface (TPI)
+1040:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+1041:./Libraries/CMSIS/Include/core_cm4.h ****  */
+1042:./Libraries/CMSIS/Include/core_cm4.h **** 
+1043:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1044:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Structure type to access the Trace Port Interface Register (TPI).
+1045:./Libraries/CMSIS/Include/core_cm4.h ****  */
+1046:./Libraries/CMSIS/Include/core_cm4.h **** typedef struct
+1047:./Libraries/CMSIS/Include/core_cm4.h **** {
+1048:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t SSPSR;                  /*!< Offset: 0x000 (R/ )  Supported Parallel Port Size Reg
+1049:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t CSPSR;                  /*!< Offset: 0x004 (R/W)  Current Parallel Port Size Regis
+1050:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED0[2U];
+ARM GAS  /tmp/cc2QYl5T.s 			page 28
+
+
+1051:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t ACPR;                   /*!< Offset: 0x010 (R/W)  Asynchronous Clock Prescaler Reg
+1052:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED1[55U];
+1053:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t SPPR;                   /*!< Offset: 0x0F0 (R/W)  Selected Pin Protocol Register *
+1054:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED2[131U];
+1055:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t FFSR;                   /*!< Offset: 0x300 (R/ )  Formatter and Flush Status Regis
+1056:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t FFCR;                   /*!< Offset: 0x304 (R/W)  Formatter and Flush Control Regi
+1057:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t FSCR;                   /*!< Offset: 0x308 (R/ )  Formatter Synchronization Counte
+1058:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED3[759U];
+1059:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t TRIGGER;                /*!< Offset: 0xEE8 (R/ )  TRIGGER */
+1060:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t FIFO0;                  /*!< Offset: 0xEEC (R/ )  Integration ETM Data */
+1061:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t ITATBCTR2;              /*!< Offset: 0xEF0 (R/ )  ITATBCTR2 */
+1062:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED4[1U];
+1063:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t ITATBCTR0;              /*!< Offset: 0xEF8 (R/ )  ITATBCTR0 */
+1064:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t FIFO1;                  /*!< Offset: 0xEFC (R/ )  Integration ITM Data */
+1065:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t ITCTRL;                 /*!< Offset: 0xF00 (R/W)  Integration Mode Control */
+1066:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED5[39U];
+1067:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t CLAIMSET;               /*!< Offset: 0xFA0 (R/W)  Claim tag set */
+1068:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t CLAIMCLR;               /*!< Offset: 0xFA4 (R/W)  Claim tag clear */
+1069:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED7[8U];
+1070:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t DEVID;                  /*!< Offset: 0xFC8 (R/ )  TPIU_DEVID */
+1071:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t DEVTYPE;                /*!< Offset: 0xFCC (R/ )  TPIU_DEVTYPE */
+1072:./Libraries/CMSIS/Include/core_cm4.h **** } TPI_Type;
+1073:./Libraries/CMSIS/Include/core_cm4.h **** 
+1074:./Libraries/CMSIS/Include/core_cm4.h **** /* TPI Asynchronous Clock Prescaler Register Definitions */
+1075:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_ACPR_PRESCALER_Pos              0U                                         /*!< TPI ACP
+1076:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_ACPR_PRESCALER_Msk             (0x1FFFUL /*<< TPI_ACPR_PRESCALER_Pos*/)    /*!< TPI ACP
+1077:./Libraries/CMSIS/Include/core_cm4.h **** 
+1078:./Libraries/CMSIS/Include/core_cm4.h **** /* TPI Selected Pin Protocol Register Definitions */
+1079:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_SPPR_TXMODE_Pos                 0U                                         /*!< TPI SPP
+1080:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_SPPR_TXMODE_Msk                (0x3UL /*<< TPI_SPPR_TXMODE_Pos*/)          /*!< TPI SPP
+1081:./Libraries/CMSIS/Include/core_cm4.h **** 
+1082:./Libraries/CMSIS/Include/core_cm4.h **** /* TPI Formatter and Flush Status Register Definitions */
+1083:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FFSR_FtNonStop_Pos              3U                                         /*!< TPI FFS
+1084:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FFSR_FtNonStop_Msk             (0x1UL << TPI_FFSR_FtNonStop_Pos)           /*!< TPI FFS
+1085:./Libraries/CMSIS/Include/core_cm4.h **** 
+1086:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FFSR_TCPresent_Pos              2U                                         /*!< TPI FFS
+1087:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FFSR_TCPresent_Msk             (0x1UL << TPI_FFSR_TCPresent_Pos)           /*!< TPI FFS
+1088:./Libraries/CMSIS/Include/core_cm4.h **** 
+1089:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FFSR_FtStopped_Pos              1U                                         /*!< TPI FFS
+1090:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FFSR_FtStopped_Msk             (0x1UL << TPI_FFSR_FtStopped_Pos)           /*!< TPI FFS
+1091:./Libraries/CMSIS/Include/core_cm4.h **** 
+1092:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FFSR_FlInProg_Pos               0U                                         /*!< TPI FFS
+1093:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FFSR_FlInProg_Msk              (0x1UL /*<< TPI_FFSR_FlInProg_Pos*/)        /*!< TPI FFS
+1094:./Libraries/CMSIS/Include/core_cm4.h **** 
+1095:./Libraries/CMSIS/Include/core_cm4.h **** /* TPI Formatter and Flush Control Register Definitions */
+1096:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FFCR_TrigIn_Pos                 8U                                         /*!< TPI FFC
+1097:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FFCR_TrigIn_Msk                (0x1UL << TPI_FFCR_TrigIn_Pos)              /*!< TPI FFC
+1098:./Libraries/CMSIS/Include/core_cm4.h **** 
+1099:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FFCR_EnFCont_Pos                1U                                         /*!< TPI FFC
+1100:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FFCR_EnFCont_Msk               (0x1UL << TPI_FFCR_EnFCont_Pos)             /*!< TPI FFC
+1101:./Libraries/CMSIS/Include/core_cm4.h **** 
+1102:./Libraries/CMSIS/Include/core_cm4.h **** /* TPI TRIGGER Register Definitions */
+1103:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_TRIGGER_TRIGGER_Pos             0U                                         /*!< TPI TRI
+1104:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_TRIGGER_TRIGGER_Msk            (0x1UL /*<< TPI_TRIGGER_TRIGGER_Pos*/)      /*!< TPI TRI
+1105:./Libraries/CMSIS/Include/core_cm4.h **** 
+1106:./Libraries/CMSIS/Include/core_cm4.h **** /* TPI Integration ETM Data Register Definitions (FIFO0) */
+1107:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ITM_ATVALID_Pos          29U                                         /*!< TPI FIF
+ARM GAS  /tmp/cc2QYl5T.s 			page 29
+
+
+1108:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ITM_ATVALID_Msk          (0x3UL << TPI_FIFO0_ITM_ATVALID_Pos)        /*!< TPI FIF
+1109:./Libraries/CMSIS/Include/core_cm4.h **** 
+1110:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ITM_bytecount_Pos        27U                                         /*!< TPI FIF
+1111:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ITM_bytecount_Msk        (0x3UL << TPI_FIFO0_ITM_bytecount_Pos)      /*!< TPI FIF
+1112:./Libraries/CMSIS/Include/core_cm4.h **** 
+1113:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ETM_ATVALID_Pos          26U                                         /*!< TPI FIF
+1114:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ETM_ATVALID_Msk          (0x3UL << TPI_FIFO0_ETM_ATVALID_Pos)        /*!< TPI FIF
+1115:./Libraries/CMSIS/Include/core_cm4.h **** 
+1116:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ETM_bytecount_Pos        24U                                         /*!< TPI FIF
+1117:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ETM_bytecount_Msk        (0x3UL << TPI_FIFO0_ETM_bytecount_Pos)      /*!< TPI FIF
+1118:./Libraries/CMSIS/Include/core_cm4.h **** 
+1119:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ETM2_Pos                 16U                                         /*!< TPI FIF
+1120:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ETM2_Msk                 (0xFFUL << TPI_FIFO0_ETM2_Pos)              /*!< TPI FIF
+1121:./Libraries/CMSIS/Include/core_cm4.h **** 
+1122:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ETM1_Pos                  8U                                         /*!< TPI FIF
+1123:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ETM1_Msk                 (0xFFUL << TPI_FIFO0_ETM1_Pos)              /*!< TPI FIF
+1124:./Libraries/CMSIS/Include/core_cm4.h **** 
+1125:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ETM0_Pos                  0U                                         /*!< TPI FIF
+1126:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO0_ETM0_Msk                 (0xFFUL /*<< TPI_FIFO0_ETM0_Pos*/)          /*!< TPI FIF
+1127:./Libraries/CMSIS/Include/core_cm4.h **** 
+1128:./Libraries/CMSIS/Include/core_cm4.h **** /* TPI ITATBCTR2 Register Definitions */
+1129:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_ITATBCTR2_ATREADY_Pos           0U                                         /*!< TPI ITA
+1130:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_ITATBCTR2_ATREADY_Msk          (0x1UL /*<< TPI_ITATBCTR2_ATREADY_Pos*/)    /*!< TPI ITA
+1131:./Libraries/CMSIS/Include/core_cm4.h **** 
+1132:./Libraries/CMSIS/Include/core_cm4.h **** /* TPI Integration ITM Data Register Definitions (FIFO1) */
+1133:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM_ATVALID_Pos          29U                                         /*!< TPI FIF
+1134:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM_ATVALID_Msk          (0x3UL << TPI_FIFO1_ITM_ATVALID_Pos)        /*!< TPI FIF
+1135:./Libraries/CMSIS/Include/core_cm4.h **** 
+1136:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM_bytecount_Pos        27U                                         /*!< TPI FIF
+1137:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM_bytecount_Msk        (0x3UL << TPI_FIFO1_ITM_bytecount_Pos)      /*!< TPI FIF
+1138:./Libraries/CMSIS/Include/core_cm4.h **** 
+1139:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ETM_ATVALID_Pos          26U                                         /*!< TPI FIF
+1140:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ETM_ATVALID_Msk          (0x3UL << TPI_FIFO1_ETM_ATVALID_Pos)        /*!< TPI FIF
+1141:./Libraries/CMSIS/Include/core_cm4.h **** 
+1142:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ETM_bytecount_Pos        24U                                         /*!< TPI FIF
+1143:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ETM_bytecount_Msk        (0x3UL << TPI_FIFO1_ETM_bytecount_Pos)      /*!< TPI FIF
+1144:./Libraries/CMSIS/Include/core_cm4.h **** 
+1145:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM2_Pos                 16U                                         /*!< TPI FIF
+1146:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM2_Msk                 (0xFFUL << TPI_FIFO1_ITM2_Pos)              /*!< TPI FIF
+1147:./Libraries/CMSIS/Include/core_cm4.h **** 
+1148:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM1_Pos                  8U                                         /*!< TPI FIF
+1149:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM1_Msk                 (0xFFUL << TPI_FIFO1_ITM1_Pos)              /*!< TPI FIF
+1150:./Libraries/CMSIS/Include/core_cm4.h **** 
+1151:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM0_Pos                  0U                                         /*!< TPI FIF
+1152:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_FIFO1_ITM0_Msk                 (0xFFUL /*<< TPI_FIFO1_ITM0_Pos*/)          /*!< TPI FIF
+1153:./Libraries/CMSIS/Include/core_cm4.h **** 
+1154:./Libraries/CMSIS/Include/core_cm4.h **** /* TPI ITATBCTR0 Register Definitions */
+1155:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_ITATBCTR0_ATREADY_Pos           0U                                         /*!< TPI ITA
+1156:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_ITATBCTR0_ATREADY_Msk          (0x1UL /*<< TPI_ITATBCTR0_ATREADY_Pos*/)    /*!< TPI ITA
+1157:./Libraries/CMSIS/Include/core_cm4.h **** 
+1158:./Libraries/CMSIS/Include/core_cm4.h **** /* TPI Integration Mode Control Register Definitions */
+1159:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_ITCTRL_Mode_Pos                 0U                                         /*!< TPI ITC
+1160:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_ITCTRL_Mode_Msk                (0x1UL /*<< TPI_ITCTRL_Mode_Pos*/)          /*!< TPI ITC
+1161:./Libraries/CMSIS/Include/core_cm4.h **** 
+1162:./Libraries/CMSIS/Include/core_cm4.h **** /* TPI DEVID Register Definitions */
+1163:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVID_NRZVALID_Pos             11U                                         /*!< TPI DEV
+1164:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVID_NRZVALID_Msk             (0x1UL << TPI_DEVID_NRZVALID_Pos)           /*!< TPI DEV
+ARM GAS  /tmp/cc2QYl5T.s 			page 30
+
+
+1165:./Libraries/CMSIS/Include/core_cm4.h **** 
+1166:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVID_MANCVALID_Pos            10U                                         /*!< TPI DEV
+1167:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVID_MANCVALID_Msk            (0x1UL << TPI_DEVID_MANCVALID_Pos)          /*!< TPI DEV
+1168:./Libraries/CMSIS/Include/core_cm4.h **** 
+1169:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVID_PTINVALID_Pos             9U                                         /*!< TPI DEV
+1170:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVID_PTINVALID_Msk            (0x1UL << TPI_DEVID_PTINVALID_Pos)          /*!< TPI DEV
+1171:./Libraries/CMSIS/Include/core_cm4.h **** 
+1172:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVID_MinBufSz_Pos              6U                                         /*!< TPI DEV
+1173:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVID_MinBufSz_Msk             (0x7UL << TPI_DEVID_MinBufSz_Pos)           /*!< TPI DEV
+1174:./Libraries/CMSIS/Include/core_cm4.h **** 
+1175:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVID_AsynClkIn_Pos             5U                                         /*!< TPI DEV
+1176:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVID_AsynClkIn_Msk            (0x1UL << TPI_DEVID_AsynClkIn_Pos)          /*!< TPI DEV
+1177:./Libraries/CMSIS/Include/core_cm4.h **** 
+1178:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVID_NrTraceInput_Pos          0U                                         /*!< TPI DEV
+1179:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVID_NrTraceInput_Msk         (0x1FUL /*<< TPI_DEVID_NrTraceInput_Pos*/)  /*!< TPI DEV
+1180:./Libraries/CMSIS/Include/core_cm4.h **** 
+1181:./Libraries/CMSIS/Include/core_cm4.h **** /* TPI DEVTYPE Register Definitions */
+1182:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVTYPE_MajorType_Pos           4U                                         /*!< TPI DEV
+1183:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVTYPE_MajorType_Msk          (0xFUL << TPI_DEVTYPE_MajorType_Pos)        /*!< TPI DEV
+1184:./Libraries/CMSIS/Include/core_cm4.h **** 
+1185:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVTYPE_SubType_Pos             0U                                         /*!< TPI DEV
+1186:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_DEVTYPE_SubType_Msk            (0xFUL /*<< TPI_DEVTYPE_SubType_Pos*/)      /*!< TPI DEV
+1187:./Libraries/CMSIS/Include/core_cm4.h **** 
+1188:./Libraries/CMSIS/Include/core_cm4.h **** /*@}*/ /* end of group CMSIS_TPI */
+1189:./Libraries/CMSIS/Include/core_cm4.h **** 
+1190:./Libraries/CMSIS/Include/core_cm4.h **** 
+1191:./Libraries/CMSIS/Include/core_cm4.h **** #if (__MPU_PRESENT == 1U)
+1192:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1193:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_core_register
+1194:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_MPU     Memory Protection Unit (MPU)
+1195:./Libraries/CMSIS/Include/core_cm4.h ****   \brief    Type definitions for the Memory Protection Unit (MPU)
+1196:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+1197:./Libraries/CMSIS/Include/core_cm4.h ****  */
+1198:./Libraries/CMSIS/Include/core_cm4.h **** 
+1199:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1200:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Structure type to access the Memory Protection Unit (MPU).
+1201:./Libraries/CMSIS/Include/core_cm4.h ****  */
+1202:./Libraries/CMSIS/Include/core_cm4.h **** typedef struct
+1203:./Libraries/CMSIS/Include/core_cm4.h **** {
+1204:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t TYPE;                   /*!< Offset: 0x000 (R/ )  MPU Type Register */
+1205:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t CTRL;                   /*!< Offset: 0x004 (R/W)  MPU Control Register */
+1206:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t RNR;                    /*!< Offset: 0x008 (R/W)  MPU Region RNRber Register */
+1207:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t RBAR;                   /*!< Offset: 0x00C (R/W)  MPU Region Base Address Register
+1208:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t RASR;                   /*!< Offset: 0x010 (R/W)  MPU Region Attribute and Size Re
+1209:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t RBAR_A1;                /*!< Offset: 0x014 (R/W)  MPU Alias 1 Region Base Address 
+1210:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t RASR_A1;                /*!< Offset: 0x018 (R/W)  MPU Alias 1 Region Attribute and
+1211:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t RBAR_A2;                /*!< Offset: 0x01C (R/W)  MPU Alias 2 Region Base Address 
+1212:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t RASR_A2;                /*!< Offset: 0x020 (R/W)  MPU Alias 2 Region Attribute and
+1213:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t RBAR_A3;                /*!< Offset: 0x024 (R/W)  MPU Alias 3 Region Base Address 
+1214:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t RASR_A3;                /*!< Offset: 0x028 (R/W)  MPU Alias 3 Region Attribute and
+1215:./Libraries/CMSIS/Include/core_cm4.h **** } MPU_Type;
+1216:./Libraries/CMSIS/Include/core_cm4.h **** 
+1217:./Libraries/CMSIS/Include/core_cm4.h **** /* MPU Type Register Definitions */
+1218:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_TYPE_IREGION_Pos               16U                                            /*!< MPU 
+1219:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_TYPE_IREGION_Msk               (0xFFUL << MPU_TYPE_IREGION_Pos)               /*!< MPU 
+1220:./Libraries/CMSIS/Include/core_cm4.h **** 
+1221:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_TYPE_DREGION_Pos                8U                                            /*!< MPU 
+ARM GAS  /tmp/cc2QYl5T.s 			page 31
+
+
+1222:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_TYPE_DREGION_Msk               (0xFFUL << MPU_TYPE_DREGION_Pos)               /*!< MPU 
+1223:./Libraries/CMSIS/Include/core_cm4.h **** 
+1224:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_TYPE_SEPARATE_Pos               0U                                            /*!< MPU 
+1225:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_TYPE_SEPARATE_Msk              (1UL /*<< MPU_TYPE_SEPARATE_Pos*/)             /*!< MPU 
+1226:./Libraries/CMSIS/Include/core_cm4.h **** 
+1227:./Libraries/CMSIS/Include/core_cm4.h **** /* MPU Control Register Definitions */
+1228:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_CTRL_PRIVDEFENA_Pos             2U                                            /*!< MPU 
+1229:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_CTRL_PRIVDEFENA_Msk            (1UL << MPU_CTRL_PRIVDEFENA_Pos)               /*!< MPU 
+1230:./Libraries/CMSIS/Include/core_cm4.h **** 
+1231:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_CTRL_HFNMIENA_Pos               1U                                            /*!< MPU 
+1232:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_CTRL_HFNMIENA_Msk              (1UL << MPU_CTRL_HFNMIENA_Pos)                 /*!< MPU 
+1233:./Libraries/CMSIS/Include/core_cm4.h **** 
+1234:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_CTRL_ENABLE_Pos                 0U                                            /*!< MPU 
+1235:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_CTRL_ENABLE_Msk                (1UL /*<< MPU_CTRL_ENABLE_Pos*/)               /*!< MPU 
+1236:./Libraries/CMSIS/Include/core_cm4.h **** 
+1237:./Libraries/CMSIS/Include/core_cm4.h **** /* MPU Region Number Register Definitions */
+1238:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RNR_REGION_Pos                  0U                                            /*!< MPU 
+1239:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RNR_REGION_Msk                 (0xFFUL /*<< MPU_RNR_REGION_Pos*/)             /*!< MPU 
+1240:./Libraries/CMSIS/Include/core_cm4.h **** 
+1241:./Libraries/CMSIS/Include/core_cm4.h **** /* MPU Region Base Address Register Definitions */
+1242:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RBAR_ADDR_Pos                   5U                                            /*!< MPU 
+1243:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RBAR_ADDR_Msk                  (0x7FFFFFFUL << MPU_RBAR_ADDR_Pos)             /*!< MPU 
+1244:./Libraries/CMSIS/Include/core_cm4.h **** 
+1245:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RBAR_VALID_Pos                  4U                                            /*!< MPU 
+1246:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RBAR_VALID_Msk                 (1UL << MPU_RBAR_VALID_Pos)                    /*!< MPU 
+1247:./Libraries/CMSIS/Include/core_cm4.h **** 
+1248:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RBAR_REGION_Pos                 0U                                            /*!< MPU 
+1249:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RBAR_REGION_Msk                (0xFUL /*<< MPU_RBAR_REGION_Pos*/)             /*!< MPU 
+1250:./Libraries/CMSIS/Include/core_cm4.h **** 
+1251:./Libraries/CMSIS/Include/core_cm4.h **** /* MPU Region Attribute and Size Register Definitions */
+1252:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_ATTRS_Pos                 16U                                            /*!< MPU 
+1253:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_ATTRS_Msk                 (0xFFFFUL << MPU_RASR_ATTRS_Pos)               /*!< MPU 
+1254:./Libraries/CMSIS/Include/core_cm4.h **** 
+1255:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_XN_Pos                    28U                                            /*!< MPU 
+1256:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_XN_Msk                    (1UL << MPU_RASR_XN_Pos)                       /*!< MPU 
+1257:./Libraries/CMSIS/Include/core_cm4.h **** 
+1258:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_AP_Pos                    24U                                            /*!< MPU 
+1259:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_AP_Msk                    (0x7UL << MPU_RASR_AP_Pos)                     /*!< MPU 
+1260:./Libraries/CMSIS/Include/core_cm4.h **** 
+1261:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_TEX_Pos                   19U                                            /*!< MPU 
+1262:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_TEX_Msk                   (0x7UL << MPU_RASR_TEX_Pos)                    /*!< MPU 
+1263:./Libraries/CMSIS/Include/core_cm4.h **** 
+1264:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_S_Pos                     18U                                            /*!< MPU 
+1265:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_S_Msk                     (1UL << MPU_RASR_S_Pos)                        /*!< MPU 
+1266:./Libraries/CMSIS/Include/core_cm4.h **** 
+1267:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_C_Pos                     17U                                            /*!< MPU 
+1268:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_C_Msk                     (1UL << MPU_RASR_C_Pos)                        /*!< MPU 
+1269:./Libraries/CMSIS/Include/core_cm4.h **** 
+1270:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_B_Pos                     16U                                            /*!< MPU 
+1271:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_B_Msk                     (1UL << MPU_RASR_B_Pos)                        /*!< MPU 
+1272:./Libraries/CMSIS/Include/core_cm4.h **** 
+1273:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_SRD_Pos                    8U                                            /*!< MPU 
+1274:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_SRD_Msk                   (0xFFUL << MPU_RASR_SRD_Pos)                   /*!< MPU 
+1275:./Libraries/CMSIS/Include/core_cm4.h **** 
+1276:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_SIZE_Pos                   1U                                            /*!< MPU 
+1277:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_SIZE_Msk                  (0x1FUL << MPU_RASR_SIZE_Pos)                  /*!< MPU 
+1278:./Libraries/CMSIS/Include/core_cm4.h **** 
+ARM GAS  /tmp/cc2QYl5T.s 			page 32
+
+
+1279:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_ENABLE_Pos                 0U                                            /*!< MPU 
+1280:./Libraries/CMSIS/Include/core_cm4.h **** #define MPU_RASR_ENABLE_Msk                (1UL /*<< MPU_RASR_ENABLE_Pos*/)               /*!< MPU 
+1281:./Libraries/CMSIS/Include/core_cm4.h **** 
+1282:./Libraries/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_MPU */
+1283:./Libraries/CMSIS/Include/core_cm4.h **** #endif
+1284:./Libraries/CMSIS/Include/core_cm4.h **** 
+1285:./Libraries/CMSIS/Include/core_cm4.h **** 
+1286:./Libraries/CMSIS/Include/core_cm4.h **** #if (__FPU_PRESENT == 1U)
+1287:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1288:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_core_register
+1289:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_FPU     Floating Point Unit (FPU)
+1290:./Libraries/CMSIS/Include/core_cm4.h ****   \brief    Type definitions for the Floating Point Unit (FPU)
+1291:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+1292:./Libraries/CMSIS/Include/core_cm4.h ****  */
+1293:./Libraries/CMSIS/Include/core_cm4.h **** 
+1294:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1295:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Structure type to access the Floating Point Unit (FPU).
+1296:./Libraries/CMSIS/Include/core_cm4.h ****  */
+1297:./Libraries/CMSIS/Include/core_cm4.h **** typedef struct
+1298:./Libraries/CMSIS/Include/core_cm4.h **** {
+1299:./Libraries/CMSIS/Include/core_cm4.h ****         uint32_t RESERVED0[1U];
+1300:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t FPCCR;                  /*!< Offset: 0x004 (R/W)  Floating-Point Context Control R
+1301:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t FPCAR;                  /*!< Offset: 0x008 (R/W)  Floating-Point Context Address R
+1302:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t FPDSCR;                 /*!< Offset: 0x00C (R/W)  Floating-Point Default Status Co
+1303:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t MVFR0;                  /*!< Offset: 0x010 (R/ )  Media and FP Feature Register 0 
+1304:./Libraries/CMSIS/Include/core_cm4.h ****   __IM  uint32_t MVFR1;                  /*!< Offset: 0x014 (R/ )  Media and FP Feature Register 1 
+1305:./Libraries/CMSIS/Include/core_cm4.h **** } FPU_Type;
+1306:./Libraries/CMSIS/Include/core_cm4.h **** 
+1307:./Libraries/CMSIS/Include/core_cm4.h **** /* Floating-Point Context Control Register Definitions */
+1308:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_ASPEN_Pos                31U                                            /*!< FPCC
+1309:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_ASPEN_Msk                (1UL << FPU_FPCCR_ASPEN_Pos)                   /*!< FPCC
+1310:./Libraries/CMSIS/Include/core_cm4.h **** 
+1311:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_LSPEN_Pos                30U                                            /*!< FPCC
+1312:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_LSPEN_Msk                (1UL << FPU_FPCCR_LSPEN_Pos)                   /*!< FPCC
+1313:./Libraries/CMSIS/Include/core_cm4.h **** 
+1314:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_MONRDY_Pos                8U                                            /*!< FPCC
+1315:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_MONRDY_Msk               (1UL << FPU_FPCCR_MONRDY_Pos)                  /*!< FPCC
+1316:./Libraries/CMSIS/Include/core_cm4.h **** 
+1317:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_BFRDY_Pos                 6U                                            /*!< FPCC
+1318:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_BFRDY_Msk                (1UL << FPU_FPCCR_BFRDY_Pos)                   /*!< FPCC
+1319:./Libraries/CMSIS/Include/core_cm4.h **** 
+1320:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_MMRDY_Pos                 5U                                            /*!< FPCC
+1321:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_MMRDY_Msk                (1UL << FPU_FPCCR_MMRDY_Pos)                   /*!< FPCC
+1322:./Libraries/CMSIS/Include/core_cm4.h **** 
+1323:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_HFRDY_Pos                 4U                                            /*!< FPCC
+1324:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_HFRDY_Msk                (1UL << FPU_FPCCR_HFRDY_Pos)                   /*!< FPCC
+1325:./Libraries/CMSIS/Include/core_cm4.h **** 
+1326:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_THREAD_Pos                3U                                            /*!< FPCC
+1327:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_THREAD_Msk               (1UL << FPU_FPCCR_THREAD_Pos)                  /*!< FPCC
+1328:./Libraries/CMSIS/Include/core_cm4.h **** 
+1329:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_USER_Pos                  1U                                            /*!< FPCC
+1330:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_USER_Msk                 (1UL << FPU_FPCCR_USER_Pos)                    /*!< FPCC
+1331:./Libraries/CMSIS/Include/core_cm4.h **** 
+1332:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_LSPACT_Pos                0U                                            /*!< FPCC
+1333:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCCR_LSPACT_Msk               (1UL /*<< FPU_FPCCR_LSPACT_Pos*/)              /*!< FPCC
+1334:./Libraries/CMSIS/Include/core_cm4.h **** 
+1335:./Libraries/CMSIS/Include/core_cm4.h **** /* Floating-Point Context Address Register Definitions */
+ARM GAS  /tmp/cc2QYl5T.s 			page 33
+
+
+1336:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCAR_ADDRESS_Pos               3U                                            /*!< FPCA
+1337:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPCAR_ADDRESS_Msk              (0x1FFFFFFFUL << FPU_FPCAR_ADDRESS_Pos)        /*!< FPCA
+1338:./Libraries/CMSIS/Include/core_cm4.h **** 
+1339:./Libraries/CMSIS/Include/core_cm4.h **** /* Floating-Point Default Status Control Register Definitions */
+1340:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_AHP_Pos                 26U                                            /*!< FPDS
+1341:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_AHP_Msk                 (1UL << FPU_FPDSCR_AHP_Pos)                    /*!< FPDS
+1342:./Libraries/CMSIS/Include/core_cm4.h **** 
+1343:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_DN_Pos                  25U                                            /*!< FPDS
+1344:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_DN_Msk                  (1UL << FPU_FPDSCR_DN_Pos)                     /*!< FPDS
+1345:./Libraries/CMSIS/Include/core_cm4.h **** 
+1346:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_FZ_Pos                  24U                                            /*!< FPDS
+1347:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_FZ_Msk                  (1UL << FPU_FPDSCR_FZ_Pos)                     /*!< FPDS
+1348:./Libraries/CMSIS/Include/core_cm4.h **** 
+1349:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_RMode_Pos               22U                                            /*!< FPDS
+1350:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_FPDSCR_RMode_Msk               (3UL << FPU_FPDSCR_RMode_Pos)                  /*!< FPDS
+1351:./Libraries/CMSIS/Include/core_cm4.h **** 
+1352:./Libraries/CMSIS/Include/core_cm4.h **** /* Media and FP Feature Register 0 Definitions */
+1353:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_FP_rounding_modes_Pos    28U                                            /*!< MVFR
+1354:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_FP_rounding_modes_Msk    (0xFUL << FPU_MVFR0_FP_rounding_modes_Pos)     /*!< MVFR
+1355:./Libraries/CMSIS/Include/core_cm4.h **** 
+1356:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Short_vectors_Pos        24U                                            /*!< MVFR
+1357:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Short_vectors_Msk        (0xFUL << FPU_MVFR0_Short_vectors_Pos)         /*!< MVFR
+1358:./Libraries/CMSIS/Include/core_cm4.h **** 
+1359:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Square_root_Pos          20U                                            /*!< MVFR
+1360:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Square_root_Msk          (0xFUL << FPU_MVFR0_Square_root_Pos)           /*!< MVFR
+1361:./Libraries/CMSIS/Include/core_cm4.h **** 
+1362:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Divide_Pos               16U                                            /*!< MVFR
+1363:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Divide_Msk               (0xFUL << FPU_MVFR0_Divide_Pos)                /*!< MVFR
+1364:./Libraries/CMSIS/Include/core_cm4.h **** 
+1365:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_FP_excep_trapping_Pos    12U                                            /*!< MVFR
+1366:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_FP_excep_trapping_Msk    (0xFUL << FPU_MVFR0_FP_excep_trapping_Pos)     /*!< MVFR
+1367:./Libraries/CMSIS/Include/core_cm4.h **** 
+1368:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Double_precision_Pos      8U                                            /*!< MVFR
+1369:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Double_precision_Msk     (0xFUL << FPU_MVFR0_Double_precision_Pos)      /*!< MVFR
+1370:./Libraries/CMSIS/Include/core_cm4.h **** 
+1371:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Single_precision_Pos      4U                                            /*!< MVFR
+1372:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_Single_precision_Msk     (0xFUL << FPU_MVFR0_Single_precision_Pos)      /*!< MVFR
+1373:./Libraries/CMSIS/Include/core_cm4.h **** 
+1374:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_A_SIMD_registers_Pos      0U                                            /*!< MVFR
+1375:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR0_A_SIMD_registers_Msk     (0xFUL /*<< FPU_MVFR0_A_SIMD_registers_Pos*/)  /*!< MVFR
+1376:./Libraries/CMSIS/Include/core_cm4.h **** 
+1377:./Libraries/CMSIS/Include/core_cm4.h **** /* Media and FP Feature Register 1 Definitions */
+1378:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_FP_fused_MAC_Pos         28U                                            /*!< MVFR
+1379:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_FP_fused_MAC_Msk         (0xFUL << FPU_MVFR1_FP_fused_MAC_Pos)          /*!< MVFR
+1380:./Libraries/CMSIS/Include/core_cm4.h **** 
+1381:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_FP_HPFP_Pos              24U                                            /*!< MVFR
+1382:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_FP_HPFP_Msk              (0xFUL << FPU_MVFR1_FP_HPFP_Pos)               /*!< MVFR
+1383:./Libraries/CMSIS/Include/core_cm4.h **** 
+1384:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_D_NaN_mode_Pos            4U                                            /*!< MVFR
+1385:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_D_NaN_mode_Msk           (0xFUL << FPU_MVFR1_D_NaN_mode_Pos)            /*!< MVFR
+1386:./Libraries/CMSIS/Include/core_cm4.h **** 
+1387:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_FtZ_mode_Pos              0U                                            /*!< MVFR
+1388:./Libraries/CMSIS/Include/core_cm4.h **** #define FPU_MVFR1_FtZ_mode_Msk             (0xFUL /*<< FPU_MVFR1_FtZ_mode_Pos*/)          /*!< MVFR
+1389:./Libraries/CMSIS/Include/core_cm4.h **** 
+1390:./Libraries/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_FPU */
+1391:./Libraries/CMSIS/Include/core_cm4.h **** #endif
+1392:./Libraries/CMSIS/Include/core_cm4.h **** 
+ARM GAS  /tmp/cc2QYl5T.s 			page 34
+
+
+1393:./Libraries/CMSIS/Include/core_cm4.h **** 
+1394:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1395:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_core_register
+1396:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_CoreDebug       Core Debug Registers (CoreDebug)
+1397:./Libraries/CMSIS/Include/core_cm4.h ****   \brief    Type definitions for the Core Debug Registers
+1398:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+1399:./Libraries/CMSIS/Include/core_cm4.h ****  */
+1400:./Libraries/CMSIS/Include/core_cm4.h **** 
+1401:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1402:./Libraries/CMSIS/Include/core_cm4.h ****   \brief  Structure type to access the Core Debug Register (CoreDebug).
+1403:./Libraries/CMSIS/Include/core_cm4.h ****  */
+1404:./Libraries/CMSIS/Include/core_cm4.h **** typedef struct
+1405:./Libraries/CMSIS/Include/core_cm4.h **** {
+1406:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t DHCSR;                  /*!< Offset: 0x000 (R/W)  Debug Halting Control and Status
+1407:./Libraries/CMSIS/Include/core_cm4.h ****   __OM  uint32_t DCRSR;                  /*!< Offset: 0x004 ( /W)  Debug Core Register Selector Reg
+1408:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t DCRDR;                  /*!< Offset: 0x008 (R/W)  Debug Core Register Data Registe
+1409:./Libraries/CMSIS/Include/core_cm4.h ****   __IOM uint32_t DEMCR;                  /*!< Offset: 0x00C (R/W)  Debug Exception and Monitor Cont
+1410:./Libraries/CMSIS/Include/core_cm4.h **** } CoreDebug_Type;
+1411:./Libraries/CMSIS/Include/core_cm4.h **** 
+1412:./Libraries/CMSIS/Include/core_cm4.h **** /* Debug Halting Control and Status Register Definitions */
+1413:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_DBGKEY_Pos         16U                                            /*!< Core
+1414:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_DBGKEY_Msk         (0xFFFFUL << CoreDebug_DHCSR_DBGKEY_Pos)       /*!< Core
+1415:./Libraries/CMSIS/Include/core_cm4.h **** 
+1416:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_RESET_ST_Pos     25U                                            /*!< Core
+1417:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_RESET_ST_Msk     (1UL << CoreDebug_DHCSR_S_RESET_ST_Pos)        /*!< Core
+1418:./Libraries/CMSIS/Include/core_cm4.h **** 
+1419:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_RETIRE_ST_Pos    24U                                            /*!< Core
+1420:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_RETIRE_ST_Msk    (1UL << CoreDebug_DHCSR_S_RETIRE_ST_Pos)       /*!< Core
+1421:./Libraries/CMSIS/Include/core_cm4.h **** 
+1422:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_LOCKUP_Pos       19U                                            /*!< Core
+1423:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_LOCKUP_Msk       (1UL << CoreDebug_DHCSR_S_LOCKUP_Pos)          /*!< Core
+1424:./Libraries/CMSIS/Include/core_cm4.h **** 
+1425:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_SLEEP_Pos        18U                                            /*!< Core
+1426:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_SLEEP_Msk        (1UL << CoreDebug_DHCSR_S_SLEEP_Pos)           /*!< Core
+1427:./Libraries/CMSIS/Include/core_cm4.h **** 
+1428:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_HALT_Pos         17U                                            /*!< Core
+1429:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_HALT_Msk         (1UL << CoreDebug_DHCSR_S_HALT_Pos)            /*!< Core
+1430:./Libraries/CMSIS/Include/core_cm4.h **** 
+1431:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_REGRDY_Pos       16U                                            /*!< Core
+1432:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_S_REGRDY_Msk       (1UL << CoreDebug_DHCSR_S_REGRDY_Pos)          /*!< Core
+1433:./Libraries/CMSIS/Include/core_cm4.h **** 
+1434:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_SNAPSTALL_Pos     5U                                            /*!< Core
+1435:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_SNAPSTALL_Msk    (1UL << CoreDebug_DHCSR_C_SNAPSTALL_Pos)       /*!< Core
+1436:./Libraries/CMSIS/Include/core_cm4.h **** 
+1437:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_MASKINTS_Pos      3U                                            /*!< Core
+1438:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_MASKINTS_Msk     (1UL << CoreDebug_DHCSR_C_MASKINTS_Pos)        /*!< Core
+1439:./Libraries/CMSIS/Include/core_cm4.h **** 
+1440:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_STEP_Pos          2U                                            /*!< Core
+1441:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_STEP_Msk         (1UL << CoreDebug_DHCSR_C_STEP_Pos)            /*!< Core
+1442:./Libraries/CMSIS/Include/core_cm4.h **** 
+1443:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_HALT_Pos          1U                                            /*!< Core
+1444:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_HALT_Msk         (1UL << CoreDebug_DHCSR_C_HALT_Pos)            /*!< Core
+1445:./Libraries/CMSIS/Include/core_cm4.h **** 
+1446:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_DEBUGEN_Pos       0U                                            /*!< Core
+1447:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DHCSR_C_DEBUGEN_Msk      (1UL /*<< CoreDebug_DHCSR_C_DEBUGEN_Pos*/)     /*!< Core
+1448:./Libraries/CMSIS/Include/core_cm4.h **** 
+1449:./Libraries/CMSIS/Include/core_cm4.h **** /* Debug Core Register Selector Register Definitions */
+ARM GAS  /tmp/cc2QYl5T.s 			page 35
+
+
+1450:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DCRSR_REGWnR_Pos         16U                                            /*!< Core
+1451:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DCRSR_REGWnR_Msk         (1UL << CoreDebug_DCRSR_REGWnR_Pos)            /*!< Core
+1452:./Libraries/CMSIS/Include/core_cm4.h **** 
+1453:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DCRSR_REGSEL_Pos          0U                                            /*!< Core
+1454:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DCRSR_REGSEL_Msk         (0x1FUL /*<< CoreDebug_DCRSR_REGSEL_Pos*/)     /*!< Core
+1455:./Libraries/CMSIS/Include/core_cm4.h **** 
+1456:./Libraries/CMSIS/Include/core_cm4.h **** /* Debug Exception and Monitor Control Register Definitions */
+1457:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_TRCENA_Pos         24U                                            /*!< Core
+1458:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_TRCENA_Msk         (1UL << CoreDebug_DEMCR_TRCENA_Pos)            /*!< Core
+1459:./Libraries/CMSIS/Include/core_cm4.h **** 
+1460:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_REQ_Pos        19U                                            /*!< Core
+1461:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_REQ_Msk        (1UL << CoreDebug_DEMCR_MON_REQ_Pos)           /*!< Core
+1462:./Libraries/CMSIS/Include/core_cm4.h **** 
+1463:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_STEP_Pos       18U                                            /*!< Core
+1464:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_STEP_Msk       (1UL << CoreDebug_DEMCR_MON_STEP_Pos)          /*!< Core
+1465:./Libraries/CMSIS/Include/core_cm4.h **** 
+1466:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_PEND_Pos       17U                                            /*!< Core
+1467:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_PEND_Msk       (1UL << CoreDebug_DEMCR_MON_PEND_Pos)          /*!< Core
+1468:./Libraries/CMSIS/Include/core_cm4.h **** 
+1469:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_EN_Pos         16U                                            /*!< Core
+1470:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_MON_EN_Msk         (1UL << CoreDebug_DEMCR_MON_EN_Pos)            /*!< Core
+1471:./Libraries/CMSIS/Include/core_cm4.h **** 
+1472:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_HARDERR_Pos     10U                                            /*!< Core
+1473:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_HARDERR_Msk     (1UL << CoreDebug_DEMCR_VC_HARDERR_Pos)        /*!< Core
+1474:./Libraries/CMSIS/Include/core_cm4.h **** 
+1475:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_INTERR_Pos       9U                                            /*!< Core
+1476:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_INTERR_Msk      (1UL << CoreDebug_DEMCR_VC_INTERR_Pos)         /*!< Core
+1477:./Libraries/CMSIS/Include/core_cm4.h **** 
+1478:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_BUSERR_Pos       8U                                            /*!< Core
+1479:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_BUSERR_Msk      (1UL << CoreDebug_DEMCR_VC_BUSERR_Pos)         /*!< Core
+1480:./Libraries/CMSIS/Include/core_cm4.h **** 
+1481:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_STATERR_Pos      7U                                            /*!< Core
+1482:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_STATERR_Msk     (1UL << CoreDebug_DEMCR_VC_STATERR_Pos)        /*!< Core
+1483:./Libraries/CMSIS/Include/core_cm4.h **** 
+1484:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_CHKERR_Pos       6U                                            /*!< Core
+1485:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_CHKERR_Msk      (1UL << CoreDebug_DEMCR_VC_CHKERR_Pos)         /*!< Core
+1486:./Libraries/CMSIS/Include/core_cm4.h **** 
+1487:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_NOCPERR_Pos      5U                                            /*!< Core
+1488:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_NOCPERR_Msk     (1UL << CoreDebug_DEMCR_VC_NOCPERR_Pos)        /*!< Core
+1489:./Libraries/CMSIS/Include/core_cm4.h **** 
+1490:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_MMERR_Pos        4U                                            /*!< Core
+1491:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_MMERR_Msk       (1UL << CoreDebug_DEMCR_VC_MMERR_Pos)          /*!< Core
+1492:./Libraries/CMSIS/Include/core_cm4.h **** 
+1493:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_CORERESET_Pos    0U                                            /*!< Core
+1494:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_DEMCR_VC_CORERESET_Msk   (1UL /*<< CoreDebug_DEMCR_VC_CORERESET_Pos*/)  /*!< Core
+1495:./Libraries/CMSIS/Include/core_cm4.h **** 
+1496:./Libraries/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_CoreDebug */
+1497:./Libraries/CMSIS/Include/core_cm4.h **** 
+1498:./Libraries/CMSIS/Include/core_cm4.h **** 
+1499:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1500:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup    CMSIS_core_register
+1501:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup   CMSIS_core_bitfield     Core register bit field macros
+1502:./Libraries/CMSIS/Include/core_cm4.h ****   \brief      Macros for use with bit field definitions (xxx_Pos, xxx_Msk).
+1503:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+1504:./Libraries/CMSIS/Include/core_cm4.h ****  */
+1505:./Libraries/CMSIS/Include/core_cm4.h **** 
+1506:./Libraries/CMSIS/Include/core_cm4.h **** /**
+ARM GAS  /tmp/cc2QYl5T.s 			page 36
+
+
+1507:./Libraries/CMSIS/Include/core_cm4.h ****   \brief   Mask and shift a bit field value for use in a register bit range.
+1508:./Libraries/CMSIS/Include/core_cm4.h ****   \param[in] field  Name of the register bit field.
+1509:./Libraries/CMSIS/Include/core_cm4.h ****   \param[in] value  Value of the bit field.
+1510:./Libraries/CMSIS/Include/core_cm4.h ****   \return           Masked and shifted value.
+1511:./Libraries/CMSIS/Include/core_cm4.h **** */
+1512:./Libraries/CMSIS/Include/core_cm4.h **** #define _VAL2FLD(field, value)    ((value << field ## _Pos) & field ## _Msk)
+1513:./Libraries/CMSIS/Include/core_cm4.h **** 
+1514:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1515:./Libraries/CMSIS/Include/core_cm4.h ****   \brief     Mask and shift a register value to extract a bit filed value.
+1516:./Libraries/CMSIS/Include/core_cm4.h ****   \param[in] field  Name of the register bit field.
+1517:./Libraries/CMSIS/Include/core_cm4.h ****   \param[in] value  Value of register.
+1518:./Libraries/CMSIS/Include/core_cm4.h ****   \return           Masked and shifted bit field value.
+1519:./Libraries/CMSIS/Include/core_cm4.h **** */
+1520:./Libraries/CMSIS/Include/core_cm4.h **** #define _FLD2VAL(field, value)    ((value & field ## _Msk) >> field ## _Pos)
+1521:./Libraries/CMSIS/Include/core_cm4.h **** 
+1522:./Libraries/CMSIS/Include/core_cm4.h **** /*@} end of group CMSIS_core_bitfield */
+1523:./Libraries/CMSIS/Include/core_cm4.h **** 
+1524:./Libraries/CMSIS/Include/core_cm4.h **** 
+1525:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1526:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup    CMSIS_core_register
+1527:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup   CMSIS_core_base     Core Definitions
+1528:./Libraries/CMSIS/Include/core_cm4.h ****   \brief      Definitions for base addresses, unions, and structures.
+1529:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+1530:./Libraries/CMSIS/Include/core_cm4.h ****  */
+1531:./Libraries/CMSIS/Include/core_cm4.h **** 
+1532:./Libraries/CMSIS/Include/core_cm4.h **** /* Memory mapping of Cortex-M4 Hardware */
+1533:./Libraries/CMSIS/Include/core_cm4.h **** #define SCS_BASE            (0xE000E000UL)                            /*!< System Control Space Bas
+1534:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM_BASE            (0xE0000000UL)                            /*!< ITM Base Address */
+1535:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT_BASE            (0xE0001000UL)                            /*!< DWT Base Address */
+1536:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI_BASE            (0xE0040000UL)                            /*!< TPI Base Address */
+1537:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug_BASE      (0xE000EDF0UL)                            /*!< Core Debug Base Address 
+1538:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick_BASE        (SCS_BASE +  0x0010UL)                    /*!< SysTick Base Address */
+1539:./Libraries/CMSIS/Include/core_cm4.h **** #define NVIC_BASE           (SCS_BASE +  0x0100UL)                    /*!< NVIC Base Address */
+1540:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB_BASE            (SCS_BASE +  0x0D00UL)                    /*!< System Control Block Bas
+1541:./Libraries/CMSIS/Include/core_cm4.h **** 
+1542:./Libraries/CMSIS/Include/core_cm4.h **** #define SCnSCB              ((SCnSCB_Type    *)     SCS_BASE      )   /*!< System control Register 
+1543:./Libraries/CMSIS/Include/core_cm4.h **** #define SCB                 ((SCB_Type       *)     SCB_BASE      )   /*!< SCB configuration struct
+1544:./Libraries/CMSIS/Include/core_cm4.h **** #define SysTick             ((SysTick_Type   *)     SysTick_BASE  )   /*!< SysTick configuration st
+1545:./Libraries/CMSIS/Include/core_cm4.h **** #define NVIC                ((NVIC_Type      *)     NVIC_BASE     )   /*!< NVIC configuration struc
+1546:./Libraries/CMSIS/Include/core_cm4.h **** #define ITM                 ((ITM_Type       *)     ITM_BASE      )   /*!< ITM configuration struct
+1547:./Libraries/CMSIS/Include/core_cm4.h **** #define DWT                 ((DWT_Type       *)     DWT_BASE      )   /*!< DWT configuration struct
+1548:./Libraries/CMSIS/Include/core_cm4.h **** #define TPI                 ((TPI_Type       *)     TPI_BASE      )   /*!< TPI configuration struct
+1549:./Libraries/CMSIS/Include/core_cm4.h **** #define CoreDebug           ((CoreDebug_Type *)     CoreDebug_BASE)   /*!< Core Debug configuration
+1550:./Libraries/CMSIS/Include/core_cm4.h **** 
+1551:./Libraries/CMSIS/Include/core_cm4.h **** #if (__MPU_PRESENT == 1U)
+1552:./Libraries/CMSIS/Include/core_cm4.h ****   #define MPU_BASE          (SCS_BASE +  0x0D90UL)                    /*!< Memory Protection Unit *
+1553:./Libraries/CMSIS/Include/core_cm4.h ****   #define MPU               ((MPU_Type       *)     MPU_BASE      )   /*!< Memory Protection Unit *
+1554:./Libraries/CMSIS/Include/core_cm4.h **** #endif
+1555:./Libraries/CMSIS/Include/core_cm4.h **** 
+1556:./Libraries/CMSIS/Include/core_cm4.h **** #if (__FPU_PRESENT == 1U)
+1557:./Libraries/CMSIS/Include/core_cm4.h ****   #define FPU_BASE          (SCS_BASE +  0x0F30UL)                    /*!< Floating Point Unit */
+1558:./Libraries/CMSIS/Include/core_cm4.h ****   #define FPU               ((FPU_Type       *)     FPU_BASE      )   /*!< Floating Point Unit */
+1559:./Libraries/CMSIS/Include/core_cm4.h **** #endif
+1560:./Libraries/CMSIS/Include/core_cm4.h **** 
+1561:./Libraries/CMSIS/Include/core_cm4.h **** /*@} */
+1562:./Libraries/CMSIS/Include/core_cm4.h **** 
+1563:./Libraries/CMSIS/Include/core_cm4.h **** 
+ARM GAS  /tmp/cc2QYl5T.s 			page 37
+
+
+1564:./Libraries/CMSIS/Include/core_cm4.h **** 
+1565:./Libraries/CMSIS/Include/core_cm4.h **** /*******************************************************************************
+1566:./Libraries/CMSIS/Include/core_cm4.h ****  *                Hardware Abstraction Layer
+1567:./Libraries/CMSIS/Include/core_cm4.h ****   Core Function Interface contains:
+1568:./Libraries/CMSIS/Include/core_cm4.h ****   - Core NVIC Functions
+1569:./Libraries/CMSIS/Include/core_cm4.h ****   - Core SysTick Functions
+1570:./Libraries/CMSIS/Include/core_cm4.h ****   - Core Debug Functions
+1571:./Libraries/CMSIS/Include/core_cm4.h ****   - Core Register Access Functions
+1572:./Libraries/CMSIS/Include/core_cm4.h ****  ******************************************************************************/
+1573:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1574:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_Core_FunctionInterface Functions and Instructions Reference
+1575:./Libraries/CMSIS/Include/core_cm4.h **** */
+1576:./Libraries/CMSIS/Include/core_cm4.h **** 
+1577:./Libraries/CMSIS/Include/core_cm4.h **** 
+1578:./Libraries/CMSIS/Include/core_cm4.h **** 
+1579:./Libraries/CMSIS/Include/core_cm4.h **** /* ##########################   NVIC functions  #################################### */
+1580:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1581:./Libraries/CMSIS/Include/core_cm4.h ****   \ingroup  CMSIS_Core_FunctionInterface
+1582:./Libraries/CMSIS/Include/core_cm4.h ****   \defgroup CMSIS_Core_NVICFunctions NVIC Functions
+1583:./Libraries/CMSIS/Include/core_cm4.h ****   \brief    Functions that manage interrupts and exceptions via the NVIC.
+1584:./Libraries/CMSIS/Include/core_cm4.h ****   @{
+1585:./Libraries/CMSIS/Include/core_cm4.h ****  */
+1586:./Libraries/CMSIS/Include/core_cm4.h **** 
+1587:./Libraries/CMSIS/Include/core_cm4.h **** /**
+1588:./Libraries/CMSIS/Include/core_cm4.h ****   \brief   Set Priority Grouping
+1589:./Libraries/CMSIS/Include/core_cm4.h ****   \details Sets the priority grouping field using the required unlock sequence.
+1590:./Libraries/CMSIS/Include/core_cm4.h ****            The parameter PriorityGroup is assigned to the field SCB->AIRCR [10:8] PRIGROUP field.
+1591:./Libraries/CMSIS/Include/core_cm4.h ****            Only values from 0..7 are used.
+1592:./Libraries/CMSIS/Include/core_cm4.h ****            In case of a conflict between priority grouping and available
+1593:./Libraries/CMSIS/Include/core_cm4.h ****            priority bits (__NVIC_PRIO_BITS), the smallest possible priority group is set.
+1594:./Libraries/CMSIS/Include/core_cm4.h ****   \param [in]      PriorityGroup  Priority grouping field.
+1595:./Libraries/CMSIS/Include/core_cm4.h ****  */
+1596:./Libraries/CMSIS/Include/core_cm4.h **** __STATIC_INLINE void NVIC_SetPriorityGrouping(uint32_t PriorityGroup)
+ 252              		.loc 3 1596 22 view .LVU65
+ 253              	.LBB11:
+1597:./Libraries/CMSIS/Include/core_cm4.h **** {
+1598:./Libraries/CMSIS/Include/core_cm4.h ****   uint32_t reg_value;
+ 254              		.loc 3 1598 3 view .LVU66
+1599:./Libraries/CMSIS/Include/core_cm4.h ****   uint32_t PriorityGroupTmp = (PriorityGroup & (uint32_t)0x07UL);             /* only values 0..7 a
+ 255              		.loc 3 1599 3 view .LVU67
+1600:./Libraries/CMSIS/Include/core_cm4.h **** 
+1601:./Libraries/CMSIS/Include/core_cm4.h ****   reg_value  =  SCB->AIRCR;                                                   /* read old register 
+ 256              		.loc 3 1601 3 view .LVU68
+ 257              		.loc 3 1601 14 is_stmt 0 view .LVU69
+ 258 0002 094A     		ldr	r2, .L15
+ 259 0004 D368     		ldr	r3, [r2, #12]
+ 260              	.LVL8:
+1602:./Libraries/CMSIS/Include/core_cm4.h ****   reg_value &= ~((uint32_t)(SCB_AIRCR_VECTKEY_Msk | SCB_AIRCR_PRIGROUP_Msk)); /* clear bits to chan
+ 261              		.loc 3 1602 3 is_stmt 1 view .LVU70
+ 262              		.loc 3 1602 13 is_stmt 0 view .LVU71
+ 263 0006 23F4E063 		bic	r3, r3, #1792
+ 264              	.LVL9:
+ 265              		.loc 3 1602 13 view .LVU72
+ 266 000a 1B04     		lsls	r3, r3, #16
+ 267 000c 1B0C     		lsrs	r3, r3, #16
+ 268              	.LVL10:
+1603:./Libraries/CMSIS/Include/core_cm4.h ****   reg_value  =  (reg_value                                   |
+ARM GAS  /tmp/cc2QYl5T.s 			page 38
+
+
+ 269              		.loc 3 1603 3 is_stmt 1 view .LVU73
+ 270              		.loc 3 1603 14 is_stmt 0 view .LVU74
+ 271 000e 43F0BF63 		orr	r3, r3, #100139008
+ 272              	.LVL11:
+ 273              		.loc 3 1603 14 view .LVU75
+ 274 0012 43F40133 		orr	r3, r3, #132096
+ 275              	.LVL12:
+1604:./Libraries/CMSIS/Include/core_cm4.h ****                 ((uint32_t)0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
+1605:./Libraries/CMSIS/Include/core_cm4.h ****                 (PriorityGroupTmp << 8U)                      );              /* Insert write key a
+1606:./Libraries/CMSIS/Include/core_cm4.h ****   SCB->AIRCR =  reg_value;
+ 276              		.loc 3 1606 3 is_stmt 1 view .LVU76
+ 277              		.loc 3 1606 14 is_stmt 0 view .LVU77
+ 278 0016 D360     		str	r3, [r2, #12]
+ 279              	.LVL13:
+ 280              		.loc 3 1606 14 view .LVU78
+ 281              	.LBE11:
+ 282              	.LBE10:
+  23:./User/Src/main.c ****   SystemClock_Config();
+ 283              		.loc 1 23 2 is_stmt 1 view .LVU79
+ 284 0018 FFF7FEFF 		bl	HAL_Init
+ 285              	.LVL14:
+  24:./User/Src/main.c **** 	/************************************************/
+ 286              		.loc 1 24 3 view .LVU80
+ 287 001c FFF7FEFF 		bl	SystemClock_Config
+ 288              	.LVL15:
+  28:./User/Src/main.c **** }
+ 289              		.loc 1 28 2 view .LVU81
+ 290 0020 FFF7FEFF 		bl	DEBUG_USART_Config
+ 291              	.LVL16:
+  29:./User/Src/main.c **** 
+ 292              		.loc 1 29 1 is_stmt 0 view .LVU82
+ 293 0024 08BD     		pop	{r3, pc}
+ 294              	.L16:
+ 295 0026 00BF     		.align	2
+ 296              	.L15:
+ 297 0028 00ED00E0 		.word	-536810240
+ 298              		.cfi_endproc
+ 299              	.LFE131:
+ 301              		.section	.rodata.main.str1.4,"aMS",%progbits,1
+ 302              		.align	2
+ 303              	.LC0:
+ 304 0000 46726565 		.ascii	"FreeRtos \304\243\260\345\000"
+ 304      52746F73 
+ 304      20C4A3B0 
+ 304      E500
+ 305              		.section	.text.main,"ax",%progbits
+ 306              		.align	1
+ 307              		.global	main
+ 308              		.syntax unified
+ 309              		.thumb
+ 310              		.thumb_func
+ 311              		.fpu fpv4-sp-d16
+ 313              	main:
+ 314              	.LFB132:
+  35:./User/Src/main.c **** 	
+ 315              		.loc 1 35 1 is_stmt 1 view -0
+ 316              		.cfi_startproc
+ARM GAS  /tmp/cc2QYl5T.s 			page 39
+
+
+ 317              		@ Volatile: function does not return.
+ 318              		@ args = 0, pretend = 0, frame = 0
+ 319              		@ frame_needed = 0, uses_anonymous_args = 0
+ 320 0000 08B5     		push	{r3, lr}
+ 321              	.LCFI5:
+ 322              		.cfi_def_cfa_offset 8
+ 323              		.cfi_offset 3, -8
+ 324              		.cfi_offset 14, -4
+  37:./User/Src/main.c **** 	printf("FreeRtos 模板\n");
+ 325              		.loc 1 37 3 view .LVU84
+ 326 0002 FFF7FEFF 		bl	BSP_Init
+ 327              	.LVL17:
+  38:./User/Src/main.c ****   
+ 328              		.loc 1 38 2 view .LVU85
+ 329 0006 0248     		ldr	r0, .L20
+ 330 0008 FFF7FEFF 		bl	puts
+ 331              	.LVL18:
+ 332              	.L18:
+  40:./User/Src/main.c ****   {
+ 333              		.loc 1 40 3 discriminator 1 view .LVU86
+  43:./User/Src/main.c **** 
+ 334              		.loc 1 43 3 discriminator 1 view .LVU87
+  40:./User/Src/main.c ****   {
+ 335              		.loc 1 40 9 discriminator 1 view .LVU88
+ 336 000c FEE7     		b	.L18
+ 337              	.L21:
+ 338 000e 00BF     		.align	2
+ 339              	.L20:
+ 340 0010 00000000 		.word	.LC0
+ 341              		.cfi_endproc
+ 342              	.LFE132:
+ 344              		.text
+ 345              	.Letext0:
+ 346              		.file 4 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/machine/_default_types.h"
+ 347              		.file 5 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/sys/_stdint.h"
+ 348              		.file 6 "./Libraries/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h"
+ 349              		.file 7 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc_ex.h"
+ 350              		.file 8 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h"
+ 351              		.file 9 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h"
+ 352              		.file 10 "<built-in>"
+ 353              		.file 11 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 354              		.file 12 "./Hardware/usart/bsp_debug_usart.h"
+ 355              		.file 13 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ARM GAS  /tmp/cc2QYl5T.s 			page 40
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+     /tmp/cc2QYl5T.s:18     .text.Error_Handler:0000000000000000 $t
+     /tmp/cc2QYl5T.s:26     .text.Error_Handler:0000000000000000 Error_Handler
+     /tmp/cc2QYl5T.s:59     .text.SystemClock_Config:0000000000000000 $t
+     /tmp/cc2QYl5T.s:66     .text.SystemClock_Config:0000000000000000 SystemClock_Config
+     /tmp/cc2QYl5T.s:224    .text.SystemClock_Config:00000000000000ac $d
+     /tmp/cc2QYl5T.s:230    .text.BSP_Init:0000000000000000 $t
+     /tmp/cc2QYl5T.s:236    .text.BSP_Init:0000000000000000 BSP_Init
+     /tmp/cc2QYl5T.s:297    .text.BSP_Init:0000000000000028 $d
+     /tmp/cc2QYl5T.s:302    .rodata.main.str1.4:0000000000000000 $d
+     /tmp/cc2QYl5T.s:306    .text.main:0000000000000000 $t
+     /tmp/cc2QYl5T.s:313    .text.main:0000000000000000 main
+     /tmp/cc2QYl5T.s:340    .text.main:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+memset
+HAL_RCC_OscConfig
+HAL_PWREx_EnableOverDrive
+HAL_RCC_ClockConfig
+HAL_Init
+DEBUG_USART_Config
+puts
