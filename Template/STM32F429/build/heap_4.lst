@@ -1,0 +1,1774 @@
+ARM GAS  /tmp/cchegFxA.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"heap_4.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.prvHeapInit,"ax",%progbits
+  18              		.align	1
+  19              		.arch armv7e-m
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	prvHeapInit:
+  26              	.LFB136:
+  27              		.file 1 "./FreeRtos/port/MemMang/heap_4.c"
+   1:./FreeRtos/port/MemMang/heap_4.c **** /*
+   2:./FreeRtos/port/MemMang/heap_4.c ****  * FreeRTOS Kernel V10.3.1
+   3:./FreeRtos/port/MemMang/heap_4.c ****  * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+   4:./FreeRtos/port/MemMang/heap_4.c ****  *
+   5:./FreeRtos/port/MemMang/heap_4.c ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   6:./FreeRtos/port/MemMang/heap_4.c ****  * this software and associated documentation files (the "Software"), to deal in
+   7:./FreeRtos/port/MemMang/heap_4.c ****  * the Software without restriction, including without limitation the rights to
+   8:./FreeRtos/port/MemMang/heap_4.c ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+   9:./FreeRtos/port/MemMang/heap_4.c ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  10:./FreeRtos/port/MemMang/heap_4.c ****  * subject to the following conditions:
+  11:./FreeRtos/port/MemMang/heap_4.c ****  *
+  12:./FreeRtos/port/MemMang/heap_4.c ****  * The above copyright notice and this permission notice shall be included in all
+  13:./FreeRtos/port/MemMang/heap_4.c ****  * copies or substantial portions of the Software.
+  14:./FreeRtos/port/MemMang/heap_4.c ****  *
+  15:./FreeRtos/port/MemMang/heap_4.c ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  16:./FreeRtos/port/MemMang/heap_4.c ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  17:./FreeRtos/port/MemMang/heap_4.c ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  18:./FreeRtos/port/MemMang/heap_4.c ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  19:./FreeRtos/port/MemMang/heap_4.c ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  20:./FreeRtos/port/MemMang/heap_4.c ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  21:./FreeRtos/port/MemMang/heap_4.c ****  *
+  22:./FreeRtos/port/MemMang/heap_4.c ****  * http://www.FreeRTOS.org
+  23:./FreeRtos/port/MemMang/heap_4.c ****  * http://aws.amazon.com/freertos
+  24:./FreeRtos/port/MemMang/heap_4.c ****  *
+  25:./FreeRtos/port/MemMang/heap_4.c ****  * 1 tab == 4 spaces!
+  26:./FreeRtos/port/MemMang/heap_4.c ****  */
+  27:./FreeRtos/port/MemMang/heap_4.c **** 
+  28:./FreeRtos/port/MemMang/heap_4.c **** /*
+  29:./FreeRtos/port/MemMang/heap_4.c ****  * A sample implementation of pvPortMalloc() and vPortFree() that combines
+  30:./FreeRtos/port/MemMang/heap_4.c ****  * (coalescences) adjacent memory blocks as they are freed, and in so doing
+  31:./FreeRtos/port/MemMang/heap_4.c ****  * limits memory fragmentation.
+ARM GAS  /tmp/cchegFxA.s 			page 2
+
+
+  32:./FreeRtos/port/MemMang/heap_4.c ****  *
+  33:./FreeRtos/port/MemMang/heap_4.c ****  * See heap_1.c, heap_2.c and heap_3.c for alternative implementations, and the
+  34:./FreeRtos/port/MemMang/heap_4.c ****  * memory management pages of http://www.FreeRTOS.org for more information.
+  35:./FreeRtos/port/MemMang/heap_4.c ****  */
+  36:./FreeRtos/port/MemMang/heap_4.c **** #include <stdlib.h>
+  37:./FreeRtos/port/MemMang/heap_4.c **** 
+  38:./FreeRtos/port/MemMang/heap_4.c **** /* Defining MPU_WRAPPERS_INCLUDED_FROM_API_FILE prevents task.h from redefining
+  39:./FreeRtos/port/MemMang/heap_4.c **** all the API functions to use the MPU wrappers.  That should only be done when
+  40:./FreeRtos/port/MemMang/heap_4.c **** task.h is included from an application file. */
+  41:./FreeRtos/port/MemMang/heap_4.c **** #define MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  42:./FreeRtos/port/MemMang/heap_4.c **** 
+  43:./FreeRtos/port/MemMang/heap_4.c **** #include "FreeRTOS.h"
+  44:./FreeRtos/port/MemMang/heap_4.c **** #include "task.h"
+  45:./FreeRtos/port/MemMang/heap_4.c **** 
+  46:./FreeRtos/port/MemMang/heap_4.c **** #undef MPU_WRAPPERS_INCLUDED_FROM_API_FILE
+  47:./FreeRtos/port/MemMang/heap_4.c **** 
+  48:./FreeRtos/port/MemMang/heap_4.c **** #if( configSUPPORT_DYNAMIC_ALLOCATION == 0 )
+  49:./FreeRtos/port/MemMang/heap_4.c **** 	#error This file must not be used if configSUPPORT_DYNAMIC_ALLOCATION is 0
+  50:./FreeRtos/port/MemMang/heap_4.c **** #endif
+  51:./FreeRtos/port/MemMang/heap_4.c **** 
+  52:./FreeRtos/port/MemMang/heap_4.c **** /* Block sizes must not get too small. */
+  53:./FreeRtos/port/MemMang/heap_4.c **** #define heapMINIMUM_BLOCK_SIZE	( ( size_t ) ( xHeapStructSize << 1 ) )
+  54:./FreeRtos/port/MemMang/heap_4.c **** 
+  55:./FreeRtos/port/MemMang/heap_4.c **** /* Assumes 8bit bytes! */
+  56:./FreeRtos/port/MemMang/heap_4.c **** #define heapBITS_PER_BYTE		( ( size_t ) 8 )
+  57:./FreeRtos/port/MemMang/heap_4.c **** 
+  58:./FreeRtos/port/MemMang/heap_4.c **** /* Allocate the memory for the heap. */
+  59:./FreeRtos/port/MemMang/heap_4.c **** #if( configAPPLICATION_ALLOCATED_HEAP == 1 )
+  60:./FreeRtos/port/MemMang/heap_4.c **** 	/* The application writer has already defined the array used for the RTOS
+  61:./FreeRtos/port/MemMang/heap_4.c **** 	heap - probably so it can be placed in a special segment or address. */
+  62:./FreeRtos/port/MemMang/heap_4.c **** 	extern uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
+  63:./FreeRtos/port/MemMang/heap_4.c **** #else
+  64:./FreeRtos/port/MemMang/heap_4.c **** 	static uint8_t ucHeap[ configTOTAL_HEAP_SIZE ];
+  65:./FreeRtos/port/MemMang/heap_4.c **** #endif /* configAPPLICATION_ALLOCATED_HEAP */
+  66:./FreeRtos/port/MemMang/heap_4.c **** 
+  67:./FreeRtos/port/MemMang/heap_4.c **** /* Define the linked list structure.  This is used to link free blocks in order
+  68:./FreeRtos/port/MemMang/heap_4.c **** of their memory address. */
+  69:./FreeRtos/port/MemMang/heap_4.c **** typedef struct A_BLOCK_LINK
+  70:./FreeRtos/port/MemMang/heap_4.c **** {
+  71:./FreeRtos/port/MemMang/heap_4.c **** 	struct A_BLOCK_LINK *pxNextFreeBlock;	/*<< The next free block in the list. */
+  72:./FreeRtos/port/MemMang/heap_4.c **** 	size_t xBlockSize;						/*<< The size of the free block. */
+  73:./FreeRtos/port/MemMang/heap_4.c **** } BlockLink_t;
+  74:./FreeRtos/port/MemMang/heap_4.c **** 
+  75:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+  76:./FreeRtos/port/MemMang/heap_4.c **** 
+  77:./FreeRtos/port/MemMang/heap_4.c **** /*
+  78:./FreeRtos/port/MemMang/heap_4.c ****  * Inserts a block of memory that is being freed into the correct position in
+  79:./FreeRtos/port/MemMang/heap_4.c ****  * the list of free memory blocks.  The block being freed will be merged with
+  80:./FreeRtos/port/MemMang/heap_4.c ****  * the block in front it and/or the block behind it if the memory blocks are
+  81:./FreeRtos/port/MemMang/heap_4.c ****  * adjacent to each other.
+  82:./FreeRtos/port/MemMang/heap_4.c ****  */
+  83:./FreeRtos/port/MemMang/heap_4.c **** static void prvInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert );
+  84:./FreeRtos/port/MemMang/heap_4.c **** 
+  85:./FreeRtos/port/MemMang/heap_4.c **** /*
+  86:./FreeRtos/port/MemMang/heap_4.c ****  * Called automatically to setup the required heap structures the first time
+  87:./FreeRtos/port/MemMang/heap_4.c ****  * pvPortMalloc() is called.
+  88:./FreeRtos/port/MemMang/heap_4.c ****  */
+ARM GAS  /tmp/cchegFxA.s 			page 3
+
+
+  89:./FreeRtos/port/MemMang/heap_4.c **** static void prvHeapInit( void );
+  90:./FreeRtos/port/MemMang/heap_4.c **** 
+  91:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+  92:./FreeRtos/port/MemMang/heap_4.c **** 
+  93:./FreeRtos/port/MemMang/heap_4.c **** /* The size of the structure placed at the beginning of each allocated memory
+  94:./FreeRtos/port/MemMang/heap_4.c **** block must by correctly byte aligned. */
+  95:./FreeRtos/port/MemMang/heap_4.c **** static const size_t xHeapStructSize	= ( sizeof( BlockLink_t ) + ( ( size_t ) ( portBYTE_ALIGNMENT -
+  96:./FreeRtos/port/MemMang/heap_4.c **** 
+  97:./FreeRtos/port/MemMang/heap_4.c **** /* Create a couple of list links to mark the start and end of the list. */
+  98:./FreeRtos/port/MemMang/heap_4.c **** static BlockLink_t xStart, *pxEnd = NULL;
+  99:./FreeRtos/port/MemMang/heap_4.c **** 
+ 100:./FreeRtos/port/MemMang/heap_4.c **** /* Keeps track of the number of calls to allocate and free memory as well as the
+ 101:./FreeRtos/port/MemMang/heap_4.c **** number of free bytes remaining, but says nothing about fragmentation. */
+ 102:./FreeRtos/port/MemMang/heap_4.c **** static size_t xFreeBytesRemaining = 0U;
+ 103:./FreeRtos/port/MemMang/heap_4.c **** static size_t xMinimumEverFreeBytesRemaining = 0U;
+ 104:./FreeRtos/port/MemMang/heap_4.c **** static size_t xNumberOfSuccessfulAllocations = 0;
+ 105:./FreeRtos/port/MemMang/heap_4.c **** static size_t xNumberOfSuccessfulFrees = 0;
+ 106:./FreeRtos/port/MemMang/heap_4.c **** 
+ 107:./FreeRtos/port/MemMang/heap_4.c **** /* Gets set to the top bit of an size_t type.  When this bit in the xBlockSize
+ 108:./FreeRtos/port/MemMang/heap_4.c **** member of an BlockLink_t structure is set then the block belongs to the
+ 109:./FreeRtos/port/MemMang/heap_4.c **** application.  When the bit is free the block is still part of the free heap
+ 110:./FreeRtos/port/MemMang/heap_4.c **** space. */
+ 111:./FreeRtos/port/MemMang/heap_4.c **** static size_t xBlockAllocatedBit = 0;
+ 112:./FreeRtos/port/MemMang/heap_4.c **** 
+ 113:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 114:./FreeRtos/port/MemMang/heap_4.c **** 
+ 115:./FreeRtos/port/MemMang/heap_4.c **** void *pvPortMalloc( size_t xWantedSize )
+ 116:./FreeRtos/port/MemMang/heap_4.c **** {
+ 117:./FreeRtos/port/MemMang/heap_4.c **** BlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
+ 118:./FreeRtos/port/MemMang/heap_4.c **** void *pvReturn = NULL;
+ 119:./FreeRtos/port/MemMang/heap_4.c **** 
+ 120:./FreeRtos/port/MemMang/heap_4.c **** 	vTaskSuspendAll();
+ 121:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 122:./FreeRtos/port/MemMang/heap_4.c **** 		/* If this is the first call to malloc then the heap will require
+ 123:./FreeRtos/port/MemMang/heap_4.c **** 		initialisation to setup the list of free blocks. */
+ 124:./FreeRtos/port/MemMang/heap_4.c **** 		if( pxEnd == NULL )
+ 125:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 126:./FreeRtos/port/MemMang/heap_4.c **** 			prvHeapInit();
+ 127:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 128:./FreeRtos/port/MemMang/heap_4.c **** 		else
+ 129:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 130:./FreeRtos/port/MemMang/heap_4.c **** 			mtCOVERAGE_TEST_MARKER();
+ 131:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 132:./FreeRtos/port/MemMang/heap_4.c **** 
+ 133:./FreeRtos/port/MemMang/heap_4.c **** 		/* Check the requested block size is not so large that the top bit is
+ 134:./FreeRtos/port/MemMang/heap_4.c **** 		set.  The top bit of the block size member of the BlockLink_t structure
+ 135:./FreeRtos/port/MemMang/heap_4.c **** 		is used to determine who owns the block - the application or the
+ 136:./FreeRtos/port/MemMang/heap_4.c **** 		kernel, so it must be free. */
+ 137:./FreeRtos/port/MemMang/heap_4.c **** 		if( ( xWantedSize & xBlockAllocatedBit ) == 0 )
+ 138:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 139:./FreeRtos/port/MemMang/heap_4.c **** 			/* The wanted size is increased so it can contain a BlockLink_t
+ 140:./FreeRtos/port/MemMang/heap_4.c **** 			structure in addition to the requested amount of bytes. */
+ 141:./FreeRtos/port/MemMang/heap_4.c **** 			if( xWantedSize > 0 )
+ 142:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 143:./FreeRtos/port/MemMang/heap_4.c **** 				xWantedSize += xHeapStructSize;
+ 144:./FreeRtos/port/MemMang/heap_4.c **** 
+ 145:./FreeRtos/port/MemMang/heap_4.c **** 				/* Ensure that blocks are always aligned to the required number
+ARM GAS  /tmp/cchegFxA.s 			page 4
+
+
+ 146:./FreeRtos/port/MemMang/heap_4.c **** 				of bytes. */
+ 147:./FreeRtos/port/MemMang/heap_4.c **** 				if( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) != 0x00 )
+ 148:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 149:./FreeRtos/port/MemMang/heap_4.c **** 					/* Byte alignment required. */
+ 150:./FreeRtos/port/MemMang/heap_4.c **** 					xWantedSize += ( portBYTE_ALIGNMENT - ( xWantedSize & portBYTE_ALIGNMENT_MASK ) );
+ 151:./FreeRtos/port/MemMang/heap_4.c **** 					configASSERT( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) == 0 );
+ 152:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 153:./FreeRtos/port/MemMang/heap_4.c **** 				else
+ 154:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 155:./FreeRtos/port/MemMang/heap_4.c **** 					mtCOVERAGE_TEST_MARKER();
+ 156:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 157:./FreeRtos/port/MemMang/heap_4.c **** 			}
+ 158:./FreeRtos/port/MemMang/heap_4.c **** 			else
+ 159:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 160:./FreeRtos/port/MemMang/heap_4.c **** 				mtCOVERAGE_TEST_MARKER();
+ 161:./FreeRtos/port/MemMang/heap_4.c **** 			}
+ 162:./FreeRtos/port/MemMang/heap_4.c **** 
+ 163:./FreeRtos/port/MemMang/heap_4.c **** 			if( ( xWantedSize > 0 ) && ( xWantedSize <= xFreeBytesRemaining ) )
+ 164:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 165:./FreeRtos/port/MemMang/heap_4.c **** 				/* Traverse the list from the start	(lowest address) block until
+ 166:./FreeRtos/port/MemMang/heap_4.c **** 				one	of adequate size is found. */
+ 167:./FreeRtos/port/MemMang/heap_4.c **** 				pxPreviousBlock = &xStart;
+ 168:./FreeRtos/port/MemMang/heap_4.c **** 				pxBlock = xStart.pxNextFreeBlock;
+ 169:./FreeRtos/port/MemMang/heap_4.c **** 				while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock != NULL ) )
+ 170:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 171:./FreeRtos/port/MemMang/heap_4.c **** 					pxPreviousBlock = pxBlock;
+ 172:./FreeRtos/port/MemMang/heap_4.c **** 					pxBlock = pxBlock->pxNextFreeBlock;
+ 173:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 174:./FreeRtos/port/MemMang/heap_4.c **** 
+ 175:./FreeRtos/port/MemMang/heap_4.c **** 				/* If the end marker was reached then a block of adequate size
+ 176:./FreeRtos/port/MemMang/heap_4.c **** 				was	not found. */
+ 177:./FreeRtos/port/MemMang/heap_4.c **** 				if( pxBlock != pxEnd )
+ 178:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 179:./FreeRtos/port/MemMang/heap_4.c **** 					/* Return the memory space pointed to - jumping over the
+ 180:./FreeRtos/port/MemMang/heap_4.c **** 					BlockLink_t structure at its start. */
+ 181:./FreeRtos/port/MemMang/heap_4.c **** 					pvReturn = ( void * ) ( ( ( uint8_t * ) pxPreviousBlock->pxNextFreeBlock ) + xHeapStructSize )
+ 182:./FreeRtos/port/MemMang/heap_4.c **** 
+ 183:./FreeRtos/port/MemMang/heap_4.c **** 					/* This block is being returned for use so must be taken out
+ 184:./FreeRtos/port/MemMang/heap_4.c **** 					of the list of free blocks. */
+ 185:./FreeRtos/port/MemMang/heap_4.c **** 					pxPreviousBlock->pxNextFreeBlock = pxBlock->pxNextFreeBlock;
+ 186:./FreeRtos/port/MemMang/heap_4.c **** 
+ 187:./FreeRtos/port/MemMang/heap_4.c **** 					/* If the block is larger than required it can be split into
+ 188:./FreeRtos/port/MemMang/heap_4.c **** 					two. */
+ 189:./FreeRtos/port/MemMang/heap_4.c **** 					if( ( pxBlock->xBlockSize - xWantedSize ) > heapMINIMUM_BLOCK_SIZE )
+ 190:./FreeRtos/port/MemMang/heap_4.c **** 					{
+ 191:./FreeRtos/port/MemMang/heap_4.c **** 						/* This block is to be split into two.  Create a new
+ 192:./FreeRtos/port/MemMang/heap_4.c **** 						block following the number of bytes requested. The void
+ 193:./FreeRtos/port/MemMang/heap_4.c **** 						cast is used to prevent byte alignment warnings from the
+ 194:./FreeRtos/port/MemMang/heap_4.c **** 						compiler. */
+ 195:./FreeRtos/port/MemMang/heap_4.c **** 						pxNewBlockLink = ( void * ) ( ( ( uint8_t * ) pxBlock ) + xWantedSize );
+ 196:./FreeRtos/port/MemMang/heap_4.c **** 						configASSERT( ( ( ( size_t ) pxNewBlockLink ) & portBYTE_ALIGNMENT_MASK ) == 0 );
+ 197:./FreeRtos/port/MemMang/heap_4.c **** 
+ 198:./FreeRtos/port/MemMang/heap_4.c **** 						/* Calculate the sizes of two blocks split from the
+ 199:./FreeRtos/port/MemMang/heap_4.c **** 						single block. */
+ 200:./FreeRtos/port/MemMang/heap_4.c **** 						pxNewBlockLink->xBlockSize = pxBlock->xBlockSize - xWantedSize;
+ 201:./FreeRtos/port/MemMang/heap_4.c **** 						pxBlock->xBlockSize = xWantedSize;
+ 202:./FreeRtos/port/MemMang/heap_4.c **** 
+ARM GAS  /tmp/cchegFxA.s 			page 5
+
+
+ 203:./FreeRtos/port/MemMang/heap_4.c **** 						/* Insert the new block into the list of free blocks. */
+ 204:./FreeRtos/port/MemMang/heap_4.c **** 						prvInsertBlockIntoFreeList( pxNewBlockLink );
+ 205:./FreeRtos/port/MemMang/heap_4.c **** 					}
+ 206:./FreeRtos/port/MemMang/heap_4.c **** 					else
+ 207:./FreeRtos/port/MemMang/heap_4.c **** 					{
+ 208:./FreeRtos/port/MemMang/heap_4.c **** 						mtCOVERAGE_TEST_MARKER();
+ 209:./FreeRtos/port/MemMang/heap_4.c **** 					}
+ 210:./FreeRtos/port/MemMang/heap_4.c **** 
+ 211:./FreeRtos/port/MemMang/heap_4.c **** 					xFreeBytesRemaining -= pxBlock->xBlockSize;
+ 212:./FreeRtos/port/MemMang/heap_4.c **** 
+ 213:./FreeRtos/port/MemMang/heap_4.c **** 					if( xFreeBytesRemaining < xMinimumEverFreeBytesRemaining )
+ 214:./FreeRtos/port/MemMang/heap_4.c **** 					{
+ 215:./FreeRtos/port/MemMang/heap_4.c **** 						xMinimumEverFreeBytesRemaining = xFreeBytesRemaining;
+ 216:./FreeRtos/port/MemMang/heap_4.c **** 					}
+ 217:./FreeRtos/port/MemMang/heap_4.c **** 					else
+ 218:./FreeRtos/port/MemMang/heap_4.c **** 					{
+ 219:./FreeRtos/port/MemMang/heap_4.c **** 						mtCOVERAGE_TEST_MARKER();
+ 220:./FreeRtos/port/MemMang/heap_4.c **** 					}
+ 221:./FreeRtos/port/MemMang/heap_4.c **** 
+ 222:./FreeRtos/port/MemMang/heap_4.c **** 					/* The block is being returned - it is allocated and owned
+ 223:./FreeRtos/port/MemMang/heap_4.c **** 					by the application and has no "next" block. */
+ 224:./FreeRtos/port/MemMang/heap_4.c **** 					pxBlock->xBlockSize |= xBlockAllocatedBit;
+ 225:./FreeRtos/port/MemMang/heap_4.c **** 					pxBlock->pxNextFreeBlock = NULL;
+ 226:./FreeRtos/port/MemMang/heap_4.c **** 					xNumberOfSuccessfulAllocations++;
+ 227:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 228:./FreeRtos/port/MemMang/heap_4.c **** 				else
+ 229:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 230:./FreeRtos/port/MemMang/heap_4.c **** 					mtCOVERAGE_TEST_MARKER();
+ 231:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 232:./FreeRtos/port/MemMang/heap_4.c **** 			}
+ 233:./FreeRtos/port/MemMang/heap_4.c **** 			else
+ 234:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 235:./FreeRtos/port/MemMang/heap_4.c **** 				mtCOVERAGE_TEST_MARKER();
+ 236:./FreeRtos/port/MemMang/heap_4.c **** 			}
+ 237:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 238:./FreeRtos/port/MemMang/heap_4.c **** 		else
+ 239:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 240:./FreeRtos/port/MemMang/heap_4.c **** 			mtCOVERAGE_TEST_MARKER();
+ 241:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 242:./FreeRtos/port/MemMang/heap_4.c **** 
+ 243:./FreeRtos/port/MemMang/heap_4.c **** 		traceMALLOC( pvReturn, xWantedSize );
+ 244:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 245:./FreeRtos/port/MemMang/heap_4.c **** 	( void ) xTaskResumeAll();
+ 246:./FreeRtos/port/MemMang/heap_4.c **** 
+ 247:./FreeRtos/port/MemMang/heap_4.c **** 	#if( configUSE_MALLOC_FAILED_HOOK == 1 )
+ 248:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 249:./FreeRtos/port/MemMang/heap_4.c **** 		if( pvReturn == NULL )
+ 250:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 251:./FreeRtos/port/MemMang/heap_4.c **** 			extern void vApplicationMallocFailedHook( void );
+ 252:./FreeRtos/port/MemMang/heap_4.c **** 			vApplicationMallocFailedHook();
+ 253:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 254:./FreeRtos/port/MemMang/heap_4.c **** 		else
+ 255:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 256:./FreeRtos/port/MemMang/heap_4.c **** 			mtCOVERAGE_TEST_MARKER();
+ 257:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 258:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 259:./FreeRtos/port/MemMang/heap_4.c **** 	#endif
+ARM GAS  /tmp/cchegFxA.s 			page 6
+
+
+ 260:./FreeRtos/port/MemMang/heap_4.c **** 
+ 261:./FreeRtos/port/MemMang/heap_4.c **** 	configASSERT( ( ( ( size_t ) pvReturn ) & ( size_t ) portBYTE_ALIGNMENT_MASK ) == 0 );
+ 262:./FreeRtos/port/MemMang/heap_4.c **** 	return pvReturn;
+ 263:./FreeRtos/port/MemMang/heap_4.c **** }
+ 264:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 265:./FreeRtos/port/MemMang/heap_4.c **** 
+ 266:./FreeRtos/port/MemMang/heap_4.c **** void vPortFree( void *pv )
+ 267:./FreeRtos/port/MemMang/heap_4.c **** {
+ 268:./FreeRtos/port/MemMang/heap_4.c **** uint8_t *puc = ( uint8_t * ) pv;
+ 269:./FreeRtos/port/MemMang/heap_4.c **** BlockLink_t *pxLink;
+ 270:./FreeRtos/port/MemMang/heap_4.c **** 
+ 271:./FreeRtos/port/MemMang/heap_4.c **** 	if( pv != NULL )
+ 272:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 273:./FreeRtos/port/MemMang/heap_4.c **** 		/* The memory being freed will have an BlockLink_t structure immediately
+ 274:./FreeRtos/port/MemMang/heap_4.c **** 		before it. */
+ 275:./FreeRtos/port/MemMang/heap_4.c **** 		puc -= xHeapStructSize;
+ 276:./FreeRtos/port/MemMang/heap_4.c **** 
+ 277:./FreeRtos/port/MemMang/heap_4.c **** 		/* This casting is to keep the compiler from issuing warnings. */
+ 278:./FreeRtos/port/MemMang/heap_4.c **** 		pxLink = ( void * ) puc;
+ 279:./FreeRtos/port/MemMang/heap_4.c **** 
+ 280:./FreeRtos/port/MemMang/heap_4.c **** 		/* Check the block is actually allocated. */
+ 281:./FreeRtos/port/MemMang/heap_4.c **** 		configASSERT( ( pxLink->xBlockSize & xBlockAllocatedBit ) != 0 );
+ 282:./FreeRtos/port/MemMang/heap_4.c **** 		configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 283:./FreeRtos/port/MemMang/heap_4.c **** 
+ 284:./FreeRtos/port/MemMang/heap_4.c **** 		if( ( pxLink->xBlockSize & xBlockAllocatedBit ) != 0 )
+ 285:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 286:./FreeRtos/port/MemMang/heap_4.c **** 			if( pxLink->pxNextFreeBlock == NULL )
+ 287:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 288:./FreeRtos/port/MemMang/heap_4.c **** 				/* The block is being returned to the heap - it is no longer
+ 289:./FreeRtos/port/MemMang/heap_4.c **** 				allocated. */
+ 290:./FreeRtos/port/MemMang/heap_4.c **** 				pxLink->xBlockSize &= ~xBlockAllocatedBit;
+ 291:./FreeRtos/port/MemMang/heap_4.c **** 
+ 292:./FreeRtos/port/MemMang/heap_4.c **** 				vTaskSuspendAll();
+ 293:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 294:./FreeRtos/port/MemMang/heap_4.c **** 					/* Add this block to the list of free blocks. */
+ 295:./FreeRtos/port/MemMang/heap_4.c **** 					xFreeBytesRemaining += pxLink->xBlockSize;
+ 296:./FreeRtos/port/MemMang/heap_4.c **** 					traceFREE( pv, pxLink->xBlockSize );
+ 297:./FreeRtos/port/MemMang/heap_4.c **** 					prvInsertBlockIntoFreeList( ( ( BlockLink_t * ) pxLink ) );
+ 298:./FreeRtos/port/MemMang/heap_4.c **** 					xNumberOfSuccessfulFrees++;
+ 299:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 300:./FreeRtos/port/MemMang/heap_4.c **** 				( void ) xTaskResumeAll();
+ 301:./FreeRtos/port/MemMang/heap_4.c **** 			}
+ 302:./FreeRtos/port/MemMang/heap_4.c **** 			else
+ 303:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 304:./FreeRtos/port/MemMang/heap_4.c **** 				mtCOVERAGE_TEST_MARKER();
+ 305:./FreeRtos/port/MemMang/heap_4.c **** 			}
+ 306:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 307:./FreeRtos/port/MemMang/heap_4.c **** 		else
+ 308:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 309:./FreeRtos/port/MemMang/heap_4.c **** 			mtCOVERAGE_TEST_MARKER();
+ 310:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 311:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 312:./FreeRtos/port/MemMang/heap_4.c **** }
+ 313:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 314:./FreeRtos/port/MemMang/heap_4.c **** 
+ 315:./FreeRtos/port/MemMang/heap_4.c **** size_t xPortGetFreeHeapSize( void )
+ 316:./FreeRtos/port/MemMang/heap_4.c **** {
+ARM GAS  /tmp/cchegFxA.s 			page 7
+
+
+ 317:./FreeRtos/port/MemMang/heap_4.c **** 	return xFreeBytesRemaining;
+ 318:./FreeRtos/port/MemMang/heap_4.c **** }
+ 319:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 320:./FreeRtos/port/MemMang/heap_4.c **** 
+ 321:./FreeRtos/port/MemMang/heap_4.c **** size_t xPortGetMinimumEverFreeHeapSize( void )
+ 322:./FreeRtos/port/MemMang/heap_4.c **** {
+ 323:./FreeRtos/port/MemMang/heap_4.c **** 	return xMinimumEverFreeBytesRemaining;
+ 324:./FreeRtos/port/MemMang/heap_4.c **** }
+ 325:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 326:./FreeRtos/port/MemMang/heap_4.c **** 
+ 327:./FreeRtos/port/MemMang/heap_4.c **** void vPortInitialiseBlocks( void )
+ 328:./FreeRtos/port/MemMang/heap_4.c **** {
+ 329:./FreeRtos/port/MemMang/heap_4.c **** 	/* This just exists to keep the linker quiet. */
+ 330:./FreeRtos/port/MemMang/heap_4.c **** }
+ 331:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 332:./FreeRtos/port/MemMang/heap_4.c **** 
+ 333:./FreeRtos/port/MemMang/heap_4.c **** static void prvHeapInit( void )
+ 334:./FreeRtos/port/MemMang/heap_4.c **** {
+  28              		.loc 1 334 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+ 335:./FreeRtos/port/MemMang/heap_4.c **** BlockLink_t *pxFirstFreeBlock;
+  33              		.loc 1 335 1 view .LVU1
+ 336:./FreeRtos/port/MemMang/heap_4.c **** uint8_t *pucAlignedHeap;
+  34              		.loc 1 336 1 view .LVU2
+ 337:./FreeRtos/port/MemMang/heap_4.c **** size_t uxAddress;
+  35              		.loc 1 337 1 view .LVU3
+ 338:./FreeRtos/port/MemMang/heap_4.c **** size_t xTotalHeapSize = configTOTAL_HEAP_SIZE;
+  36              		.loc 1 338 1 view .LVU4
+  37              	.LVL0:
+ 339:./FreeRtos/port/MemMang/heap_4.c **** 
+ 340:./FreeRtos/port/MemMang/heap_4.c **** 	/* Ensure the heap starts on a correctly aligned boundary. */
+ 341:./FreeRtos/port/MemMang/heap_4.c **** 	uxAddress = ( size_t ) ucHeap;
+  38              		.loc 1 341 2 view .LVU5
+  39              		.loc 1 341 12 is_stmt 0 view .LVU6
+  40 0000 124A     		ldr	r2, .L4
+  41              	.LVL1:
+ 342:./FreeRtos/port/MemMang/heap_4.c **** 
+ 343:./FreeRtos/port/MemMang/heap_4.c **** 	if( ( uxAddress & portBYTE_ALIGNMENT_MASK ) != 0 )
+  42              		.loc 1 343 2 is_stmt 1 view .LVU7
+  43              		.loc 1 343 4 is_stmt 0 view .LVU8
+  44 0002 12F0070F 		tst	r2, #7
+  45 0006 1ED0     		beq	.L3
+ 344:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 345:./FreeRtos/port/MemMang/heap_4.c **** 		uxAddress += ( portBYTE_ALIGNMENT - 1 );
+  46              		.loc 1 345 3 is_stmt 1 view .LVU9
+  47              		.loc 1 345 13 is_stmt 0 view .LVU10
+  48 0008 D11D     		adds	r1, r2, #7
+  49              	.LVL2:
+ 346:./FreeRtos/port/MemMang/heap_4.c **** 		uxAddress &= ~( ( size_t ) portBYTE_ALIGNMENT_MASK );
+  50              		.loc 1 346 3 is_stmt 1 view .LVU11
+  51              		.loc 1 346 13 is_stmt 0 view .LVU12
+  52 000a 21F00701 		bic	r1, r1, #7
+  53              	.LVL3:
+ 347:./FreeRtos/port/MemMang/heap_4.c **** 		xTotalHeapSize -= uxAddress - ( size_t ) ucHeap;
+ARM GAS  /tmp/cchegFxA.s 			page 8
+
+
+  54              		.loc 1 347 3 is_stmt 1 view .LVU13
+  55              		.loc 1 347 18 is_stmt 0 view .LVU14
+  56 000e C1F51043 		rsb	r3, r1, #36864
+  57 0012 1344     		add	r3, r3, r2
+  58              	.LVL4:
+ 346:./FreeRtos/port/MemMang/heap_4.c **** 		uxAddress &= ~( ( size_t ) portBYTE_ALIGNMENT_MASK );
+  59              		.loc 1 346 13 view .LVU15
+  60 0014 0A46     		mov	r2, r1
+  61              	.LVL5:
+  62              	.L2:
+ 348:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 349:./FreeRtos/port/MemMang/heap_4.c **** 
+ 350:./FreeRtos/port/MemMang/heap_4.c **** 	pucAlignedHeap = ( uint8_t * ) uxAddress;
+  63              		.loc 1 350 2 is_stmt 1 view .LVU16
+ 351:./FreeRtos/port/MemMang/heap_4.c **** 
+ 352:./FreeRtos/port/MemMang/heap_4.c **** 	/* xStart is used to hold a pointer to the first item in the list of free
+ 353:./FreeRtos/port/MemMang/heap_4.c **** 	blocks.  The void cast is used to prevent compiler warnings. */
+ 354:./FreeRtos/port/MemMang/heap_4.c **** 	xStart.pxNextFreeBlock = ( void * ) pucAlignedHeap;
+  64              		.loc 1 354 2 view .LVU17
+  65              		.loc 1 354 25 is_stmt 0 view .LVU18
+  66 0016 0E48     		ldr	r0, .L4+4
+  67 0018 0260     		str	r2, [r0]
+ 355:./FreeRtos/port/MemMang/heap_4.c **** 	xStart.xBlockSize = ( size_t ) 0;
+  68              		.loc 1 355 2 is_stmt 1 view .LVU19
+  69              		.loc 1 355 20 is_stmt 0 view .LVU20
+  70 001a 0021     		movs	r1, #0
+  71 001c 4160     		str	r1, [r0, #4]
+ 356:./FreeRtos/port/MemMang/heap_4.c **** 
+ 357:./FreeRtos/port/MemMang/heap_4.c **** 	/* pxEnd is used to mark the end of the list of free blocks and is inserted
+ 358:./FreeRtos/port/MemMang/heap_4.c **** 	at the end of the heap space. */
+ 359:./FreeRtos/port/MemMang/heap_4.c **** 	uxAddress = ( ( size_t ) pucAlignedHeap ) + xTotalHeapSize;
+  72              		.loc 1 359 2 is_stmt 1 view .LVU21
+  73              		.loc 1 359 12 is_stmt 0 view .LVU22
+  74 001e 1344     		add	r3, r3, r2
+  75              	.LVL6:
+ 360:./FreeRtos/port/MemMang/heap_4.c **** 	uxAddress -= xHeapStructSize;
+  76              		.loc 1 360 2 is_stmt 1 view .LVU23
+  77              		.loc 1 360 12 is_stmt 0 view .LVU24
+  78 0020 083B     		subs	r3, r3, #8
+  79              	.LVL7:
+ 361:./FreeRtos/port/MemMang/heap_4.c **** 	uxAddress &= ~( ( size_t ) portBYTE_ALIGNMENT_MASK );
+  80              		.loc 1 361 2 is_stmt 1 view .LVU25
+  81              		.loc 1 361 12 is_stmt 0 view .LVU26
+  82 0022 23F00703 		bic	r3, r3, #7
+  83              	.LVL8:
+ 362:./FreeRtos/port/MemMang/heap_4.c **** 	pxEnd = ( void * ) uxAddress;
+  84              		.loc 1 362 2 is_stmt 1 view .LVU27
+  85              		.loc 1 362 8 is_stmt 0 view .LVU28
+  86 0026 0B48     		ldr	r0, .L4+8
+  87 0028 0360     		str	r3, [r0]
+ 363:./FreeRtos/port/MemMang/heap_4.c **** 	pxEnd->xBlockSize = 0;
+  88              		.loc 1 363 2 is_stmt 1 view .LVU29
+  89              		.loc 1 363 20 is_stmt 0 view .LVU30
+  90 002a 5960     		str	r1, [r3, #4]
+ 364:./FreeRtos/port/MemMang/heap_4.c **** 	pxEnd->pxNextFreeBlock = NULL;
+  91              		.loc 1 364 2 is_stmt 1 view .LVU31
+  92              		.loc 1 364 25 is_stmt 0 view .LVU32
+ARM GAS  /tmp/cchegFxA.s 			page 9
+
+
+  93 002c 1960     		str	r1, [r3]
+ 365:./FreeRtos/port/MemMang/heap_4.c **** 
+ 366:./FreeRtos/port/MemMang/heap_4.c **** 	/* To start with there is a single free block that is sized to take up the
+ 367:./FreeRtos/port/MemMang/heap_4.c **** 	entire heap space, minus the space taken by pxEnd. */
+ 368:./FreeRtos/port/MemMang/heap_4.c **** 	pxFirstFreeBlock = ( void * ) pucAlignedHeap;
+  94              		.loc 1 368 2 is_stmt 1 view .LVU33
+  95              	.LVL9:
+ 369:./FreeRtos/port/MemMang/heap_4.c **** 	pxFirstFreeBlock->xBlockSize = uxAddress - ( size_t ) pxFirstFreeBlock;
+  96              		.loc 1 369 2 view .LVU34
+  97              		.loc 1 369 43 is_stmt 0 view .LVU35
+  98 002e 991A     		subs	r1, r3, r2
+  99              		.loc 1 369 31 view .LVU36
+ 100 0030 5160     		str	r1, [r2, #4]
+ 370:./FreeRtos/port/MemMang/heap_4.c **** 	pxFirstFreeBlock->pxNextFreeBlock = pxEnd;
+ 101              		.loc 1 370 2 is_stmt 1 view .LVU37
+ 102              		.loc 1 370 36 is_stmt 0 view .LVU38
+ 103 0032 1360     		str	r3, [r2]
+ 371:./FreeRtos/port/MemMang/heap_4.c **** 
+ 372:./FreeRtos/port/MemMang/heap_4.c **** 	/* Only one block exists - and it covers the entire usable heap space. */
+ 373:./FreeRtos/port/MemMang/heap_4.c **** 	xMinimumEverFreeBytesRemaining = pxFirstFreeBlock->xBlockSize;
+ 104              		.loc 1 373 2 is_stmt 1 view .LVU39
+ 105              		.loc 1 373 33 is_stmt 0 view .LVU40
+ 106 0034 084B     		ldr	r3, .L4+12
+ 107              	.LVL10:
+ 108              		.loc 1 373 33 view .LVU41
+ 109 0036 1960     		str	r1, [r3]
+ 374:./FreeRtos/port/MemMang/heap_4.c **** 	xFreeBytesRemaining = pxFirstFreeBlock->xBlockSize;
+ 110              		.loc 1 374 2 is_stmt 1 view .LVU42
+ 111              		.loc 1 374 22 is_stmt 0 view .LVU43
+ 112 0038 084B     		ldr	r3, .L4+16
+ 113 003a 1960     		str	r1, [r3]
+ 375:./FreeRtos/port/MemMang/heap_4.c **** 
+ 376:./FreeRtos/port/MemMang/heap_4.c **** 	/* Work out the position of the top bit in a size_t variable. */
+ 377:./FreeRtos/port/MemMang/heap_4.c **** 	xBlockAllocatedBit = ( ( size_t ) 1 ) << ( ( sizeof( size_t ) * heapBITS_PER_BYTE ) - 1 );
+ 114              		.loc 1 377 2 is_stmt 1 view .LVU44
+ 115              		.loc 1 377 21 is_stmt 0 view .LVU45
+ 116 003c 084B     		ldr	r3, .L4+20
+ 117 003e 4FF00042 		mov	r2, #-2147483648
+ 118              	.LVL11:
+ 119              		.loc 1 377 21 view .LVU46
+ 120 0042 1A60     		str	r2, [r3]
+ 378:./FreeRtos/port/MemMang/heap_4.c **** }
+ 121              		.loc 1 378 1 view .LVU47
+ 122 0044 7047     		bx	lr
+ 123              	.LVL12:
+ 124              	.L3:
+ 338:./FreeRtos/port/MemMang/heap_4.c **** 
+ 125              		.loc 1 338 8 view .LVU48
+ 126 0046 4FF41043 		mov	r3, #36864
+ 127 004a E4E7     		b	.L2
+ 128              	.L5:
+ 129              		.align	2
+ 130              	.L4:
+ 131 004c 00000000 		.word	ucHeap
+ 132 0050 00000000 		.word	.LANCHOR0
+ 133 0054 00000000 		.word	.LANCHOR1
+ 134 0058 00000000 		.word	.LANCHOR2
+ARM GAS  /tmp/cchegFxA.s 			page 10
+
+
+ 135 005c 00000000 		.word	.LANCHOR3
+ 136 0060 00000000 		.word	.LANCHOR4
+ 137              		.cfi_endproc
+ 138              	.LFE136:
+ 140              		.section	.text.prvInsertBlockIntoFreeList,"ax",%progbits
+ 141              		.align	1
+ 142              		.syntax unified
+ 143              		.thumb
+ 144              		.thumb_func
+ 145              		.fpu fpv4-sp-d16
+ 147              	prvInsertBlockIntoFreeList:
+ 148              	.LVL13:
+ 149              	.LFB137:
+ 379:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 380:./FreeRtos/port/MemMang/heap_4.c **** 
+ 381:./FreeRtos/port/MemMang/heap_4.c **** static void prvInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert )
+ 382:./FreeRtos/port/MemMang/heap_4.c **** {
+ 150              		.loc 1 382 1 is_stmt 1 view -0
+ 151              		.cfi_startproc
+ 152              		@ args = 0, pretend = 0, frame = 0
+ 153              		@ frame_needed = 0, uses_anonymous_args = 0
+ 154              		@ link register save eliminated.
+ 383:./FreeRtos/port/MemMang/heap_4.c **** BlockLink_t *pxIterator;
+ 155              		.loc 1 383 1 view .LVU50
+ 384:./FreeRtos/port/MemMang/heap_4.c **** uint8_t *puc;
+ 156              		.loc 1 384 1 view .LVU51
+ 385:./FreeRtos/port/MemMang/heap_4.c **** 
+ 386:./FreeRtos/port/MemMang/heap_4.c **** 	/* Iterate through the list until a block is found that has a higher address
+ 387:./FreeRtos/port/MemMang/heap_4.c **** 	than the block being inserted. */
+ 388:./FreeRtos/port/MemMang/heap_4.c **** 	for( pxIterator = &xStart; pxIterator->pxNextFreeBlock < pxBlockToInsert; pxIterator = pxIterator-
+ 157              		.loc 1 388 2 view .LVU52
+ 158              		.loc 1 388 18 is_stmt 0 view .LVU53
+ 159 0000 164B     		ldr	r3, .L21
+ 160              	.LVL14:
+ 161              	.L7:
+ 162              		.loc 1 388 29 is_stmt 1 discriminator 1 view .LVU54
+ 163 0002 1A46     		mov	r2, r3
+ 164              		.loc 1 388 39 is_stmt 0 discriminator 1 view .LVU55
+ 165 0004 1B68     		ldr	r3, [r3]
+ 166              	.LVL15:
+ 167              		.loc 1 388 2 discriminator 1 view .LVU56
+ 168 0006 8342     		cmp	r3, r0
+ 169 0008 FBD3     		bcc	.L7
+ 389:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 390:./FreeRtos/port/MemMang/heap_4.c **** 		/* Nothing to do here, just iterate to the right position. */
+ 391:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 392:./FreeRtos/port/MemMang/heap_4.c **** 
+ 393:./FreeRtos/port/MemMang/heap_4.c **** 	/* Do the block being inserted, and the block it is being inserted after
+ 394:./FreeRtos/port/MemMang/heap_4.c **** 	make a contiguous block of memory? */
+ 395:./FreeRtos/port/MemMang/heap_4.c **** 	puc = ( uint8_t * ) pxIterator;
+ 170              		.loc 1 395 2 is_stmt 1 view .LVU57
+ 171              	.LVL16:
+ 396:./FreeRtos/port/MemMang/heap_4.c **** 	if( ( puc + pxIterator->xBlockSize ) == ( uint8_t * ) pxBlockToInsert )
+ 172              		.loc 1 396 2 view .LVU58
+ 173              		.loc 1 396 24 is_stmt 0 view .LVU59
+ 174 000a 5168     		ldr	r1, [r2, #4]
+ 175              		.loc 1 396 12 view .LVU60
+ARM GAS  /tmp/cchegFxA.s 			page 11
+
+
+ 176 000c 02EB010C 		add	ip, r2, r1
+ 177              		.loc 1 396 4 view .LVU61
+ 178 0010 8445     		cmp	ip, r0
+ 179 0012 09D0     		beq	.L19
+ 180              	.L8:
+ 397:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 398:./FreeRtos/port/MemMang/heap_4.c **** 		pxIterator->xBlockSize += pxBlockToInsert->xBlockSize;
+ 399:./FreeRtos/port/MemMang/heap_4.c **** 		pxBlockToInsert = pxIterator;
+ 400:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 401:./FreeRtos/port/MemMang/heap_4.c **** 	else
+ 402:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 403:./FreeRtos/port/MemMang/heap_4.c **** 		mtCOVERAGE_TEST_MARKER();
+ 181              		.loc 1 403 27 is_stmt 1 view .LVU62
+ 404:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 405:./FreeRtos/port/MemMang/heap_4.c **** 
+ 406:./FreeRtos/port/MemMang/heap_4.c **** 	/* Do the block being inserted, and the block it is being inserted before
+ 407:./FreeRtos/port/MemMang/heap_4.c **** 	make a contiguous block of memory? */
+ 408:./FreeRtos/port/MemMang/heap_4.c **** 	puc = ( uint8_t * ) pxBlockToInsert;
+ 182              		.loc 1 408 2 view .LVU63
+ 183              	.LVL17:
+ 409:./FreeRtos/port/MemMang/heap_4.c **** 	if( ( puc + pxBlockToInsert->xBlockSize ) == ( uint8_t * ) pxIterator->pxNextFreeBlock )
+ 184              		.loc 1 409 2 view .LVU64
+ 185              		.loc 1 409 29 is_stmt 0 view .LVU65
+ 186 0014 4168     		ldr	r1, [r0, #4]
+ 187              		.loc 1 409 12 view .LVU66
+ 188 0016 00EB010C 		add	ip, r0, r1
+ 189              		.loc 1 409 4 view .LVU67
+ 190 001a 6345     		cmp	r3, ip
+ 191 001c 09D0     		beq	.L20
+ 410:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 411:./FreeRtos/port/MemMang/heap_4.c **** 		if( pxIterator->pxNextFreeBlock != pxEnd )
+ 412:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 413:./FreeRtos/port/MemMang/heap_4.c **** 			/* Form one big block from the two blocks. */
+ 414:./FreeRtos/port/MemMang/heap_4.c **** 			pxBlockToInsert->xBlockSize += pxIterator->pxNextFreeBlock->xBlockSize;
+ 415:./FreeRtos/port/MemMang/heap_4.c **** 			pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock->pxNextFreeBlock;
+ 416:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 417:./FreeRtos/port/MemMang/heap_4.c **** 		else
+ 418:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 419:./FreeRtos/port/MemMang/heap_4.c **** 			pxBlockToInsert->pxNextFreeBlock = pxEnd;
+ 420:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 421:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 422:./FreeRtos/port/MemMang/heap_4.c **** 	else
+ 423:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 424:./FreeRtos/port/MemMang/heap_4.c **** 		pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock;
+ 192              		.loc 1 424 3 is_stmt 1 view .LVU68
+ 193              		.loc 1 424 36 is_stmt 0 view .LVU69
+ 194 001e 0360     		str	r3, [r0]
+ 425:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 426:./FreeRtos/port/MemMang/heap_4.c **** 
+ 427:./FreeRtos/port/MemMang/heap_4.c **** 	/* If the block being inserted plugged a gab, so was merged with the block
+ 428:./FreeRtos/port/MemMang/heap_4.c **** 	before and the block after, then it's pxNextFreeBlock pointer will have
+ 429:./FreeRtos/port/MemMang/heap_4.c **** 	already been set, and should not be set here as that would make it point
+ 430:./FreeRtos/port/MemMang/heap_4.c **** 	to itself. */
+ 431:./FreeRtos/port/MemMang/heap_4.c **** 	if( pxIterator != pxBlockToInsert )
+ 195              		.loc 1 431 2 is_stmt 1 view .LVU70
+ 196              		.loc 1 431 4 is_stmt 0 view .LVU71
+ 197 0020 9042     		cmp	r0, r2
+ARM GAS  /tmp/cchegFxA.s 			page 12
+
+
+ 198 0022 19D0     		beq	.L16
+ 432:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 433:./FreeRtos/port/MemMang/heap_4.c **** 		pxIterator->pxNextFreeBlock = pxBlockToInsert;
+ 199              		.loc 1 433 3 is_stmt 1 view .LVU72
+ 200              		.loc 1 433 31 is_stmt 0 view .LVU73
+ 201 0024 1060     		str	r0, [r2]
+ 434:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 435:./FreeRtos/port/MemMang/heap_4.c **** 	else
+ 436:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 437:./FreeRtos/port/MemMang/heap_4.c **** 		mtCOVERAGE_TEST_MARKER();
+ 202              		.loc 1 437 27 is_stmt 1 view .LVU74
+ 203 0026 7047     		bx	lr
+ 204              	.LVL18:
+ 205              	.L19:
+ 398:./FreeRtos/port/MemMang/heap_4.c **** 		pxBlockToInsert = pxIterator;
+ 206              		.loc 1 398 3 view .LVU75
+ 398:./FreeRtos/port/MemMang/heap_4.c **** 		pxBlockToInsert = pxIterator;
+ 207              		.loc 1 398 44 is_stmt 0 view .LVU76
+ 208 0028 4068     		ldr	r0, [r0, #4]
+ 209              	.LVL19:
+ 398:./FreeRtos/port/MemMang/heap_4.c **** 		pxBlockToInsert = pxIterator;
+ 210              		.loc 1 398 26 view .LVU77
+ 211 002a 0144     		add	r1, r1, r0
+ 212 002c 5160     		str	r1, [r2, #4]
+ 399:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 213              		.loc 1 399 3 is_stmt 1 view .LVU78
+ 214              	.LVL20:
+ 399:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 215              		.loc 1 399 19 is_stmt 0 view .LVU79
+ 216 002e 1046     		mov	r0, r2
+ 217 0030 F0E7     		b	.L8
+ 218              	.LVL21:
+ 219              	.L20:
+ 382:./FreeRtos/port/MemMang/heap_4.c **** BlockLink_t *pxIterator;
+ 220              		.loc 1 382 1 view .LVU80
+ 221 0032 10B4     		push	{r4}
+ 222              	.LCFI0:
+ 223              		.cfi_def_cfa_offset 4
+ 224              		.cfi_offset 4, -4
+ 411:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 225              		.loc 1 411 3 is_stmt 1 view .LVU81
+ 411:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 226              		.loc 1 411 35 is_stmt 0 view .LVU82
+ 227 0034 0A4C     		ldr	r4, .L21+4
+ 228 0036 2468     		ldr	r4, [r4]
+ 411:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 229              		.loc 1 411 5 view .LVU83
+ 230 0038 A342     		cmp	r3, r4
+ 231 003a 0BD0     		beq	.L10
+ 414:./FreeRtos/port/MemMang/heap_4.c **** 			pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock->pxNextFreeBlock;
+ 232              		.loc 1 414 4 is_stmt 1 view .LVU84
+ 414:./FreeRtos/port/MemMang/heap_4.c **** 			pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock->pxNextFreeBlock;
+ 233              		.loc 1 414 62 is_stmt 0 view .LVU85
+ 234 003c 5B68     		ldr	r3, [r3, #4]
+ 414:./FreeRtos/port/MemMang/heap_4.c **** 			pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock->pxNextFreeBlock;
+ 235              		.loc 1 414 32 view .LVU86
+ 236 003e 1944     		add	r1, r1, r3
+ARM GAS  /tmp/cchegFxA.s 			page 13
+
+
+ 237 0040 4160     		str	r1, [r0, #4]
+ 415:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 238              		.loc 1 415 4 is_stmt 1 view .LVU87
+ 415:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 239              		.loc 1 415 49 is_stmt 0 view .LVU88
+ 240 0042 1368     		ldr	r3, [r2]
+ 415:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 241              		.loc 1 415 66 view .LVU89
+ 242 0044 1B68     		ldr	r3, [r3]
+ 415:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 243              		.loc 1 415 37 view .LVU90
+ 244 0046 0360     		str	r3, [r0]
+ 245              	.L11:
+ 431:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 246              		.loc 1 431 2 is_stmt 1 view .LVU91
+ 431:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 247              		.loc 1 431 4 is_stmt 0 view .LVU92
+ 248 0048 9042     		cmp	r0, r2
+ 249 004a 00D0     		beq	.L6
+ 433:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 250              		.loc 1 433 3 is_stmt 1 view .LVU93
+ 433:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 251              		.loc 1 433 31 is_stmt 0 view .LVU94
+ 252 004c 1060     		str	r0, [r2]
+ 253              		.loc 1 437 27 is_stmt 1 view .LVU95
+ 254              	.L6:
+ 438:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 439:./FreeRtos/port/MemMang/heap_4.c **** }
+ 255              		.loc 1 439 1 is_stmt 0 view .LVU96
+ 256 004e 5DF8044B 		ldr	r4, [sp], #4
+ 257              	.LCFI1:
+ 258              		.cfi_remember_state
+ 259              		.cfi_restore 4
+ 260              		.cfi_def_cfa_offset 0
+ 261 0052 7047     		bx	lr
+ 262              	.L10:
+ 263              	.LCFI2:
+ 264              		.cfi_restore_state
+ 419:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 265              		.loc 1 419 4 is_stmt 1 view .LVU97
+ 419:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 266              		.loc 1 419 37 is_stmt 0 view .LVU98
+ 267 0054 0460     		str	r4, [r0]
+ 268 0056 F7E7     		b	.L11
+ 269              	.L16:
+ 270              	.LCFI3:
+ 271              		.cfi_def_cfa_offset 0
+ 272              		.cfi_restore 4
+ 419:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 273              		.loc 1 419 37 view .LVU99
+ 274 0058 7047     		bx	lr
+ 275              	.L22:
+ 276 005a 00BF     		.align	2
+ 277              	.L21:
+ 278 005c 00000000 		.word	.LANCHOR0
+ 279 0060 00000000 		.word	.LANCHOR1
+ 280              		.cfi_endproc
+ARM GAS  /tmp/cchegFxA.s 			page 14
+
+
+ 281              	.LFE137:
+ 283              		.section	.rodata.pvPortMalloc.str1.4,"aMS",%progbits,1
+ 284              		.align	2
+ 285              	.LC0:
+ 286 0000 2E2F4672 		.ascii	"./FreeRtos/port/MemMang/heap_4.c\000"
+ 286      65655274 
+ 286      6F732F70 
+ 286      6F72742F 
+ 286      4D656D4D 
+ 287 0021 000000   		.align	2
+ 288              	.LC1:
+ 289 0024 4572726F 		.ascii	"Error:%s,%d\015\012\000"
+ 289      723A2573 
+ 289      2C25640D 
+ 289      0A00
+ 290              		.section	.text.pvPortMalloc,"ax",%progbits
+ 291              		.align	1
+ 292              		.global	pvPortMalloc
+ 293              		.syntax unified
+ 294              		.thumb
+ 295              		.thumb_func
+ 296              		.fpu fpv4-sp-d16
+ 298              	pvPortMalloc:
+ 299              	.LVL22:
+ 300              	.LFB131:
+ 116:./FreeRtos/port/MemMang/heap_4.c **** BlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
+ 301              		.loc 1 116 1 is_stmt 1 view -0
+ 302              		.cfi_startproc
+ 303              		@ args = 0, pretend = 0, frame = 0
+ 304              		@ frame_needed = 0, uses_anonymous_args = 0
+ 116:./FreeRtos/port/MemMang/heap_4.c **** BlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
+ 305              		.loc 1 116 1 is_stmt 0 view .LVU101
+ 306 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 307              	.LCFI4:
+ 308              		.cfi_def_cfa_offset 24
+ 309              		.cfi_offset 3, -24
+ 310              		.cfi_offset 4, -20
+ 311              		.cfi_offset 5, -16
+ 312              		.cfi_offset 6, -12
+ 313              		.cfi_offset 7, -8
+ 314              		.cfi_offset 14, -4
+ 315 0002 0546     		mov	r5, r0
+ 117:./FreeRtos/port/MemMang/heap_4.c **** void *pvReturn = NULL;
+ 316              		.loc 1 117 1 is_stmt 1 view .LVU102
+ 118:./FreeRtos/port/MemMang/heap_4.c **** 
+ 317              		.loc 1 118 1 view .LVU103
+ 318              	.LVL23:
+ 120:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 319              		.loc 1 120 2 view .LVU104
+ 320 0004 FFF7FEFF 		bl	vTaskSuspendAll
+ 321              	.LVL24:
+ 124:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 322              		.loc 1 124 3 view .LVU105
+ 124:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 323              		.loc 1 124 13 is_stmt 0 view .LVU106
+ 324 0008 354B     		ldr	r3, .L42
+ 325 000a 1B68     		ldr	r3, [r3]
+ARM GAS  /tmp/cchegFxA.s 			page 15
+
+
+ 124:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 326              		.loc 1 124 5 view .LVU107
+ 327 000c A3B1     		cbz	r3, .L39
+ 328              	.L24:
+ 130:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 329              		.loc 1 130 28 is_stmt 1 view .LVU108
+ 137:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 330              		.loc 1 137 3 view .LVU109
+ 137:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 331              		.loc 1 137 21 is_stmt 0 view .LVU110
+ 332 000e 354B     		ldr	r3, .L42+4
+ 333 0010 1B68     		ldr	r3, [r3]
+ 137:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 334              		.loc 1 137 5 view .LVU111
+ 335 0012 1D42     		tst	r5, r3
+ 336 0014 54D1     		bne	.L33
+ 141:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 337              		.loc 1 141 4 is_stmt 1 view .LVU112
+ 141:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 338              		.loc 1 141 6 is_stmt 0 view .LVU113
+ 339 0016 35B1     		cbz	r5, .L26
+ 143:./FreeRtos/port/MemMang/heap_4.c **** 
+ 340              		.loc 1 143 5 is_stmt 1 view .LVU114
+ 143:./FreeRtos/port/MemMang/heap_4.c **** 
+ 341              		.loc 1 143 17 is_stmt 0 view .LVU115
+ 342 0018 0835     		adds	r5, r5, #8
+ 343              	.LVL25:
+ 147:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 344              		.loc 1 147 5 is_stmt 1 view .LVU116
+ 147:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 345              		.loc 1 147 7 is_stmt 0 view .LVU117
+ 346 001a 15F0070F 		tst	r5, #7
+ 347 001e 02D0     		beq	.L26
+ 150:./FreeRtos/port/MemMang/heap_4.c **** 					configASSERT( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) == 0 );
+ 348              		.loc 1 150 6 is_stmt 1 view .LVU118
+ 150:./FreeRtos/port/MemMang/heap_4.c **** 					configASSERT( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) == 0 );
+ 349              		.loc 1 150 18 is_stmt 0 view .LVU119
+ 350 0020 25F00705 		bic	r5, r5, #7
+ 351              	.LVL26:
+ 150:./FreeRtos/port/MemMang/heap_4.c **** 					configASSERT( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) == 0 );
+ 352              		.loc 1 150 18 view .LVU120
+ 353 0024 0835     		adds	r5, r5, #8
+ 354              	.LVL27:
+ 151:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 355              		.loc 1 151 6 is_stmt 1 view .LVU121
+ 356              	.L26:
+ 160:./FreeRtos/port/MemMang/heap_4.c **** 			}
+ 357              		.loc 1 160 29 view .LVU122
+ 163:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 358              		.loc 1 163 4 view .LVU123
+ 163:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 359              		.loc 1 163 6 is_stmt 0 view .LVU124
+ 360 0026 002D     		cmp	r5, #0
+ 361 0028 4CD0     		beq	.L34
+ 163:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 362              		.loc 1 163 45 discriminator 1 view .LVU125
+ 363 002a 2F4B     		ldr	r3, .L42+8
+ARM GAS  /tmp/cchegFxA.s 			page 16
+
+
+ 364 002c 1B68     		ldr	r3, [r3]
+ 163:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 365              		.loc 1 163 28 discriminator 1 view .LVU126
+ 366 002e AB42     		cmp	r3, r5
+ 367 0030 4AD3     		bcc	.L35
+ 167:./FreeRtos/port/MemMang/heap_4.c **** 				pxBlock = xStart.pxNextFreeBlock;
+ 368              		.loc 1 167 5 is_stmt 1 view .LVU127
+ 369              	.LVL28:
+ 168:./FreeRtos/port/MemMang/heap_4.c **** 				while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock != NULL ) )
+ 370              		.loc 1 168 5 view .LVU128
+ 168:./FreeRtos/port/MemMang/heap_4.c **** 				while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock != NULL ) )
+ 371              		.loc 1 168 13 is_stmt 0 view .LVU129
+ 372 0032 2E4A     		ldr	r2, .L42+12
+ 373 0034 1468     		ldr	r4, [r2]
+ 374              	.LVL29:
+ 169:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 375              		.loc 1 169 5 is_stmt 1 view .LVU130
+ 169:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 376              		.loc 1 169 10 is_stmt 0 view .LVU131
+ 377 0036 04E0     		b	.L28
+ 378              	.LVL30:
+ 379              	.L39:
+ 126:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 380              		.loc 1 126 4 is_stmt 1 view .LVU132
+ 381 0038 FFF7FEFF 		bl	prvHeapInit
+ 382              	.LVL31:
+ 383 003c E7E7     		b	.L24
+ 384              	.LVL32:
+ 385              	.L36:
+ 171:./FreeRtos/port/MemMang/heap_4.c **** 					pxBlock = pxBlock->pxNextFreeBlock;
+ 386              		.loc 1 171 22 is_stmt 0 view .LVU133
+ 387 003e 2246     		mov	r2, r4
+ 388              	.LVL33:
+ 172:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 389              		.loc 1 172 14 view .LVU134
+ 390 0040 1C46     		mov	r4, r3
+ 391              	.LVL34:
+ 392              	.L28:
+ 169:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 393              		.loc 1 169 10 is_stmt 1 view .LVU135
+ 169:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 394              		.loc 1 169 21 is_stmt 0 view .LVU136
+ 395 0042 6368     		ldr	r3, [r4, #4]
+ 169:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 396              		.loc 1 169 10 view .LVU137
+ 397 0044 AB42     		cmp	r3, r5
+ 398 0046 02D2     		bcs	.L27
+ 169:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 399              		.loc 1 169 62 discriminator 1 view .LVU138
+ 400 0048 2368     		ldr	r3, [r4]
+ 169:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 401              		.loc 1 169 50 discriminator 1 view .LVU139
+ 402 004a 002B     		cmp	r3, #0
+ 403 004c F7D1     		bne	.L36
+ 404              	.L27:
+ 177:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 405              		.loc 1 177 5 is_stmt 1 view .LVU140
+ARM GAS  /tmp/cchegFxA.s 			page 17
+
+
+ 177:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 406              		.loc 1 177 17 is_stmt 0 view .LVU141
+ 407 004e 244B     		ldr	r3, .L42
+ 408 0050 1B68     		ldr	r3, [r3]
+ 177:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 409              		.loc 1 177 7 view .LVU142
+ 410 0052 A342     		cmp	r3, r4
+ 411 0054 3AD0     		beq	.L37
+ 181:./FreeRtos/port/MemMang/heap_4.c **** 
+ 412              		.loc 1 181 6 is_stmt 1 view .LVU143
+ 181:./FreeRtos/port/MemMang/heap_4.c **** 
+ 413              		.loc 1 181 61 is_stmt 0 view .LVU144
+ 414 0056 1668     		ldr	r6, [r2]
+ 181:./FreeRtos/port/MemMang/heap_4.c **** 
+ 415              		.loc 1 181 15 view .LVU145
+ 416 0058 0836     		adds	r6, r6, #8
+ 417              	.LVL35:
+ 185:./FreeRtos/port/MemMang/heap_4.c **** 
+ 418              		.loc 1 185 6 is_stmt 1 view .LVU146
+ 185:./FreeRtos/port/MemMang/heap_4.c **** 
+ 419              		.loc 1 185 48 is_stmt 0 view .LVU147
+ 420 005a 2368     		ldr	r3, [r4]
+ 185:./FreeRtos/port/MemMang/heap_4.c **** 
+ 421              		.loc 1 185 39 view .LVU148
+ 422 005c 1360     		str	r3, [r2]
+ 189:./FreeRtos/port/MemMang/heap_4.c **** 					{
+ 423              		.loc 1 189 6 is_stmt 1 view .LVU149
+ 189:./FreeRtos/port/MemMang/heap_4.c **** 					{
+ 424              		.loc 1 189 19 is_stmt 0 view .LVU150
+ 425 005e 6368     		ldr	r3, [r4, #4]
+ 189:./FreeRtos/port/MemMang/heap_4.c **** 					{
+ 426              		.loc 1 189 32 view .LVU151
+ 427 0060 5B1B     		subs	r3, r3, r5
+ 189:./FreeRtos/port/MemMang/heap_4.c **** 					{
+ 428              		.loc 1 189 8 view .LVU152
+ 429 0062 102B     		cmp	r3, #16
+ 430 0064 0AD9     		bls	.L29
+ 195:./FreeRtos/port/MemMang/heap_4.c **** 						configASSERT( ( ( ( size_t ) pxNewBlockLink ) & portBYTE_ALIGNMENT_MASK ) == 0 );
+ 431              		.loc 1 195 7 is_stmt 1 view .LVU153
+ 195:./FreeRtos/port/MemMang/heap_4.c **** 						configASSERT( ( ( ( size_t ) pxNewBlockLink ) & portBYTE_ALIGNMENT_MASK ) == 0 );
+ 432              		.loc 1 195 22 is_stmt 0 view .LVU154
+ 433 0066 6719     		adds	r7, r4, r5
+ 434              	.LVL36:
+ 196:./FreeRtos/port/MemMang/heap_4.c **** 
+ 435              		.loc 1 196 7 is_stmt 1 view .LVU155
+ 436 0068 17F0070F 		tst	r7, #7
+ 437 006c 22D1     		bne	.L40
+ 438              	.LVL37:
+ 439              	.L30:
+ 200:./FreeRtos/port/MemMang/heap_4.c **** 						pxBlock->xBlockSize = xWantedSize;
+ 440              		.loc 1 200 7 view .LVU156
+ 200:./FreeRtos/port/MemMang/heap_4.c **** 						pxBlock->xBlockSize = xWantedSize;
+ 441              		.loc 1 200 43 is_stmt 0 view .LVU157
+ 442 006e 6368     		ldr	r3, [r4, #4]
+ 200:./FreeRtos/port/MemMang/heap_4.c **** 						pxBlock->xBlockSize = xWantedSize;
+ 443              		.loc 1 200 56 view .LVU158
+ 444 0070 5B1B     		subs	r3, r3, r5
+ARM GAS  /tmp/cchegFxA.s 			page 18
+
+
+ 200:./FreeRtos/port/MemMang/heap_4.c **** 						pxBlock->xBlockSize = xWantedSize;
+ 445              		.loc 1 200 34 view .LVU159
+ 446 0072 7B60     		str	r3, [r7, #4]
+ 201:./FreeRtos/port/MemMang/heap_4.c **** 
+ 447              		.loc 1 201 7 is_stmt 1 view .LVU160
+ 201:./FreeRtos/port/MemMang/heap_4.c **** 
+ 448              		.loc 1 201 27 is_stmt 0 view .LVU161
+ 449 0074 6560     		str	r5, [r4, #4]
+ 204:./FreeRtos/port/MemMang/heap_4.c **** 					}
+ 450              		.loc 1 204 7 is_stmt 1 view .LVU162
+ 451 0076 3846     		mov	r0, r7
+ 452 0078 FFF7FEFF 		bl	prvInsertBlockIntoFreeList
+ 453              	.LVL38:
+ 454              	.L29:
+ 208:./FreeRtos/port/MemMang/heap_4.c **** 					}
+ 455              		.loc 1 208 31 view .LVU163
+ 211:./FreeRtos/port/MemMang/heap_4.c **** 
+ 456              		.loc 1 211 6 view .LVU164
+ 211:./FreeRtos/port/MemMang/heap_4.c **** 
+ 457              		.loc 1 211 36 is_stmt 0 view .LVU165
+ 458 007c 6268     		ldr	r2, [r4, #4]
+ 211:./FreeRtos/port/MemMang/heap_4.c **** 
+ 459              		.loc 1 211 26 view .LVU166
+ 460 007e 1A49     		ldr	r1, .L42+8
+ 461 0080 0B68     		ldr	r3, [r1]
+ 462 0082 9B1A     		subs	r3, r3, r2
+ 463 0084 0B60     		str	r3, [r1]
+ 213:./FreeRtos/port/MemMang/heap_4.c **** 					{
+ 464              		.loc 1 213 6 is_stmt 1 view .LVU167
+ 213:./FreeRtos/port/MemMang/heap_4.c **** 					{
+ 465              		.loc 1 213 30 is_stmt 0 view .LVU168
+ 466 0086 1A49     		ldr	r1, .L42+16
+ 467 0088 0968     		ldr	r1, [r1]
+ 213:./FreeRtos/port/MemMang/heap_4.c **** 					{
+ 468              		.loc 1 213 8 view .LVU169
+ 469 008a 8B42     		cmp	r3, r1
+ 470 008c 01D2     		bcs	.L31
+ 215:./FreeRtos/port/MemMang/heap_4.c **** 					}
+ 471              		.loc 1 215 7 is_stmt 1 view .LVU170
+ 215:./FreeRtos/port/MemMang/heap_4.c **** 					}
+ 472              		.loc 1 215 38 is_stmt 0 view .LVU171
+ 473 008e 1849     		ldr	r1, .L42+16
+ 474 0090 0B60     		str	r3, [r1]
+ 475              	.L31:
+ 219:./FreeRtos/port/MemMang/heap_4.c **** 					}
+ 476              		.loc 1 219 31 is_stmt 1 view .LVU172
+ 224:./FreeRtos/port/MemMang/heap_4.c **** 					pxBlock->pxNextFreeBlock = NULL;
+ 477              		.loc 1 224 6 view .LVU173
+ 224:./FreeRtos/port/MemMang/heap_4.c **** 					pxBlock->pxNextFreeBlock = NULL;
+ 478              		.loc 1 224 26 is_stmt 0 view .LVU174
+ 479 0092 144B     		ldr	r3, .L42+4
+ 480 0094 1B68     		ldr	r3, [r3]
+ 481 0096 1343     		orrs	r3, r3, r2
+ 482 0098 6360     		str	r3, [r4, #4]
+ 225:./FreeRtos/port/MemMang/heap_4.c **** 					xNumberOfSuccessfulAllocations++;
+ 483              		.loc 1 225 6 is_stmt 1 view .LVU175
+ 225:./FreeRtos/port/MemMang/heap_4.c **** 					xNumberOfSuccessfulAllocations++;
+ARM GAS  /tmp/cchegFxA.s 			page 19
+
+
+ 484              		.loc 1 225 31 is_stmt 0 view .LVU176
+ 485 009a 0023     		movs	r3, #0
+ 486 009c 2360     		str	r3, [r4]
+ 226:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 487              		.loc 1 226 6 is_stmt 1 view .LVU177
+ 226:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 488              		.loc 1 226 36 is_stmt 0 view .LVU178
+ 489 009e 154A     		ldr	r2, .L42+20
+ 490 00a0 1368     		ldr	r3, [r2]
+ 491 00a2 0133     		adds	r3, r3, #1
+ 492 00a4 1360     		str	r3, [r2]
+ 493              	.LVL39:
+ 494              	.L25:
+ 240:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 495              		.loc 1 240 28 is_stmt 1 view .LVU179
+ 243:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 496              		.loc 1 243 39 view .LVU180
+ 245:./FreeRtos/port/MemMang/heap_4.c **** 
+ 497              		.loc 1 245 2 view .LVU181
+ 245:./FreeRtos/port/MemMang/heap_4.c **** 
+ 498              		.loc 1 245 11 is_stmt 0 view .LVU182
+ 499 00a6 FFF7FEFF 		bl	xTaskResumeAll
+ 500              	.LVL40:
+ 261:./FreeRtos/port/MemMang/heap_4.c **** 	return pvReturn;
+ 501              		.loc 1 261 2 is_stmt 1 view .LVU183
+ 502 00aa 16F0070F 		tst	r6, #7
+ 503 00ae 0FD1     		bne	.L41
+ 504              	.L23:
+ 263:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 505              		.loc 1 263 1 is_stmt 0 view .LVU184
+ 506 00b0 3046     		mov	r0, r6
+ 507 00b2 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 508              	.LVL41:
+ 509              	.L40:
+ 196:./FreeRtos/port/MemMang/heap_4.c **** 
+ 510              		.loc 1 196 7 is_stmt 1 discriminator 1 view .LVU185
+ 511 00b4 C422     		movs	r2, #196
+ 512              	.LVL42:
+ 196:./FreeRtos/port/MemMang/heap_4.c **** 
+ 513              		.loc 1 196 7 is_stmt 0 discriminator 1 view .LVU186
+ 514 00b6 1049     		ldr	r1, .L42+24
+ 515 00b8 1048     		ldr	r0, .L42+28
+ 516 00ba FFF7FEFF 		bl	printf
+ 517              	.LVL43:
+ 518 00be D6E7     		b	.L30
+ 519              	.LVL44:
+ 520              	.L33:
+ 118:./FreeRtos/port/MemMang/heap_4.c **** 
+ 521              		.loc 1 118 7 view .LVU187
+ 522 00c0 0026     		movs	r6, #0
+ 523 00c2 F0E7     		b	.L25
+ 524              	.L34:
+ 118:./FreeRtos/port/MemMang/heap_4.c **** 
+ 525              		.loc 1 118 7 view .LVU188
+ 526 00c4 0026     		movs	r6, #0
+ 527 00c6 EEE7     		b	.L25
+ 528              	.L35:
+ARM GAS  /tmp/cchegFxA.s 			page 20
+
+
+ 529 00c8 0026     		movs	r6, #0
+ 530 00ca ECE7     		b	.L25
+ 531              	.LVL45:
+ 532              	.L37:
+ 118:./FreeRtos/port/MemMang/heap_4.c **** 
+ 533              		.loc 1 118 7 view .LVU189
+ 534 00cc 0026     		movs	r6, #0
+ 535 00ce EAE7     		b	.L25
+ 536              	.LVL46:
+ 537              	.L41:
+ 261:./FreeRtos/port/MemMang/heap_4.c **** 	return pvReturn;
+ 538              		.loc 1 261 2 is_stmt 1 discriminator 1 view .LVU190
+ 539 00d0 40F20512 		movw	r2, #261
+ 540 00d4 0849     		ldr	r1, .L42+24
+ 541 00d6 0948     		ldr	r0, .L42+28
+ 542 00d8 FFF7FEFF 		bl	printf
+ 543              	.LVL47:
+ 262:./FreeRtos/port/MemMang/heap_4.c **** }
+ 544              		.loc 1 262 2 discriminator 1 view .LVU191
+ 262:./FreeRtos/port/MemMang/heap_4.c **** }
+ 545              		.loc 1 262 9 is_stmt 0 discriminator 1 view .LVU192
+ 546 00dc E8E7     		b	.L23
+ 547              	.L43:
+ 548 00de 00BF     		.align	2
+ 549              	.L42:
+ 550 00e0 00000000 		.word	.LANCHOR1
+ 551 00e4 00000000 		.word	.LANCHOR4
+ 552 00e8 00000000 		.word	.LANCHOR3
+ 553 00ec 00000000 		.word	.LANCHOR0
+ 554 00f0 00000000 		.word	.LANCHOR2
+ 555 00f4 00000000 		.word	.LANCHOR5
+ 556 00f8 00000000 		.word	.LC0
+ 557 00fc 24000000 		.word	.LC1
+ 558              		.cfi_endproc
+ 559              	.LFE131:
+ 561              		.section	.text.vPortFree,"ax",%progbits
+ 562              		.align	1
+ 563              		.global	vPortFree
+ 564              		.syntax unified
+ 565              		.thumb
+ 566              		.thumb_func
+ 567              		.fpu fpv4-sp-d16
+ 569              	vPortFree:
+ 570              	.LVL48:
+ 571              	.LFB132:
+ 267:./FreeRtos/port/MemMang/heap_4.c **** uint8_t *puc = ( uint8_t * ) pv;
+ 572              		.loc 1 267 1 is_stmt 1 view -0
+ 573              		.cfi_startproc
+ 574              		@ args = 0, pretend = 0, frame = 0
+ 575              		@ frame_needed = 0, uses_anonymous_args = 0
+ 268:./FreeRtos/port/MemMang/heap_4.c **** BlockLink_t *pxLink;
+ 576              		.loc 1 268 1 view .LVU194
+ 269:./FreeRtos/port/MemMang/heap_4.c **** 
+ 577              		.loc 1 269 1 view .LVU195
+ 271:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 578              		.loc 1 271 2 view .LVU196
+ 271:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ARM GAS  /tmp/cchegFxA.s 			page 21
+
+
+ 579              		.loc 1 271 4 is_stmt 0 view .LVU197
+ 580 0000 0028     		cmp	r0, #0
+ 581 0002 39D0     		beq	.L49
+ 267:./FreeRtos/port/MemMang/heap_4.c **** uint8_t *puc = ( uint8_t * ) pv;
+ 582              		.loc 1 267 1 view .LVU198
+ 583 0004 38B5     		push	{r3, r4, r5, lr}
+ 584              	.LCFI5:
+ 585              		.cfi_def_cfa_offset 16
+ 586              		.cfi_offset 3, -16
+ 587              		.cfi_offset 4, -12
+ 588              		.cfi_offset 5, -8
+ 589              		.cfi_offset 14, -4
+ 590 0006 0446     		mov	r4, r0
+ 275:./FreeRtos/port/MemMang/heap_4.c **** 
+ 591              		.loc 1 275 3 is_stmt 1 view .LVU199
+ 275:./FreeRtos/port/MemMang/heap_4.c **** 
+ 592              		.loc 1 275 7 is_stmt 0 view .LVU200
+ 593 0008 A0F10805 		sub	r5, r0, #8
+ 594              	.LVL49:
+ 278:./FreeRtos/port/MemMang/heap_4.c **** 
+ 595              		.loc 1 278 3 is_stmt 1 view .LVU201
+ 281:./FreeRtos/port/MemMang/heap_4.c **** 		configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 596              		.loc 1 281 3 view .LVU202
+ 597 000c 50F8042C 		ldr	r2, [r0, #-4]
+ 598 0010 1A4B     		ldr	r3, .L54
+ 599 0012 1B68     		ldr	r3, [r3]
+ 600 0014 1A42     		tst	r2, r3
+ 601 0016 12D0     		beq	.L52
+ 602              	.LVL50:
+ 603              	.L46:
+ 282:./FreeRtos/port/MemMang/heap_4.c **** 
+ 604              		.loc 1 282 3 view .LVU203
+ 605 0018 54F8083C 		ldr	r3, [r4, #-8]
+ 606 001c 2BB1     		cbz	r3, .L47
+ 282:./FreeRtos/port/MemMang/heap_4.c **** 
+ 607              		.loc 1 282 3 discriminator 1 view .LVU204
+ 608 001e 4FF48D72 		mov	r2, #282
+ 609 0022 1749     		ldr	r1, .L54+4
+ 610 0024 1748     		ldr	r0, .L54+8
+ 611 0026 FFF7FEFF 		bl	printf
+ 612              	.LVL51:
+ 613              	.L47:
+ 284:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 614              		.loc 1 284 3 view .LVU205
+ 284:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 615              		.loc 1 284 15 is_stmt 0 view .LVU206
+ 616 002a 54F8043C 		ldr	r3, [r4, #-4]
+ 284:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 617              		.loc 1 284 28 view .LVU207
+ 618 002e 134A     		ldr	r2, .L54
+ 619 0030 1268     		ldr	r2, [r2]
+ 284:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 620              		.loc 1 284 5 view .LVU208
+ 621 0032 1342     		tst	r3, r2
+ 622 0034 02D0     		beq	.L44
+ 286:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 623              		.loc 1 286 4 is_stmt 1 view .LVU209
+ARM GAS  /tmp/cchegFxA.s 			page 22
+
+
+ 286:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 624              		.loc 1 286 14 is_stmt 0 view .LVU210
+ 625 0036 54F8081C 		ldr	r1, [r4, #-8]
+ 286:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 626              		.loc 1 286 6 view .LVU211
+ 627 003a 39B1     		cbz	r1, .L53
+ 628              	.L44:
+ 312:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 629              		.loc 1 312 1 view .LVU212
+ 630 003c 38BD     		pop	{r3, r4, r5, pc}
+ 631              	.LVL52:
+ 632              	.L52:
+ 281:./FreeRtos/port/MemMang/heap_4.c **** 		configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 633              		.loc 1 281 3 is_stmt 1 discriminator 1 view .LVU213
+ 634 003e 40F21912 		movw	r2, #281
+ 635 0042 0F49     		ldr	r1, .L54+4
+ 636 0044 0F48     		ldr	r0, .L54+8
+ 637              	.LVL53:
+ 281:./FreeRtos/port/MemMang/heap_4.c **** 		configASSERT( pxLink->pxNextFreeBlock == NULL );
+ 638              		.loc 1 281 3 is_stmt 0 discriminator 1 view .LVU214
+ 639 0046 FFF7FEFF 		bl	printf
+ 640              	.LVL54:
+ 641 004a E5E7     		b	.L46
+ 642              	.L53:
+ 290:./FreeRtos/port/MemMang/heap_4.c **** 
+ 643              		.loc 1 290 5 is_stmt 1 view .LVU215
+ 290:./FreeRtos/port/MemMang/heap_4.c **** 
+ 644              		.loc 1 290 24 is_stmt 0 view .LVU216
+ 645 004c 23EA0203 		bic	r3, r3, r2
+ 646 0050 44F8043C 		str	r3, [r4, #-4]
+ 292:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 647              		.loc 1 292 5 is_stmt 1 view .LVU217
+ 648 0054 FFF7FEFF 		bl	vTaskSuspendAll
+ 649              	.LVL55:
+ 295:./FreeRtos/port/MemMang/heap_4.c **** 					traceFREE( pv, pxLink->xBlockSize );
+ 650              		.loc 1 295 6 view .LVU218
+ 295:./FreeRtos/port/MemMang/heap_4.c **** 					traceFREE( pv, pxLink->xBlockSize );
+ 651              		.loc 1 295 35 is_stmt 0 view .LVU219
+ 652 0058 54F8041C 		ldr	r1, [r4, #-4]
+ 295:./FreeRtos/port/MemMang/heap_4.c **** 					traceFREE( pv, pxLink->xBlockSize );
+ 653              		.loc 1 295 26 view .LVU220
+ 654 005c 0A4A     		ldr	r2, .L54+12
+ 655 005e 1368     		ldr	r3, [r2]
+ 656 0060 0B44     		add	r3, r3, r1
+ 657 0062 1360     		str	r3, [r2]
+ 296:./FreeRtos/port/MemMang/heap_4.c **** 					prvInsertBlockIntoFreeList( ( ( BlockLink_t * ) pxLink ) );
+ 658              		.loc 1 296 41 is_stmt 1 view .LVU221
+ 297:./FreeRtos/port/MemMang/heap_4.c **** 					xNumberOfSuccessfulFrees++;
+ 659              		.loc 1 297 6 view .LVU222
+ 660 0064 2846     		mov	r0, r5
+ 661 0066 FFF7FEFF 		bl	prvInsertBlockIntoFreeList
+ 662              	.LVL56:
+ 298:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 663              		.loc 1 298 6 view .LVU223
+ 298:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 664              		.loc 1 298 30 is_stmt 0 view .LVU224
+ 665 006a 084A     		ldr	r2, .L54+16
+ARM GAS  /tmp/cchegFxA.s 			page 23
+
+
+ 666 006c 1368     		ldr	r3, [r2]
+ 667 006e 0133     		adds	r3, r3, #1
+ 668 0070 1360     		str	r3, [r2]
+ 300:./FreeRtos/port/MemMang/heap_4.c **** 			}
+ 669              		.loc 1 300 5 is_stmt 1 view .LVU225
+ 300:./FreeRtos/port/MemMang/heap_4.c **** 			}
+ 670              		.loc 1 300 14 is_stmt 0 view .LVU226
+ 671 0072 FFF7FEFF 		bl	xTaskResumeAll
+ 672              	.LVL57:
+ 309:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 673              		.loc 1 309 28 is_stmt 1 view .LVU227
+ 312:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 674              		.loc 1 312 1 is_stmt 0 view .LVU228
+ 675 0076 E1E7     		b	.L44
+ 676              	.LVL58:
+ 677              	.L49:
+ 678              	.LCFI6:
+ 679              		.cfi_def_cfa_offset 0
+ 680              		.cfi_restore 3
+ 681              		.cfi_restore 4
+ 682              		.cfi_restore 5
+ 683              		.cfi_restore 14
+ 312:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 684              		.loc 1 312 1 view .LVU229
+ 685 0078 7047     		bx	lr
+ 686              	.L55:
+ 687 007a 00BF     		.align	2
+ 688              	.L54:
+ 689 007c 00000000 		.word	.LANCHOR4
+ 690 0080 00000000 		.word	.LC0
+ 691 0084 24000000 		.word	.LC1
+ 692 0088 00000000 		.word	.LANCHOR3
+ 693 008c 00000000 		.word	.LANCHOR6
+ 694              		.cfi_endproc
+ 695              	.LFE132:
+ 697              		.section	.text.xPortGetFreeHeapSize,"ax",%progbits
+ 698              		.align	1
+ 699              		.global	xPortGetFreeHeapSize
+ 700              		.syntax unified
+ 701              		.thumb
+ 702              		.thumb_func
+ 703              		.fpu fpv4-sp-d16
+ 705              	xPortGetFreeHeapSize:
+ 706              	.LFB133:
+ 316:./FreeRtos/port/MemMang/heap_4.c **** 	return xFreeBytesRemaining;
+ 707              		.loc 1 316 1 is_stmt 1 view -0
+ 708              		.cfi_startproc
+ 709              		@ args = 0, pretend = 0, frame = 0
+ 710              		@ frame_needed = 0, uses_anonymous_args = 0
+ 711              		@ link register save eliminated.
+ 317:./FreeRtos/port/MemMang/heap_4.c **** }
+ 712              		.loc 1 317 2 view .LVU231
+ 318:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 713              		.loc 1 318 1 is_stmt 0 view .LVU232
+ 714 0000 014B     		ldr	r3, .L57
+ 715 0002 1868     		ldr	r0, [r3]
+ 716 0004 7047     		bx	lr
+ARM GAS  /tmp/cchegFxA.s 			page 24
+
+
+ 717              	.L58:
+ 718 0006 00BF     		.align	2
+ 719              	.L57:
+ 720 0008 00000000 		.word	.LANCHOR3
+ 721              		.cfi_endproc
+ 722              	.LFE133:
+ 724              		.section	.text.xPortGetMinimumEverFreeHeapSize,"ax",%progbits
+ 725              		.align	1
+ 726              		.global	xPortGetMinimumEverFreeHeapSize
+ 727              		.syntax unified
+ 728              		.thumb
+ 729              		.thumb_func
+ 730              		.fpu fpv4-sp-d16
+ 732              	xPortGetMinimumEverFreeHeapSize:
+ 733              	.LFB134:
+ 322:./FreeRtos/port/MemMang/heap_4.c **** 	return xMinimumEverFreeBytesRemaining;
+ 734              		.loc 1 322 1 is_stmt 1 view -0
+ 735              		.cfi_startproc
+ 736              		@ args = 0, pretend = 0, frame = 0
+ 737              		@ frame_needed = 0, uses_anonymous_args = 0
+ 738              		@ link register save eliminated.
+ 323:./FreeRtos/port/MemMang/heap_4.c **** }
+ 739              		.loc 1 323 2 view .LVU234
+ 324:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 740              		.loc 1 324 1 is_stmt 0 view .LVU235
+ 741 0000 014B     		ldr	r3, .L60
+ 742 0002 1868     		ldr	r0, [r3]
+ 743 0004 7047     		bx	lr
+ 744              	.L61:
+ 745 0006 00BF     		.align	2
+ 746              	.L60:
+ 747 0008 00000000 		.word	.LANCHOR2
+ 748              		.cfi_endproc
+ 749              	.LFE134:
+ 751              		.section	.text.vPortInitialiseBlocks,"ax",%progbits
+ 752              		.align	1
+ 753              		.global	vPortInitialiseBlocks
+ 754              		.syntax unified
+ 755              		.thumb
+ 756              		.thumb_func
+ 757              		.fpu fpv4-sp-d16
+ 759              	vPortInitialiseBlocks:
+ 760              	.LFB135:
+ 328:./FreeRtos/port/MemMang/heap_4.c **** 	/* This just exists to keep the linker quiet. */
+ 761              		.loc 1 328 1 is_stmt 1 view -0
+ 762              		.cfi_startproc
+ 763              		@ args = 0, pretend = 0, frame = 0
+ 764              		@ frame_needed = 0, uses_anonymous_args = 0
+ 765              		@ link register save eliminated.
+ 330:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 766              		.loc 1 330 1 view .LVU237
+ 767 0000 7047     		bx	lr
+ 768              		.cfi_endproc
+ 769              	.LFE135:
+ 771              		.section	.text.vPortGetHeapStats,"ax",%progbits
+ 772              		.align	1
+ 773              		.global	vPortGetHeapStats
+ARM GAS  /tmp/cchegFxA.s 			page 25
+
+
+ 774              		.syntax unified
+ 775              		.thumb
+ 776              		.thumb_func
+ 777              		.fpu fpv4-sp-d16
+ 779              	vPortGetHeapStats:
+ 780              	.LVL59:
+ 781              	.LFB138:
+ 440:./FreeRtos/port/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
+ 441:./FreeRtos/port/MemMang/heap_4.c **** 
+ 442:./FreeRtos/port/MemMang/heap_4.c **** void vPortGetHeapStats( HeapStats_t *pxHeapStats )
+ 443:./FreeRtos/port/MemMang/heap_4.c **** {
+ 782              		.loc 1 443 1 view -0
+ 783              		.cfi_startproc
+ 784              		@ args = 0, pretend = 0, frame = 0
+ 785              		@ frame_needed = 0, uses_anonymous_args = 0
+ 786              		.loc 1 443 1 is_stmt 0 view .LVU239
+ 787 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 788              	.LCFI7:
+ 789              		.cfi_def_cfa_offset 24
+ 790              		.cfi_offset 3, -24
+ 791              		.cfi_offset 4, -20
+ 792              		.cfi_offset 5, -16
+ 793              		.cfi_offset 6, -12
+ 794              		.cfi_offset 7, -8
+ 795              		.cfi_offset 14, -4
+ 796 0002 0746     		mov	r7, r0
+ 444:./FreeRtos/port/MemMang/heap_4.c **** BlockLink_t *pxBlock;
+ 797              		.loc 1 444 1 is_stmt 1 view .LVU240
+ 445:./FreeRtos/port/MemMang/heap_4.c **** size_t xBlocks = 0, xMaxSize = 0, xMinSize = portMAX_DELAY; /* portMAX_DELAY used as a portable way
+ 798              		.loc 1 445 1 view .LVU241
+ 799              	.LVL60:
+ 446:./FreeRtos/port/MemMang/heap_4.c **** 
+ 447:./FreeRtos/port/MemMang/heap_4.c **** 	vTaskSuspendAll();
+ 800              		.loc 1 447 2 view .LVU242
+ 801 0004 FFF7FEFF 		bl	vTaskSuspendAll
+ 802              	.LVL61:
+ 448:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 449:./FreeRtos/port/MemMang/heap_4.c **** 		pxBlock = xStart.pxNextFreeBlock;
+ 803              		.loc 1 449 3 view .LVU243
+ 804              		.loc 1 449 11 is_stmt 0 view .LVU244
+ 805 0008 174B     		ldr	r3, .L72
+ 806 000a 1B68     		ldr	r3, [r3]
+ 807              	.LVL62:
+ 450:./FreeRtos/port/MemMang/heap_4.c **** 
+ 451:./FreeRtos/port/MemMang/heap_4.c **** 		/* pxBlock will be NULL if the heap has not been initialised.  The heap
+ 452:./FreeRtos/port/MemMang/heap_4.c **** 		is initialised automatically when the first allocation is made. */
+ 453:./FreeRtos/port/MemMang/heap_4.c **** 		if( pxBlock != NULL )
+ 808              		.loc 1 453 3 is_stmt 1 view .LVU245
+ 809              		.loc 1 453 5 is_stmt 0 view .LVU246
+ 810 000c 93B1     		cbz	r3, .L68
+ 445:./FreeRtos/port/MemMang/heap_4.c **** 
+ 811              		.loc 1 445 35 view .LVU247
+ 812 000e 4FF0FF36 		mov	r6, #-1
+ 445:./FreeRtos/port/MemMang/heap_4.c **** 
+ 813              		.loc 1 445 21 view .LVU248
+ 814 0012 0025     		movs	r5, #0
+ 445:./FreeRtos/port/MemMang/heap_4.c **** 
+ARM GAS  /tmp/cchegFxA.s 			page 26
+
+
+ 815              		.loc 1 445 8 view .LVU249
+ 816 0014 2C46     		mov	r4, r5
+ 817 0016 04E0     		b	.L67
+ 818              	.LVL63:
+ 819              	.L66:
+ 454:./FreeRtos/port/MemMang/heap_4.c **** 		{
+ 455:./FreeRtos/port/MemMang/heap_4.c **** 			do
+ 456:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 457:./FreeRtos/port/MemMang/heap_4.c **** 				/* Increment the number of blocks and record the largest block seen
+ 458:./FreeRtos/port/MemMang/heap_4.c **** 				so far. */
+ 459:./FreeRtos/port/MemMang/heap_4.c **** 				xBlocks++;
+ 460:./FreeRtos/port/MemMang/heap_4.c **** 
+ 461:./FreeRtos/port/MemMang/heap_4.c **** 				if( pxBlock->xBlockSize > xMaxSize )
+ 462:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 463:./FreeRtos/port/MemMang/heap_4.c **** 					xMaxSize = pxBlock->xBlockSize;
+ 464:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 465:./FreeRtos/port/MemMang/heap_4.c **** 
+ 466:./FreeRtos/port/MemMang/heap_4.c **** 				if( pxBlock->xBlockSize < xMinSize )
+ 467:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 468:./FreeRtos/port/MemMang/heap_4.c **** 					xMinSize = pxBlock->xBlockSize;
+ 469:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 470:./FreeRtos/port/MemMang/heap_4.c **** 
+ 471:./FreeRtos/port/MemMang/heap_4.c **** 				/* Move to the next block in the chain until the last block is
+ 472:./FreeRtos/port/MemMang/heap_4.c **** 				reached. */
+ 473:./FreeRtos/port/MemMang/heap_4.c **** 				pxBlock = pxBlock->pxNextFreeBlock;
+ 820              		.loc 1 473 5 is_stmt 1 view .LVU250
+ 821              		.loc 1 473 13 is_stmt 0 view .LVU251
+ 822 0018 1B68     		ldr	r3, [r3]
+ 823              	.LVL64:
+ 474:./FreeRtos/port/MemMang/heap_4.c **** 			} while( pxBlock != pxEnd );
+ 824              		.loc 1 474 11 is_stmt 1 view .LVU252
+ 825              		.loc 1 474 21 is_stmt 0 view .LVU253
+ 826 001a 144A     		ldr	r2, .L72+4
+ 827 001c 1268     		ldr	r2, [r2]
+ 828              		.loc 1 474 4 view .LVU254
+ 829 001e 9A42     		cmp	r2, r3
+ 830 0020 0CD0     		beq	.L64
+ 831              	.LVL65:
+ 832              	.L67:
+ 455:./FreeRtos/port/MemMang/heap_4.c **** 			{
+ 833              		.loc 1 455 4 is_stmt 1 view .LVU255
+ 459:./FreeRtos/port/MemMang/heap_4.c **** 
+ 834              		.loc 1 459 5 view .LVU256
+ 459:./FreeRtos/port/MemMang/heap_4.c **** 
+ 835              		.loc 1 459 12 is_stmt 0 view .LVU257
+ 836 0022 0134     		adds	r4, r4, #1
+ 837              	.LVL66:
+ 461:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 838              		.loc 1 461 5 is_stmt 1 view .LVU258
+ 461:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 839              		.loc 1 461 16 is_stmt 0 view .LVU259
+ 840 0024 5A68     		ldr	r2, [r3, #4]
+ 461:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 841              		.loc 1 461 7 view .LVU260
+ 842 0026 AA42     		cmp	r2, r5
+ 843 0028 00D9     		bls	.L65
+ 463:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ARM GAS  /tmp/cchegFxA.s 			page 27
+
+
+ 844              		.loc 1 463 15 view .LVU261
+ 845 002a 1546     		mov	r5, r2
+ 846              	.LVL67:
+ 847              	.L65:
+ 466:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 848              		.loc 1 466 5 is_stmt 1 view .LVU262
+ 466:./FreeRtos/port/MemMang/heap_4.c **** 				{
+ 849              		.loc 1 466 7 is_stmt 0 view .LVU263
+ 850 002c B242     		cmp	r2, r6
+ 851 002e F3D2     		bcs	.L66
+ 468:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 852              		.loc 1 468 15 view .LVU264
+ 853 0030 1646     		mov	r6, r2
+ 854              	.LVL68:
+ 468:./FreeRtos/port/MemMang/heap_4.c **** 				}
+ 855              		.loc 1 468 15 view .LVU265
+ 856 0032 F1E7     		b	.L66
+ 857              	.LVL69:
+ 858              	.L68:
+ 445:./FreeRtos/port/MemMang/heap_4.c **** 
+ 859              		.loc 1 445 35 view .LVU266
+ 860 0034 4FF0FF36 		mov	r6, #-1
+ 445:./FreeRtos/port/MemMang/heap_4.c **** 
+ 861              		.loc 1 445 21 view .LVU267
+ 862 0038 0025     		movs	r5, #0
+ 445:./FreeRtos/port/MemMang/heap_4.c **** 
+ 863              		.loc 1 445 8 view .LVU268
+ 864 003a 2C46     		mov	r4, r5
+ 865              	.LVL70:
+ 866              	.L64:
+ 475:./FreeRtos/port/MemMang/heap_4.c **** 		}
+ 476:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 477:./FreeRtos/port/MemMang/heap_4.c **** 	xTaskResumeAll();
+ 867              		.loc 1 477 2 is_stmt 1 view .LVU269
+ 868 003c FFF7FEFF 		bl	xTaskResumeAll
+ 869              	.LVL71:
+ 478:./FreeRtos/port/MemMang/heap_4.c **** 
+ 479:./FreeRtos/port/MemMang/heap_4.c **** 	pxHeapStats->xSizeOfLargestFreeBlockInBytes = xMaxSize;
+ 870              		.loc 1 479 2 view .LVU270
+ 871              		.loc 1 479 46 is_stmt 0 view .LVU271
+ 872 0040 7D60     		str	r5, [r7, #4]
+ 480:./FreeRtos/port/MemMang/heap_4.c **** 	pxHeapStats->xSizeOfSmallestFreeBlockInBytes = xMinSize;
+ 873              		.loc 1 480 2 is_stmt 1 view .LVU272
+ 874              		.loc 1 480 47 is_stmt 0 view .LVU273
+ 875 0042 BE60     		str	r6, [r7, #8]
+ 481:./FreeRtos/port/MemMang/heap_4.c **** 	pxHeapStats->xNumberOfFreeBlocks = xBlocks;
+ 876              		.loc 1 481 2 is_stmt 1 view .LVU274
+ 877              		.loc 1 481 35 is_stmt 0 view .LVU275
+ 878 0044 FC60     		str	r4, [r7, #12]
+ 482:./FreeRtos/port/MemMang/heap_4.c **** 
+ 483:./FreeRtos/port/MemMang/heap_4.c **** 	taskENTER_CRITICAL();
+ 879              		.loc 1 483 2 is_stmt 1 view .LVU276
+ 880 0046 FFF7FEFF 		bl	vPortEnterCritical
+ 881              	.LVL72:
+ 484:./FreeRtos/port/MemMang/heap_4.c **** 	{
+ 485:./FreeRtos/port/MemMang/heap_4.c **** 		pxHeapStats->xAvailableHeapSpaceInBytes = xFreeBytesRemaining;
+ 882              		.loc 1 485 3 view .LVU277
+ARM GAS  /tmp/cchegFxA.s 			page 28
+
+
+ 883              		.loc 1 485 43 is_stmt 0 view .LVU278
+ 884 004a 094B     		ldr	r3, .L72+8
+ 885 004c 1B68     		ldr	r3, [r3]
+ 886 004e 3B60     		str	r3, [r7]
+ 486:./FreeRtos/port/MemMang/heap_4.c **** 		pxHeapStats->xNumberOfSuccessfulAllocations = xNumberOfSuccessfulAllocations;
+ 887              		.loc 1 486 3 is_stmt 1 view .LVU279
+ 888              		.loc 1 486 47 is_stmt 0 view .LVU280
+ 889 0050 084B     		ldr	r3, .L72+12
+ 890 0052 1B68     		ldr	r3, [r3]
+ 891 0054 7B61     		str	r3, [r7, #20]
+ 487:./FreeRtos/port/MemMang/heap_4.c **** 		pxHeapStats->xNumberOfSuccessfulFrees = xNumberOfSuccessfulFrees;
+ 892              		.loc 1 487 3 is_stmt 1 view .LVU281
+ 893              		.loc 1 487 41 is_stmt 0 view .LVU282
+ 894 0056 084B     		ldr	r3, .L72+16
+ 895 0058 1B68     		ldr	r3, [r3]
+ 896 005a BB61     		str	r3, [r7, #24]
+ 488:./FreeRtos/port/MemMang/heap_4.c **** 		pxHeapStats->xMinimumEverFreeBytesRemaining = xMinimumEverFreeBytesRemaining;
+ 897              		.loc 1 488 3 is_stmt 1 view .LVU283
+ 898              		.loc 1 488 47 is_stmt 0 view .LVU284
+ 899 005c 074B     		ldr	r3, .L72+20
+ 900 005e 1B68     		ldr	r3, [r3]
+ 901 0060 3B61     		str	r3, [r7, #16]
+ 489:./FreeRtos/port/MemMang/heap_4.c **** 	}
+ 490:./FreeRtos/port/MemMang/heap_4.c **** 	taskEXIT_CRITICAL();
+ 902              		.loc 1 490 2 is_stmt 1 view .LVU285
+ 903 0062 FFF7FEFF 		bl	vPortExitCritical
+ 904              	.LVL73:
+ 491:./FreeRtos/port/MemMang/heap_4.c **** }
+ 905              		.loc 1 491 1 is_stmt 0 view .LVU286
+ 906 0066 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 907              	.LVL74:
+ 908              	.L73:
+ 909              		.loc 1 491 1 view .LVU287
+ 910              		.align	2
+ 911              	.L72:
+ 912 0068 00000000 		.word	.LANCHOR0
+ 913 006c 00000000 		.word	.LANCHOR1
+ 914 0070 00000000 		.word	.LANCHOR3
+ 915 0074 00000000 		.word	.LANCHOR5
+ 916 0078 00000000 		.word	.LANCHOR6
+ 917 007c 00000000 		.word	.LANCHOR2
+ 918              		.cfi_endproc
+ 919              	.LFE138:
+ 921              		.section	.bss.pxEnd,"aw",%nobits
+ 922              		.align	2
+ 923              		.set	.LANCHOR1,. + 0
+ 926              	pxEnd:
+ 927 0000 00000000 		.space	4
+ 928              		.section	.bss.ucHeap,"aw",%nobits
+ 929              		.align	2
+ 932              	ucHeap:
+ 933 0000 00000000 		.space	36864
+ 933      00000000 
+ 933      00000000 
+ 933      00000000 
+ 933      00000000 
+ 934              		.section	.bss.xBlockAllocatedBit,"aw",%nobits
+ARM GAS  /tmp/cchegFxA.s 			page 29
+
+
+ 935              		.align	2
+ 936              		.set	.LANCHOR4,. + 0
+ 939              	xBlockAllocatedBit:
+ 940 0000 00000000 		.space	4
+ 941              		.section	.bss.xFreeBytesRemaining,"aw",%nobits
+ 942              		.align	2
+ 943              		.set	.LANCHOR3,. + 0
+ 946              	xFreeBytesRemaining:
+ 947 0000 00000000 		.space	4
+ 948              		.section	.bss.xMinimumEverFreeBytesRemaining,"aw",%nobits
+ 949              		.align	2
+ 950              		.set	.LANCHOR2,. + 0
+ 953              	xMinimumEverFreeBytesRemaining:
+ 954 0000 00000000 		.space	4
+ 955              		.section	.bss.xNumberOfSuccessfulAllocations,"aw",%nobits
+ 956              		.align	2
+ 957              		.set	.LANCHOR5,. + 0
+ 960              	xNumberOfSuccessfulAllocations:
+ 961 0000 00000000 		.space	4
+ 962              		.section	.bss.xNumberOfSuccessfulFrees,"aw",%nobits
+ 963              		.align	2
+ 964              		.set	.LANCHOR6,. + 0
+ 967              	xNumberOfSuccessfulFrees:
+ 968 0000 00000000 		.space	4
+ 969              		.section	.bss.xStart,"aw",%nobits
+ 970              		.align	2
+ 971              		.set	.LANCHOR0,. + 0
+ 974              	xStart:
+ 975 0000 00000000 		.space	8
+ 975      00000000 
+ 976              		.text
+ 977              	.Letext0:
+ 978              		.file 2 "/home/hao/Documents/gcc-arm-none-eabi/lib/gcc/arm-none-eabi/10.2.1/include/stddef.h"
+ 979              		.file 3 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/machine/_default_types.h"
+ 980              		.file 4 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/sys/_stdint.h"
+ 981              		.file 5 "./FreeRtos/port/ARM_CM4F/portmacro.h"
+ 982              		.file 6 "./FreeRtos/port/include/portable.h"
+ 983              		.file 7 "./FreeRtos/port/include/task.h"
+ 984              		.file 8 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/stdio.h"
+ARM GAS  /tmp/cchegFxA.s 			page 30
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 heap_4.c
+     /tmp/cchegFxA.s:18     .text.prvHeapInit:0000000000000000 $t
+     /tmp/cchegFxA.s:25     .text.prvHeapInit:0000000000000000 prvHeapInit
+     /tmp/cchegFxA.s:131    .text.prvHeapInit:000000000000004c $d
+     /tmp/cchegFxA.s:932    .bss.ucHeap:0000000000000000 ucHeap
+     /tmp/cchegFxA.s:141    .text.prvInsertBlockIntoFreeList:0000000000000000 $t
+     /tmp/cchegFxA.s:147    .text.prvInsertBlockIntoFreeList:0000000000000000 prvInsertBlockIntoFreeList
+     /tmp/cchegFxA.s:278    .text.prvInsertBlockIntoFreeList:000000000000005c $d
+     /tmp/cchegFxA.s:284    .rodata.pvPortMalloc.str1.4:0000000000000000 $d
+     /tmp/cchegFxA.s:291    .text.pvPortMalloc:0000000000000000 $t
+     /tmp/cchegFxA.s:298    .text.pvPortMalloc:0000000000000000 pvPortMalloc
+     /tmp/cchegFxA.s:550    .text.pvPortMalloc:00000000000000e0 $d
+     /tmp/cchegFxA.s:562    .text.vPortFree:0000000000000000 $t
+     /tmp/cchegFxA.s:569    .text.vPortFree:0000000000000000 vPortFree
+     /tmp/cchegFxA.s:689    .text.vPortFree:000000000000007c $d
+     /tmp/cchegFxA.s:698    .text.xPortGetFreeHeapSize:0000000000000000 $t
+     /tmp/cchegFxA.s:705    .text.xPortGetFreeHeapSize:0000000000000000 xPortGetFreeHeapSize
+     /tmp/cchegFxA.s:720    .text.xPortGetFreeHeapSize:0000000000000008 $d
+     /tmp/cchegFxA.s:725    .text.xPortGetMinimumEverFreeHeapSize:0000000000000000 $t
+     /tmp/cchegFxA.s:732    .text.xPortGetMinimumEverFreeHeapSize:0000000000000000 xPortGetMinimumEverFreeHeapSize
+     /tmp/cchegFxA.s:747    .text.xPortGetMinimumEverFreeHeapSize:0000000000000008 $d
+     /tmp/cchegFxA.s:752    .text.vPortInitialiseBlocks:0000000000000000 $t
+     /tmp/cchegFxA.s:759    .text.vPortInitialiseBlocks:0000000000000000 vPortInitialiseBlocks
+     /tmp/cchegFxA.s:772    .text.vPortGetHeapStats:0000000000000000 $t
+     /tmp/cchegFxA.s:779    .text.vPortGetHeapStats:0000000000000000 vPortGetHeapStats
+     /tmp/cchegFxA.s:912    .text.vPortGetHeapStats:0000000000000068 $d
+     /tmp/cchegFxA.s:922    .bss.pxEnd:0000000000000000 $d
+     /tmp/cchegFxA.s:926    .bss.pxEnd:0000000000000000 pxEnd
+     /tmp/cchegFxA.s:929    .bss.ucHeap:0000000000000000 $d
+     /tmp/cchegFxA.s:935    .bss.xBlockAllocatedBit:0000000000000000 $d
+     /tmp/cchegFxA.s:939    .bss.xBlockAllocatedBit:0000000000000000 xBlockAllocatedBit
+     /tmp/cchegFxA.s:942    .bss.xFreeBytesRemaining:0000000000000000 $d
+     /tmp/cchegFxA.s:946    .bss.xFreeBytesRemaining:0000000000000000 xFreeBytesRemaining
+     /tmp/cchegFxA.s:949    .bss.xMinimumEverFreeBytesRemaining:0000000000000000 $d
+     /tmp/cchegFxA.s:953    .bss.xMinimumEverFreeBytesRemaining:0000000000000000 xMinimumEverFreeBytesRemaining
+     /tmp/cchegFxA.s:956    .bss.xNumberOfSuccessfulAllocations:0000000000000000 $d
+     /tmp/cchegFxA.s:960    .bss.xNumberOfSuccessfulAllocations:0000000000000000 xNumberOfSuccessfulAllocations
+     /tmp/cchegFxA.s:963    .bss.xNumberOfSuccessfulFrees:0000000000000000 $d
+     /tmp/cchegFxA.s:967    .bss.xNumberOfSuccessfulFrees:0000000000000000 xNumberOfSuccessfulFrees
+     /tmp/cchegFxA.s:970    .bss.xStart:0000000000000000 $d
+     /tmp/cchegFxA.s:974    .bss.xStart:0000000000000000 xStart
+
+UNDEFINED SYMBOLS
+vTaskSuspendAll
+xTaskResumeAll
+printf
+vPortEnterCritical
+vPortExitCritical

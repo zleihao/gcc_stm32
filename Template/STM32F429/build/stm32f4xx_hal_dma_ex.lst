@@ -1,0 +1,3832 @@
+ARM GAS  /tmp/ccYTbMTL.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f4xx_hal_dma_ex.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_DMAEx_MultiBufferStart,"ax",%progbits
+  18              		.align	1
+  19              		.global	HAL_DMAEx_MultiBufferStart
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	HAL_DMAEx_MultiBufferStart:
+  27              	.LFB126:
+  28              		.file 1 "./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c"
+   1:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /**
+   2:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   ******************************************************************************
+   3:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @file    stm32f4xx_hal_dma_ex.c
+   4:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @author  MCD Application Team
+   5:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @brief   DMA Extension HAL module driver
+   6:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *         This file provides firmware functions to manage the following 
+   7:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *         functionalities of the DMA Extension peripheral:
+   8:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *           + Extended features functions
+   9:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *
+  10:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   @verbatim
+  11:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   ==============================================================================
+  12:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****                         ##### How to use this driver #####
+  13:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   ==============================================================================
+  14:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   [..]
+  15:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   The DMA Extension HAL driver can be used as follows:
+  16:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****    (#) Start a multi buffer transfer using the HAL_DMA_MultiBufferStart() function
+  17:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****        for polling mode or HAL_DMA_MultiBufferStart_IT() for interrupt mode.
+  18:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****                    
+  19:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****      -@-  In Memory-to-Memory transfer mode, Multi (Double) Buffer mode is not allowed.
+  20:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****      -@-  When Multi (Double) Buffer mode is enabled the, transfer is circular by default.
+  21:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****      -@-  In Multi (Double) buffer mode, it is possible to update the base address for 
+  22:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****           the AHB memory port on the fly (DMA_SxM0AR or DMA_SxM1AR) when the stream is enabled. 
+  23:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   
+  24:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   @endverbatim
+  25:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   ******************************************************************************
+  26:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @attention
+  27:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *
+  28:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  29:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *
+  30:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * Redistribution and use in source and binary forms, with or without modification,
+ARM GAS  /tmp/ccYTbMTL.s 			page 2
+
+
+  31:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * are permitted provided that the following conditions are met:
+  32:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  33:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *      this list of conditions and the following disclaimer.
+  34:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  35:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *      this list of conditions and the following disclaimer in the documentation
+  36:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *      and/or other materials provided with the distribution.
+  37:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  38:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *      may be used to endorse or promote products derived from this software
+  39:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *      without specific prior written permission.
+  40:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *
+  41:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  42:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  43:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  44:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  45:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  46:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  47:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  48:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  49:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  50:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  51:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *
+  52:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   ******************************************************************************
+  53:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+  54:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+  55:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /* Includes ------------------------------------------------------------------*/
+  56:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** #include "stm32f4xx_hal.h"
+  57:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+  58:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /** @addtogroup STM32F4xx_HAL_Driver
+  59:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @{
+  60:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+  61:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+  62:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /** @defgroup DMAEx DMAEx
+  63:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @brief DMA Extended HAL module driver
+  64:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @{
+  65:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+  66:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+  67:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** #ifdef HAL_DMA_MODULE_ENABLED
+  68:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+  69:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /* Private types -------------------------------------------------------------*/
+  70:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /* Private variables ---------------------------------------------------------*/
+  71:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /* Private Constants ---------------------------------------------------------*/
+  72:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /* Private macros ------------------------------------------------------------*/
+  73:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /* Private functions ---------------------------------------------------------*/
+  74:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /** @addtogroup DMAEx_Private_Functions
+  75:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @{
+  76:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+  77:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** static void DMA_MultiBufferSetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddr
+  78:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /**
+  79:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @}
+  80:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+  81:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+  82:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /* Exported functions ---------------------------------------------------------*/
+  83:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+  84:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /** @addtogroup DMAEx_Exported_Functions
+  85:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @{
+  86:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+  87:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+ARM GAS  /tmp/ccYTbMTL.s 			page 3
+
+
+  88:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+  89:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /** @addtogroup DMAEx_Exported_Functions_Group1
+  90:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *
+  91:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** @verbatim   
+  92:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****  ===============================================================================
+  93:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****                 #####  Extended features functions  #####
+  94:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****  ===============================================================================  
+  95:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     [..]  This section provides functions allowing to:
+  96:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       (+) Configure the source, destination address and data length and 
+  97:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****           Start MultiBuffer DMA transfer
+  98:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       (+) Configure the source, destination address and data length and 
+  99:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****           Start MultiBuffer DMA transfer with interrupt
+ 100:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       (+) Change on the fly the memory0 or memory1 address.
+ 101:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       
+ 102:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** @endverbatim
+ 103:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @{
+ 104:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+ 105:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+ 106:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+ 107:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /**
+ 108:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @brief  Starts the multi_buffer DMA Transfer.
+ 109:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+ 110:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *                     the configuration information for the specified DMA Stream.  
+ 111:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  SrcAddress The source memory Buffer address
+ 112:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  DstAddress The destination memory Buffer address
+ 113:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  SecondMemAddress The second memory Buffer address in case of multi buffer Transfer  
+ 114:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  DataLength The length of data to be transferred from source to destination
+ 115:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @retval HAL status
+ 116:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+ 117:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** HAL_StatusTypeDef HAL_DMAEx_MultiBufferStart(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t
+ 118:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** {
+  29              		.loc 1 118 1
+  30              		.cfi_startproc
+  31              		@ args = 4, pretend = 0, frame = 24
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 80B5     		push	{r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  38 0002 86B0     		sub	sp, sp, #24
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 32
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+  44 0006 F860     		str	r0, [r7, #12]
+  45 0008 B960     		str	r1, [r7, #8]
+  46 000a 7A60     		str	r2, [r7, #4]
+  47 000c 3B60     		str	r3, [r7]
+ 119:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   HAL_StatusTypeDef status = HAL_OK;
+  48              		.loc 1 119 21
+  49 000e 0023     		movs	r3, #0
+  50 0010 FB75     		strb	r3, [r7, #23]
+ 120:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   
+ 121:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   /* Check the parameters */
+ 122:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   assert_param(IS_DMA_BUFFER_SIZE(DataLength));
+ARM GAS  /tmp/ccYTbMTL.s 			page 4
+
+
+ 123:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   
+ 124:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   /* Memory-to-memory transfer not supported in double buffering mode */
+ 125:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   if (hdma->Init.Direction == DMA_MEMORY_TO_MEMORY)
+  51              		.loc 1 125 17
+  52 0012 FB68     		ldr	r3, [r7, #12]
+  53 0014 9B68     		ldr	r3, [r3, #8]
+  54              		.loc 1 125 6
+  55 0016 802B     		cmp	r3, #128
+  56 0018 06D1     		bne	.L2
+ 126:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   {
+ 127:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->ErrorCode = HAL_DMA_ERROR_NOT_SUPPORTED;
+  57              		.loc 1 127 21
+  58 001a FB68     		ldr	r3, [r7, #12]
+  59 001c 4FF48072 		mov	r2, #256
+  60 0020 5A65     		str	r2, [r3, #84]
+ 128:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     status = HAL_ERROR;
+  61              		.loc 1 128 12
+  62 0022 0123     		movs	r3, #1
+  63 0024 FB75     		strb	r3, [r7, #23]
+  64 0026 31E0     		b	.L3
+  65              	.L2:
+ 129:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   }
+ 130:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   else
+ 131:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   {
+ 132:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Process Locked */
+ 133:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     __HAL_LOCK(hdma);
+  66              		.loc 1 133 5
+  67 0028 FB68     		ldr	r3, [r7, #12]
+  68 002a 93F83430 		ldrb	r3, [r3, #52]	@ zero_extendqisi2
+  69 002e 012B     		cmp	r3, #1
+  70 0030 01D1     		bne	.L4
+  71              		.loc 1 133 5 is_stmt 0 discriminator 1
+  72 0032 0223     		movs	r3, #2
+  73 0034 2BE0     		b	.L5
+  74              	.L4:
+  75              		.loc 1 133 5 discriminator 2
+  76 0036 FB68     		ldr	r3, [r7, #12]
+  77 0038 0122     		movs	r2, #1
+  78 003a 83F83420 		strb	r2, [r3, #52]
+ 134:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ 135:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     if(HAL_DMA_STATE_READY == hdma->State)
+  79              		.loc 1 135 35 is_stmt 1 discriminator 2
+  80 003e FB68     		ldr	r3, [r7, #12]
+  81 0040 93F83530 		ldrb	r3, [r3, #53]
+  82 0044 DBB2     		uxtb	r3, r3
+  83              		.loc 1 135 7 discriminator 2
+  84 0046 012B     		cmp	r3, #1
+  85 0048 1ED1     		bne	.L6
+ 136:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     {
+ 137:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       /* Change DMA peripheral state */
+ 138:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       hdma->State = HAL_DMA_STATE_BUSY; 
+  86              		.loc 1 138 19
+  87 004a FB68     		ldr	r3, [r7, #12]
+  88 004c 0222     		movs	r2, #2
+  89 004e 83F83520 		strb	r2, [r3, #53]
+ 139:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       
+ 140:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       /* Enable the double buffer mode */
+ARM GAS  /tmp/ccYTbMTL.s 			page 5
+
+
+ 141:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       hdma->Instance->CR |= (uint32_t)DMA_SxCR_DBM;
+  90              		.loc 1 141 11
+  91 0052 FB68     		ldr	r3, [r7, #12]
+  92 0054 1B68     		ldr	r3, [r3]
+  93              		.loc 1 141 26
+  94 0056 1A68     		ldr	r2, [r3]
+  95              		.loc 1 141 11
+  96 0058 FB68     		ldr	r3, [r7, #12]
+  97 005a 1B68     		ldr	r3, [r3]
+  98              		.loc 1 141 26
+  99 005c 42F48022 		orr	r2, r2, #262144
+ 100 0060 1A60     		str	r2, [r3]
+ 142:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       
+ 143:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       /* Configure DMA Stream destination address */
+ 144:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       hdma->Instance->M1AR = SecondMemAddress;
+ 101              		.loc 1 144 11
+ 102 0062 FB68     		ldr	r3, [r7, #12]
+ 103 0064 1B68     		ldr	r3, [r3]
+ 104              		.loc 1 144 28
+ 105 0066 3A68     		ldr	r2, [r7]
+ 106 0068 1A61     		str	r2, [r3, #16]
+ 145:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       
+ 146:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       /* Configure the source, destination address and the data length */
+ 147:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       DMA_MultiBufferSetConfig(hdma, SrcAddress, DstAddress, DataLength);
+ 107              		.loc 1 147 7
+ 108 006a 3B6A     		ldr	r3, [r7, #32]
+ 109 006c 7A68     		ldr	r2, [r7, #4]
+ 110 006e B968     		ldr	r1, [r7, #8]
+ 111 0070 F868     		ldr	r0, [r7, #12]
+ 112 0072 FFF7FEFF 		bl	DMA_MultiBufferSetConfig
+ 148:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       
+ 149:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       /* Enable the peripheral */
+ 150:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       __HAL_DMA_ENABLE(hdma);
+ 113              		.loc 1 150 7
+ 114 0076 FB68     		ldr	r3, [r7, #12]
+ 115 0078 1B68     		ldr	r3, [r3]
+ 116 007a 1A68     		ldr	r2, [r3]
+ 117 007c FB68     		ldr	r3, [r7, #12]
+ 118 007e 1B68     		ldr	r3, [r3]
+ 119 0080 42F00102 		orr	r2, r2, #1
+ 120 0084 1A60     		str	r2, [r3]
+ 121 0086 01E0     		b	.L3
+ 122              	.L6:
+ 151:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     }
+ 152:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     else
+ 153:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     {
+ 154:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       /* Return error status */
+ 155:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       status = HAL_BUSY;
+ 123              		.loc 1 155 14
+ 124 0088 0223     		movs	r3, #2
+ 125 008a FB75     		strb	r3, [r7, #23]
+ 126              	.L3:
+ 156:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     }
+ 157:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   }
+ 158:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   return status;
+ 127              		.loc 1 158 10
+ 128 008c FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ARM GAS  /tmp/ccYTbMTL.s 			page 6
+
+
+ 129              	.L5:
+ 159:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** }
+ 130              		.loc 1 159 1
+ 131 008e 1846     		mov	r0, r3
+ 132 0090 1837     		adds	r7, r7, #24
+ 133              	.LCFI3:
+ 134              		.cfi_def_cfa_offset 8
+ 135 0092 BD46     		mov	sp, r7
+ 136              	.LCFI4:
+ 137              		.cfi_def_cfa_register 13
+ 138              		@ sp needed
+ 139 0094 80BD     		pop	{r7, pc}
+ 140              		.cfi_endproc
+ 141              	.LFE126:
+ 143              		.section	.text.HAL_DMAEx_MultiBufferStart_IT,"ax",%progbits
+ 144              		.align	1
+ 145              		.global	HAL_DMAEx_MultiBufferStart_IT
+ 146              		.syntax unified
+ 147              		.thumb
+ 148              		.thumb_func
+ 149              		.fpu fpv4-sp-d16
+ 151              	HAL_DMAEx_MultiBufferStart_IT:
+ 152              	.LFB127:
+ 160:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+ 161:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /**
+ 162:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @brief  Starts the multi_buffer DMA Transfer with interrupt enabled.
+ 163:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+ 164:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *                     the configuration information for the specified DMA Stream.  
+ 165:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  SrcAddress The source memory Buffer address
+ 166:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  DstAddress The destination memory Buffer address
+ 167:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  SecondMemAddress The second memory Buffer address in case of multi buffer Transfer  
+ 168:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  DataLength The length of data to be transferred from source to destination
+ 169:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @retval HAL status
+ 170:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+ 171:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** HAL_StatusTypeDef HAL_DMAEx_MultiBufferStart_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint3
+ 172:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** {
+ 153              		.loc 1 172 1
+ 154              		.cfi_startproc
+ 155              		@ args = 4, pretend = 0, frame = 24
+ 156              		@ frame_needed = 1, uses_anonymous_args = 0
+ 157 0000 80B5     		push	{r7, lr}
+ 158              	.LCFI5:
+ 159              		.cfi_def_cfa_offset 8
+ 160              		.cfi_offset 7, -8
+ 161              		.cfi_offset 14, -4
+ 162 0002 86B0     		sub	sp, sp, #24
+ 163              	.LCFI6:
+ 164              		.cfi_def_cfa_offset 32
+ 165 0004 00AF     		add	r7, sp, #0
+ 166              	.LCFI7:
+ 167              		.cfi_def_cfa_register 7
+ 168 0006 F860     		str	r0, [r7, #12]
+ 169 0008 B960     		str	r1, [r7, #8]
+ 170 000a 7A60     		str	r2, [r7, #4]
+ 171 000c 3B60     		str	r3, [r7]
+ 173:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 172              		.loc 1 173 21
+ARM GAS  /tmp/ccYTbMTL.s 			page 7
+
+
+ 173 000e 0023     		movs	r3, #0
+ 174 0010 FB75     		strb	r3, [r7, #23]
+ 174:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   
+ 175:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   /* Check the parameters */
+ 176:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   assert_param(IS_DMA_BUFFER_SIZE(DataLength));
+ 177:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   
+ 178:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   /* Memory-to-memory transfer not supported in double buffering mode */
+ 179:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   if (hdma->Init.Direction == DMA_MEMORY_TO_MEMORY)
+ 175              		.loc 1 179 17
+ 176 0012 FB68     		ldr	r3, [r7, #12]
+ 177 0014 9B68     		ldr	r3, [r3, #8]
+ 178              		.loc 1 179 6
+ 179 0016 802B     		cmp	r3, #128
+ 180 0018 06D1     		bne	.L8
+ 180:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   {
+ 181:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->ErrorCode = HAL_DMA_ERROR_NOT_SUPPORTED;
+ 181              		.loc 1 181 21
+ 182 001a FB68     		ldr	r3, [r7, #12]
+ 183 001c 4FF48072 		mov	r2, #256
+ 184 0020 5A65     		str	r2, [r3, #84]
+ 182:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     return HAL_ERROR;
+ 185              		.loc 1 182 12
+ 186 0022 0123     		movs	r3, #1
+ 187 0024 01F011B9 		b	.L9
+ 188              	.L8:
+ 183:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   }
+ 184:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   
+ 185:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   /* Check callback functions */
+ 186:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   if ((NULL == hdma->XferCpltCallback) || (NULL == hdma->XferM1CpltCallback) || (NULL == hdma->Xfer
+ 189              		.loc 1 186 20
+ 190 0028 FB68     		ldr	r3, [r7, #12]
+ 191 002a DB6B     		ldr	r3, [r3, #60]
+ 192              		.loc 1 186 6
+ 193 002c 002B     		cmp	r3, #0
+ 194 002e 07D0     		beq	.L10
+ 195              		.loc 1 186 56 discriminator 1
+ 196 0030 FB68     		ldr	r3, [r7, #12]
+ 197 0032 5B6C     		ldr	r3, [r3, #68]
+ 198              		.loc 1 186 40 discriminator 1
+ 199 0034 002B     		cmp	r3, #0
+ 200 0036 03D0     		beq	.L10
+ 201              		.loc 1 186 94 discriminator 2
+ 202 0038 FB68     		ldr	r3, [r7, #12]
+ 203 003a DB6C     		ldr	r3, [r3, #76]
+ 204              		.loc 1 186 78 discriminator 2
+ 205 003c 002B     		cmp	r3, #0
+ 206 003e 05D1     		bne	.L11
+ 207              	.L10:
+ 187:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   {
+ 188:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->ErrorCode = HAL_DMA_ERROR_PARAM;
+ 208              		.loc 1 188 21
+ 209 0040 FB68     		ldr	r3, [r7, #12]
+ 210 0042 4022     		movs	r2, #64
+ 211 0044 5A65     		str	r2, [r3, #84]
+ 189:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     return HAL_ERROR;
+ 212              		.loc 1 189 12
+ 213 0046 0123     		movs	r3, #1
+ARM GAS  /tmp/ccYTbMTL.s 			page 8
+
+
+ 214 0048 01F0FFB8 		b	.L9
+ 215              	.L11:
+ 190:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   }
+ 191:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   
+ 192:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   /* Process locked */
+ 193:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   __HAL_LOCK(hdma);
+ 216              		.loc 1 193 3
+ 217 004c FB68     		ldr	r3, [r7, #12]
+ 218 004e 93F83430 		ldrb	r3, [r3, #52]	@ zero_extendqisi2
+ 219 0052 012B     		cmp	r3, #1
+ 220 0054 02D1     		bne	.L12
+ 221              		.loc 1 193 3 is_stmt 0 discriminator 1
+ 222 0056 0223     		movs	r3, #2
+ 223 0058 01F0F7B8 		b	.L9
+ 224              	.L12:
+ 225              		.loc 1 193 3 discriminator 2
+ 226 005c FB68     		ldr	r3, [r7, #12]
+ 227 005e 0122     		movs	r2, #1
+ 228 0060 83F83420 		strb	r2, [r3, #52]
+ 194:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   
+ 195:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   if(HAL_DMA_STATE_READY == hdma->State)
+ 229              		.loc 1 195 33 is_stmt 1 discriminator 2
+ 230 0064 FB68     		ldr	r3, [r7, #12]
+ 231 0066 93F83530 		ldrb	r3, [r3, #53]
+ 232 006a DBB2     		uxtb	r3, r3
+ 233              		.loc 1 195 5 discriminator 2
+ 234 006c 012B     		cmp	r3, #1
+ 235 006e 41F0E580 		bne	.L13
+ 196:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   {
+ 197:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Change DMA peripheral state */
+ 198:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->State = HAL_DMA_STATE_BUSY;
+ 236              		.loc 1 198 17
+ 237 0072 FB68     		ldr	r3, [r7, #12]
+ 238 0074 0222     		movs	r2, #2
+ 239 0076 83F83520 		strb	r2, [r3, #53]
+ 199:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ 200:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Initialize the error code */
+ 201:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->ErrorCode = HAL_DMA_ERROR_NONE;
+ 240              		.loc 1 201 21
+ 241 007a FB68     		ldr	r3, [r7, #12]
+ 242 007c 0022     		movs	r2, #0
+ 243 007e 5A65     		str	r2, [r3, #84]
+ 202:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ 203:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Enable the Double buffer mode */
+ 204:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->Instance->CR |= (uint32_t)DMA_SxCR_DBM;
+ 244              		.loc 1 204 9
+ 245 0080 FB68     		ldr	r3, [r7, #12]
+ 246 0082 1B68     		ldr	r3, [r3]
+ 247              		.loc 1 204 24
+ 248 0084 1A68     		ldr	r2, [r3]
+ 249              		.loc 1 204 9
+ 250 0086 FB68     		ldr	r3, [r7, #12]
+ 251 0088 1B68     		ldr	r3, [r3]
+ 252              		.loc 1 204 24
+ 253 008a 42F48022 		orr	r2, r2, #262144
+ 254 008e 1A60     		str	r2, [r3]
+ 205:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ARM GAS  /tmp/ccYTbMTL.s 			page 9
+
+
+ 206:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Configure DMA Stream destination address */
+ 207:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->Instance->M1AR = SecondMemAddress;
+ 255              		.loc 1 207 9
+ 256 0090 FB68     		ldr	r3, [r7, #12]
+ 257 0092 1B68     		ldr	r3, [r3]
+ 258              		.loc 1 207 26
+ 259 0094 3A68     		ldr	r2, [r7]
+ 260 0096 1A61     		str	r2, [r3, #16]
+ 208:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ 209:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Configure the source, destination address and the data length */
+ 210:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     DMA_MultiBufferSetConfig(hdma, SrcAddress, DstAddress, DataLength); 
+ 261              		.loc 1 210 5
+ 262 0098 3B6A     		ldr	r3, [r7, #32]
+ 263 009a 7A68     		ldr	r2, [r7, #4]
+ 264 009c B968     		ldr	r1, [r7, #8]
+ 265 009e F868     		ldr	r0, [r7, #12]
+ 266 00a0 FFF7FEFF 		bl	DMA_MultiBufferSetConfig
+ 211:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ 212:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Clear all flags */
+ 213:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TC_FLAG_INDEX(hdma));
+ 267              		.loc 1 213 5
+ 268 00a4 FB68     		ldr	r3, [r7, #12]
+ 269 00a6 1B68     		ldr	r3, [r3]
+ 270 00a8 1A46     		mov	r2, r3
+ 271 00aa 8D4B     		ldr	r3, .L527
+ 272 00ac 9A42     		cmp	r2, r3
+ 273 00ae 60D9     		bls	.L14
+ 274              		.loc 1 213 5 is_stmt 0 discriminator 1
+ 275 00b0 FB68     		ldr	r3, [r7, #12]
+ 276 00b2 1B68     		ldr	r3, [r3]
+ 277 00b4 8B4A     		ldr	r2, .L527+4
+ 278 00b6 9342     		cmp	r3, r2
+ 279 00b8 57D0     		beq	.L15
+ 280              		.loc 1 213 5 discriminator 3
+ 281 00ba FB68     		ldr	r3, [r7, #12]
+ 282 00bc 1B68     		ldr	r3, [r3]
+ 283 00be 8A4A     		ldr	r2, .L527+8
+ 284 00c0 9342     		cmp	r3, r2
+ 285 00c2 50D0     		beq	.L16
+ 286              		.loc 1 213 5 discriminator 5
+ 287 00c4 FB68     		ldr	r3, [r7, #12]
+ 288 00c6 1B68     		ldr	r3, [r3]
+ 289 00c8 884A     		ldr	r2, .L527+12
+ 290 00ca 9342     		cmp	r3, r2
+ 291 00cc 49D0     		beq	.L17
+ 292              		.loc 1 213 5 discriminator 7
+ 293 00ce FB68     		ldr	r3, [r7, #12]
+ 294 00d0 1B68     		ldr	r3, [r3]
+ 295 00d2 874A     		ldr	r2, .L527+16
+ 296 00d4 9342     		cmp	r3, r2
+ 297 00d6 42D0     		beq	.L18
+ 298              		.loc 1 213 5 discriminator 9
+ 299 00d8 FB68     		ldr	r3, [r7, #12]
+ 300 00da 1B68     		ldr	r3, [r3]
+ 301 00dc 854A     		ldr	r2, .L527+20
+ 302 00de 9342     		cmp	r3, r2
+ 303 00e0 3AD0     		beq	.L19
+ARM GAS  /tmp/ccYTbMTL.s 			page 10
+
+
+ 304              		.loc 1 213 5 discriminator 11
+ 305 00e2 FB68     		ldr	r3, [r7, #12]
+ 306 00e4 1B68     		ldr	r3, [r3]
+ 307 00e6 844A     		ldr	r2, .L527+24
+ 308 00e8 9342     		cmp	r3, r2
+ 309 00ea 32D0     		beq	.L20
+ 310              		.loc 1 213 5 discriminator 13
+ 311 00ec FB68     		ldr	r3, [r7, #12]
+ 312 00ee 1B68     		ldr	r3, [r3]
+ 313 00f0 824A     		ldr	r2, .L527+28
+ 314 00f2 9342     		cmp	r3, r2
+ 315 00f4 2AD0     		beq	.L21
+ 316              		.loc 1 213 5 discriminator 15
+ 317 00f6 FB68     		ldr	r3, [r7, #12]
+ 318 00f8 1B68     		ldr	r3, [r3]
+ 319 00fa 814A     		ldr	r2, .L527+32
+ 320 00fc 9342     		cmp	r3, r2
+ 321 00fe 22D0     		beq	.L22
+ 322              		.loc 1 213 5 discriminator 17
+ 323 0100 FB68     		ldr	r3, [r7, #12]
+ 324 0102 1B68     		ldr	r3, [r3]
+ 325 0104 7F4A     		ldr	r2, .L527+36
+ 326 0106 9342     		cmp	r3, r2
+ 327 0108 1AD0     		beq	.L23
+ 328              		.loc 1 213 5 discriminator 19
+ 329 010a FB68     		ldr	r3, [r7, #12]
+ 330 010c 1B68     		ldr	r3, [r3]
+ 331 010e 7E4A     		ldr	r2, .L527+40
+ 332 0110 9342     		cmp	r3, r2
+ 333 0112 12D0     		beq	.L24
+ 334              		.loc 1 213 5 discriminator 21
+ 335 0114 FB68     		ldr	r3, [r7, #12]
+ 336 0116 1B68     		ldr	r3, [r3]
+ 337 0118 7C4A     		ldr	r2, .L527+44
+ 338 011a 9342     		cmp	r3, r2
+ 339 011c 0AD0     		beq	.L25
+ 340              		.loc 1 213 5 discriminator 23
+ 341 011e FB68     		ldr	r3, [r7, #12]
+ 342 0120 1B68     		ldr	r3, [r3]
+ 343 0122 7B4A     		ldr	r2, .L527+48
+ 344 0124 9342     		cmp	r3, r2
+ 345 0126 02D1     		bne	.L26
+ 346              		.loc 1 213 5 discriminator 25
+ 347 0128 4FF40013 		mov	r3, #2097152
+ 348 012c 1EE0     		b	.L38
+ 349              	.L26:
+ 350              		.loc 1 213 5 discriminator 26
+ 351 012e 4FF00063 		mov	r3, #134217728
+ 352 0132 1BE0     		b	.L38
+ 353              	.L25:
+ 354              		.loc 1 213 5 discriminator 24
+ 355 0134 4FF40013 		mov	r3, #2097152
+ 356 0138 18E0     		b	.L38
+ 357              	.L24:
+ 358              		.loc 1 213 5 discriminator 22
+ 359 013a 4FF40013 		mov	r3, #2097152
+ 360 013e 15E0     		b	.L38
+ARM GAS  /tmp/ccYTbMTL.s 			page 11
+
+
+ 361              	.L23:
+ 362              		.loc 1 213 5 discriminator 20
+ 363 0140 4FF40013 		mov	r3, #2097152
+ 364 0144 12E0     		b	.L38
+ 365              	.L22:
+ 366              		.loc 1 213 5 discriminator 18
+ 367 0146 4FF40063 		mov	r3, #2048
+ 368 014a 0FE0     		b	.L38
+ 369              	.L21:
+ 370              		.loc 1 213 5 discriminator 16
+ 371 014c 4FF40063 		mov	r3, #2048
+ 372 0150 0CE0     		b	.L38
+ 373              	.L20:
+ 374              		.loc 1 213 5 discriminator 14
+ 375 0152 4FF40063 		mov	r3, #2048
+ 376 0156 09E0     		b	.L38
+ 377              	.L19:
+ 378              		.loc 1 213 5 discriminator 12
+ 379 0158 4FF40063 		mov	r3, #2048
+ 380 015c 06E0     		b	.L38
+ 381              	.L18:
+ 382              		.loc 1 213 5 discriminator 10
+ 383 015e 2023     		movs	r3, #32
+ 384 0160 04E0     		b	.L38
+ 385              	.L17:
+ 386              		.loc 1 213 5 discriminator 8
+ 387 0162 2023     		movs	r3, #32
+ 388 0164 02E0     		b	.L38
+ 389              	.L16:
+ 390              		.loc 1 213 5 discriminator 6
+ 391 0166 2023     		movs	r3, #32
+ 392 0168 00E0     		b	.L38
+ 393              	.L15:
+ 394              		.loc 1 213 5 discriminator 4
+ 395 016a 2023     		movs	r3, #32
+ 396              	.L38:
+ 397              		.loc 1 213 5 discriminator 50
+ 398 016c 694A     		ldr	r2, .L527+52
+ 399 016e D360     		str	r3, [r2, #12]
+ 400 0170 4FE1     		b	.L39
+ 401              	.L14:
+ 402              		.loc 1 213 5 discriminator 2
+ 403 0172 FB68     		ldr	r3, [r7, #12]
+ 404 0174 1B68     		ldr	r3, [r3]
+ 405 0176 1A46     		mov	r2, r3
+ 406 0178 674B     		ldr	r3, .L527+56
+ 407 017a 9A42     		cmp	r2, r3
+ 408 017c 60D9     		bls	.L40
+ 409              		.loc 1 213 5 discriminator 51
+ 410 017e FB68     		ldr	r3, [r7, #12]
+ 411 0180 1B68     		ldr	r3, [r3]
+ 412 0182 584A     		ldr	r2, .L527+4
+ 413 0184 9342     		cmp	r3, r2
+ 414 0186 57D0     		beq	.L41
+ 415              		.loc 1 213 5 discriminator 53
+ 416 0188 FB68     		ldr	r3, [r7, #12]
+ 417 018a 1B68     		ldr	r3, [r3]
+ARM GAS  /tmp/ccYTbMTL.s 			page 12
+
+
+ 418 018c 564A     		ldr	r2, .L527+8
+ 419 018e 9342     		cmp	r3, r2
+ 420 0190 50D0     		beq	.L42
+ 421              		.loc 1 213 5 discriminator 55
+ 422 0192 FB68     		ldr	r3, [r7, #12]
+ 423 0194 1B68     		ldr	r3, [r3]
+ 424 0196 554A     		ldr	r2, .L527+12
+ 425 0198 9342     		cmp	r3, r2
+ 426 019a 49D0     		beq	.L43
+ 427              		.loc 1 213 5 discriminator 57
+ 428 019c FB68     		ldr	r3, [r7, #12]
+ 429 019e 1B68     		ldr	r3, [r3]
+ 430 01a0 534A     		ldr	r2, .L527+16
+ 431 01a2 9342     		cmp	r3, r2
+ 432 01a4 42D0     		beq	.L44
+ 433              		.loc 1 213 5 discriminator 59
+ 434 01a6 FB68     		ldr	r3, [r7, #12]
+ 435 01a8 1B68     		ldr	r3, [r3]
+ 436 01aa 524A     		ldr	r2, .L527+20
+ 437 01ac 9342     		cmp	r3, r2
+ 438 01ae 3AD0     		beq	.L45
+ 439              		.loc 1 213 5 discriminator 61
+ 440 01b0 FB68     		ldr	r3, [r7, #12]
+ 441 01b2 1B68     		ldr	r3, [r3]
+ 442 01b4 504A     		ldr	r2, .L527+24
+ 443 01b6 9342     		cmp	r3, r2
+ 444 01b8 32D0     		beq	.L46
+ 445              		.loc 1 213 5 discriminator 63
+ 446 01ba FB68     		ldr	r3, [r7, #12]
+ 447 01bc 1B68     		ldr	r3, [r3]
+ 448 01be 4F4A     		ldr	r2, .L527+28
+ 449 01c0 9342     		cmp	r3, r2
+ 450 01c2 2AD0     		beq	.L47
+ 451              		.loc 1 213 5 discriminator 65
+ 452 01c4 FB68     		ldr	r3, [r7, #12]
+ 453 01c6 1B68     		ldr	r3, [r3]
+ 454 01c8 4D4A     		ldr	r2, .L527+32
+ 455 01ca 9342     		cmp	r3, r2
+ 456 01cc 22D0     		beq	.L48
+ 457              		.loc 1 213 5 discriminator 67
+ 458 01ce FB68     		ldr	r3, [r7, #12]
+ 459 01d0 1B68     		ldr	r3, [r3]
+ 460 01d2 4C4A     		ldr	r2, .L527+36
+ 461 01d4 9342     		cmp	r3, r2
+ 462 01d6 1AD0     		beq	.L49
+ 463              		.loc 1 213 5 discriminator 69
+ 464 01d8 FB68     		ldr	r3, [r7, #12]
+ 465 01da 1B68     		ldr	r3, [r3]
+ 466 01dc 4A4A     		ldr	r2, .L527+40
+ 467 01de 9342     		cmp	r3, r2
+ 468 01e0 12D0     		beq	.L50
+ 469              		.loc 1 213 5 discriminator 71
+ 470 01e2 FB68     		ldr	r3, [r7, #12]
+ 471 01e4 1B68     		ldr	r3, [r3]
+ 472 01e6 494A     		ldr	r2, .L527+44
+ 473 01e8 9342     		cmp	r3, r2
+ 474 01ea 0AD0     		beq	.L51
+ARM GAS  /tmp/ccYTbMTL.s 			page 13
+
+
+ 475              		.loc 1 213 5 discriminator 73
+ 476 01ec FB68     		ldr	r3, [r7, #12]
+ 477 01ee 1B68     		ldr	r3, [r3]
+ 478 01f0 474A     		ldr	r2, .L527+48
+ 479 01f2 9342     		cmp	r3, r2
+ 480 01f4 02D1     		bne	.L52
+ 481              		.loc 1 213 5 discriminator 75
+ 482 01f6 4FF40013 		mov	r3, #2097152
+ 483 01fa 1EE0     		b	.L64
+ 484              	.L52:
+ 485              		.loc 1 213 5 discriminator 76
+ 486 01fc 4FF00063 		mov	r3, #134217728
+ 487 0200 1BE0     		b	.L64
+ 488              	.L51:
+ 489              		.loc 1 213 5 discriminator 74
+ 490 0202 4FF40013 		mov	r3, #2097152
+ 491 0206 18E0     		b	.L64
+ 492              	.L50:
+ 493              		.loc 1 213 5 discriminator 72
+ 494 0208 4FF40013 		mov	r3, #2097152
+ 495 020c 15E0     		b	.L64
+ 496              	.L49:
+ 497              		.loc 1 213 5 discriminator 70
+ 498 020e 4FF40013 		mov	r3, #2097152
+ 499 0212 12E0     		b	.L64
+ 500              	.L48:
+ 501              		.loc 1 213 5 discriminator 68
+ 502 0214 4FF40063 		mov	r3, #2048
+ 503 0218 0FE0     		b	.L64
+ 504              	.L47:
+ 505              		.loc 1 213 5 discriminator 66
+ 506 021a 4FF40063 		mov	r3, #2048
+ 507 021e 0CE0     		b	.L64
+ 508              	.L46:
+ 509              		.loc 1 213 5 discriminator 64
+ 510 0220 4FF40063 		mov	r3, #2048
+ 511 0224 09E0     		b	.L64
+ 512              	.L45:
+ 513              		.loc 1 213 5 discriminator 62
+ 514 0226 4FF40063 		mov	r3, #2048
+ 515 022a 06E0     		b	.L64
+ 516              	.L44:
+ 517              		.loc 1 213 5 discriminator 60
+ 518 022c 2023     		movs	r3, #32
+ 519 022e 04E0     		b	.L64
+ 520              	.L43:
+ 521              		.loc 1 213 5 discriminator 58
+ 522 0230 2023     		movs	r3, #32
+ 523 0232 02E0     		b	.L64
+ 524              	.L42:
+ 525              		.loc 1 213 5 discriminator 56
+ 526 0234 2023     		movs	r3, #32
+ 527 0236 00E0     		b	.L64
+ 528              	.L41:
+ 529              		.loc 1 213 5 discriminator 54
+ 530 0238 2023     		movs	r3, #32
+ 531              	.L64:
+ARM GAS  /tmp/ccYTbMTL.s 			page 14
+
+
+ 532              		.loc 1 213 5 discriminator 100
+ 533 023a 364A     		ldr	r2, .L527+52
+ 534 023c 9360     		str	r3, [r2, #8]
+ 535 023e E8E0     		b	.L39
+ 536              	.L40:
+ 537              		.loc 1 213 5 discriminator 52
+ 538 0240 FB68     		ldr	r3, [r7, #12]
+ 539 0242 1B68     		ldr	r3, [r3]
+ 540 0244 1A46     		mov	r2, r3
+ 541 0246 354B     		ldr	r3, .L527+60
+ 542 0248 9A42     		cmp	r2, r3
+ 543 024a 40F28280 		bls	.L66
+ 544              		.loc 1 213 5 discriminator 102
+ 545 024e FB68     		ldr	r3, [r7, #12]
+ 546 0250 1B68     		ldr	r3, [r3]
+ 547 0252 244A     		ldr	r2, .L527+4
+ 548 0254 9342     		cmp	r3, r2
+ 549 0256 78D0     		beq	.L67
+ 550              		.loc 1 213 5 discriminator 104
+ 551 0258 FB68     		ldr	r3, [r7, #12]
+ 552 025a 1B68     		ldr	r3, [r3]
+ 553 025c 224A     		ldr	r2, .L527+8
+ 554 025e 9342     		cmp	r3, r2
+ 555 0260 71D0     		beq	.L68
+ 556              		.loc 1 213 5 discriminator 106
+ 557 0262 FB68     		ldr	r3, [r7, #12]
+ 558 0264 1B68     		ldr	r3, [r3]
+ 559 0266 214A     		ldr	r2, .L527+12
+ 560 0268 9342     		cmp	r3, r2
+ 561 026a 6AD0     		beq	.L69
+ 562              		.loc 1 213 5 discriminator 108
+ 563 026c FB68     		ldr	r3, [r7, #12]
+ 564 026e 1B68     		ldr	r3, [r3]
+ 565 0270 1F4A     		ldr	r2, .L527+16
+ 566 0272 9342     		cmp	r3, r2
+ 567 0274 63D0     		beq	.L70
+ 568              		.loc 1 213 5 discriminator 110
+ 569 0276 FB68     		ldr	r3, [r7, #12]
+ 570 0278 1B68     		ldr	r3, [r3]
+ 571 027a 1E4A     		ldr	r2, .L527+20
+ 572 027c 9342     		cmp	r3, r2
+ 573 027e 5BD0     		beq	.L71
+ 574              		.loc 1 213 5 discriminator 112
+ 575 0280 FB68     		ldr	r3, [r7, #12]
+ 576 0282 1B68     		ldr	r3, [r3]
+ 577 0284 1C4A     		ldr	r2, .L527+24
+ 578 0286 9342     		cmp	r3, r2
+ 579 0288 53D0     		beq	.L72
+ 580              		.loc 1 213 5 discriminator 114
+ 581 028a FB68     		ldr	r3, [r7, #12]
+ 582 028c 1B68     		ldr	r3, [r3]
+ 583 028e 1B4A     		ldr	r2, .L527+28
+ 584 0290 9342     		cmp	r3, r2
+ 585 0292 4BD0     		beq	.L73
+ 586              		.loc 1 213 5 discriminator 116
+ 587 0294 FB68     		ldr	r3, [r7, #12]
+ 588 0296 1B68     		ldr	r3, [r3]
+ARM GAS  /tmp/ccYTbMTL.s 			page 15
+
+
+ 589 0298 194A     		ldr	r2, .L527+32
+ 590 029a 9342     		cmp	r3, r2
+ 591 029c 43D0     		beq	.L74
+ 592              		.loc 1 213 5 discriminator 118
+ 593 029e FB68     		ldr	r3, [r7, #12]
+ 594 02a0 1B68     		ldr	r3, [r3]
+ 595 02a2 184A     		ldr	r2, .L527+36
+ 596 02a4 9342     		cmp	r3, r2
+ 597 02a6 3BD0     		beq	.L75
+ 598              		.loc 1 213 5 discriminator 120
+ 599 02a8 FB68     		ldr	r3, [r7, #12]
+ 600 02aa 1B68     		ldr	r3, [r3]
+ 601 02ac 164A     		ldr	r2, .L527+40
+ 602 02ae 9342     		cmp	r3, r2
+ 603 02b0 12D0     		beq	.L76
+ 604              		.loc 1 213 5 discriminator 122
+ 605 02b2 FB68     		ldr	r3, [r7, #12]
+ 606 02b4 1B68     		ldr	r3, [r3]
+ 607 02b6 154A     		ldr	r2, .L527+44
+ 608 02b8 9342     		cmp	r3, r2
+ 609 02ba 0AD0     		beq	.L77
+ 610              		.loc 1 213 5 discriminator 124
+ 611 02bc FB68     		ldr	r3, [r7, #12]
+ 612 02be 1B68     		ldr	r3, [r3]
+ 613 02c0 134A     		ldr	r2, .L527+48
+ 614 02c2 9342     		cmp	r3, r2
+ 615 02c4 02D1     		bne	.L78
+ 616              		.loc 1 213 5 discriminator 126
+ 617 02c6 4FF40013 		mov	r3, #2097152
+ 618 02ca 3FE0     		b	.L90
+ 619              	.L78:
+ 620              		.loc 1 213 5 discriminator 127
+ 621 02cc 4FF00063 		mov	r3, #134217728
+ 622 02d0 3CE0     		b	.L90
+ 623              	.L77:
+ 624              		.loc 1 213 5 discriminator 125
+ 625 02d2 4FF40013 		mov	r3, #2097152
+ 626 02d6 39E0     		b	.L90
+ 627              	.L76:
+ 628              		.loc 1 213 5 discriminator 123
+ 629 02d8 4FF40013 		mov	r3, #2097152
+ 630 02dc 36E0     		b	.L90
+ 631              	.L528:
+ 632 02de 00BF     		.align	2
+ 633              	.L527:
+ 634 02e0 58640240 		.word	1073898584
+ 635 02e4 10600240 		.word	1073897488
+ 636 02e8 10640240 		.word	1073898512
+ 637 02ec 70600240 		.word	1073897584
+ 638 02f0 70640240 		.word	1073898608
+ 639 02f4 28600240 		.word	1073897512
+ 640 02f8 28640240 		.word	1073898536
+ 641 02fc 88600240 		.word	1073897608
+ 642 0300 88640240 		.word	1073898632
+ 643 0304 40600240 		.word	1073897536
+ 644 0308 40640240 		.word	1073898560
+ 645 030c A0600240 		.word	1073897632
+ARM GAS  /tmp/ccYTbMTL.s 			page 16
+
+
+ 646 0310 A0640240 		.word	1073898656
+ 647 0314 00640240 		.word	1073898496
+ 648 0318 B8600240 		.word	1073897656
+ 649 031c 58600240 		.word	1073897560
+ 650              	.L75:
+ 651              		.loc 1 213 5 discriminator 121
+ 652 0320 4FF40013 		mov	r3, #2097152
+ 653 0324 12E0     		b	.L90
+ 654              	.L74:
+ 655              		.loc 1 213 5 discriminator 119
+ 656 0326 4FF40063 		mov	r3, #2048
+ 657 032a 0FE0     		b	.L90
+ 658              	.L73:
+ 659              		.loc 1 213 5 discriminator 117
+ 660 032c 4FF40063 		mov	r3, #2048
+ 661 0330 0CE0     		b	.L90
+ 662              	.L72:
+ 663              		.loc 1 213 5 discriminator 115
+ 664 0332 4FF40063 		mov	r3, #2048
+ 665 0336 09E0     		b	.L90
+ 666              	.L71:
+ 667              		.loc 1 213 5 discriminator 113
+ 668 0338 4FF40063 		mov	r3, #2048
+ 669 033c 06E0     		b	.L90
+ 670              	.L70:
+ 671              		.loc 1 213 5 discriminator 111
+ 672 033e 2023     		movs	r3, #32
+ 673 0340 04E0     		b	.L90
+ 674              	.L69:
+ 675              		.loc 1 213 5 discriminator 109
+ 676 0342 2023     		movs	r3, #32
+ 677 0344 02E0     		b	.L90
+ 678              	.L68:
+ 679              		.loc 1 213 5 discriminator 107
+ 680 0346 2023     		movs	r3, #32
+ 681 0348 00E0     		b	.L90
+ 682              	.L67:
+ 683              		.loc 1 213 5 discriminator 105
+ 684 034a 2023     		movs	r3, #32
+ 685              	.L90:
+ 686              		.loc 1 213 5 discriminator 151
+ 687 034c 8C4A     		ldr	r2, .L529
+ 688 034e D360     		str	r3, [r2, #12]
+ 689 0350 5FE0     		b	.L39
+ 690              	.L66:
+ 691              		.loc 1 213 5 discriminator 103
+ 692 0352 FB68     		ldr	r3, [r7, #12]
+ 693 0354 1B68     		ldr	r3, [r3]
+ 694 0356 8B4A     		ldr	r2, .L529+4
+ 695 0358 9342     		cmp	r3, r2
+ 696 035a 57D0     		beq	.L92
+ 697              		.loc 1 213 5 discriminator 153
+ 698 035c FB68     		ldr	r3, [r7, #12]
+ 699 035e 1B68     		ldr	r3, [r3]
+ 700 0360 894A     		ldr	r2, .L529+8
+ 701 0362 9342     		cmp	r3, r2
+ 702 0364 50D0     		beq	.L93
+ARM GAS  /tmp/ccYTbMTL.s 			page 17
+
+
+ 703              		.loc 1 213 5 discriminator 155
+ 704 0366 FB68     		ldr	r3, [r7, #12]
+ 705 0368 1B68     		ldr	r3, [r3]
+ 706 036a 884A     		ldr	r2, .L529+12
+ 707 036c 9342     		cmp	r3, r2
+ 708 036e 49D0     		beq	.L94
+ 709              		.loc 1 213 5 discriminator 157
+ 710 0370 FB68     		ldr	r3, [r7, #12]
+ 711 0372 1B68     		ldr	r3, [r3]
+ 712 0374 864A     		ldr	r2, .L529+16
+ 713 0376 9342     		cmp	r3, r2
+ 714 0378 42D0     		beq	.L95
+ 715              		.loc 1 213 5 discriminator 159
+ 716 037a FB68     		ldr	r3, [r7, #12]
+ 717 037c 1B68     		ldr	r3, [r3]
+ 718 037e 854A     		ldr	r2, .L529+20
+ 719 0380 9342     		cmp	r3, r2
+ 720 0382 3AD0     		beq	.L96
+ 721              		.loc 1 213 5 discriminator 161
+ 722 0384 FB68     		ldr	r3, [r7, #12]
+ 723 0386 1B68     		ldr	r3, [r3]
+ 724 0388 834A     		ldr	r2, .L529+24
+ 725 038a 9342     		cmp	r3, r2
+ 726 038c 32D0     		beq	.L97
+ 727              		.loc 1 213 5 discriminator 163
+ 728 038e FB68     		ldr	r3, [r7, #12]
+ 729 0390 1B68     		ldr	r3, [r3]
+ 730 0392 824A     		ldr	r2, .L529+28
+ 731 0394 9342     		cmp	r3, r2
+ 732 0396 2AD0     		beq	.L98
+ 733              		.loc 1 213 5 discriminator 165
+ 734 0398 FB68     		ldr	r3, [r7, #12]
+ 735 039a 1B68     		ldr	r3, [r3]
+ 736 039c 804A     		ldr	r2, .L529+32
+ 737 039e 9342     		cmp	r3, r2
+ 738 03a0 22D0     		beq	.L99
+ 739              		.loc 1 213 5 discriminator 167
+ 740 03a2 FB68     		ldr	r3, [r7, #12]
+ 741 03a4 1B68     		ldr	r3, [r3]
+ 742 03a6 7F4A     		ldr	r2, .L529+36
+ 743 03a8 9342     		cmp	r3, r2
+ 744 03aa 1AD0     		beq	.L100
+ 745              		.loc 1 213 5 discriminator 169
+ 746 03ac FB68     		ldr	r3, [r7, #12]
+ 747 03ae 1B68     		ldr	r3, [r3]
+ 748 03b0 7D4A     		ldr	r2, .L529+40
+ 749 03b2 9342     		cmp	r3, r2
+ 750 03b4 12D0     		beq	.L101
+ 751              		.loc 1 213 5 discriminator 171
+ 752 03b6 FB68     		ldr	r3, [r7, #12]
+ 753 03b8 1B68     		ldr	r3, [r3]
+ 754 03ba 7C4A     		ldr	r2, .L529+44
+ 755 03bc 9342     		cmp	r3, r2
+ 756 03be 0AD0     		beq	.L102
+ 757              		.loc 1 213 5 discriminator 173
+ 758 03c0 FB68     		ldr	r3, [r7, #12]
+ 759 03c2 1B68     		ldr	r3, [r3]
+ARM GAS  /tmp/ccYTbMTL.s 			page 18
+
+
+ 760 03c4 7A4A     		ldr	r2, .L529+48
+ 761 03c6 9342     		cmp	r3, r2
+ 762 03c8 02D1     		bne	.L103
+ 763              		.loc 1 213 5 discriminator 175
+ 764 03ca 4FF40013 		mov	r3, #2097152
+ 765 03ce 1EE0     		b	.L115
+ 766              	.L103:
+ 767              		.loc 1 213 5 discriminator 176
+ 768 03d0 4FF00063 		mov	r3, #134217728
+ 769 03d4 1BE0     		b	.L115
+ 770              	.L102:
+ 771              		.loc 1 213 5 discriminator 174
+ 772 03d6 4FF40013 		mov	r3, #2097152
+ 773 03da 18E0     		b	.L115
+ 774              	.L101:
+ 775              		.loc 1 213 5 discriminator 172
+ 776 03dc 4FF40013 		mov	r3, #2097152
+ 777 03e0 15E0     		b	.L115
+ 778              	.L100:
+ 779              		.loc 1 213 5 discriminator 170
+ 780 03e2 4FF40013 		mov	r3, #2097152
+ 781 03e6 12E0     		b	.L115
+ 782              	.L99:
+ 783              		.loc 1 213 5 discriminator 168
+ 784 03e8 4FF40063 		mov	r3, #2048
+ 785 03ec 0FE0     		b	.L115
+ 786              	.L98:
+ 787              		.loc 1 213 5 discriminator 166
+ 788 03ee 4FF40063 		mov	r3, #2048
+ 789 03f2 0CE0     		b	.L115
+ 790              	.L97:
+ 791              		.loc 1 213 5 discriminator 164
+ 792 03f4 4FF40063 		mov	r3, #2048
+ 793 03f8 09E0     		b	.L115
+ 794              	.L96:
+ 795              		.loc 1 213 5 discriminator 162
+ 796 03fa 4FF40063 		mov	r3, #2048
+ 797 03fe 06E0     		b	.L115
+ 798              	.L95:
+ 799              		.loc 1 213 5 discriminator 160
+ 800 0400 2023     		movs	r3, #32
+ 801 0402 04E0     		b	.L115
+ 802              	.L94:
+ 803              		.loc 1 213 5 discriminator 158
+ 804 0404 2023     		movs	r3, #32
+ 805 0406 02E0     		b	.L115
+ 806              	.L93:
+ 807              		.loc 1 213 5 discriminator 156
+ 808 0408 2023     		movs	r3, #32
+ 809 040a 00E0     		b	.L115
+ 810              	.L92:
+ 811              		.loc 1 213 5 discriminator 154
+ 812 040c 2023     		movs	r3, #32
+ 813              	.L115:
+ 814              		.loc 1 213 5 discriminator 200
+ 815 040e 5C4A     		ldr	r2, .L529
+ 816 0410 9360     		str	r3, [r2, #8]
+ARM GAS  /tmp/ccYTbMTL.s 			page 19
+
+
+ 817              	.L39:
+ 214:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_HT_FLAG_INDEX(hdma));
+ 818              		.loc 1 214 5 is_stmt 1
+ 819 0412 FB68     		ldr	r3, [r7, #12]
+ 820 0414 1B68     		ldr	r3, [r3]
+ 821 0416 1A46     		mov	r2, r3
+ 822 0418 664B     		ldr	r3, .L529+52
+ 823 041a 9A42     		cmp	r2, r3
+ 824 041c 60D9     		bls	.L116
+ 825              		.loc 1 214 5 is_stmt 0 discriminator 1
+ 826 041e FB68     		ldr	r3, [r7, #12]
+ 827 0420 1B68     		ldr	r3, [r3]
+ 828 0422 584A     		ldr	r2, .L529+4
+ 829 0424 9342     		cmp	r3, r2
+ 830 0426 57D0     		beq	.L117
+ 831              		.loc 1 214 5 discriminator 3
+ 832 0428 FB68     		ldr	r3, [r7, #12]
+ 833 042a 1B68     		ldr	r3, [r3]
+ 834 042c 564A     		ldr	r2, .L529+8
+ 835 042e 9342     		cmp	r3, r2
+ 836 0430 50D0     		beq	.L118
+ 837              		.loc 1 214 5 discriminator 5
+ 838 0432 FB68     		ldr	r3, [r7, #12]
+ 839 0434 1B68     		ldr	r3, [r3]
+ 840 0436 554A     		ldr	r2, .L529+12
+ 841 0438 9342     		cmp	r3, r2
+ 842 043a 49D0     		beq	.L119
+ 843              		.loc 1 214 5 discriminator 7
+ 844 043c FB68     		ldr	r3, [r7, #12]
+ 845 043e 1B68     		ldr	r3, [r3]
+ 846 0440 534A     		ldr	r2, .L529+16
+ 847 0442 9342     		cmp	r3, r2
+ 848 0444 42D0     		beq	.L120
+ 849              		.loc 1 214 5 discriminator 9
+ 850 0446 FB68     		ldr	r3, [r7, #12]
+ 851 0448 1B68     		ldr	r3, [r3]
+ 852 044a 524A     		ldr	r2, .L529+20
+ 853 044c 9342     		cmp	r3, r2
+ 854 044e 3AD0     		beq	.L121
+ 855              		.loc 1 214 5 discriminator 11
+ 856 0450 FB68     		ldr	r3, [r7, #12]
+ 857 0452 1B68     		ldr	r3, [r3]
+ 858 0454 504A     		ldr	r2, .L529+24
+ 859 0456 9342     		cmp	r3, r2
+ 860 0458 32D0     		beq	.L122
+ 861              		.loc 1 214 5 discriminator 13
+ 862 045a FB68     		ldr	r3, [r7, #12]
+ 863 045c 1B68     		ldr	r3, [r3]
+ 864 045e 4F4A     		ldr	r2, .L529+28
+ 865 0460 9342     		cmp	r3, r2
+ 866 0462 2AD0     		beq	.L123
+ 867              		.loc 1 214 5 discriminator 15
+ 868 0464 FB68     		ldr	r3, [r7, #12]
+ 869 0466 1B68     		ldr	r3, [r3]
+ 870 0468 4D4A     		ldr	r2, .L529+32
+ 871 046a 9342     		cmp	r3, r2
+ 872 046c 22D0     		beq	.L124
+ARM GAS  /tmp/ccYTbMTL.s 			page 20
+
+
+ 873              		.loc 1 214 5 discriminator 17
+ 874 046e FB68     		ldr	r3, [r7, #12]
+ 875 0470 1B68     		ldr	r3, [r3]
+ 876 0472 4C4A     		ldr	r2, .L529+36
+ 877 0474 9342     		cmp	r3, r2
+ 878 0476 1AD0     		beq	.L125
+ 879              		.loc 1 214 5 discriminator 19
+ 880 0478 FB68     		ldr	r3, [r7, #12]
+ 881 047a 1B68     		ldr	r3, [r3]
+ 882 047c 4A4A     		ldr	r2, .L529+40
+ 883 047e 9342     		cmp	r3, r2
+ 884 0480 12D0     		beq	.L126
+ 885              		.loc 1 214 5 discriminator 21
+ 886 0482 FB68     		ldr	r3, [r7, #12]
+ 887 0484 1B68     		ldr	r3, [r3]
+ 888 0486 494A     		ldr	r2, .L529+44
+ 889 0488 9342     		cmp	r3, r2
+ 890 048a 0AD0     		beq	.L127
+ 891              		.loc 1 214 5 discriminator 23
+ 892 048c FB68     		ldr	r3, [r7, #12]
+ 893 048e 1B68     		ldr	r3, [r3]
+ 894 0490 474A     		ldr	r2, .L529+48
+ 895 0492 9342     		cmp	r3, r2
+ 896 0494 02D1     		bne	.L128
+ 897              		.loc 1 214 5 discriminator 25
+ 898 0496 4FF48013 		mov	r3, #1048576
+ 899 049a 1EE0     		b	.L140
+ 900              	.L128:
+ 901              		.loc 1 214 5 discriminator 26
+ 902 049c 4FF08063 		mov	r3, #67108864
+ 903 04a0 1BE0     		b	.L140
+ 904              	.L127:
+ 905              		.loc 1 214 5 discriminator 24
+ 906 04a2 4FF48013 		mov	r3, #1048576
+ 907 04a6 18E0     		b	.L140
+ 908              	.L126:
+ 909              		.loc 1 214 5 discriminator 22
+ 910 04a8 4FF48013 		mov	r3, #1048576
+ 911 04ac 15E0     		b	.L140
+ 912              	.L125:
+ 913              		.loc 1 214 5 discriminator 20
+ 914 04ae 4FF48013 		mov	r3, #1048576
+ 915 04b2 12E0     		b	.L140
+ 916              	.L124:
+ 917              		.loc 1 214 5 discriminator 18
+ 918 04b4 4FF48063 		mov	r3, #1024
+ 919 04b8 0FE0     		b	.L140
+ 920              	.L123:
+ 921              		.loc 1 214 5 discriminator 16
+ 922 04ba 4FF48063 		mov	r3, #1024
+ 923 04be 0CE0     		b	.L140
+ 924              	.L122:
+ 925              		.loc 1 214 5 discriminator 14
+ 926 04c0 4FF48063 		mov	r3, #1024
+ 927 04c4 09E0     		b	.L140
+ 928              	.L121:
+ 929              		.loc 1 214 5 discriminator 12
+ARM GAS  /tmp/ccYTbMTL.s 			page 21
+
+
+ 930 04c6 4FF48063 		mov	r3, #1024
+ 931 04ca 06E0     		b	.L140
+ 932              	.L120:
+ 933              		.loc 1 214 5 discriminator 10
+ 934 04cc 1023     		movs	r3, #16
+ 935 04ce 04E0     		b	.L140
+ 936              	.L119:
+ 937              		.loc 1 214 5 discriminator 8
+ 938 04d0 1023     		movs	r3, #16
+ 939 04d2 02E0     		b	.L140
+ 940              	.L118:
+ 941              		.loc 1 214 5 discriminator 6
+ 942 04d4 1023     		movs	r3, #16
+ 943 04d6 00E0     		b	.L140
+ 944              	.L117:
+ 945              		.loc 1 214 5 discriminator 4
+ 946 04d8 1023     		movs	r3, #16
+ 947              	.L140:
+ 948              		.loc 1 214 5 discriminator 50
+ 949 04da 374A     		ldr	r2, .L529+56
+ 950 04dc D360     		str	r3, [r2, #12]
+ 951 04de 4FE1     		b	.L141
+ 952              	.L116:
+ 953              		.loc 1 214 5 discriminator 2
+ 954 04e0 FB68     		ldr	r3, [r7, #12]
+ 955 04e2 1B68     		ldr	r3, [r3]
+ 956 04e4 1A46     		mov	r2, r3
+ 957 04e6 354B     		ldr	r3, .L529+60
+ 958 04e8 9A42     		cmp	r2, r3
+ 959 04ea 40F28280 		bls	.L142
+ 960              		.loc 1 214 5 discriminator 51
+ 961 04ee FB68     		ldr	r3, [r7, #12]
+ 962 04f0 1B68     		ldr	r3, [r3]
+ 963 04f2 244A     		ldr	r2, .L529+4
+ 964 04f4 9342     		cmp	r3, r2
+ 965 04f6 78D0     		beq	.L143
+ 966              		.loc 1 214 5 discriminator 53
+ 967 04f8 FB68     		ldr	r3, [r7, #12]
+ 968 04fa 1B68     		ldr	r3, [r3]
+ 969 04fc 224A     		ldr	r2, .L529+8
+ 970 04fe 9342     		cmp	r3, r2
+ 971 0500 71D0     		beq	.L144
+ 972              		.loc 1 214 5 discriminator 55
+ 973 0502 FB68     		ldr	r3, [r7, #12]
+ 974 0504 1B68     		ldr	r3, [r3]
+ 975 0506 214A     		ldr	r2, .L529+12
+ 976 0508 9342     		cmp	r3, r2
+ 977 050a 6AD0     		beq	.L145
+ 978              		.loc 1 214 5 discriminator 57
+ 979 050c FB68     		ldr	r3, [r7, #12]
+ 980 050e 1B68     		ldr	r3, [r3]
+ 981 0510 1F4A     		ldr	r2, .L529+16
+ 982 0512 9342     		cmp	r3, r2
+ 983 0514 63D0     		beq	.L146
+ 984              		.loc 1 214 5 discriminator 59
+ 985 0516 FB68     		ldr	r3, [r7, #12]
+ 986 0518 1B68     		ldr	r3, [r3]
+ARM GAS  /tmp/ccYTbMTL.s 			page 22
+
+
+ 987 051a 1E4A     		ldr	r2, .L529+20
+ 988 051c 9342     		cmp	r3, r2
+ 989 051e 5BD0     		beq	.L147
+ 990              		.loc 1 214 5 discriminator 61
+ 991 0520 FB68     		ldr	r3, [r7, #12]
+ 992 0522 1B68     		ldr	r3, [r3]
+ 993 0524 1C4A     		ldr	r2, .L529+24
+ 994 0526 9342     		cmp	r3, r2
+ 995 0528 53D0     		beq	.L148
+ 996              		.loc 1 214 5 discriminator 63
+ 997 052a FB68     		ldr	r3, [r7, #12]
+ 998 052c 1B68     		ldr	r3, [r3]
+ 999 052e 1B4A     		ldr	r2, .L529+28
+ 1000 0530 9342     		cmp	r3, r2
+ 1001 0532 4BD0     		beq	.L149
+ 1002              		.loc 1 214 5 discriminator 65
+ 1003 0534 FB68     		ldr	r3, [r7, #12]
+ 1004 0536 1B68     		ldr	r3, [r3]
+ 1005 0538 194A     		ldr	r2, .L529+32
+ 1006 053a 9342     		cmp	r3, r2
+ 1007 053c 43D0     		beq	.L150
+ 1008              		.loc 1 214 5 discriminator 67
+ 1009 053e FB68     		ldr	r3, [r7, #12]
+ 1010 0540 1B68     		ldr	r3, [r3]
+ 1011 0542 184A     		ldr	r2, .L529+36
+ 1012 0544 9342     		cmp	r3, r2
+ 1013 0546 3BD0     		beq	.L151
+ 1014              		.loc 1 214 5 discriminator 69
+ 1015 0548 FB68     		ldr	r3, [r7, #12]
+ 1016 054a 1B68     		ldr	r3, [r3]
+ 1017 054c 164A     		ldr	r2, .L529+40
+ 1018 054e 9342     		cmp	r3, r2
+ 1019 0550 12D0     		beq	.L152
+ 1020              		.loc 1 214 5 discriminator 71
+ 1021 0552 FB68     		ldr	r3, [r7, #12]
+ 1022 0554 1B68     		ldr	r3, [r3]
+ 1023 0556 154A     		ldr	r2, .L529+44
+ 1024 0558 9342     		cmp	r3, r2
+ 1025 055a 0AD0     		beq	.L153
+ 1026              		.loc 1 214 5 discriminator 73
+ 1027 055c FB68     		ldr	r3, [r7, #12]
+ 1028 055e 1B68     		ldr	r3, [r3]
+ 1029 0560 134A     		ldr	r2, .L529+48
+ 1030 0562 9342     		cmp	r3, r2
+ 1031 0564 02D1     		bne	.L154
+ 1032              		.loc 1 214 5 discriminator 75
+ 1033 0566 4FF48013 		mov	r3, #1048576
+ 1034 056a 3FE0     		b	.L166
+ 1035              	.L154:
+ 1036              		.loc 1 214 5 discriminator 76
+ 1037 056c 4FF08063 		mov	r3, #67108864
+ 1038 0570 3CE0     		b	.L166
+ 1039              	.L153:
+ 1040              		.loc 1 214 5 discriminator 74
+ 1041 0572 4FF48013 		mov	r3, #1048576
+ 1042 0576 39E0     		b	.L166
+ 1043              	.L152:
+ARM GAS  /tmp/ccYTbMTL.s 			page 23
+
+
+ 1044              		.loc 1 214 5 discriminator 72
+ 1045 0578 4FF48013 		mov	r3, #1048576
+ 1046 057c 36E0     		b	.L166
+ 1047              	.L530:
+ 1048 057e 00BF     		.align	2
+ 1049              	.L529:
+ 1050 0580 00600240 		.word	1073897472
+ 1051 0584 10600240 		.word	1073897488
+ 1052 0588 10640240 		.word	1073898512
+ 1053 058c 70600240 		.word	1073897584
+ 1054 0590 70640240 		.word	1073898608
+ 1055 0594 28600240 		.word	1073897512
+ 1056 0598 28640240 		.word	1073898536
+ 1057 059c 88600240 		.word	1073897608
+ 1058 05a0 88640240 		.word	1073898632
+ 1059 05a4 40600240 		.word	1073897536
+ 1060 05a8 40640240 		.word	1073898560
+ 1061 05ac A0600240 		.word	1073897632
+ 1062 05b0 A0640240 		.word	1073898656
+ 1063 05b4 58640240 		.word	1073898584
+ 1064 05b8 00640240 		.word	1073898496
+ 1065 05bc B8600240 		.word	1073897656
+ 1066              	.L151:
+ 1067              		.loc 1 214 5 discriminator 70
+ 1068 05c0 4FF48013 		mov	r3, #1048576
+ 1069 05c4 12E0     		b	.L166
+ 1070              	.L150:
+ 1071              		.loc 1 214 5 discriminator 68
+ 1072 05c6 4FF48063 		mov	r3, #1024
+ 1073 05ca 0FE0     		b	.L166
+ 1074              	.L149:
+ 1075              		.loc 1 214 5 discriminator 66
+ 1076 05cc 4FF48063 		mov	r3, #1024
+ 1077 05d0 0CE0     		b	.L166
+ 1078              	.L148:
+ 1079              		.loc 1 214 5 discriminator 64
+ 1080 05d2 4FF48063 		mov	r3, #1024
+ 1081 05d6 09E0     		b	.L166
+ 1082              	.L147:
+ 1083              		.loc 1 214 5 discriminator 62
+ 1084 05d8 4FF48063 		mov	r3, #1024
+ 1085 05dc 06E0     		b	.L166
+ 1086              	.L146:
+ 1087              		.loc 1 214 5 discriminator 60
+ 1088 05de 1023     		movs	r3, #16
+ 1089 05e0 04E0     		b	.L166
+ 1090              	.L145:
+ 1091              		.loc 1 214 5 discriminator 58
+ 1092 05e2 1023     		movs	r3, #16
+ 1093 05e4 02E0     		b	.L166
+ 1094              	.L144:
+ 1095              		.loc 1 214 5 discriminator 56
+ 1096 05e6 1023     		movs	r3, #16
+ 1097 05e8 00E0     		b	.L166
+ 1098              	.L143:
+ 1099              		.loc 1 214 5 discriminator 54
+ 1100 05ea 1023     		movs	r3, #16
+ARM GAS  /tmp/ccYTbMTL.s 			page 24
+
+
+ 1101              	.L166:
+ 1102              		.loc 1 214 5 discriminator 100
+ 1103 05ec 8C4A     		ldr	r2, .L531
+ 1104 05ee 9360     		str	r3, [r2, #8]
+ 1105 05f0 C6E0     		b	.L141
+ 1106              	.L142:
+ 1107              		.loc 1 214 5 discriminator 52
+ 1108 05f2 FB68     		ldr	r3, [r7, #12]
+ 1109 05f4 1B68     		ldr	r3, [r3]
+ 1110 05f6 1A46     		mov	r2, r3
+ 1111 05f8 8A4B     		ldr	r3, .L531+4
+ 1112 05fa 9A42     		cmp	r2, r3
+ 1113 05fc 60D9     		bls	.L168
+ 1114              		.loc 1 214 5 discriminator 102
+ 1115 05fe FB68     		ldr	r3, [r7, #12]
+ 1116 0600 1B68     		ldr	r3, [r3]
+ 1117 0602 894A     		ldr	r2, .L531+8
+ 1118 0604 9342     		cmp	r3, r2
+ 1119 0606 57D0     		beq	.L169
+ 1120              		.loc 1 214 5 discriminator 104
+ 1121 0608 FB68     		ldr	r3, [r7, #12]
+ 1122 060a 1B68     		ldr	r3, [r3]
+ 1123 060c 874A     		ldr	r2, .L531+12
+ 1124 060e 9342     		cmp	r3, r2
+ 1125 0610 50D0     		beq	.L170
+ 1126              		.loc 1 214 5 discriminator 106
+ 1127 0612 FB68     		ldr	r3, [r7, #12]
+ 1128 0614 1B68     		ldr	r3, [r3]
+ 1129 0616 864A     		ldr	r2, .L531+16
+ 1130 0618 9342     		cmp	r3, r2
+ 1131 061a 49D0     		beq	.L171
+ 1132              		.loc 1 214 5 discriminator 108
+ 1133 061c FB68     		ldr	r3, [r7, #12]
+ 1134 061e 1B68     		ldr	r3, [r3]
+ 1135 0620 844A     		ldr	r2, .L531+20
+ 1136 0622 9342     		cmp	r3, r2
+ 1137 0624 42D0     		beq	.L172
+ 1138              		.loc 1 214 5 discriminator 110
+ 1139 0626 FB68     		ldr	r3, [r7, #12]
+ 1140 0628 1B68     		ldr	r3, [r3]
+ 1141 062a 834A     		ldr	r2, .L531+24
+ 1142 062c 9342     		cmp	r3, r2
+ 1143 062e 3AD0     		beq	.L173
+ 1144              		.loc 1 214 5 discriminator 112
+ 1145 0630 FB68     		ldr	r3, [r7, #12]
+ 1146 0632 1B68     		ldr	r3, [r3]
+ 1147 0634 814A     		ldr	r2, .L531+28
+ 1148 0636 9342     		cmp	r3, r2
+ 1149 0638 32D0     		beq	.L174
+ 1150              		.loc 1 214 5 discriminator 114
+ 1151 063a FB68     		ldr	r3, [r7, #12]
+ 1152 063c 1B68     		ldr	r3, [r3]
+ 1153 063e 804A     		ldr	r2, .L531+32
+ 1154 0640 9342     		cmp	r3, r2
+ 1155 0642 2AD0     		beq	.L175
+ 1156              		.loc 1 214 5 discriminator 116
+ 1157 0644 FB68     		ldr	r3, [r7, #12]
+ARM GAS  /tmp/ccYTbMTL.s 			page 25
+
+
+ 1158 0646 1B68     		ldr	r3, [r3]
+ 1159 0648 7E4A     		ldr	r2, .L531+36
+ 1160 064a 9342     		cmp	r3, r2
+ 1161 064c 22D0     		beq	.L176
+ 1162              		.loc 1 214 5 discriminator 118
+ 1163 064e FB68     		ldr	r3, [r7, #12]
+ 1164 0650 1B68     		ldr	r3, [r3]
+ 1165 0652 7D4A     		ldr	r2, .L531+40
+ 1166 0654 9342     		cmp	r3, r2
+ 1167 0656 1AD0     		beq	.L177
+ 1168              		.loc 1 214 5 discriminator 120
+ 1169 0658 FB68     		ldr	r3, [r7, #12]
+ 1170 065a 1B68     		ldr	r3, [r3]
+ 1171 065c 7B4A     		ldr	r2, .L531+44
+ 1172 065e 9342     		cmp	r3, r2
+ 1173 0660 12D0     		beq	.L178
+ 1174              		.loc 1 214 5 discriminator 122
+ 1175 0662 FB68     		ldr	r3, [r7, #12]
+ 1176 0664 1B68     		ldr	r3, [r3]
+ 1177 0666 7A4A     		ldr	r2, .L531+48
+ 1178 0668 9342     		cmp	r3, r2
+ 1179 066a 0AD0     		beq	.L179
+ 1180              		.loc 1 214 5 discriminator 124
+ 1181 066c FB68     		ldr	r3, [r7, #12]
+ 1182 066e 1B68     		ldr	r3, [r3]
+ 1183 0670 784A     		ldr	r2, .L531+52
+ 1184 0672 9342     		cmp	r3, r2
+ 1185 0674 02D1     		bne	.L180
+ 1186              		.loc 1 214 5 discriminator 126
+ 1187 0676 4FF48013 		mov	r3, #1048576
+ 1188 067a 1EE0     		b	.L192
+ 1189              	.L180:
+ 1190              		.loc 1 214 5 discriminator 127
+ 1191 067c 4FF08063 		mov	r3, #67108864
+ 1192 0680 1BE0     		b	.L192
+ 1193              	.L179:
+ 1194              		.loc 1 214 5 discriminator 125
+ 1195 0682 4FF48013 		mov	r3, #1048576
+ 1196 0686 18E0     		b	.L192
+ 1197              	.L178:
+ 1198              		.loc 1 214 5 discriminator 123
+ 1199 0688 4FF48013 		mov	r3, #1048576
+ 1200 068c 15E0     		b	.L192
+ 1201              	.L177:
+ 1202              		.loc 1 214 5 discriminator 121
+ 1203 068e 4FF48013 		mov	r3, #1048576
+ 1204 0692 12E0     		b	.L192
+ 1205              	.L176:
+ 1206              		.loc 1 214 5 discriminator 119
+ 1207 0694 4FF48063 		mov	r3, #1024
+ 1208 0698 0FE0     		b	.L192
+ 1209              	.L175:
+ 1210              		.loc 1 214 5 discriminator 117
+ 1211 069a 4FF48063 		mov	r3, #1024
+ 1212 069e 0CE0     		b	.L192
+ 1213              	.L174:
+ 1214              		.loc 1 214 5 discriminator 115
+ARM GAS  /tmp/ccYTbMTL.s 			page 26
+
+
+ 1215 06a0 4FF48063 		mov	r3, #1024
+ 1216 06a4 09E0     		b	.L192
+ 1217              	.L173:
+ 1218              		.loc 1 214 5 discriminator 113
+ 1219 06a6 4FF48063 		mov	r3, #1024
+ 1220 06aa 06E0     		b	.L192
+ 1221              	.L172:
+ 1222              		.loc 1 214 5 discriminator 111
+ 1223 06ac 1023     		movs	r3, #16
+ 1224 06ae 04E0     		b	.L192
+ 1225              	.L171:
+ 1226              		.loc 1 214 5 discriminator 109
+ 1227 06b0 1023     		movs	r3, #16
+ 1228 06b2 02E0     		b	.L192
+ 1229              	.L170:
+ 1230              		.loc 1 214 5 discriminator 107
+ 1231 06b4 1023     		movs	r3, #16
+ 1232 06b6 00E0     		b	.L192
+ 1233              	.L169:
+ 1234              		.loc 1 214 5 discriminator 105
+ 1235 06b8 1023     		movs	r3, #16
+ 1236              	.L192:
+ 1237              		.loc 1 214 5 discriminator 151
+ 1238 06ba 674A     		ldr	r2, .L531+56
+ 1239 06bc D360     		str	r3, [r2, #12]
+ 1240 06be 5FE0     		b	.L141
+ 1241              	.L168:
+ 1242              		.loc 1 214 5 discriminator 103
+ 1243 06c0 FB68     		ldr	r3, [r7, #12]
+ 1244 06c2 1B68     		ldr	r3, [r3]
+ 1245 06c4 584A     		ldr	r2, .L531+8
+ 1246 06c6 9342     		cmp	r3, r2
+ 1247 06c8 57D0     		beq	.L194
+ 1248              		.loc 1 214 5 discriminator 153
+ 1249 06ca FB68     		ldr	r3, [r7, #12]
+ 1250 06cc 1B68     		ldr	r3, [r3]
+ 1251 06ce 574A     		ldr	r2, .L531+12
+ 1252 06d0 9342     		cmp	r3, r2
+ 1253 06d2 50D0     		beq	.L195
+ 1254              		.loc 1 214 5 discriminator 155
+ 1255 06d4 FB68     		ldr	r3, [r7, #12]
+ 1256 06d6 1B68     		ldr	r3, [r3]
+ 1257 06d8 554A     		ldr	r2, .L531+16
+ 1258 06da 9342     		cmp	r3, r2
+ 1259 06dc 49D0     		beq	.L196
+ 1260              		.loc 1 214 5 discriminator 157
+ 1261 06de FB68     		ldr	r3, [r7, #12]
+ 1262 06e0 1B68     		ldr	r3, [r3]
+ 1263 06e2 544A     		ldr	r2, .L531+20
+ 1264 06e4 9342     		cmp	r3, r2
+ 1265 06e6 42D0     		beq	.L197
+ 1266              		.loc 1 214 5 discriminator 159
+ 1267 06e8 FB68     		ldr	r3, [r7, #12]
+ 1268 06ea 1B68     		ldr	r3, [r3]
+ 1269 06ec 524A     		ldr	r2, .L531+24
+ 1270 06ee 9342     		cmp	r3, r2
+ 1271 06f0 3AD0     		beq	.L198
+ARM GAS  /tmp/ccYTbMTL.s 			page 27
+
+
+ 1272              		.loc 1 214 5 discriminator 161
+ 1273 06f2 FB68     		ldr	r3, [r7, #12]
+ 1274 06f4 1B68     		ldr	r3, [r3]
+ 1275 06f6 514A     		ldr	r2, .L531+28
+ 1276 06f8 9342     		cmp	r3, r2
+ 1277 06fa 32D0     		beq	.L199
+ 1278              		.loc 1 214 5 discriminator 163
+ 1279 06fc FB68     		ldr	r3, [r7, #12]
+ 1280 06fe 1B68     		ldr	r3, [r3]
+ 1281 0700 4F4A     		ldr	r2, .L531+32
+ 1282 0702 9342     		cmp	r3, r2
+ 1283 0704 2AD0     		beq	.L200
+ 1284              		.loc 1 214 5 discriminator 165
+ 1285 0706 FB68     		ldr	r3, [r7, #12]
+ 1286 0708 1B68     		ldr	r3, [r3]
+ 1287 070a 4E4A     		ldr	r2, .L531+36
+ 1288 070c 9342     		cmp	r3, r2
+ 1289 070e 22D0     		beq	.L201
+ 1290              		.loc 1 214 5 discriminator 167
+ 1291 0710 FB68     		ldr	r3, [r7, #12]
+ 1292 0712 1B68     		ldr	r3, [r3]
+ 1293 0714 4C4A     		ldr	r2, .L531+40
+ 1294 0716 9342     		cmp	r3, r2
+ 1295 0718 1AD0     		beq	.L202
+ 1296              		.loc 1 214 5 discriminator 169
+ 1297 071a FB68     		ldr	r3, [r7, #12]
+ 1298 071c 1B68     		ldr	r3, [r3]
+ 1299 071e 4B4A     		ldr	r2, .L531+44
+ 1300 0720 9342     		cmp	r3, r2
+ 1301 0722 12D0     		beq	.L203
+ 1302              		.loc 1 214 5 discriminator 171
+ 1303 0724 FB68     		ldr	r3, [r7, #12]
+ 1304 0726 1B68     		ldr	r3, [r3]
+ 1305 0728 494A     		ldr	r2, .L531+48
+ 1306 072a 9342     		cmp	r3, r2
+ 1307 072c 0AD0     		beq	.L204
+ 1308              		.loc 1 214 5 discriminator 173
+ 1309 072e FB68     		ldr	r3, [r7, #12]
+ 1310 0730 1B68     		ldr	r3, [r3]
+ 1311 0732 484A     		ldr	r2, .L531+52
+ 1312 0734 9342     		cmp	r3, r2
+ 1313 0736 02D1     		bne	.L205
+ 1314              		.loc 1 214 5 discriminator 175
+ 1315 0738 4FF48013 		mov	r3, #1048576
+ 1316 073c 1EE0     		b	.L217
+ 1317              	.L205:
+ 1318              		.loc 1 214 5 discriminator 176
+ 1319 073e 4FF08063 		mov	r3, #67108864
+ 1320 0742 1BE0     		b	.L217
+ 1321              	.L204:
+ 1322              		.loc 1 214 5 discriminator 174
+ 1323 0744 4FF48013 		mov	r3, #1048576
+ 1324 0748 18E0     		b	.L217
+ 1325              	.L203:
+ 1326              		.loc 1 214 5 discriminator 172
+ 1327 074a 4FF48013 		mov	r3, #1048576
+ 1328 074e 15E0     		b	.L217
+ARM GAS  /tmp/ccYTbMTL.s 			page 28
+
+
+ 1329              	.L202:
+ 1330              		.loc 1 214 5 discriminator 170
+ 1331 0750 4FF48013 		mov	r3, #1048576
+ 1332 0754 12E0     		b	.L217
+ 1333              	.L201:
+ 1334              		.loc 1 214 5 discriminator 168
+ 1335 0756 4FF48063 		mov	r3, #1024
+ 1336 075a 0FE0     		b	.L217
+ 1337              	.L200:
+ 1338              		.loc 1 214 5 discriminator 166
+ 1339 075c 4FF48063 		mov	r3, #1024
+ 1340 0760 0CE0     		b	.L217
+ 1341              	.L199:
+ 1342              		.loc 1 214 5 discriminator 164
+ 1343 0762 4FF48063 		mov	r3, #1024
+ 1344 0766 09E0     		b	.L217
+ 1345              	.L198:
+ 1346              		.loc 1 214 5 discriminator 162
+ 1347 0768 4FF48063 		mov	r3, #1024
+ 1348 076c 06E0     		b	.L217
+ 1349              	.L197:
+ 1350              		.loc 1 214 5 discriminator 160
+ 1351 076e 1023     		movs	r3, #16
+ 1352 0770 04E0     		b	.L217
+ 1353              	.L196:
+ 1354              		.loc 1 214 5 discriminator 158
+ 1355 0772 1023     		movs	r3, #16
+ 1356 0774 02E0     		b	.L217
+ 1357              	.L195:
+ 1358              		.loc 1 214 5 discriminator 156
+ 1359 0776 1023     		movs	r3, #16
+ 1360 0778 00E0     		b	.L217
+ 1361              	.L194:
+ 1362              		.loc 1 214 5 discriminator 154
+ 1363 077a 1023     		movs	r3, #16
+ 1364              	.L217:
+ 1365              		.loc 1 214 5 discriminator 200
+ 1366 077c 364A     		ldr	r2, .L531+56
+ 1367 077e 9360     		str	r3, [r2, #8]
+ 1368              	.L141:
+ 215:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_TE_FLAG_INDEX(hdma));
+ 1369              		.loc 1 215 5 is_stmt 1
+ 1370 0780 FB68     		ldr	r3, [r7, #12]
+ 1371 0782 1B68     		ldr	r3, [r3]
+ 1372 0784 1A46     		mov	r2, r3
+ 1373 0786 354B     		ldr	r3, .L531+60
+ 1374 0788 9A42     		cmp	r2, r3
+ 1375 078a 40F28280 		bls	.L218
+ 1376              		.loc 1 215 5 is_stmt 0 discriminator 1
+ 1377 078e FB68     		ldr	r3, [r7, #12]
+ 1378 0790 1B68     		ldr	r3, [r3]
+ 1379 0792 254A     		ldr	r2, .L531+8
+ 1380 0794 9342     		cmp	r3, r2
+ 1381 0796 78D0     		beq	.L219
+ 1382              		.loc 1 215 5 discriminator 3
+ 1383 0798 FB68     		ldr	r3, [r7, #12]
+ 1384 079a 1B68     		ldr	r3, [r3]
+ARM GAS  /tmp/ccYTbMTL.s 			page 29
+
+
+ 1385 079c 234A     		ldr	r2, .L531+12
+ 1386 079e 9342     		cmp	r3, r2
+ 1387 07a0 71D0     		beq	.L220
+ 1388              		.loc 1 215 5 discriminator 5
+ 1389 07a2 FB68     		ldr	r3, [r7, #12]
+ 1390 07a4 1B68     		ldr	r3, [r3]
+ 1391 07a6 224A     		ldr	r2, .L531+16
+ 1392 07a8 9342     		cmp	r3, r2
+ 1393 07aa 6AD0     		beq	.L221
+ 1394              		.loc 1 215 5 discriminator 7
+ 1395 07ac FB68     		ldr	r3, [r7, #12]
+ 1396 07ae 1B68     		ldr	r3, [r3]
+ 1397 07b0 204A     		ldr	r2, .L531+20
+ 1398 07b2 9342     		cmp	r3, r2
+ 1399 07b4 63D0     		beq	.L222
+ 1400              		.loc 1 215 5 discriminator 9
+ 1401 07b6 FB68     		ldr	r3, [r7, #12]
+ 1402 07b8 1B68     		ldr	r3, [r3]
+ 1403 07ba 1F4A     		ldr	r2, .L531+24
+ 1404 07bc 9342     		cmp	r3, r2
+ 1405 07be 5BD0     		beq	.L223
+ 1406              		.loc 1 215 5 discriminator 11
+ 1407 07c0 FB68     		ldr	r3, [r7, #12]
+ 1408 07c2 1B68     		ldr	r3, [r3]
+ 1409 07c4 1D4A     		ldr	r2, .L531+28
+ 1410 07c6 9342     		cmp	r3, r2
+ 1411 07c8 53D0     		beq	.L224
+ 1412              		.loc 1 215 5 discriminator 13
+ 1413 07ca FB68     		ldr	r3, [r7, #12]
+ 1414 07cc 1B68     		ldr	r3, [r3]
+ 1415 07ce 1C4A     		ldr	r2, .L531+32
+ 1416 07d0 9342     		cmp	r3, r2
+ 1417 07d2 4BD0     		beq	.L225
+ 1418              		.loc 1 215 5 discriminator 15
+ 1419 07d4 FB68     		ldr	r3, [r7, #12]
+ 1420 07d6 1B68     		ldr	r3, [r3]
+ 1421 07d8 1A4A     		ldr	r2, .L531+36
+ 1422 07da 9342     		cmp	r3, r2
+ 1423 07dc 43D0     		beq	.L226
+ 1424              		.loc 1 215 5 discriminator 17
+ 1425 07de FB68     		ldr	r3, [r7, #12]
+ 1426 07e0 1B68     		ldr	r3, [r3]
+ 1427 07e2 194A     		ldr	r2, .L531+40
+ 1428 07e4 9342     		cmp	r3, r2
+ 1429 07e6 3BD0     		beq	.L227
+ 1430              		.loc 1 215 5 discriminator 19
+ 1431 07e8 FB68     		ldr	r3, [r7, #12]
+ 1432 07ea 1B68     		ldr	r3, [r3]
+ 1433 07ec 174A     		ldr	r2, .L531+44
+ 1434 07ee 9342     		cmp	r3, r2
+ 1435 07f0 12D0     		beq	.L228
+ 1436              		.loc 1 215 5 discriminator 21
+ 1437 07f2 FB68     		ldr	r3, [r7, #12]
+ 1438 07f4 1B68     		ldr	r3, [r3]
+ 1439 07f6 164A     		ldr	r2, .L531+48
+ 1440 07f8 9342     		cmp	r3, r2
+ 1441 07fa 0AD0     		beq	.L229
+ARM GAS  /tmp/ccYTbMTL.s 			page 30
+
+
+ 1442              		.loc 1 215 5 discriminator 23
+ 1443 07fc FB68     		ldr	r3, [r7, #12]
+ 1444 07fe 1B68     		ldr	r3, [r3]
+ 1445 0800 144A     		ldr	r2, .L531+52
+ 1446 0802 9342     		cmp	r3, r2
+ 1447 0804 02D1     		bne	.L230
+ 1448              		.loc 1 215 5 discriminator 25
+ 1449 0806 4FF40023 		mov	r3, #524288
+ 1450 080a 3FE0     		b	.L242
+ 1451              	.L230:
+ 1452              		.loc 1 215 5 discriminator 26
+ 1453 080c 4FF00073 		mov	r3, #33554432
+ 1454 0810 3CE0     		b	.L242
+ 1455              	.L229:
+ 1456              		.loc 1 215 5 discriminator 24
+ 1457 0812 4FF40023 		mov	r3, #524288
+ 1458 0816 39E0     		b	.L242
+ 1459              	.L228:
+ 1460              		.loc 1 215 5 discriminator 22
+ 1461 0818 4FF40023 		mov	r3, #524288
+ 1462 081c 36E0     		b	.L242
+ 1463              	.L532:
+ 1464 081e 00BF     		.align	2
+ 1465              	.L531:
+ 1466 0820 00640240 		.word	1073898496
+ 1467 0824 58600240 		.word	1073897560
+ 1468 0828 10600240 		.word	1073897488
+ 1469 082c 10640240 		.word	1073898512
+ 1470 0830 70600240 		.word	1073897584
+ 1471 0834 70640240 		.word	1073898608
+ 1472 0838 28600240 		.word	1073897512
+ 1473 083c 28640240 		.word	1073898536
+ 1474 0840 88600240 		.word	1073897608
+ 1475 0844 88640240 		.word	1073898632
+ 1476 0848 40600240 		.word	1073897536
+ 1477 084c 40640240 		.word	1073898560
+ 1478 0850 A0600240 		.word	1073897632
+ 1479 0854 A0640240 		.word	1073898656
+ 1480 0858 00600240 		.word	1073897472
+ 1481 085c 58640240 		.word	1073898584
+ 1482              	.L227:
+ 1483              		.loc 1 215 5 discriminator 20
+ 1484 0860 4FF40023 		mov	r3, #524288
+ 1485 0864 12E0     		b	.L242
+ 1486              	.L226:
+ 1487              		.loc 1 215 5 discriminator 18
+ 1488 0866 4FF40073 		mov	r3, #512
+ 1489 086a 0FE0     		b	.L242
+ 1490              	.L225:
+ 1491              		.loc 1 215 5 discriminator 16
+ 1492 086c 4FF40073 		mov	r3, #512
+ 1493 0870 0CE0     		b	.L242
+ 1494              	.L224:
+ 1495              		.loc 1 215 5 discriminator 14
+ 1496 0872 4FF40073 		mov	r3, #512
+ 1497 0876 09E0     		b	.L242
+ 1498              	.L223:
+ARM GAS  /tmp/ccYTbMTL.s 			page 31
+
+
+ 1499              		.loc 1 215 5 discriminator 12
+ 1500 0878 4FF40073 		mov	r3, #512
+ 1501 087c 06E0     		b	.L242
+ 1502              	.L222:
+ 1503              		.loc 1 215 5 discriminator 10
+ 1504 087e 0823     		movs	r3, #8
+ 1505 0880 04E0     		b	.L242
+ 1506              	.L221:
+ 1507              		.loc 1 215 5 discriminator 8
+ 1508 0882 0823     		movs	r3, #8
+ 1509 0884 02E0     		b	.L242
+ 1510              	.L220:
+ 1511              		.loc 1 215 5 discriminator 6
+ 1512 0886 0823     		movs	r3, #8
+ 1513 0888 00E0     		b	.L242
+ 1514              	.L219:
+ 1515              		.loc 1 215 5 discriminator 4
+ 1516 088a 0823     		movs	r3, #8
+ 1517              	.L242:
+ 1518              		.loc 1 215 5 discriminator 50
+ 1519 088c 8C4A     		ldr	r2, .L533
+ 1520 088e D360     		str	r3, [r2, #12]
+ 1521 0890 4EE1     		b	.L243
+ 1522              	.L218:
+ 1523              		.loc 1 215 5 discriminator 2
+ 1524 0892 FB68     		ldr	r3, [r7, #12]
+ 1525 0894 1B68     		ldr	r3, [r3]
+ 1526 0896 1A46     		mov	r2, r3
+ 1527 0898 8A4B     		ldr	r3, .L533+4
+ 1528 089a 9A42     		cmp	r2, r3
+ 1529 089c 60D9     		bls	.L244
+ 1530              		.loc 1 215 5 discriminator 51
+ 1531 089e FB68     		ldr	r3, [r7, #12]
+ 1532 08a0 1B68     		ldr	r3, [r3]
+ 1533 08a2 894A     		ldr	r2, .L533+8
+ 1534 08a4 9342     		cmp	r3, r2
+ 1535 08a6 57D0     		beq	.L245
+ 1536              		.loc 1 215 5 discriminator 53
+ 1537 08a8 FB68     		ldr	r3, [r7, #12]
+ 1538 08aa 1B68     		ldr	r3, [r3]
+ 1539 08ac 874A     		ldr	r2, .L533+12
+ 1540 08ae 9342     		cmp	r3, r2
+ 1541 08b0 50D0     		beq	.L246
+ 1542              		.loc 1 215 5 discriminator 55
+ 1543 08b2 FB68     		ldr	r3, [r7, #12]
+ 1544 08b4 1B68     		ldr	r3, [r3]
+ 1545 08b6 864A     		ldr	r2, .L533+16
+ 1546 08b8 9342     		cmp	r3, r2
+ 1547 08ba 49D0     		beq	.L247
+ 1548              		.loc 1 215 5 discriminator 57
+ 1549 08bc FB68     		ldr	r3, [r7, #12]
+ 1550 08be 1B68     		ldr	r3, [r3]
+ 1551 08c0 844A     		ldr	r2, .L533+20
+ 1552 08c2 9342     		cmp	r3, r2
+ 1553 08c4 42D0     		beq	.L248
+ 1554              		.loc 1 215 5 discriminator 59
+ 1555 08c6 FB68     		ldr	r3, [r7, #12]
+ARM GAS  /tmp/ccYTbMTL.s 			page 32
+
+
+ 1556 08c8 1B68     		ldr	r3, [r3]
+ 1557 08ca 834A     		ldr	r2, .L533+24
+ 1558 08cc 9342     		cmp	r3, r2
+ 1559 08ce 3AD0     		beq	.L249
+ 1560              		.loc 1 215 5 discriminator 61
+ 1561 08d0 FB68     		ldr	r3, [r7, #12]
+ 1562 08d2 1B68     		ldr	r3, [r3]
+ 1563 08d4 814A     		ldr	r2, .L533+28
+ 1564 08d6 9342     		cmp	r3, r2
+ 1565 08d8 32D0     		beq	.L250
+ 1566              		.loc 1 215 5 discriminator 63
+ 1567 08da FB68     		ldr	r3, [r7, #12]
+ 1568 08dc 1B68     		ldr	r3, [r3]
+ 1569 08de 804A     		ldr	r2, .L533+32
+ 1570 08e0 9342     		cmp	r3, r2
+ 1571 08e2 2AD0     		beq	.L251
+ 1572              		.loc 1 215 5 discriminator 65
+ 1573 08e4 FB68     		ldr	r3, [r7, #12]
+ 1574 08e6 1B68     		ldr	r3, [r3]
+ 1575 08e8 7E4A     		ldr	r2, .L533+36
+ 1576 08ea 9342     		cmp	r3, r2
+ 1577 08ec 22D0     		beq	.L252
+ 1578              		.loc 1 215 5 discriminator 67
+ 1579 08ee FB68     		ldr	r3, [r7, #12]
+ 1580 08f0 1B68     		ldr	r3, [r3]
+ 1581 08f2 7D4A     		ldr	r2, .L533+40
+ 1582 08f4 9342     		cmp	r3, r2
+ 1583 08f6 1AD0     		beq	.L253
+ 1584              		.loc 1 215 5 discriminator 69
+ 1585 08f8 FB68     		ldr	r3, [r7, #12]
+ 1586 08fa 1B68     		ldr	r3, [r3]
+ 1587 08fc 7B4A     		ldr	r2, .L533+44
+ 1588 08fe 9342     		cmp	r3, r2
+ 1589 0900 12D0     		beq	.L254
+ 1590              		.loc 1 215 5 discriminator 71
+ 1591 0902 FB68     		ldr	r3, [r7, #12]
+ 1592 0904 1B68     		ldr	r3, [r3]
+ 1593 0906 7A4A     		ldr	r2, .L533+48
+ 1594 0908 9342     		cmp	r3, r2
+ 1595 090a 0AD0     		beq	.L255
+ 1596              		.loc 1 215 5 discriminator 73
+ 1597 090c FB68     		ldr	r3, [r7, #12]
+ 1598 090e 1B68     		ldr	r3, [r3]
+ 1599 0910 784A     		ldr	r2, .L533+52
+ 1600 0912 9342     		cmp	r3, r2
+ 1601 0914 02D1     		bne	.L256
+ 1602              		.loc 1 215 5 discriminator 75
+ 1603 0916 4FF40023 		mov	r3, #524288
+ 1604 091a 1EE0     		b	.L268
+ 1605              	.L256:
+ 1606              		.loc 1 215 5 discriminator 76
+ 1607 091c 4FF00073 		mov	r3, #33554432
+ 1608 0920 1BE0     		b	.L268
+ 1609              	.L255:
+ 1610              		.loc 1 215 5 discriminator 74
+ 1611 0922 4FF40023 		mov	r3, #524288
+ 1612 0926 18E0     		b	.L268
+ARM GAS  /tmp/ccYTbMTL.s 			page 33
+
+
+ 1613              	.L254:
+ 1614              		.loc 1 215 5 discriminator 72
+ 1615 0928 4FF40023 		mov	r3, #524288
+ 1616 092c 15E0     		b	.L268
+ 1617              	.L253:
+ 1618              		.loc 1 215 5 discriminator 70
+ 1619 092e 4FF40023 		mov	r3, #524288
+ 1620 0932 12E0     		b	.L268
+ 1621              	.L252:
+ 1622              		.loc 1 215 5 discriminator 68
+ 1623 0934 4FF40073 		mov	r3, #512
+ 1624 0938 0FE0     		b	.L268
+ 1625              	.L251:
+ 1626              		.loc 1 215 5 discriminator 66
+ 1627 093a 4FF40073 		mov	r3, #512
+ 1628 093e 0CE0     		b	.L268
+ 1629              	.L250:
+ 1630              		.loc 1 215 5 discriminator 64
+ 1631 0940 4FF40073 		mov	r3, #512
+ 1632 0944 09E0     		b	.L268
+ 1633              	.L249:
+ 1634              		.loc 1 215 5 discriminator 62
+ 1635 0946 4FF40073 		mov	r3, #512
+ 1636 094a 06E0     		b	.L268
+ 1637              	.L248:
+ 1638              		.loc 1 215 5 discriminator 60
+ 1639 094c 0823     		movs	r3, #8
+ 1640 094e 04E0     		b	.L268
+ 1641              	.L247:
+ 1642              		.loc 1 215 5 discriminator 58
+ 1643 0950 0823     		movs	r3, #8
+ 1644 0952 02E0     		b	.L268
+ 1645              	.L246:
+ 1646              		.loc 1 215 5 discriminator 56
+ 1647 0954 0823     		movs	r3, #8
+ 1648 0956 00E0     		b	.L268
+ 1649              	.L245:
+ 1650              		.loc 1 215 5 discriminator 54
+ 1651 0958 0823     		movs	r3, #8
+ 1652              	.L268:
+ 1653              		.loc 1 215 5 discriminator 100
+ 1654 095a 594A     		ldr	r2, .L533
+ 1655 095c 9360     		str	r3, [r2, #8]
+ 1656 095e E7E0     		b	.L243
+ 1657              	.L244:
+ 1658              		.loc 1 215 5 discriminator 52
+ 1659 0960 FB68     		ldr	r3, [r7, #12]
+ 1660 0962 1B68     		ldr	r3, [r3]
+ 1661 0964 1A46     		mov	r2, r3
+ 1662 0966 644B     		ldr	r3, .L533+56
+ 1663 0968 9A42     		cmp	r2, r3
+ 1664 096a 60D9     		bls	.L270
+ 1665              		.loc 1 215 5 discriminator 102
+ 1666 096c FB68     		ldr	r3, [r7, #12]
+ 1667 096e 1B68     		ldr	r3, [r3]
+ 1668 0970 554A     		ldr	r2, .L533+8
+ 1669 0972 9342     		cmp	r3, r2
+ARM GAS  /tmp/ccYTbMTL.s 			page 34
+
+
+ 1670 0974 57D0     		beq	.L271
+ 1671              		.loc 1 215 5 discriminator 104
+ 1672 0976 FB68     		ldr	r3, [r7, #12]
+ 1673 0978 1B68     		ldr	r3, [r3]
+ 1674 097a 544A     		ldr	r2, .L533+12
+ 1675 097c 9342     		cmp	r3, r2
+ 1676 097e 50D0     		beq	.L272
+ 1677              		.loc 1 215 5 discriminator 106
+ 1678 0980 FB68     		ldr	r3, [r7, #12]
+ 1679 0982 1B68     		ldr	r3, [r3]
+ 1680 0984 524A     		ldr	r2, .L533+16
+ 1681 0986 9342     		cmp	r3, r2
+ 1682 0988 49D0     		beq	.L273
+ 1683              		.loc 1 215 5 discriminator 108
+ 1684 098a FB68     		ldr	r3, [r7, #12]
+ 1685 098c 1B68     		ldr	r3, [r3]
+ 1686 098e 514A     		ldr	r2, .L533+20
+ 1687 0990 9342     		cmp	r3, r2
+ 1688 0992 42D0     		beq	.L274
+ 1689              		.loc 1 215 5 discriminator 110
+ 1690 0994 FB68     		ldr	r3, [r7, #12]
+ 1691 0996 1B68     		ldr	r3, [r3]
+ 1692 0998 4F4A     		ldr	r2, .L533+24
+ 1693 099a 9342     		cmp	r3, r2
+ 1694 099c 3AD0     		beq	.L275
+ 1695              		.loc 1 215 5 discriminator 112
+ 1696 099e FB68     		ldr	r3, [r7, #12]
+ 1697 09a0 1B68     		ldr	r3, [r3]
+ 1698 09a2 4E4A     		ldr	r2, .L533+28
+ 1699 09a4 9342     		cmp	r3, r2
+ 1700 09a6 32D0     		beq	.L276
+ 1701              		.loc 1 215 5 discriminator 114
+ 1702 09a8 FB68     		ldr	r3, [r7, #12]
+ 1703 09aa 1B68     		ldr	r3, [r3]
+ 1704 09ac 4C4A     		ldr	r2, .L533+32
+ 1705 09ae 9342     		cmp	r3, r2
+ 1706 09b0 2AD0     		beq	.L277
+ 1707              		.loc 1 215 5 discriminator 116
+ 1708 09b2 FB68     		ldr	r3, [r7, #12]
+ 1709 09b4 1B68     		ldr	r3, [r3]
+ 1710 09b6 4B4A     		ldr	r2, .L533+36
+ 1711 09b8 9342     		cmp	r3, r2
+ 1712 09ba 22D0     		beq	.L278
+ 1713              		.loc 1 215 5 discriminator 118
+ 1714 09bc FB68     		ldr	r3, [r7, #12]
+ 1715 09be 1B68     		ldr	r3, [r3]
+ 1716 09c0 494A     		ldr	r2, .L533+40
+ 1717 09c2 9342     		cmp	r3, r2
+ 1718 09c4 1AD0     		beq	.L279
+ 1719              		.loc 1 215 5 discriminator 120
+ 1720 09c6 FB68     		ldr	r3, [r7, #12]
+ 1721 09c8 1B68     		ldr	r3, [r3]
+ 1722 09ca 484A     		ldr	r2, .L533+44
+ 1723 09cc 9342     		cmp	r3, r2
+ 1724 09ce 12D0     		beq	.L280
+ 1725              		.loc 1 215 5 discriminator 122
+ 1726 09d0 FB68     		ldr	r3, [r7, #12]
+ARM GAS  /tmp/ccYTbMTL.s 			page 35
+
+
+ 1727 09d2 1B68     		ldr	r3, [r3]
+ 1728 09d4 464A     		ldr	r2, .L533+48
+ 1729 09d6 9342     		cmp	r3, r2
+ 1730 09d8 0AD0     		beq	.L281
+ 1731              		.loc 1 215 5 discriminator 124
+ 1732 09da FB68     		ldr	r3, [r7, #12]
+ 1733 09dc 1B68     		ldr	r3, [r3]
+ 1734 09de 454A     		ldr	r2, .L533+52
+ 1735 09e0 9342     		cmp	r3, r2
+ 1736 09e2 02D1     		bne	.L282
+ 1737              		.loc 1 215 5 discriminator 126
+ 1738 09e4 4FF40023 		mov	r3, #524288
+ 1739 09e8 1EE0     		b	.L294
+ 1740              	.L282:
+ 1741              		.loc 1 215 5 discriminator 127
+ 1742 09ea 4FF00073 		mov	r3, #33554432
+ 1743 09ee 1BE0     		b	.L294
+ 1744              	.L281:
+ 1745              		.loc 1 215 5 discriminator 125
+ 1746 09f0 4FF40023 		mov	r3, #524288
+ 1747 09f4 18E0     		b	.L294
+ 1748              	.L280:
+ 1749              		.loc 1 215 5 discriminator 123
+ 1750 09f6 4FF40023 		mov	r3, #524288
+ 1751 09fa 15E0     		b	.L294
+ 1752              	.L279:
+ 1753              		.loc 1 215 5 discriminator 121
+ 1754 09fc 4FF40023 		mov	r3, #524288
+ 1755 0a00 12E0     		b	.L294
+ 1756              	.L278:
+ 1757              		.loc 1 215 5 discriminator 119
+ 1758 0a02 4FF40073 		mov	r3, #512
+ 1759 0a06 0FE0     		b	.L294
+ 1760              	.L277:
+ 1761              		.loc 1 215 5 discriminator 117
+ 1762 0a08 4FF40073 		mov	r3, #512
+ 1763 0a0c 0CE0     		b	.L294
+ 1764              	.L276:
+ 1765              		.loc 1 215 5 discriminator 115
+ 1766 0a0e 4FF40073 		mov	r3, #512
+ 1767 0a12 09E0     		b	.L294
+ 1768              	.L275:
+ 1769              		.loc 1 215 5 discriminator 113
+ 1770 0a14 4FF40073 		mov	r3, #512
+ 1771 0a18 06E0     		b	.L294
+ 1772              	.L274:
+ 1773              		.loc 1 215 5 discriminator 111
+ 1774 0a1a 0823     		movs	r3, #8
+ 1775 0a1c 04E0     		b	.L294
+ 1776              	.L273:
+ 1777              		.loc 1 215 5 discriminator 109
+ 1778 0a1e 0823     		movs	r3, #8
+ 1779 0a20 02E0     		b	.L294
+ 1780              	.L272:
+ 1781              		.loc 1 215 5 discriminator 107
+ 1782 0a22 0823     		movs	r3, #8
+ 1783 0a24 00E0     		b	.L294
+ARM GAS  /tmp/ccYTbMTL.s 			page 36
+
+
+ 1784              	.L271:
+ 1785              		.loc 1 215 5 discriminator 105
+ 1786 0a26 0823     		movs	r3, #8
+ 1787              	.L294:
+ 1788              		.loc 1 215 5 discriminator 151
+ 1789 0a28 344A     		ldr	r2, .L533+60
+ 1790 0a2a D360     		str	r3, [r2, #12]
+ 1791 0a2c 80E0     		b	.L243
+ 1792              	.L270:
+ 1793              		.loc 1 215 5 discriminator 103
+ 1794 0a2e FB68     		ldr	r3, [r7, #12]
+ 1795 0a30 1B68     		ldr	r3, [r3]
+ 1796 0a32 254A     		ldr	r2, .L533+8
+ 1797 0a34 9342     		cmp	r3, r2
+ 1798 0a36 78D0     		beq	.L296
+ 1799              		.loc 1 215 5 discriminator 153
+ 1800 0a38 FB68     		ldr	r3, [r7, #12]
+ 1801 0a3a 1B68     		ldr	r3, [r3]
+ 1802 0a3c 234A     		ldr	r2, .L533+12
+ 1803 0a3e 9342     		cmp	r3, r2
+ 1804 0a40 71D0     		beq	.L297
+ 1805              		.loc 1 215 5 discriminator 155
+ 1806 0a42 FB68     		ldr	r3, [r7, #12]
+ 1807 0a44 1B68     		ldr	r3, [r3]
+ 1808 0a46 224A     		ldr	r2, .L533+16
+ 1809 0a48 9342     		cmp	r3, r2
+ 1810 0a4a 6AD0     		beq	.L298
+ 1811              		.loc 1 215 5 discriminator 157
+ 1812 0a4c FB68     		ldr	r3, [r7, #12]
+ 1813 0a4e 1B68     		ldr	r3, [r3]
+ 1814 0a50 204A     		ldr	r2, .L533+20
+ 1815 0a52 9342     		cmp	r3, r2
+ 1816 0a54 63D0     		beq	.L299
+ 1817              		.loc 1 215 5 discriminator 159
+ 1818 0a56 FB68     		ldr	r3, [r7, #12]
+ 1819 0a58 1B68     		ldr	r3, [r3]
+ 1820 0a5a 1F4A     		ldr	r2, .L533+24
+ 1821 0a5c 9342     		cmp	r3, r2
+ 1822 0a5e 5BD0     		beq	.L300
+ 1823              		.loc 1 215 5 discriminator 161
+ 1824 0a60 FB68     		ldr	r3, [r7, #12]
+ 1825 0a62 1B68     		ldr	r3, [r3]
+ 1826 0a64 1D4A     		ldr	r2, .L533+28
+ 1827 0a66 9342     		cmp	r3, r2
+ 1828 0a68 53D0     		beq	.L301
+ 1829              		.loc 1 215 5 discriminator 163
+ 1830 0a6a FB68     		ldr	r3, [r7, #12]
+ 1831 0a6c 1B68     		ldr	r3, [r3]
+ 1832 0a6e 1C4A     		ldr	r2, .L533+32
+ 1833 0a70 9342     		cmp	r3, r2
+ 1834 0a72 4BD0     		beq	.L302
+ 1835              		.loc 1 215 5 discriminator 165
+ 1836 0a74 FB68     		ldr	r3, [r7, #12]
+ 1837 0a76 1B68     		ldr	r3, [r3]
+ 1838 0a78 1A4A     		ldr	r2, .L533+36
+ 1839 0a7a 9342     		cmp	r3, r2
+ 1840 0a7c 43D0     		beq	.L303
+ARM GAS  /tmp/ccYTbMTL.s 			page 37
+
+
+ 1841              		.loc 1 215 5 discriminator 167
+ 1842 0a7e FB68     		ldr	r3, [r7, #12]
+ 1843 0a80 1B68     		ldr	r3, [r3]
+ 1844 0a82 194A     		ldr	r2, .L533+40
+ 1845 0a84 9342     		cmp	r3, r2
+ 1846 0a86 3BD0     		beq	.L304
+ 1847              		.loc 1 215 5 discriminator 169
+ 1848 0a88 FB68     		ldr	r3, [r7, #12]
+ 1849 0a8a 1B68     		ldr	r3, [r3]
+ 1850 0a8c 174A     		ldr	r2, .L533+44
+ 1851 0a8e 9342     		cmp	r3, r2
+ 1852 0a90 12D0     		beq	.L305
+ 1853              		.loc 1 215 5 discriminator 171
+ 1854 0a92 FB68     		ldr	r3, [r7, #12]
+ 1855 0a94 1B68     		ldr	r3, [r3]
+ 1856 0a96 164A     		ldr	r2, .L533+48
+ 1857 0a98 9342     		cmp	r3, r2
+ 1858 0a9a 0AD0     		beq	.L306
+ 1859              		.loc 1 215 5 discriminator 173
+ 1860 0a9c FB68     		ldr	r3, [r7, #12]
+ 1861 0a9e 1B68     		ldr	r3, [r3]
+ 1862 0aa0 144A     		ldr	r2, .L533+52
+ 1863 0aa2 9342     		cmp	r3, r2
+ 1864 0aa4 02D1     		bne	.L307
+ 1865              		.loc 1 215 5 discriminator 175
+ 1866 0aa6 4FF40023 		mov	r3, #524288
+ 1867 0aaa 3FE0     		b	.L319
+ 1868              	.L307:
+ 1869              		.loc 1 215 5 discriminator 176
+ 1870 0aac 4FF00073 		mov	r3, #33554432
+ 1871 0ab0 3CE0     		b	.L319
+ 1872              	.L306:
+ 1873              		.loc 1 215 5 discriminator 174
+ 1874 0ab2 4FF40023 		mov	r3, #524288
+ 1875 0ab6 39E0     		b	.L319
+ 1876              	.L305:
+ 1877              		.loc 1 215 5 discriminator 172
+ 1878 0ab8 4FF40023 		mov	r3, #524288
+ 1879 0abc 36E0     		b	.L319
+ 1880              	.L534:
+ 1881 0abe 00BF     		.align	2
+ 1882              	.L533:
+ 1883 0ac0 00640240 		.word	1073898496
+ 1884 0ac4 B8600240 		.word	1073897656
+ 1885 0ac8 10600240 		.word	1073897488
+ 1886 0acc 10640240 		.word	1073898512
+ 1887 0ad0 70600240 		.word	1073897584
+ 1888 0ad4 70640240 		.word	1073898608
+ 1889 0ad8 28600240 		.word	1073897512
+ 1890 0adc 28640240 		.word	1073898536
+ 1891 0ae0 88600240 		.word	1073897608
+ 1892 0ae4 88640240 		.word	1073898632
+ 1893 0ae8 40600240 		.word	1073897536
+ 1894 0aec 40640240 		.word	1073898560
+ 1895 0af0 A0600240 		.word	1073897632
+ 1896 0af4 A0640240 		.word	1073898656
+ 1897 0af8 58600240 		.word	1073897560
+ARM GAS  /tmp/ccYTbMTL.s 			page 38
+
+
+ 1898 0afc 00600240 		.word	1073897472
+ 1899              	.L304:
+ 1900              		.loc 1 215 5 discriminator 170
+ 1901 0b00 4FF40023 		mov	r3, #524288
+ 1902 0b04 12E0     		b	.L319
+ 1903              	.L303:
+ 1904              		.loc 1 215 5 discriminator 168
+ 1905 0b06 4FF40073 		mov	r3, #512
+ 1906 0b0a 0FE0     		b	.L319
+ 1907              	.L302:
+ 1908              		.loc 1 215 5 discriminator 166
+ 1909 0b0c 4FF40073 		mov	r3, #512
+ 1910 0b10 0CE0     		b	.L319
+ 1911              	.L301:
+ 1912              		.loc 1 215 5 discriminator 164
+ 1913 0b12 4FF40073 		mov	r3, #512
+ 1914 0b16 09E0     		b	.L319
+ 1915              	.L300:
+ 1916              		.loc 1 215 5 discriminator 162
+ 1917 0b18 4FF40073 		mov	r3, #512
+ 1918 0b1c 06E0     		b	.L319
+ 1919              	.L299:
+ 1920              		.loc 1 215 5 discriminator 160
+ 1921 0b1e 0823     		movs	r3, #8
+ 1922 0b20 04E0     		b	.L319
+ 1923              	.L298:
+ 1924              		.loc 1 215 5 discriminator 158
+ 1925 0b22 0823     		movs	r3, #8
+ 1926 0b24 02E0     		b	.L319
+ 1927              	.L297:
+ 1928              		.loc 1 215 5 discriminator 156
+ 1929 0b26 0823     		movs	r3, #8
+ 1930 0b28 00E0     		b	.L319
+ 1931              	.L296:
+ 1932              		.loc 1 215 5 discriminator 154
+ 1933 0b2a 0823     		movs	r3, #8
+ 1934              	.L319:
+ 1935              		.loc 1 215 5 discriminator 200
+ 1936 0b2c 8A4A     		ldr	r2, .L535
+ 1937 0b2e 9360     		str	r3, [r2, #8]
+ 1938              	.L243:
+ 216:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_DME_FLAG_INDEX(hdma));
+ 1939              		.loc 1 216 5 is_stmt 1
+ 1940 0b30 FB68     		ldr	r3, [r7, #12]
+ 1941 0b32 1B68     		ldr	r3, [r3]
+ 1942 0b34 1A46     		mov	r2, r3
+ 1943 0b36 894B     		ldr	r3, .L535+4
+ 1944 0b38 9A42     		cmp	r2, r3
+ 1945 0b3a 60D9     		bls	.L320
+ 1946              		.loc 1 216 5 is_stmt 0 discriminator 1
+ 1947 0b3c FB68     		ldr	r3, [r7, #12]
+ 1948 0b3e 1B68     		ldr	r3, [r3]
+ 1949 0b40 874A     		ldr	r2, .L535+8
+ 1950 0b42 9342     		cmp	r3, r2
+ 1951 0b44 57D0     		beq	.L321
+ 1952              		.loc 1 216 5 discriminator 3
+ 1953 0b46 FB68     		ldr	r3, [r7, #12]
+ARM GAS  /tmp/ccYTbMTL.s 			page 39
+
+
+ 1954 0b48 1B68     		ldr	r3, [r3]
+ 1955 0b4a 864A     		ldr	r2, .L535+12
+ 1956 0b4c 9342     		cmp	r3, r2
+ 1957 0b4e 50D0     		beq	.L322
+ 1958              		.loc 1 216 5 discriminator 5
+ 1959 0b50 FB68     		ldr	r3, [r7, #12]
+ 1960 0b52 1B68     		ldr	r3, [r3]
+ 1961 0b54 844A     		ldr	r2, .L535+16
+ 1962 0b56 9342     		cmp	r3, r2
+ 1963 0b58 49D0     		beq	.L323
+ 1964              		.loc 1 216 5 discriminator 7
+ 1965 0b5a FB68     		ldr	r3, [r7, #12]
+ 1966 0b5c 1B68     		ldr	r3, [r3]
+ 1967 0b5e 834A     		ldr	r2, .L535+20
+ 1968 0b60 9342     		cmp	r3, r2
+ 1969 0b62 42D0     		beq	.L324
+ 1970              		.loc 1 216 5 discriminator 9
+ 1971 0b64 FB68     		ldr	r3, [r7, #12]
+ 1972 0b66 1B68     		ldr	r3, [r3]
+ 1973 0b68 814A     		ldr	r2, .L535+24
+ 1974 0b6a 9342     		cmp	r3, r2
+ 1975 0b6c 3AD0     		beq	.L325
+ 1976              		.loc 1 216 5 discriminator 11
+ 1977 0b6e FB68     		ldr	r3, [r7, #12]
+ 1978 0b70 1B68     		ldr	r3, [r3]
+ 1979 0b72 804A     		ldr	r2, .L535+28
+ 1980 0b74 9342     		cmp	r3, r2
+ 1981 0b76 32D0     		beq	.L326
+ 1982              		.loc 1 216 5 discriminator 13
+ 1983 0b78 FB68     		ldr	r3, [r7, #12]
+ 1984 0b7a 1B68     		ldr	r3, [r3]
+ 1985 0b7c 7E4A     		ldr	r2, .L535+32
+ 1986 0b7e 9342     		cmp	r3, r2
+ 1987 0b80 2AD0     		beq	.L327
+ 1988              		.loc 1 216 5 discriminator 15
+ 1989 0b82 FB68     		ldr	r3, [r7, #12]
+ 1990 0b84 1B68     		ldr	r3, [r3]
+ 1991 0b86 7D4A     		ldr	r2, .L535+36
+ 1992 0b88 9342     		cmp	r3, r2
+ 1993 0b8a 22D0     		beq	.L328
+ 1994              		.loc 1 216 5 discriminator 17
+ 1995 0b8c FB68     		ldr	r3, [r7, #12]
+ 1996 0b8e 1B68     		ldr	r3, [r3]
+ 1997 0b90 7B4A     		ldr	r2, .L535+40
+ 1998 0b92 9342     		cmp	r3, r2
+ 1999 0b94 1AD0     		beq	.L329
+ 2000              		.loc 1 216 5 discriminator 19
+ 2001 0b96 FB68     		ldr	r3, [r7, #12]
+ 2002 0b98 1B68     		ldr	r3, [r3]
+ 2003 0b9a 7A4A     		ldr	r2, .L535+44
+ 2004 0b9c 9342     		cmp	r3, r2
+ 2005 0b9e 12D0     		beq	.L330
+ 2006              		.loc 1 216 5 discriminator 21
+ 2007 0ba0 FB68     		ldr	r3, [r7, #12]
+ 2008 0ba2 1B68     		ldr	r3, [r3]
+ 2009 0ba4 784A     		ldr	r2, .L535+48
+ 2010 0ba6 9342     		cmp	r3, r2
+ARM GAS  /tmp/ccYTbMTL.s 			page 40
+
+
+ 2011 0ba8 0AD0     		beq	.L331
+ 2012              		.loc 1 216 5 discriminator 23
+ 2013 0baa FB68     		ldr	r3, [r7, #12]
+ 2014 0bac 1B68     		ldr	r3, [r3]
+ 2015 0bae 774A     		ldr	r2, .L535+52
+ 2016 0bb0 9342     		cmp	r3, r2
+ 2017 0bb2 02D1     		bne	.L332
+ 2018              		.loc 1 216 5 discriminator 25
+ 2019 0bb4 4FF48023 		mov	r3, #262144
+ 2020 0bb8 1EE0     		b	.L344
+ 2021              	.L332:
+ 2022              		.loc 1 216 5 discriminator 26
+ 2023 0bba 4FF08073 		mov	r3, #16777216
+ 2024 0bbe 1BE0     		b	.L344
+ 2025              	.L331:
+ 2026              		.loc 1 216 5 discriminator 24
+ 2027 0bc0 4FF48023 		mov	r3, #262144
+ 2028 0bc4 18E0     		b	.L344
+ 2029              	.L330:
+ 2030              		.loc 1 216 5 discriminator 22
+ 2031 0bc6 4FF48023 		mov	r3, #262144
+ 2032 0bca 15E0     		b	.L344
+ 2033              	.L329:
+ 2034              		.loc 1 216 5 discriminator 20
+ 2035 0bcc 4FF48023 		mov	r3, #262144
+ 2036 0bd0 12E0     		b	.L344
+ 2037              	.L328:
+ 2038              		.loc 1 216 5 discriminator 18
+ 2039 0bd2 4FF48073 		mov	r3, #256
+ 2040 0bd6 0FE0     		b	.L344
+ 2041              	.L327:
+ 2042              		.loc 1 216 5 discriminator 16
+ 2043 0bd8 4FF48073 		mov	r3, #256
+ 2044 0bdc 0CE0     		b	.L344
+ 2045              	.L326:
+ 2046              		.loc 1 216 5 discriminator 14
+ 2047 0bde 4FF48073 		mov	r3, #256
+ 2048 0be2 09E0     		b	.L344
+ 2049              	.L325:
+ 2050              		.loc 1 216 5 discriminator 12
+ 2051 0be4 4FF48073 		mov	r3, #256
+ 2052 0be8 06E0     		b	.L344
+ 2053              	.L324:
+ 2054              		.loc 1 216 5 discriminator 10
+ 2055 0bea 0423     		movs	r3, #4
+ 2056 0bec 04E0     		b	.L344
+ 2057              	.L323:
+ 2058              		.loc 1 216 5 discriminator 8
+ 2059 0bee 0423     		movs	r3, #4
+ 2060 0bf0 02E0     		b	.L344
+ 2061              	.L322:
+ 2062              		.loc 1 216 5 discriminator 6
+ 2063 0bf2 0423     		movs	r3, #4
+ 2064 0bf4 00E0     		b	.L344
+ 2065              	.L321:
+ 2066              		.loc 1 216 5 discriminator 4
+ 2067 0bf6 0423     		movs	r3, #4
+ARM GAS  /tmp/ccYTbMTL.s 			page 41
+
+
+ 2068              	.L344:
+ 2069              		.loc 1 216 5 discriminator 50
+ 2070 0bf8 654A     		ldr	r2, .L535+56
+ 2071 0bfa D360     		str	r3, [r2, #12]
+ 2072 0bfc 50E1     		b	.L345
+ 2073              	.L320:
+ 2074              		.loc 1 216 5 discriminator 2
+ 2075 0bfe FB68     		ldr	r3, [r7, #12]
+ 2076 0c00 1B68     		ldr	r3, [r3]
+ 2077 0c02 1A46     		mov	r2, r3
+ 2078 0c04 634B     		ldr	r3, .L535+60
+ 2079 0c06 9A42     		cmp	r2, r3
+ 2080 0c08 60D9     		bls	.L346
+ 2081              		.loc 1 216 5 discriminator 51
+ 2082 0c0a FB68     		ldr	r3, [r7, #12]
+ 2083 0c0c 1B68     		ldr	r3, [r3]
+ 2084 0c0e 544A     		ldr	r2, .L535+8
+ 2085 0c10 9342     		cmp	r3, r2
+ 2086 0c12 57D0     		beq	.L347
+ 2087              		.loc 1 216 5 discriminator 53
+ 2088 0c14 FB68     		ldr	r3, [r7, #12]
+ 2089 0c16 1B68     		ldr	r3, [r3]
+ 2090 0c18 524A     		ldr	r2, .L535+12
+ 2091 0c1a 9342     		cmp	r3, r2
+ 2092 0c1c 50D0     		beq	.L348
+ 2093              		.loc 1 216 5 discriminator 55
+ 2094 0c1e FB68     		ldr	r3, [r7, #12]
+ 2095 0c20 1B68     		ldr	r3, [r3]
+ 2096 0c22 514A     		ldr	r2, .L535+16
+ 2097 0c24 9342     		cmp	r3, r2
+ 2098 0c26 49D0     		beq	.L349
+ 2099              		.loc 1 216 5 discriminator 57
+ 2100 0c28 FB68     		ldr	r3, [r7, #12]
+ 2101 0c2a 1B68     		ldr	r3, [r3]
+ 2102 0c2c 4F4A     		ldr	r2, .L535+20
+ 2103 0c2e 9342     		cmp	r3, r2
+ 2104 0c30 42D0     		beq	.L350
+ 2105              		.loc 1 216 5 discriminator 59
+ 2106 0c32 FB68     		ldr	r3, [r7, #12]
+ 2107 0c34 1B68     		ldr	r3, [r3]
+ 2108 0c36 4E4A     		ldr	r2, .L535+24
+ 2109 0c38 9342     		cmp	r3, r2
+ 2110 0c3a 3AD0     		beq	.L351
+ 2111              		.loc 1 216 5 discriminator 61
+ 2112 0c3c FB68     		ldr	r3, [r7, #12]
+ 2113 0c3e 1B68     		ldr	r3, [r3]
+ 2114 0c40 4C4A     		ldr	r2, .L535+28
+ 2115 0c42 9342     		cmp	r3, r2
+ 2116 0c44 32D0     		beq	.L352
+ 2117              		.loc 1 216 5 discriminator 63
+ 2118 0c46 FB68     		ldr	r3, [r7, #12]
+ 2119 0c48 1B68     		ldr	r3, [r3]
+ 2120 0c4a 4B4A     		ldr	r2, .L535+32
+ 2121 0c4c 9342     		cmp	r3, r2
+ 2122 0c4e 2AD0     		beq	.L353
+ 2123              		.loc 1 216 5 discriminator 65
+ 2124 0c50 FB68     		ldr	r3, [r7, #12]
+ARM GAS  /tmp/ccYTbMTL.s 			page 42
+
+
+ 2125 0c52 1B68     		ldr	r3, [r3]
+ 2126 0c54 494A     		ldr	r2, .L535+36
+ 2127 0c56 9342     		cmp	r3, r2
+ 2128 0c58 22D0     		beq	.L354
+ 2129              		.loc 1 216 5 discriminator 67
+ 2130 0c5a FB68     		ldr	r3, [r7, #12]
+ 2131 0c5c 1B68     		ldr	r3, [r3]
+ 2132 0c5e 484A     		ldr	r2, .L535+40
+ 2133 0c60 9342     		cmp	r3, r2
+ 2134 0c62 1AD0     		beq	.L355
+ 2135              		.loc 1 216 5 discriminator 69
+ 2136 0c64 FB68     		ldr	r3, [r7, #12]
+ 2137 0c66 1B68     		ldr	r3, [r3]
+ 2138 0c68 464A     		ldr	r2, .L535+44
+ 2139 0c6a 9342     		cmp	r3, r2
+ 2140 0c6c 12D0     		beq	.L356
+ 2141              		.loc 1 216 5 discriminator 71
+ 2142 0c6e FB68     		ldr	r3, [r7, #12]
+ 2143 0c70 1B68     		ldr	r3, [r3]
+ 2144 0c72 454A     		ldr	r2, .L535+48
+ 2145 0c74 9342     		cmp	r3, r2
+ 2146 0c76 0AD0     		beq	.L357
+ 2147              		.loc 1 216 5 discriminator 73
+ 2148 0c78 FB68     		ldr	r3, [r7, #12]
+ 2149 0c7a 1B68     		ldr	r3, [r3]
+ 2150 0c7c 434A     		ldr	r2, .L535+52
+ 2151 0c7e 9342     		cmp	r3, r2
+ 2152 0c80 02D1     		bne	.L358
+ 2153              		.loc 1 216 5 discriminator 75
+ 2154 0c82 4FF48023 		mov	r3, #262144
+ 2155 0c86 1EE0     		b	.L370
+ 2156              	.L358:
+ 2157              		.loc 1 216 5 discriminator 76
+ 2158 0c88 4FF08073 		mov	r3, #16777216
+ 2159 0c8c 1BE0     		b	.L370
+ 2160              	.L357:
+ 2161              		.loc 1 216 5 discriminator 74
+ 2162 0c8e 4FF48023 		mov	r3, #262144
+ 2163 0c92 18E0     		b	.L370
+ 2164              	.L356:
+ 2165              		.loc 1 216 5 discriminator 72
+ 2166 0c94 4FF48023 		mov	r3, #262144
+ 2167 0c98 15E0     		b	.L370
+ 2168              	.L355:
+ 2169              		.loc 1 216 5 discriminator 70
+ 2170 0c9a 4FF48023 		mov	r3, #262144
+ 2171 0c9e 12E0     		b	.L370
+ 2172              	.L354:
+ 2173              		.loc 1 216 5 discriminator 68
+ 2174 0ca0 4FF48073 		mov	r3, #256
+ 2175 0ca4 0FE0     		b	.L370
+ 2176              	.L353:
+ 2177              		.loc 1 216 5 discriminator 66
+ 2178 0ca6 4FF48073 		mov	r3, #256
+ 2179 0caa 0CE0     		b	.L370
+ 2180              	.L352:
+ 2181              		.loc 1 216 5 discriminator 64
+ARM GAS  /tmp/ccYTbMTL.s 			page 43
+
+
+ 2182 0cac 4FF48073 		mov	r3, #256
+ 2183 0cb0 09E0     		b	.L370
+ 2184              	.L351:
+ 2185              		.loc 1 216 5 discriminator 62
+ 2186 0cb2 4FF48073 		mov	r3, #256
+ 2187 0cb6 06E0     		b	.L370
+ 2188              	.L350:
+ 2189              		.loc 1 216 5 discriminator 60
+ 2190 0cb8 0423     		movs	r3, #4
+ 2191 0cba 04E0     		b	.L370
+ 2192              	.L349:
+ 2193              		.loc 1 216 5 discriminator 58
+ 2194 0cbc 0423     		movs	r3, #4
+ 2195 0cbe 02E0     		b	.L370
+ 2196              	.L348:
+ 2197              		.loc 1 216 5 discriminator 56
+ 2198 0cc0 0423     		movs	r3, #4
+ 2199 0cc2 00E0     		b	.L370
+ 2200              	.L347:
+ 2201              		.loc 1 216 5 discriminator 54
+ 2202 0cc4 0423     		movs	r3, #4
+ 2203              	.L370:
+ 2204              		.loc 1 216 5 discriminator 100
+ 2205 0cc6 324A     		ldr	r2, .L535+56
+ 2206 0cc8 9360     		str	r3, [r2, #8]
+ 2207 0cca E9E0     		b	.L345
+ 2208              	.L346:
+ 2209              		.loc 1 216 5 discriminator 52
+ 2210 0ccc FB68     		ldr	r3, [r7, #12]
+ 2211 0cce 1B68     		ldr	r3, [r3]
+ 2212 0cd0 1A46     		mov	r2, r3
+ 2213 0cd2 314B     		ldr	r3, .L535+64
+ 2214 0cd4 9A42     		cmp	r2, r3
+ 2215 0cd6 40F28380 		bls	.L372
+ 2216              		.loc 1 216 5 discriminator 102
+ 2217 0cda FB68     		ldr	r3, [r7, #12]
+ 2218 0cdc 1B68     		ldr	r3, [r3]
+ 2219 0cde 204A     		ldr	r2, .L535+8
+ 2220 0ce0 9342     		cmp	r3, r2
+ 2221 0ce2 79D0     		beq	.L373
+ 2222              		.loc 1 216 5 discriminator 104
+ 2223 0ce4 FB68     		ldr	r3, [r7, #12]
+ 2224 0ce6 1B68     		ldr	r3, [r3]
+ 2225 0ce8 1E4A     		ldr	r2, .L535+12
+ 2226 0cea 9342     		cmp	r3, r2
+ 2227 0cec 72D0     		beq	.L374
+ 2228              		.loc 1 216 5 discriminator 106
+ 2229 0cee FB68     		ldr	r3, [r7, #12]
+ 2230 0cf0 1B68     		ldr	r3, [r3]
+ 2231 0cf2 1D4A     		ldr	r2, .L535+16
+ 2232 0cf4 9342     		cmp	r3, r2
+ 2233 0cf6 6BD0     		beq	.L375
+ 2234              		.loc 1 216 5 discriminator 108
+ 2235 0cf8 FB68     		ldr	r3, [r7, #12]
+ 2236 0cfa 1B68     		ldr	r3, [r3]
+ 2237 0cfc 1B4A     		ldr	r2, .L535+20
+ 2238 0cfe 9342     		cmp	r3, r2
+ARM GAS  /tmp/ccYTbMTL.s 			page 44
+
+
+ 2239 0d00 64D0     		beq	.L376
+ 2240              		.loc 1 216 5 discriminator 110
+ 2241 0d02 FB68     		ldr	r3, [r7, #12]
+ 2242 0d04 1B68     		ldr	r3, [r3]
+ 2243 0d06 1A4A     		ldr	r2, .L535+24
+ 2244 0d08 9342     		cmp	r3, r2
+ 2245 0d0a 5CD0     		beq	.L377
+ 2246              		.loc 1 216 5 discriminator 112
+ 2247 0d0c FB68     		ldr	r3, [r7, #12]
+ 2248 0d0e 1B68     		ldr	r3, [r3]
+ 2249 0d10 184A     		ldr	r2, .L535+28
+ 2250 0d12 9342     		cmp	r3, r2
+ 2251 0d14 54D0     		beq	.L378
+ 2252              		.loc 1 216 5 discriminator 114
+ 2253 0d16 FB68     		ldr	r3, [r7, #12]
+ 2254 0d18 1B68     		ldr	r3, [r3]
+ 2255 0d1a 174A     		ldr	r2, .L535+32
+ 2256 0d1c 9342     		cmp	r3, r2
+ 2257 0d1e 4CD0     		beq	.L379
+ 2258              		.loc 1 216 5 discriminator 116
+ 2259 0d20 FB68     		ldr	r3, [r7, #12]
+ 2260 0d22 1B68     		ldr	r3, [r3]
+ 2261 0d24 154A     		ldr	r2, .L535+36
+ 2262 0d26 9342     		cmp	r3, r2
+ 2263 0d28 44D0     		beq	.L380
+ 2264              		.loc 1 216 5 discriminator 118
+ 2265 0d2a FB68     		ldr	r3, [r7, #12]
+ 2266 0d2c 1B68     		ldr	r3, [r3]
+ 2267 0d2e 144A     		ldr	r2, .L535+40
+ 2268 0d30 9342     		cmp	r3, r2
+ 2269 0d32 3CD0     		beq	.L381
+ 2270              		.loc 1 216 5 discriminator 120
+ 2271 0d34 FB68     		ldr	r3, [r7, #12]
+ 2272 0d36 1B68     		ldr	r3, [r3]
+ 2273 0d38 124A     		ldr	r2, .L535+44
+ 2274 0d3a 9342     		cmp	r3, r2
+ 2275 0d3c 34D0     		beq	.L382
+ 2276              		.loc 1 216 5 discriminator 122
+ 2277 0d3e FB68     		ldr	r3, [r7, #12]
+ 2278 0d40 1B68     		ldr	r3, [r3]
+ 2279 0d42 114A     		ldr	r2, .L535+48
+ 2280 0d44 9342     		cmp	r3, r2
+ 2281 0d46 2CD0     		beq	.L383
+ 2282              		.loc 1 216 5 discriminator 124
+ 2283 0d48 FB68     		ldr	r3, [r7, #12]
+ 2284 0d4a 1B68     		ldr	r3, [r3]
+ 2285 0d4c 0F4A     		ldr	r2, .L535+52
+ 2286 0d4e 9342     		cmp	r3, r2
+ 2287 0d50 24D1     		bne	.L384
+ 2288              		.loc 1 216 5 discriminator 126
+ 2289 0d52 4FF48023 		mov	r3, #262144
+ 2290 0d56 40E0     		b	.L396
+ 2291              	.L536:
+ 2292              		.align	2
+ 2293              	.L535:
+ 2294 0d58 00600240 		.word	1073897472
+ 2295 0d5c 58640240 		.word	1073898584
+ARM GAS  /tmp/ccYTbMTL.s 			page 45
+
+
+ 2296 0d60 10600240 		.word	1073897488
+ 2297 0d64 10640240 		.word	1073898512
+ 2298 0d68 70600240 		.word	1073897584
+ 2299 0d6c 70640240 		.word	1073898608
+ 2300 0d70 28600240 		.word	1073897512
+ 2301 0d74 28640240 		.word	1073898536
+ 2302 0d78 88600240 		.word	1073897608
+ 2303 0d7c 88640240 		.word	1073898632
+ 2304 0d80 40600240 		.word	1073897536
+ 2305 0d84 40640240 		.word	1073898560
+ 2306 0d88 A0600240 		.word	1073897632
+ 2307 0d8c A0640240 		.word	1073898656
+ 2308 0d90 00640240 		.word	1073898496
+ 2309 0d94 B8600240 		.word	1073897656
+ 2310 0d98 58600240 		.word	1073897560
+ 2311              	.L384:
+ 2312              		.loc 1 216 5 discriminator 127
+ 2313 0d9c 4FF08073 		mov	r3, #16777216
+ 2314 0da0 1BE0     		b	.L396
+ 2315              	.L383:
+ 2316              		.loc 1 216 5 discriminator 125
+ 2317 0da2 4FF48023 		mov	r3, #262144
+ 2318 0da6 18E0     		b	.L396
+ 2319              	.L382:
+ 2320              		.loc 1 216 5 discriminator 123
+ 2321 0da8 4FF48023 		mov	r3, #262144
+ 2322 0dac 15E0     		b	.L396
+ 2323              	.L381:
+ 2324              		.loc 1 216 5 discriminator 121
+ 2325 0dae 4FF48023 		mov	r3, #262144
+ 2326 0db2 12E0     		b	.L396
+ 2327              	.L380:
+ 2328              		.loc 1 216 5 discriminator 119
+ 2329 0db4 4FF48073 		mov	r3, #256
+ 2330 0db8 0FE0     		b	.L396
+ 2331              	.L379:
+ 2332              		.loc 1 216 5 discriminator 117
+ 2333 0dba 4FF48073 		mov	r3, #256
+ 2334 0dbe 0CE0     		b	.L396
+ 2335              	.L378:
+ 2336              		.loc 1 216 5 discriminator 115
+ 2337 0dc0 4FF48073 		mov	r3, #256
+ 2338 0dc4 09E0     		b	.L396
+ 2339              	.L377:
+ 2340              		.loc 1 216 5 discriminator 113
+ 2341 0dc6 4FF48073 		mov	r3, #256
+ 2342 0dca 06E0     		b	.L396
+ 2343              	.L376:
+ 2344              		.loc 1 216 5 discriminator 111
+ 2345 0dcc 0423     		movs	r3, #4
+ 2346 0dce 04E0     		b	.L396
+ 2347              	.L375:
+ 2348              		.loc 1 216 5 discriminator 109
+ 2349 0dd0 0423     		movs	r3, #4
+ 2350 0dd2 02E0     		b	.L396
+ 2351              	.L374:
+ 2352              		.loc 1 216 5 discriminator 107
+ARM GAS  /tmp/ccYTbMTL.s 			page 46
+
+
+ 2353 0dd4 0423     		movs	r3, #4
+ 2354 0dd6 00E0     		b	.L396
+ 2355              	.L373:
+ 2356              		.loc 1 216 5 discriminator 105
+ 2357 0dd8 0423     		movs	r3, #4
+ 2358              	.L396:
+ 2359              		.loc 1 216 5 discriminator 151
+ 2360 0dda 8B4A     		ldr	r2, .L537
+ 2361 0ddc D360     		str	r3, [r2, #12]
+ 2362 0dde 5FE0     		b	.L345
+ 2363              	.L372:
+ 2364              		.loc 1 216 5 discriminator 103
+ 2365 0de0 FB68     		ldr	r3, [r7, #12]
+ 2366 0de2 1B68     		ldr	r3, [r3]
+ 2367 0de4 894A     		ldr	r2, .L537+4
+ 2368 0de6 9342     		cmp	r3, r2
+ 2369 0de8 57D0     		beq	.L398
+ 2370              		.loc 1 216 5 discriminator 153
+ 2371 0dea FB68     		ldr	r3, [r7, #12]
+ 2372 0dec 1B68     		ldr	r3, [r3]
+ 2373 0dee 884A     		ldr	r2, .L537+8
+ 2374 0df0 9342     		cmp	r3, r2
+ 2375 0df2 50D0     		beq	.L399
+ 2376              		.loc 1 216 5 discriminator 155
+ 2377 0df4 FB68     		ldr	r3, [r7, #12]
+ 2378 0df6 1B68     		ldr	r3, [r3]
+ 2379 0df8 864A     		ldr	r2, .L537+12
+ 2380 0dfa 9342     		cmp	r3, r2
+ 2381 0dfc 49D0     		beq	.L400
+ 2382              		.loc 1 216 5 discriminator 157
+ 2383 0dfe FB68     		ldr	r3, [r7, #12]
+ 2384 0e00 1B68     		ldr	r3, [r3]
+ 2385 0e02 854A     		ldr	r2, .L537+16
+ 2386 0e04 9342     		cmp	r3, r2
+ 2387 0e06 42D0     		beq	.L401
+ 2388              		.loc 1 216 5 discriminator 159
+ 2389 0e08 FB68     		ldr	r3, [r7, #12]
+ 2390 0e0a 1B68     		ldr	r3, [r3]
+ 2391 0e0c 834A     		ldr	r2, .L537+20
+ 2392 0e0e 9342     		cmp	r3, r2
+ 2393 0e10 3AD0     		beq	.L402
+ 2394              		.loc 1 216 5 discriminator 161
+ 2395 0e12 FB68     		ldr	r3, [r7, #12]
+ 2396 0e14 1B68     		ldr	r3, [r3]
+ 2397 0e16 824A     		ldr	r2, .L537+24
+ 2398 0e18 9342     		cmp	r3, r2
+ 2399 0e1a 32D0     		beq	.L403
+ 2400              		.loc 1 216 5 discriminator 163
+ 2401 0e1c FB68     		ldr	r3, [r7, #12]
+ 2402 0e1e 1B68     		ldr	r3, [r3]
+ 2403 0e20 804A     		ldr	r2, .L537+28
+ 2404 0e22 9342     		cmp	r3, r2
+ 2405 0e24 2AD0     		beq	.L404
+ 2406              		.loc 1 216 5 discriminator 165
+ 2407 0e26 FB68     		ldr	r3, [r7, #12]
+ 2408 0e28 1B68     		ldr	r3, [r3]
+ 2409 0e2a 7F4A     		ldr	r2, .L537+32
+ARM GAS  /tmp/ccYTbMTL.s 			page 47
+
+
+ 2410 0e2c 9342     		cmp	r3, r2
+ 2411 0e2e 22D0     		beq	.L405
+ 2412              		.loc 1 216 5 discriminator 167
+ 2413 0e30 FB68     		ldr	r3, [r7, #12]
+ 2414 0e32 1B68     		ldr	r3, [r3]
+ 2415 0e34 7D4A     		ldr	r2, .L537+36
+ 2416 0e36 9342     		cmp	r3, r2
+ 2417 0e38 1AD0     		beq	.L406
+ 2418              		.loc 1 216 5 discriminator 169
+ 2419 0e3a FB68     		ldr	r3, [r7, #12]
+ 2420 0e3c 1B68     		ldr	r3, [r3]
+ 2421 0e3e 7C4A     		ldr	r2, .L537+40
+ 2422 0e40 9342     		cmp	r3, r2
+ 2423 0e42 12D0     		beq	.L407
+ 2424              		.loc 1 216 5 discriminator 171
+ 2425 0e44 FB68     		ldr	r3, [r7, #12]
+ 2426 0e46 1B68     		ldr	r3, [r3]
+ 2427 0e48 7A4A     		ldr	r2, .L537+44
+ 2428 0e4a 9342     		cmp	r3, r2
+ 2429 0e4c 0AD0     		beq	.L408
+ 2430              		.loc 1 216 5 discriminator 173
+ 2431 0e4e FB68     		ldr	r3, [r7, #12]
+ 2432 0e50 1B68     		ldr	r3, [r3]
+ 2433 0e52 794A     		ldr	r2, .L537+48
+ 2434 0e54 9342     		cmp	r3, r2
+ 2435 0e56 02D1     		bne	.L409
+ 2436              		.loc 1 216 5 discriminator 175
+ 2437 0e58 4FF48023 		mov	r3, #262144
+ 2438 0e5c 1EE0     		b	.L421
+ 2439              	.L409:
+ 2440              		.loc 1 216 5 discriminator 176
+ 2441 0e5e 4FF08073 		mov	r3, #16777216
+ 2442 0e62 1BE0     		b	.L421
+ 2443              	.L408:
+ 2444              		.loc 1 216 5 discriminator 174
+ 2445 0e64 4FF48023 		mov	r3, #262144
+ 2446 0e68 18E0     		b	.L421
+ 2447              	.L407:
+ 2448              		.loc 1 216 5 discriminator 172
+ 2449 0e6a 4FF48023 		mov	r3, #262144
+ 2450 0e6e 15E0     		b	.L421
+ 2451              	.L406:
+ 2452              		.loc 1 216 5 discriminator 170
+ 2453 0e70 4FF48023 		mov	r3, #262144
+ 2454 0e74 12E0     		b	.L421
+ 2455              	.L405:
+ 2456              		.loc 1 216 5 discriminator 168
+ 2457 0e76 4FF48073 		mov	r3, #256
+ 2458 0e7a 0FE0     		b	.L421
+ 2459              	.L404:
+ 2460              		.loc 1 216 5 discriminator 166
+ 2461 0e7c 4FF48073 		mov	r3, #256
+ 2462 0e80 0CE0     		b	.L421
+ 2463              	.L403:
+ 2464              		.loc 1 216 5 discriminator 164
+ 2465 0e82 4FF48073 		mov	r3, #256
+ 2466 0e86 09E0     		b	.L421
+ARM GAS  /tmp/ccYTbMTL.s 			page 48
+
+
+ 2467              	.L402:
+ 2468              		.loc 1 216 5 discriminator 162
+ 2469 0e88 4FF48073 		mov	r3, #256
+ 2470 0e8c 06E0     		b	.L421
+ 2471              	.L401:
+ 2472              		.loc 1 216 5 discriminator 160
+ 2473 0e8e 0423     		movs	r3, #4
+ 2474 0e90 04E0     		b	.L421
+ 2475              	.L400:
+ 2476              		.loc 1 216 5 discriminator 158
+ 2477 0e92 0423     		movs	r3, #4
+ 2478 0e94 02E0     		b	.L421
+ 2479              	.L399:
+ 2480              		.loc 1 216 5 discriminator 156
+ 2481 0e96 0423     		movs	r3, #4
+ 2482 0e98 00E0     		b	.L421
+ 2483              	.L398:
+ 2484              		.loc 1 216 5 discriminator 154
+ 2485 0e9a 0423     		movs	r3, #4
+ 2486              	.L421:
+ 2487              		.loc 1 216 5 discriminator 200
+ 2488 0e9c 5A4A     		ldr	r2, .L537
+ 2489 0e9e 9360     		str	r3, [r2, #8]
+ 2490              	.L345:
+ 217:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     __HAL_DMA_CLEAR_FLAG (hdma, __HAL_DMA_GET_FE_FLAG_INDEX(hdma));
+ 2491              		.loc 1 217 5 is_stmt 1
+ 2492 0ea0 FB68     		ldr	r3, [r7, #12]
+ 2493 0ea2 1B68     		ldr	r3, [r3]
+ 2494 0ea4 1A46     		mov	r2, r3
+ 2495 0ea6 654B     		ldr	r3, .L537+52
+ 2496 0ea8 9A42     		cmp	r2, r3
+ 2497 0eaa 5CD9     		bls	.L422
+ 2498              		.loc 1 217 5 is_stmt 0 discriminator 1
+ 2499 0eac FB68     		ldr	r3, [r7, #12]
+ 2500 0eae 1B68     		ldr	r3, [r3]
+ 2501 0eb0 564A     		ldr	r2, .L537+4
+ 2502 0eb2 9342     		cmp	r3, r2
+ 2503 0eb4 53D0     		beq	.L423
+ 2504              		.loc 1 217 5 discriminator 3
+ 2505 0eb6 FB68     		ldr	r3, [r7, #12]
+ 2506 0eb8 1B68     		ldr	r3, [r3]
+ 2507 0eba 554A     		ldr	r2, .L537+8
+ 2508 0ebc 9342     		cmp	r3, r2
+ 2509 0ebe 4CD0     		beq	.L424
+ 2510              		.loc 1 217 5 discriminator 5
+ 2511 0ec0 FB68     		ldr	r3, [r7, #12]
+ 2512 0ec2 1B68     		ldr	r3, [r3]
+ 2513 0ec4 534A     		ldr	r2, .L537+12
+ 2514 0ec6 9342     		cmp	r3, r2
+ 2515 0ec8 45D0     		beq	.L425
+ 2516              		.loc 1 217 5 discriminator 7
+ 2517 0eca FB68     		ldr	r3, [r7, #12]
+ 2518 0ecc 1B68     		ldr	r3, [r3]
+ 2519 0ece 524A     		ldr	r2, .L537+16
+ 2520 0ed0 9342     		cmp	r3, r2
+ 2521 0ed2 3ED0     		beq	.L426
+ 2522              		.loc 1 217 5 discriminator 9
+ARM GAS  /tmp/ccYTbMTL.s 			page 49
+
+
+ 2523 0ed4 FB68     		ldr	r3, [r7, #12]
+ 2524 0ed6 1B68     		ldr	r3, [r3]
+ 2525 0ed8 504A     		ldr	r2, .L537+20
+ 2526 0eda 9342     		cmp	r3, r2
+ 2527 0edc 37D0     		beq	.L427
+ 2528              		.loc 1 217 5 discriminator 11
+ 2529 0ede FB68     		ldr	r3, [r7, #12]
+ 2530 0ee0 1B68     		ldr	r3, [r3]
+ 2531 0ee2 4F4A     		ldr	r2, .L537+24
+ 2532 0ee4 9342     		cmp	r3, r2
+ 2533 0ee6 30D0     		beq	.L428
+ 2534              		.loc 1 217 5 discriminator 13
+ 2535 0ee8 FB68     		ldr	r3, [r7, #12]
+ 2536 0eea 1B68     		ldr	r3, [r3]
+ 2537 0eec 4D4A     		ldr	r2, .L537+28
+ 2538 0eee 9342     		cmp	r3, r2
+ 2539 0ef0 29D0     		beq	.L429
+ 2540              		.loc 1 217 5 discriminator 15
+ 2541 0ef2 FB68     		ldr	r3, [r7, #12]
+ 2542 0ef4 1B68     		ldr	r3, [r3]
+ 2543 0ef6 4C4A     		ldr	r2, .L537+32
+ 2544 0ef8 9342     		cmp	r3, r2
+ 2545 0efa 22D0     		beq	.L430
+ 2546              		.loc 1 217 5 discriminator 17
+ 2547 0efc FB68     		ldr	r3, [r7, #12]
+ 2548 0efe 1B68     		ldr	r3, [r3]
+ 2549 0f00 4A4A     		ldr	r2, .L537+36
+ 2550 0f02 9342     		cmp	r3, r2
+ 2551 0f04 1AD0     		beq	.L431
+ 2552              		.loc 1 217 5 discriminator 19
+ 2553 0f06 FB68     		ldr	r3, [r7, #12]
+ 2554 0f08 1B68     		ldr	r3, [r3]
+ 2555 0f0a 494A     		ldr	r2, .L537+40
+ 2556 0f0c 9342     		cmp	r3, r2
+ 2557 0f0e 12D0     		beq	.L432
+ 2558              		.loc 1 217 5 discriminator 21
+ 2559 0f10 FB68     		ldr	r3, [r7, #12]
+ 2560 0f12 1B68     		ldr	r3, [r3]
+ 2561 0f14 474A     		ldr	r2, .L537+44
+ 2562 0f16 9342     		cmp	r3, r2
+ 2563 0f18 0AD0     		beq	.L433
+ 2564              		.loc 1 217 5 discriminator 23
+ 2565 0f1a FB68     		ldr	r3, [r7, #12]
+ 2566 0f1c 1B68     		ldr	r3, [r3]
+ 2567 0f1e 464A     		ldr	r2, .L537+48
+ 2568 0f20 9342     		cmp	r3, r2
+ 2569 0f22 02D1     		bne	.L434
+ 2570              		.loc 1 217 5 discriminator 25
+ 2571 0f24 4FF48033 		mov	r3, #65536
+ 2572 0f28 1AE0     		b	.L446
+ 2573              	.L434:
+ 2574              		.loc 1 217 5 discriminator 26
+ 2575 0f2a 4FF48003 		mov	r3, #4194304
+ 2576 0f2e 17E0     		b	.L446
+ 2577              	.L433:
+ 2578              		.loc 1 217 5 discriminator 24
+ 2579 0f30 4FF48033 		mov	r3, #65536
+ARM GAS  /tmp/ccYTbMTL.s 			page 50
+
+
+ 2580 0f34 14E0     		b	.L446
+ 2581              	.L432:
+ 2582              		.loc 1 217 5 discriminator 22
+ 2583 0f36 4FF48033 		mov	r3, #65536
+ 2584 0f3a 11E0     		b	.L446
+ 2585              	.L431:
+ 2586              		.loc 1 217 5 discriminator 20
+ 2587 0f3c 4FF48033 		mov	r3, #65536
+ 2588 0f40 0EE0     		b	.L446
+ 2589              	.L430:
+ 2590              		.loc 1 217 5 discriminator 18
+ 2591 0f42 4023     		movs	r3, #64
+ 2592 0f44 0CE0     		b	.L446
+ 2593              	.L429:
+ 2594              		.loc 1 217 5 discriminator 16
+ 2595 0f46 4023     		movs	r3, #64
+ 2596 0f48 0AE0     		b	.L446
+ 2597              	.L428:
+ 2598              		.loc 1 217 5 discriminator 14
+ 2599 0f4a 4023     		movs	r3, #64
+ 2600 0f4c 08E0     		b	.L446
+ 2601              	.L427:
+ 2602              		.loc 1 217 5 discriminator 12
+ 2603 0f4e 4023     		movs	r3, #64
+ 2604 0f50 06E0     		b	.L446
+ 2605              	.L426:
+ 2606              		.loc 1 217 5 discriminator 10
+ 2607 0f52 0123     		movs	r3, #1
+ 2608 0f54 04E0     		b	.L446
+ 2609              	.L425:
+ 2610              		.loc 1 217 5 discriminator 8
+ 2611 0f56 0123     		movs	r3, #1
+ 2612 0f58 02E0     		b	.L446
+ 2613              	.L424:
+ 2614              		.loc 1 217 5 discriminator 6
+ 2615 0f5a 0123     		movs	r3, #1
+ 2616 0f5c 00E0     		b	.L446
+ 2617              	.L423:
+ 2618              		.loc 1 217 5 discriminator 4
+ 2619 0f5e 0123     		movs	r3, #1
+ 2620              	.L446:
+ 2621              		.loc 1 217 5 discriminator 50
+ 2622 0f60 374A     		ldr	r2, .L537+56
+ 2623 0f62 D360     		str	r3, [r2, #12]
+ 2624 0f64 41E1     		b	.L447
+ 2625              	.L422:
+ 2626              		.loc 1 217 5 discriminator 2
+ 2627 0f66 FB68     		ldr	r3, [r7, #12]
+ 2628 0f68 1B68     		ldr	r3, [r3]
+ 2629 0f6a 1A46     		mov	r2, r3
+ 2630 0f6c 354B     		ldr	r3, .L537+60
+ 2631 0f6e 9A42     		cmp	r2, r3
+ 2632 0f70 7CD9     		bls	.L448
+ 2633              		.loc 1 217 5 discriminator 51
+ 2634 0f72 FB68     		ldr	r3, [r7, #12]
+ 2635 0f74 1B68     		ldr	r3, [r3]
+ 2636 0f76 254A     		ldr	r2, .L537+4
+ARM GAS  /tmp/ccYTbMTL.s 			page 51
+
+
+ 2637 0f78 9342     		cmp	r3, r2
+ 2638 0f7a 73D0     		beq	.L449
+ 2639              		.loc 1 217 5 discriminator 53
+ 2640 0f7c FB68     		ldr	r3, [r7, #12]
+ 2641 0f7e 1B68     		ldr	r3, [r3]
+ 2642 0f80 234A     		ldr	r2, .L537+8
+ 2643 0f82 9342     		cmp	r3, r2
+ 2644 0f84 6CD0     		beq	.L450
+ 2645              		.loc 1 217 5 discriminator 55
+ 2646 0f86 FB68     		ldr	r3, [r7, #12]
+ 2647 0f88 1B68     		ldr	r3, [r3]
+ 2648 0f8a 224A     		ldr	r2, .L537+12
+ 2649 0f8c 9342     		cmp	r3, r2
+ 2650 0f8e 65D0     		beq	.L451
+ 2651              		.loc 1 217 5 discriminator 57
+ 2652 0f90 FB68     		ldr	r3, [r7, #12]
+ 2653 0f92 1B68     		ldr	r3, [r3]
+ 2654 0f94 204A     		ldr	r2, .L537+16
+ 2655 0f96 9342     		cmp	r3, r2
+ 2656 0f98 5ED0     		beq	.L452
+ 2657              		.loc 1 217 5 discriminator 59
+ 2658 0f9a FB68     		ldr	r3, [r7, #12]
+ 2659 0f9c 1B68     		ldr	r3, [r3]
+ 2660 0f9e 1F4A     		ldr	r2, .L537+20
+ 2661 0fa0 9342     		cmp	r3, r2
+ 2662 0fa2 57D0     		beq	.L453
+ 2663              		.loc 1 217 5 discriminator 61
+ 2664 0fa4 FB68     		ldr	r3, [r7, #12]
+ 2665 0fa6 1B68     		ldr	r3, [r3]
+ 2666 0fa8 1D4A     		ldr	r2, .L537+24
+ 2667 0faa 9342     		cmp	r3, r2
+ 2668 0fac 50D0     		beq	.L454
+ 2669              		.loc 1 217 5 discriminator 63
+ 2670 0fae FB68     		ldr	r3, [r7, #12]
+ 2671 0fb0 1B68     		ldr	r3, [r3]
+ 2672 0fb2 1C4A     		ldr	r2, .L537+28
+ 2673 0fb4 9342     		cmp	r3, r2
+ 2674 0fb6 49D0     		beq	.L455
+ 2675              		.loc 1 217 5 discriminator 65
+ 2676 0fb8 FB68     		ldr	r3, [r7, #12]
+ 2677 0fba 1B68     		ldr	r3, [r3]
+ 2678 0fbc 1A4A     		ldr	r2, .L537+32
+ 2679 0fbe 9342     		cmp	r3, r2
+ 2680 0fc0 42D0     		beq	.L456
+ 2681              		.loc 1 217 5 discriminator 67
+ 2682 0fc2 FB68     		ldr	r3, [r7, #12]
+ 2683 0fc4 1B68     		ldr	r3, [r3]
+ 2684 0fc6 194A     		ldr	r2, .L537+36
+ 2685 0fc8 9342     		cmp	r3, r2
+ 2686 0fca 1AD0     		beq	.L457
+ 2687              		.loc 1 217 5 discriminator 69
+ 2688 0fcc FB68     		ldr	r3, [r7, #12]
+ 2689 0fce 1B68     		ldr	r3, [r3]
+ 2690 0fd0 174A     		ldr	r2, .L537+40
+ 2691 0fd2 9342     		cmp	r3, r2
+ 2692 0fd4 12D0     		beq	.L458
+ 2693              		.loc 1 217 5 discriminator 71
+ARM GAS  /tmp/ccYTbMTL.s 			page 52
+
+
+ 2694 0fd6 FB68     		ldr	r3, [r7, #12]
+ 2695 0fd8 1B68     		ldr	r3, [r3]
+ 2696 0fda 164A     		ldr	r2, .L537+44
+ 2697 0fdc 9342     		cmp	r3, r2
+ 2698 0fde 0AD0     		beq	.L459
+ 2699              		.loc 1 217 5 discriminator 73
+ 2700 0fe0 FB68     		ldr	r3, [r7, #12]
+ 2701 0fe2 1B68     		ldr	r3, [r3]
+ 2702 0fe4 144A     		ldr	r2, .L537+48
+ 2703 0fe6 9342     		cmp	r3, r2
+ 2704 0fe8 02D1     		bne	.L460
+ 2705              		.loc 1 217 5 discriminator 75
+ 2706 0fea 4FF48033 		mov	r3, #65536
+ 2707 0fee 3AE0     		b	.L472
+ 2708              	.L460:
+ 2709              		.loc 1 217 5 discriminator 76
+ 2710 0ff0 4FF48003 		mov	r3, #4194304
+ 2711 0ff4 37E0     		b	.L472
+ 2712              	.L459:
+ 2713              		.loc 1 217 5 discriminator 74
+ 2714 0ff6 4FF48033 		mov	r3, #65536
+ 2715 0ffa 34E0     		b	.L472
+ 2716              	.L458:
+ 2717              		.loc 1 217 5 discriminator 72
+ 2718 0ffc 4FF48033 		mov	r3, #65536
+ 2719 1000 31E0     		b	.L472
+ 2720              	.L457:
+ 2721              		.loc 1 217 5 discriminator 70
+ 2722 1002 4FF48033 		mov	r3, #65536
+ 2723 1006 2EE0     		b	.L472
+ 2724              	.L538:
+ 2725              		.align	2
+ 2726              	.L537:
+ 2727 1008 00600240 		.word	1073897472
+ 2728 100c 10600240 		.word	1073897488
+ 2729 1010 10640240 		.word	1073898512
+ 2730 1014 70600240 		.word	1073897584
+ 2731 1018 70640240 		.word	1073898608
+ 2732 101c 28600240 		.word	1073897512
+ 2733 1020 28640240 		.word	1073898536
+ 2734 1024 88600240 		.word	1073897608
+ 2735 1028 88640240 		.word	1073898632
+ 2736 102c 40600240 		.word	1073897536
+ 2737 1030 40640240 		.word	1073898560
+ 2738 1034 A0600240 		.word	1073897632
+ 2739 1038 A0640240 		.word	1073898656
+ 2740 103c 58640240 		.word	1073898584
+ 2741 1040 00640240 		.word	1073898496
+ 2742 1044 B8600240 		.word	1073897656
+ 2743              	.L456:
+ 2744              		.loc 1 217 5 discriminator 68
+ 2745 1048 4023     		movs	r3, #64
+ 2746 104a 0CE0     		b	.L472
+ 2747              	.L455:
+ 2748              		.loc 1 217 5 discriminator 66
+ 2749 104c 4023     		movs	r3, #64
+ 2750 104e 0AE0     		b	.L472
+ARM GAS  /tmp/ccYTbMTL.s 			page 53
+
+
+ 2751              	.L454:
+ 2752              		.loc 1 217 5 discriminator 64
+ 2753 1050 4023     		movs	r3, #64
+ 2754 1052 08E0     		b	.L472
+ 2755              	.L453:
+ 2756              		.loc 1 217 5 discriminator 62
+ 2757 1054 4023     		movs	r3, #64
+ 2758 1056 06E0     		b	.L472
+ 2759              	.L452:
+ 2760              		.loc 1 217 5 discriminator 60
+ 2761 1058 0123     		movs	r3, #1
+ 2762 105a 04E0     		b	.L472
+ 2763              	.L451:
+ 2764              		.loc 1 217 5 discriminator 58
+ 2765 105c 0123     		movs	r3, #1
+ 2766 105e 02E0     		b	.L472
+ 2767              	.L450:
+ 2768              		.loc 1 217 5 discriminator 56
+ 2769 1060 0123     		movs	r3, #1
+ 2770 1062 00E0     		b	.L472
+ 2771              	.L449:
+ 2772              		.loc 1 217 5 discriminator 54
+ 2773 1064 0123     		movs	r3, #1
+ 2774              	.L472:
+ 2775              		.loc 1 217 5 discriminator 100
+ 2776 1066 7B4A     		ldr	r2, .L539
+ 2777 1068 9360     		str	r3, [r2, #8]
+ 2778 106a BEE0     		b	.L447
+ 2779              	.L448:
+ 2780              		.loc 1 217 5 discriminator 52
+ 2781 106c FB68     		ldr	r3, [r7, #12]
+ 2782 106e 1B68     		ldr	r3, [r3]
+ 2783 1070 1A46     		mov	r2, r3
+ 2784 1072 794B     		ldr	r3, .L539+4
+ 2785 1074 9A42     		cmp	r2, r3
+ 2786 1076 5CD9     		bls	.L474
+ 2787              		.loc 1 217 5 discriminator 102
+ 2788 1078 FB68     		ldr	r3, [r7, #12]
+ 2789 107a 1B68     		ldr	r3, [r3]
+ 2790 107c 774A     		ldr	r2, .L539+8
+ 2791 107e 9342     		cmp	r3, r2
+ 2792 1080 53D0     		beq	.L475
+ 2793              		.loc 1 217 5 discriminator 104
+ 2794 1082 FB68     		ldr	r3, [r7, #12]
+ 2795 1084 1B68     		ldr	r3, [r3]
+ 2796 1086 764A     		ldr	r2, .L539+12
+ 2797 1088 9342     		cmp	r3, r2
+ 2798 108a 4CD0     		beq	.L476
+ 2799              		.loc 1 217 5 discriminator 106
+ 2800 108c FB68     		ldr	r3, [r7, #12]
+ 2801 108e 1B68     		ldr	r3, [r3]
+ 2802 1090 744A     		ldr	r2, .L539+16
+ 2803 1092 9342     		cmp	r3, r2
+ 2804 1094 45D0     		beq	.L477
+ 2805              		.loc 1 217 5 discriminator 108
+ 2806 1096 FB68     		ldr	r3, [r7, #12]
+ 2807 1098 1B68     		ldr	r3, [r3]
+ARM GAS  /tmp/ccYTbMTL.s 			page 54
+
+
+ 2808 109a 734A     		ldr	r2, .L539+20
+ 2809 109c 9342     		cmp	r3, r2
+ 2810 109e 3ED0     		beq	.L478
+ 2811              		.loc 1 217 5 discriminator 110
+ 2812 10a0 FB68     		ldr	r3, [r7, #12]
+ 2813 10a2 1B68     		ldr	r3, [r3]
+ 2814 10a4 714A     		ldr	r2, .L539+24
+ 2815 10a6 9342     		cmp	r3, r2
+ 2816 10a8 37D0     		beq	.L479
+ 2817              		.loc 1 217 5 discriminator 112
+ 2818 10aa FB68     		ldr	r3, [r7, #12]
+ 2819 10ac 1B68     		ldr	r3, [r3]
+ 2820 10ae 704A     		ldr	r2, .L539+28
+ 2821 10b0 9342     		cmp	r3, r2
+ 2822 10b2 30D0     		beq	.L480
+ 2823              		.loc 1 217 5 discriminator 114
+ 2824 10b4 FB68     		ldr	r3, [r7, #12]
+ 2825 10b6 1B68     		ldr	r3, [r3]
+ 2826 10b8 6E4A     		ldr	r2, .L539+32
+ 2827 10ba 9342     		cmp	r3, r2
+ 2828 10bc 29D0     		beq	.L481
+ 2829              		.loc 1 217 5 discriminator 116
+ 2830 10be FB68     		ldr	r3, [r7, #12]
+ 2831 10c0 1B68     		ldr	r3, [r3]
+ 2832 10c2 6D4A     		ldr	r2, .L539+36
+ 2833 10c4 9342     		cmp	r3, r2
+ 2834 10c6 22D0     		beq	.L482
+ 2835              		.loc 1 217 5 discriminator 118
+ 2836 10c8 FB68     		ldr	r3, [r7, #12]
+ 2837 10ca 1B68     		ldr	r3, [r3]
+ 2838 10cc 6B4A     		ldr	r2, .L539+40
+ 2839 10ce 9342     		cmp	r3, r2
+ 2840 10d0 1AD0     		beq	.L483
+ 2841              		.loc 1 217 5 discriminator 120
+ 2842 10d2 FB68     		ldr	r3, [r7, #12]
+ 2843 10d4 1B68     		ldr	r3, [r3]
+ 2844 10d6 6A4A     		ldr	r2, .L539+44
+ 2845 10d8 9342     		cmp	r3, r2
+ 2846 10da 12D0     		beq	.L484
+ 2847              		.loc 1 217 5 discriminator 122
+ 2848 10dc FB68     		ldr	r3, [r7, #12]
+ 2849 10de 1B68     		ldr	r3, [r3]
+ 2850 10e0 684A     		ldr	r2, .L539+48
+ 2851 10e2 9342     		cmp	r3, r2
+ 2852 10e4 0AD0     		beq	.L485
+ 2853              		.loc 1 217 5 discriminator 124
+ 2854 10e6 FB68     		ldr	r3, [r7, #12]
+ 2855 10e8 1B68     		ldr	r3, [r3]
+ 2856 10ea 674A     		ldr	r2, .L539+52
+ 2857 10ec 9342     		cmp	r3, r2
+ 2858 10ee 02D1     		bne	.L486
+ 2859              		.loc 1 217 5 discriminator 126
+ 2860 10f0 4FF48033 		mov	r3, #65536
+ 2861 10f4 1AE0     		b	.L498
+ 2862              	.L486:
+ 2863              		.loc 1 217 5 discriminator 127
+ 2864 10f6 4FF48003 		mov	r3, #4194304
+ARM GAS  /tmp/ccYTbMTL.s 			page 55
+
+
+ 2865 10fa 17E0     		b	.L498
+ 2866              	.L485:
+ 2867              		.loc 1 217 5 discriminator 125
+ 2868 10fc 4FF48033 		mov	r3, #65536
+ 2869 1100 14E0     		b	.L498
+ 2870              	.L484:
+ 2871              		.loc 1 217 5 discriminator 123
+ 2872 1102 4FF48033 		mov	r3, #65536
+ 2873 1106 11E0     		b	.L498
+ 2874              	.L483:
+ 2875              		.loc 1 217 5 discriminator 121
+ 2876 1108 4FF48033 		mov	r3, #65536
+ 2877 110c 0EE0     		b	.L498
+ 2878              	.L482:
+ 2879              		.loc 1 217 5 discriminator 119
+ 2880 110e 4023     		movs	r3, #64
+ 2881 1110 0CE0     		b	.L498
+ 2882              	.L481:
+ 2883              		.loc 1 217 5 discriminator 117
+ 2884 1112 4023     		movs	r3, #64
+ 2885 1114 0AE0     		b	.L498
+ 2886              	.L480:
+ 2887              		.loc 1 217 5 discriminator 115
+ 2888 1116 4023     		movs	r3, #64
+ 2889 1118 08E0     		b	.L498
+ 2890              	.L479:
+ 2891              		.loc 1 217 5 discriminator 113
+ 2892 111a 4023     		movs	r3, #64
+ 2893 111c 06E0     		b	.L498
+ 2894              	.L478:
+ 2895              		.loc 1 217 5 discriminator 111
+ 2896 111e 0123     		movs	r3, #1
+ 2897 1120 04E0     		b	.L498
+ 2898              	.L477:
+ 2899              		.loc 1 217 5 discriminator 109
+ 2900 1122 0123     		movs	r3, #1
+ 2901 1124 02E0     		b	.L498
+ 2902              	.L476:
+ 2903              		.loc 1 217 5 discriminator 107
+ 2904 1126 0123     		movs	r3, #1
+ 2905 1128 00E0     		b	.L498
+ 2906              	.L475:
+ 2907              		.loc 1 217 5 discriminator 105
+ 2908 112a 0123     		movs	r3, #1
+ 2909              	.L498:
+ 2910              		.loc 1 217 5 discriminator 151
+ 2911 112c 574A     		ldr	r2, .L539+56
+ 2912 112e D360     		str	r3, [r2, #12]
+ 2913 1130 5BE0     		b	.L447
+ 2914              	.L474:
+ 2915              		.loc 1 217 5 discriminator 103
+ 2916 1132 FB68     		ldr	r3, [r7, #12]
+ 2917 1134 1B68     		ldr	r3, [r3]
+ 2918 1136 494A     		ldr	r2, .L539+8
+ 2919 1138 9342     		cmp	r3, r2
+ 2920 113a 53D0     		beq	.L500
+ 2921              		.loc 1 217 5 discriminator 153
+ARM GAS  /tmp/ccYTbMTL.s 			page 56
+
+
+ 2922 113c FB68     		ldr	r3, [r7, #12]
+ 2923 113e 1B68     		ldr	r3, [r3]
+ 2924 1140 474A     		ldr	r2, .L539+12
+ 2925 1142 9342     		cmp	r3, r2
+ 2926 1144 4CD0     		beq	.L501
+ 2927              		.loc 1 217 5 discriminator 155
+ 2928 1146 FB68     		ldr	r3, [r7, #12]
+ 2929 1148 1B68     		ldr	r3, [r3]
+ 2930 114a 464A     		ldr	r2, .L539+16
+ 2931 114c 9342     		cmp	r3, r2
+ 2932 114e 45D0     		beq	.L502
+ 2933              		.loc 1 217 5 discriminator 157
+ 2934 1150 FB68     		ldr	r3, [r7, #12]
+ 2935 1152 1B68     		ldr	r3, [r3]
+ 2936 1154 444A     		ldr	r2, .L539+20
+ 2937 1156 9342     		cmp	r3, r2
+ 2938 1158 3ED0     		beq	.L503
+ 2939              		.loc 1 217 5 discriminator 159
+ 2940 115a FB68     		ldr	r3, [r7, #12]
+ 2941 115c 1B68     		ldr	r3, [r3]
+ 2942 115e 434A     		ldr	r2, .L539+24
+ 2943 1160 9342     		cmp	r3, r2
+ 2944 1162 37D0     		beq	.L504
+ 2945              		.loc 1 217 5 discriminator 161
+ 2946 1164 FB68     		ldr	r3, [r7, #12]
+ 2947 1166 1B68     		ldr	r3, [r3]
+ 2948 1168 414A     		ldr	r2, .L539+28
+ 2949 116a 9342     		cmp	r3, r2
+ 2950 116c 30D0     		beq	.L505
+ 2951              		.loc 1 217 5 discriminator 163
+ 2952 116e FB68     		ldr	r3, [r7, #12]
+ 2953 1170 1B68     		ldr	r3, [r3]
+ 2954 1172 404A     		ldr	r2, .L539+32
+ 2955 1174 9342     		cmp	r3, r2
+ 2956 1176 29D0     		beq	.L506
+ 2957              		.loc 1 217 5 discriminator 165
+ 2958 1178 FB68     		ldr	r3, [r7, #12]
+ 2959 117a 1B68     		ldr	r3, [r3]
+ 2960 117c 3E4A     		ldr	r2, .L539+36
+ 2961 117e 9342     		cmp	r3, r2
+ 2962 1180 22D0     		beq	.L507
+ 2963              		.loc 1 217 5 discriminator 167
+ 2964 1182 FB68     		ldr	r3, [r7, #12]
+ 2965 1184 1B68     		ldr	r3, [r3]
+ 2966 1186 3D4A     		ldr	r2, .L539+40
+ 2967 1188 9342     		cmp	r3, r2
+ 2968 118a 1AD0     		beq	.L508
+ 2969              		.loc 1 217 5 discriminator 169
+ 2970 118c FB68     		ldr	r3, [r7, #12]
+ 2971 118e 1B68     		ldr	r3, [r3]
+ 2972 1190 3B4A     		ldr	r2, .L539+44
+ 2973 1192 9342     		cmp	r3, r2
+ 2974 1194 12D0     		beq	.L509
+ 2975              		.loc 1 217 5 discriminator 171
+ 2976 1196 FB68     		ldr	r3, [r7, #12]
+ 2977 1198 1B68     		ldr	r3, [r3]
+ 2978 119a 3A4A     		ldr	r2, .L539+48
+ARM GAS  /tmp/ccYTbMTL.s 			page 57
+
+
+ 2979 119c 9342     		cmp	r3, r2
+ 2980 119e 0AD0     		beq	.L510
+ 2981              		.loc 1 217 5 discriminator 173
+ 2982 11a0 FB68     		ldr	r3, [r7, #12]
+ 2983 11a2 1B68     		ldr	r3, [r3]
+ 2984 11a4 384A     		ldr	r2, .L539+52
+ 2985 11a6 9342     		cmp	r3, r2
+ 2986 11a8 02D1     		bne	.L511
+ 2987              		.loc 1 217 5 discriminator 175
+ 2988 11aa 4FF48033 		mov	r3, #65536
+ 2989 11ae 1AE0     		b	.L523
+ 2990              	.L511:
+ 2991              		.loc 1 217 5 discriminator 176
+ 2992 11b0 4FF48003 		mov	r3, #4194304
+ 2993 11b4 17E0     		b	.L523
+ 2994              	.L510:
+ 2995              		.loc 1 217 5 discriminator 174
+ 2996 11b6 4FF48033 		mov	r3, #65536
+ 2997 11ba 14E0     		b	.L523
+ 2998              	.L509:
+ 2999              		.loc 1 217 5 discriminator 172
+ 3000 11bc 4FF48033 		mov	r3, #65536
+ 3001 11c0 11E0     		b	.L523
+ 3002              	.L508:
+ 3003              		.loc 1 217 5 discriminator 170
+ 3004 11c2 4FF48033 		mov	r3, #65536
+ 3005 11c6 0EE0     		b	.L523
+ 3006              	.L507:
+ 3007              		.loc 1 217 5 discriminator 168
+ 3008 11c8 4023     		movs	r3, #64
+ 3009 11ca 0CE0     		b	.L523
+ 3010              	.L506:
+ 3011              		.loc 1 217 5 discriminator 166
+ 3012 11cc 4023     		movs	r3, #64
+ 3013 11ce 0AE0     		b	.L523
+ 3014              	.L505:
+ 3015              		.loc 1 217 5 discriminator 164
+ 3016 11d0 4023     		movs	r3, #64
+ 3017 11d2 08E0     		b	.L523
+ 3018              	.L504:
+ 3019              		.loc 1 217 5 discriminator 162
+ 3020 11d4 4023     		movs	r3, #64
+ 3021 11d6 06E0     		b	.L523
+ 3022              	.L503:
+ 3023              		.loc 1 217 5 discriminator 160
+ 3024 11d8 0123     		movs	r3, #1
+ 3025 11da 04E0     		b	.L523
+ 3026              	.L502:
+ 3027              		.loc 1 217 5 discriminator 158
+ 3028 11dc 0123     		movs	r3, #1
+ 3029 11de 02E0     		b	.L523
+ 3030              	.L501:
+ 3031              		.loc 1 217 5 discriminator 156
+ 3032 11e0 0123     		movs	r3, #1
+ 3033 11e2 00E0     		b	.L523
+ 3034              	.L500:
+ 3035              		.loc 1 217 5 discriminator 154
+ARM GAS  /tmp/ccYTbMTL.s 			page 58
+
+
+ 3036 11e4 0123     		movs	r3, #1
+ 3037              	.L523:
+ 3038              		.loc 1 217 5 discriminator 200
+ 3039 11e6 294A     		ldr	r2, .L539+56
+ 3040 11e8 9360     		str	r3, [r2, #8]
+ 3041              	.L447:
+ 218:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+ 219:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Enable Common interrupts*/
+ 220:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->Instance->CR  |= DMA_IT_TC | DMA_IT_TE | DMA_IT_DME;
+ 3042              		.loc 1 220 9 is_stmt 1
+ 3043 11ea FB68     		ldr	r3, [r7, #12]
+ 3044 11ec 1B68     		ldr	r3, [r3]
+ 3045              		.loc 1 220 25
+ 3046 11ee 1A68     		ldr	r2, [r3]
+ 3047              		.loc 1 220 9
+ 3048 11f0 FB68     		ldr	r3, [r7, #12]
+ 3049 11f2 1B68     		ldr	r3, [r3]
+ 3050              		.loc 1 220 25
+ 3051 11f4 42F01602 		orr	r2, r2, #22
+ 3052 11f8 1A60     		str	r2, [r3]
+ 221:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->Instance->FCR |= DMA_IT_FE;
+ 3053              		.loc 1 221 9
+ 3054 11fa FB68     		ldr	r3, [r7, #12]
+ 3055 11fc 1B68     		ldr	r3, [r3]
+ 3056              		.loc 1 221 25
+ 3057 11fe 5A69     		ldr	r2, [r3, #20]
+ 3058              		.loc 1 221 9
+ 3059 1200 FB68     		ldr	r3, [r7, #12]
+ 3060 1202 1B68     		ldr	r3, [r3]
+ 3061              		.loc 1 221 25
+ 3062 1204 42F08002 		orr	r2, r2, #128
+ 3063 1208 5A61     		str	r2, [r3, #20]
+ 222:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ 223:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     if((hdma->XferHalfCpltCallback != NULL) || (hdma->XferM1HalfCpltCallback != NULL))
+ 3064              		.loc 1 223 13
+ 3065 120a FB68     		ldr	r3, [r7, #12]
+ 3066 120c 1B6C     		ldr	r3, [r3, #64]
+ 3067              		.loc 1 223 7
+ 3068 120e 002B     		cmp	r3, #0
+ 3069 1210 03D1     		bne	.L524
+ 3070              		.loc 1 223 53 discriminator 1
+ 3071 1212 FB68     		ldr	r3, [r7, #12]
+ 3072 1214 9B6C     		ldr	r3, [r3, #72]
+ 3073              		.loc 1 223 45 discriminator 1
+ 3074 1216 002B     		cmp	r3, #0
+ 3075 1218 07D0     		beq	.L525
+ 3076              	.L524:
+ 224:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     {
+ 225:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****       hdma->Instance->CR  |= DMA_IT_HT;
+ 3077              		.loc 1 225 11
+ 3078 121a FB68     		ldr	r3, [r7, #12]
+ 3079 121c 1B68     		ldr	r3, [r3]
+ 3080              		.loc 1 225 27
+ 3081 121e 1A68     		ldr	r2, [r3]
+ 3082              		.loc 1 225 11
+ 3083 1220 FB68     		ldr	r3, [r7, #12]
+ 3084 1222 1B68     		ldr	r3, [r3]
+ARM GAS  /tmp/ccYTbMTL.s 			page 59
+
+
+ 3085              		.loc 1 225 27
+ 3086 1224 42F00802 		orr	r2, r2, #8
+ 3087 1228 1A60     		str	r2, [r3]
+ 3088              	.L525:
+ 226:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     }
+ 227:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ 228:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Enable the peripheral */
+ 229:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     __HAL_DMA_ENABLE(hdma); 
+ 3089              		.loc 1 229 5
+ 3090 122a FB68     		ldr	r3, [r7, #12]
+ 3091 122c 1B68     		ldr	r3, [r3]
+ 3092 122e 1A68     		ldr	r2, [r3]
+ 3093 1230 FB68     		ldr	r3, [r7, #12]
+ 3094 1232 1B68     		ldr	r3, [r3]
+ 3095 1234 42F00102 		orr	r2, r2, #1
+ 3096 1238 1A60     		str	r2, [r3]
+ 3097 123a 05E0     		b	.L526
+ 3098              	.L13:
+ 230:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   }
+ 231:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   else
+ 232:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   {     
+ 233:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Process unlocked */
+ 234:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     __HAL_UNLOCK(hdma);	  
+ 3099              		.loc 1 234 5
+ 3100 123c FB68     		ldr	r3, [r7, #12]
+ 3101 123e 0022     		movs	r2, #0
+ 3102 1240 83F83420 		strb	r2, [r3, #52]
+ 235:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ 236:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Return error status */
+ 237:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     status = HAL_BUSY;
+ 3103              		.loc 1 237 12
+ 3104 1244 0223     		movs	r3, #2
+ 3105 1246 FB75     		strb	r3, [r7, #23]
+ 3106              	.L526:
+ 238:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   }  
+ 239:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   return status; 
+ 3107              		.loc 1 239 10
+ 3108 1248 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 3109              	.L9:
+ 240:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** }
+ 3110              		.loc 1 240 1
+ 3111 124a 1846     		mov	r0, r3
+ 3112 124c 1837     		adds	r7, r7, #24
+ 3113              	.LCFI8:
+ 3114              		.cfi_def_cfa_offset 8
+ 3115 124e BD46     		mov	sp, r7
+ 3116              	.LCFI9:
+ 3117              		.cfi_def_cfa_register 13
+ 3118              		@ sp needed
+ 3119 1250 80BD     		pop	{r7, pc}
+ 3120              	.L540:
+ 3121 1252 00BF     		.align	2
+ 3122              	.L539:
+ 3123 1254 00640240 		.word	1073898496
+ 3124 1258 58600240 		.word	1073897560
+ 3125 125c 10600240 		.word	1073897488
+ 3126 1260 10640240 		.word	1073898512
+ARM GAS  /tmp/ccYTbMTL.s 			page 60
+
+
+ 3127 1264 70600240 		.word	1073897584
+ 3128 1268 70640240 		.word	1073898608
+ 3129 126c 28600240 		.word	1073897512
+ 3130 1270 28640240 		.word	1073898536
+ 3131 1274 88600240 		.word	1073897608
+ 3132 1278 88640240 		.word	1073898632
+ 3133 127c 40600240 		.word	1073897536
+ 3134 1280 40640240 		.word	1073898560
+ 3135 1284 A0600240 		.word	1073897632
+ 3136 1288 A0640240 		.word	1073898656
+ 3137 128c 00600240 		.word	1073897472
+ 3138              		.cfi_endproc
+ 3139              	.LFE127:
+ 3141              		.section	.text.HAL_DMAEx_ChangeMemory,"ax",%progbits
+ 3142              		.align	1
+ 3143              		.global	HAL_DMAEx_ChangeMemory
+ 3144              		.syntax unified
+ 3145              		.thumb
+ 3146              		.thumb_func
+ 3147              		.fpu fpv4-sp-d16
+ 3149              	HAL_DMAEx_ChangeMemory:
+ 3150              	.LFB128:
+ 241:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+ 242:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /**
+ 243:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @brief  Change the memory0 or memory1 address on the fly.
+ 244:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+ 245:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *                     the configuration information for the specified DMA Stream.  
+ 246:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  Address    The new address
+ 247:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  memory     the memory to be changed, This parameter can be one of 
+ 248:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *                     the following values:
+ 249:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *                      MEMORY0 /
+ 250:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *                      MEMORY1
+ 251:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @note   The MEMORY0 address can be changed only when the current transfer use
+ 252:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *         MEMORY1 and the MEMORY1 address can be changed only when the current 
+ 253:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *         transfer use MEMORY0.
+ 254:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @retval HAL status
+ 255:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+ 256:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** HAL_StatusTypeDef HAL_DMAEx_ChangeMemory(DMA_HandleTypeDef *hdma, uint32_t Address, HAL_DMA_MemoryT
+ 257:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** {
+ 3151              		.loc 1 257 1
+ 3152              		.cfi_startproc
+ 3153              		@ args = 0, pretend = 0, frame = 16
+ 3154              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3155              		@ link register save eliminated.
+ 3156 0000 80B4     		push	{r7}
+ 3157              	.LCFI10:
+ 3158              		.cfi_def_cfa_offset 4
+ 3159              		.cfi_offset 7, -4
+ 3160 0002 85B0     		sub	sp, sp, #20
+ 3161              	.LCFI11:
+ 3162              		.cfi_def_cfa_offset 24
+ 3163 0004 00AF     		add	r7, sp, #0
+ 3164              	.LCFI12:
+ 3165              		.cfi_def_cfa_register 7
+ 3166 0006 F860     		str	r0, [r7, #12]
+ 3167 0008 B960     		str	r1, [r7, #8]
+ 3168 000a 1346     		mov	r3, r2
+ARM GAS  /tmp/ccYTbMTL.s 			page 61
+
+
+ 3169 000c FB71     		strb	r3, [r7, #7]
+ 258:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   if(memory == MEMORY0)
+ 3170              		.loc 1 258 5
+ 3171 000e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 3172 0010 002B     		cmp	r3, #0
+ 3173 0012 04D1     		bne	.L542
+ 259:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   {
+ 260:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* change the memory0 address */
+ 261:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->Instance->M0AR = Address;
+ 3174              		.loc 1 261 9
+ 3175 0014 FB68     		ldr	r3, [r7, #12]
+ 3176 0016 1B68     		ldr	r3, [r3]
+ 3177              		.loc 1 261 26
+ 3178 0018 BA68     		ldr	r2, [r7, #8]
+ 3179 001a DA60     		str	r2, [r3, #12]
+ 3180 001c 03E0     		b	.L543
+ 3181              	.L542:
+ 262:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   }
+ 263:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   else
+ 264:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   {
+ 265:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* change the memory1 address */
+ 266:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->Instance->M1AR = Address;
+ 3182              		.loc 1 266 9
+ 3183 001e FB68     		ldr	r3, [r7, #12]
+ 3184 0020 1B68     		ldr	r3, [r3]
+ 3185              		.loc 1 266 26
+ 3186 0022 BA68     		ldr	r2, [r7, #8]
+ 3187 0024 1A61     		str	r2, [r3, #16]
+ 3188              	.L543:
+ 267:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   }
+ 268:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+ 269:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   return HAL_OK;
+ 3189              		.loc 1 269 10
+ 3190 0026 0023     		movs	r3, #0
+ 270:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** }
+ 3191              		.loc 1 270 1
+ 3192 0028 1846     		mov	r0, r3
+ 3193 002a 1437     		adds	r7, r7, #20
+ 3194              	.LCFI13:
+ 3195              		.cfi_def_cfa_offset 4
+ 3196 002c BD46     		mov	sp, r7
+ 3197              	.LCFI14:
+ 3198              		.cfi_def_cfa_register 13
+ 3199              		@ sp needed
+ 3200 002e 5DF8047B 		ldr	r7, [sp], #4
+ 3201              	.LCFI15:
+ 3202              		.cfi_restore 7
+ 3203              		.cfi_def_cfa_offset 0
+ 3204 0032 7047     		bx	lr
+ 3205              		.cfi_endproc
+ 3206              	.LFE128:
+ 3208              		.section	.text.DMA_MultiBufferSetConfig,"ax",%progbits
+ 3209              		.align	1
+ 3210              		.syntax unified
+ 3211              		.thumb
+ 3212              		.thumb_func
+ 3213              		.fpu fpv4-sp-d16
+ARM GAS  /tmp/ccYTbMTL.s 			page 62
+
+
+ 3215              	DMA_MultiBufferSetConfig:
+ 3216              	.LFB129:
+ 271:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+ 272:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /**
+ 273:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @}
+ 274:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+ 275:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+ 276:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /**
+ 277:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @}
+ 278:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+ 279:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+ 280:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /** @addtogroup DMAEx_Private_Functions
+ 281:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @{
+ 282:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+ 283:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** 
+ 284:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** /**
+ 285:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @brief  Set the DMA Transfer parameter.
+ 286:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+ 287:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   *                     the configuration information for the specified DMA Stream.  
+ 288:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  SrcAddress The source memory Buffer address
+ 289:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  DstAddress The destination memory Buffer address
+ 290:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @param  DataLength The length of data to be transferred from source to destination
+ 291:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   * @retval HAL status
+ 292:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   */
+ 293:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** static void DMA_MultiBufferSetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddr
+ 294:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** {  
+ 3217              		.loc 1 294 1
+ 3218              		.cfi_startproc
+ 3219              		@ args = 0, pretend = 0, frame = 16
+ 3220              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3221              		@ link register save eliminated.
+ 3222 0000 80B4     		push	{r7}
+ 3223              	.LCFI16:
+ 3224              		.cfi_def_cfa_offset 4
+ 3225              		.cfi_offset 7, -4
+ 3226 0002 85B0     		sub	sp, sp, #20
+ 3227              	.LCFI17:
+ 3228              		.cfi_def_cfa_offset 24
+ 3229 0004 00AF     		add	r7, sp, #0
+ 3230              	.LCFI18:
+ 3231              		.cfi_def_cfa_register 7
+ 3232 0006 F860     		str	r0, [r7, #12]
+ 3233 0008 B960     		str	r1, [r7, #8]
+ 3234 000a 7A60     		str	r2, [r7, #4]
+ 3235 000c 3B60     		str	r3, [r7]
+ 295:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   /* Configure DMA Stream data length */
+ 296:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   hdma->Instance->NDTR = DataLength;
+ 3236              		.loc 1 296 7
+ 3237 000e FB68     		ldr	r3, [r7, #12]
+ 3238 0010 1B68     		ldr	r3, [r3]
+ 3239              		.loc 1 296 24
+ 3240 0012 3A68     		ldr	r2, [r7]
+ 3241 0014 5A60     		str	r2, [r3, #4]
+ 297:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   
+ 298:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   /* Peripheral to Memory */
+ 299:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   if((hdma->Init.Direction) == DMA_MEMORY_TO_PERIPH)
+ 3242              		.loc 1 299 17
+ARM GAS  /tmp/ccYTbMTL.s 			page 63
+
+
+ 3243 0016 FB68     		ldr	r3, [r7, #12]
+ 3244 0018 9B68     		ldr	r3, [r3, #8]
+ 3245              		.loc 1 299 5
+ 3246 001a 402B     		cmp	r3, #64
+ 3247 001c 08D1     		bne	.L546
+ 300:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   {   
+ 301:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Configure DMA Stream destination address */
+ 302:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->Instance->PAR = DstAddress;
+ 3248              		.loc 1 302 9
+ 3249 001e FB68     		ldr	r3, [r7, #12]
+ 3250 0020 1B68     		ldr	r3, [r3]
+ 3251              		.loc 1 302 25
+ 3252 0022 7A68     		ldr	r2, [r7, #4]
+ 3253 0024 9A60     		str	r2, [r3, #8]
+ 303:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ 304:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Configure DMA Stream source address */
+ 305:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->Instance->M0AR = SrcAddress;
+ 3254              		.loc 1 305 9
+ 3255 0026 FB68     		ldr	r3, [r7, #12]
+ 3256 0028 1B68     		ldr	r3, [r3]
+ 3257              		.loc 1 305 26
+ 3258 002a BA68     		ldr	r2, [r7, #8]
+ 3259 002c DA60     		str	r2, [r3, #12]
+ 306:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   }
+ 307:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   /* Memory to Peripheral */
+ 308:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   else
+ 309:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   {
+ 310:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Configure DMA Stream source address */
+ 311:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->Instance->PAR = SrcAddress;
+ 312:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ 313:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     /* Configure DMA Stream destination address */
+ 314:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     hdma->Instance->M0AR = DstAddress;
+ 315:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   }
+ 316:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c **** }
+ 3260              		.loc 1 316 1
+ 3261 002e 07E0     		b	.L548
+ 3262              	.L546:
+ 311:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ 3263              		.loc 1 311 9
+ 3264 0030 FB68     		ldr	r3, [r7, #12]
+ 3265 0032 1B68     		ldr	r3, [r3]
+ 311:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****     
+ 3266              		.loc 1 311 25
+ 3267 0034 BA68     		ldr	r2, [r7, #8]
+ 3268 0036 9A60     		str	r2, [r3, #8]
+ 314:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   }
+ 3269              		.loc 1 314 9
+ 3270 0038 FB68     		ldr	r3, [r7, #12]
+ 3271 003a 1B68     		ldr	r3, [r3]
+ 314:./Libraries/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c ****   }
+ 3272              		.loc 1 314 26
+ 3273 003c 7A68     		ldr	r2, [r7, #4]
+ 3274 003e DA60     		str	r2, [r3, #12]
+ 3275              	.L548:
+ 3276              		.loc 1 316 1
+ 3277 0040 00BF     		nop
+ 3278 0042 1437     		adds	r7, r7, #20
+ARM GAS  /tmp/ccYTbMTL.s 			page 64
+
+
+ 3279              	.LCFI19:
+ 3280              		.cfi_def_cfa_offset 4
+ 3281 0044 BD46     		mov	sp, r7
+ 3282              	.LCFI20:
+ 3283              		.cfi_def_cfa_register 13
+ 3284              		@ sp needed
+ 3285 0046 5DF8047B 		ldr	r7, [sp], #4
+ 3286              	.LCFI21:
+ 3287              		.cfi_restore 7
+ 3288              		.cfi_def_cfa_offset 0
+ 3289 004a 7047     		bx	lr
+ 3290              		.cfi_endproc
+ 3291              	.LFE129:
+ 3293              		.text
+ 3294              	.Letext0:
+ 3295              		.file 2 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/machine/_default_types.h"
+ 3296              		.file 3 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/sys/_stdint.h"
+ 3297              		.file 4 "./Libraries/CMSIS/Device/ST/STM32F4xx/Include/stm32f429xx.h"
+ 3298              		.file 5 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 3299              		.file 6 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 3300              		.file 7 "./Libraries/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma_ex.h"
+ARM GAS  /tmp/ccYTbMTL.s 			page 65
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32f4xx_hal_dma_ex.c
+     /tmp/ccYTbMTL.s:18     .text.HAL_DMAEx_MultiBufferStart:0000000000000000 $t
+     /tmp/ccYTbMTL.s:26     .text.HAL_DMAEx_MultiBufferStart:0000000000000000 HAL_DMAEx_MultiBufferStart
+     /tmp/ccYTbMTL.s:3215   .text.DMA_MultiBufferSetConfig:0000000000000000 DMA_MultiBufferSetConfig
+     /tmp/ccYTbMTL.s:144    .text.HAL_DMAEx_MultiBufferStart_IT:0000000000000000 $t
+     /tmp/ccYTbMTL.s:151    .text.HAL_DMAEx_MultiBufferStart_IT:0000000000000000 HAL_DMAEx_MultiBufferStart_IT
+     /tmp/ccYTbMTL.s:634    .text.HAL_DMAEx_MultiBufferStart_IT:00000000000002e0 $d
+     /tmp/ccYTbMTL.s:652    .text.HAL_DMAEx_MultiBufferStart_IT:0000000000000320 $t
+     /tmp/ccYTbMTL.s:1050   .text.HAL_DMAEx_MultiBufferStart_IT:0000000000000580 $d
+     /tmp/ccYTbMTL.s:1068   .text.HAL_DMAEx_MultiBufferStart_IT:00000000000005c0 $t
+     /tmp/ccYTbMTL.s:1466   .text.HAL_DMAEx_MultiBufferStart_IT:0000000000000820 $d
+     /tmp/ccYTbMTL.s:1484   .text.HAL_DMAEx_MultiBufferStart_IT:0000000000000860 $t
+     /tmp/ccYTbMTL.s:1883   .text.HAL_DMAEx_MultiBufferStart_IT:0000000000000ac0 $d
+     /tmp/ccYTbMTL.s:1901   .text.HAL_DMAEx_MultiBufferStart_IT:0000000000000b00 $t
+     /tmp/ccYTbMTL.s:2294   .text.HAL_DMAEx_MultiBufferStart_IT:0000000000000d58 $d
+     /tmp/ccYTbMTL.s:2313   .text.HAL_DMAEx_MultiBufferStart_IT:0000000000000d9c $t
+     /tmp/ccYTbMTL.s:2727   .text.HAL_DMAEx_MultiBufferStart_IT:0000000000001008 $d
+     /tmp/ccYTbMTL.s:2745   .text.HAL_DMAEx_MultiBufferStart_IT:0000000000001048 $t
+     /tmp/ccYTbMTL.s:3123   .text.HAL_DMAEx_MultiBufferStart_IT:0000000000001254 $d
+     /tmp/ccYTbMTL.s:3142   .text.HAL_DMAEx_ChangeMemory:0000000000000000 $t
+     /tmp/ccYTbMTL.s:3149   .text.HAL_DMAEx_ChangeMemory:0000000000000000 HAL_DMAEx_ChangeMemory
+     /tmp/ccYTbMTL.s:3209   .text.DMA_MultiBufferSetConfig:0000000000000000 $t
+
+NO UNDEFINED SYMBOLS
