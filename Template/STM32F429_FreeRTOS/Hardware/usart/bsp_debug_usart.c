@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2016-xx-xx
-  * @brief   Ê¹ÓÃ´®¿Ú1£¬ÖØ¶¨Ïòc¿âprintfº¯Êıµ½usart¶Ë¿Ú£¬ÖĞ¶Ï½ÓÊÕÄ£Ê½
+  * @brief   ä½¿ç”¨ä¸²å£1ï¼Œé‡å®šå‘cåº“printfå‡½æ•°åˆ°usartç«¯å£ï¼Œä¸­æ–­æ¥æ”¶æ¨¡å¼
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ STM32 F429 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://fire-stm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç« STM32 F429 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://fire-stm32.taobao.com
   *
   ******************************************************************************
   */ 
@@ -21,9 +21,9 @@ UART_HandleTypeDef UartHandle;
  
 
  /**
-  * @brief  DEBUG_USART GPIO ÅäÖÃ,¹¤×÷Ä£Ê½ÅäÖÃ¡£115200 8-N-1
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  DEBUG_USART GPIO é…ç½®,å·¥ä½œæ¨¡å¼é…ç½®ã€‚115200 8-N-1
+  * @param  æ— 
+  * @retval æ— 
   */  
 void DEBUG_USART_Config(void)
 { 
@@ -43,9 +43,9 @@ void DEBUG_USART_Config(void)
 
 
 /**
-  * @brief UART MSP ³õÊ¼»¯ 
+  * @brief UART MSP åˆå§‹åŒ– 
   * @param huart: UART handle
-  * @retval ÎŞ
+  * @retval æ— 
   */
 void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 {  
@@ -60,7 +60,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   PA9     ------> USART1_TX
   PA10    ------> USART1_RX 
   */
-  /* ÅäÖÃTxÒı½ÅÎª¸´ÓÃ¹¦ÄÜ  */
+  /* é…ç½®Txå¼•è„šä¸ºå¤ç”¨åŠŸèƒ½  */
   GPIO_InitStruct.Pin = DEBUG_USART_TX_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
@@ -68,7 +68,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   GPIO_InitStruct.Alternate = DEBUG_USART_TX_AF;
   HAL_GPIO_Init(DEBUG_USART_TX_GPIO_PORT, &GPIO_InitStruct);
   
-  /* ÅäÖÃRxÒı½ÅÎª¸´ÓÃ¹¦ÄÜ */
+  /* é…ç½®Rxå¼•è„šä¸ºå¤ç”¨åŠŸèƒ½ */
   GPIO_InitStruct.Pin = DEBUG_USART_RX_PIN;
   GPIO_InitStruct.Alternate = DEBUG_USART_RX_AF;
   HAL_GPIO_Init(DEBUG_USART_RX_GPIO_PORT, &GPIO_InitStruct); 

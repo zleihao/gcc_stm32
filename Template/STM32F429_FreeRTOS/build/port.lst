@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccJubwoR.s 			page 1
+ARM GAS  /tmp/ccaKK50j.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
   29:./FreeRtos/port/ARM_CM4F/port.c ****  * Implementation of functions defined in portable.h for the ARM CM4F port.
   30:./FreeRtos/port/ARM_CM4F/port.c ****  *----------------------------------------------------------*/
   31:./FreeRtos/port/ARM_CM4F/port.c **** 
-ARM GAS  /tmp/ccJubwoR.s 			page 2
+ARM GAS  /tmp/ccaKK50j.s 			page 2
 
 
   32:./FreeRtos/port/ARM_CM4F/port.c **** /* Scheduler includes. */
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
   86:./FreeRtos/port/ARM_CM4F/port.c **** #define portASPEN_AND_LSPEN_BITS			( 0x3UL << 30UL )
   87:./FreeRtos/port/ARM_CM4F/port.c **** 
   88:./FreeRtos/port/ARM_CM4F/port.c **** /* Constants required to set up the initial stack. */
-ARM GAS  /tmp/ccJubwoR.s 			page 3
+ARM GAS  /tmp/ccaKK50j.s 			page 3
 
 
   89:./FreeRtos/port/ARM_CM4F/port.c **** #define portINITIAL_XPSR					( 0x01000000 )
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  143:./FreeRtos/port/ARM_CM4F/port.c **** 
  144:./FreeRtos/port/ARM_CM4F/port.c **** /* Each task maintains its own interrupt status in the critical nesting
  145:./FreeRtos/port/ARM_CM4F/port.c **** variable. */
-ARM GAS  /tmp/ccJubwoR.s 			page 4
+ARM GAS  /tmp/ccaKK50j.s 			page 4
 
 
  146:./FreeRtos/port/ARM_CM4F/port.c **** static UBaseType_t uxCriticalNesting = 0xaaaaaaaa;
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  200:./FreeRtos/port/ARM_CM4F/port.c **** 	*pxTopOfStack = ( StackType_t ) portTASK_RETURN_ADDRESS;	/* LR */
  201:./FreeRtos/port/ARM_CM4F/port.c **** 
  202:./FreeRtos/port/ARM_CM4F/port.c **** 	/* Save code space by skipping register initialisation. */
-ARM GAS  /tmp/ccJubwoR.s 			page 5
+ARM GAS  /tmp/ccaKK50j.s 			page 5
 
 
  203:./FreeRtos/port/ARM_CM4F/port.c **** 	pxTopOfStack -= 5;	/* R12, R3, R2 and R1. */
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  257:./FreeRtos/port/ARM_CM4F/port.c **** 				);
  258:./FreeRtos/port/ARM_CM4F/port.c **** }
  259:./FreeRtos/port/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
-ARM GAS  /tmp/ccJubwoR.s 			page 6
+ARM GAS  /tmp/ccaKK50j.s 			page 6
 
 
  260:./FreeRtos/port/ARM_CM4F/port.c **** 
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
   61              		.fpu fpv4-sp-d16
   63              	vPortEnableVFP:
   64              	.LFB142:
-ARM GAS  /tmp/ccJubwoR.s 			page 7
+ARM GAS  /tmp/ccaKK50j.s 			page 7
 
 
  282:./FreeRtos/port/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  336:./FreeRtos/port/ARM_CM4F/port.c **** 			from the hardware. */
  337:./FreeRtos/port/ARM_CM4F/port.c **** 			configASSERT( ( portMAX_PRIGROUP_BITS - ulMaxPRIGROUPValue ) == __NVIC_PRIO_BITS );
  338:./FreeRtos/port/ARM_CM4F/port.c **** 		}
-ARM GAS  /tmp/ccJubwoR.s 			page 8
+ARM GAS  /tmp/ccaKK50j.s 			page 8
 
 
  339:./FreeRtos/port/ARM_CM4F/port.c **** 		#endif
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  393:./FreeRtos/port/ARM_CM4F/port.c **** /*-----------------------------------------------------------*/
  394:./FreeRtos/port/ARM_CM4F/port.c **** 
  395:./FreeRtos/port/ARM_CM4F/port.c **** void vPortEndScheduler( void )
-ARM GAS  /tmp/ccJubwoR.s 			page 9
+ARM GAS  /tmp/ccaKK50j.s 			page 9
 
 
  396:./FreeRtos/port/ARM_CM4F/port.c **** {
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  450:./FreeRtos/port/ARM_CM4F/port.c **** 	"	stmdb sp!, {r0, r3}					\n"
  451:./FreeRtos/port/ARM_CM4F/port.c **** 	"	mov r0, %0 							\n"
  452:./FreeRtos/port/ARM_CM4F/port.c **** 	"	msr basepri, r0						\n"
-ARM GAS  /tmp/ccJubwoR.s 			page 10
+ARM GAS  /tmp/ccaKK50j.s 			page 10
 
 
  453:./FreeRtos/port/ARM_CM4F/port.c **** 	"	dsb									\n"
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  507:./FreeRtos/port/ARM_CM4F/port.c **** 
  508:./FreeRtos/port/ARM_CM4F/port.c **** #if( configUSE_TICKLESS_IDLE == 1 )
  509:./FreeRtos/port/ARM_CM4F/port.c **** 
-ARM GAS  /tmp/ccJubwoR.s 			page 11
+ARM GAS  /tmp/ccaKK50j.s 			page 11
 
 
  510:./FreeRtos/port/ARM_CM4F/port.c **** 	__attribute__((weak)) void vPortSuppressTicksAndSleep( TickType_t xExpectedIdleTime )
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  564:./FreeRtos/port/ARM_CM4F/port.c **** 			portNVIC_SYSTICK_LOAD_REG = ulReloadValue;
  565:./FreeRtos/port/ARM_CM4F/port.c **** 
  566:./FreeRtos/port/ARM_CM4F/port.c **** 			/* Clear the SysTick count flag and set the count value back to
-ARM GAS  /tmp/ccJubwoR.s 			page 12
+ARM GAS  /tmp/ccaKK50j.s 			page 12
 
 
  567:./FreeRtos/port/ARM_CM4F/port.c **** 			zero. */
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  621:./FreeRtos/port/ARM_CM4F/port.c **** 				/* The tick interrupt is already pending, and the SysTick count
  622:./FreeRtos/port/ARM_CM4F/port.c **** 				reloaded with ulReloadValue.  Reset the
  623:./FreeRtos/port/ARM_CM4F/port.c **** 				portNVIC_SYSTICK_LOAD_REG with whatever remains of this tick
-ARM GAS  /tmp/ccJubwoR.s 			page 13
+ARM GAS  /tmp/ccaKK50j.s 			page 13
 
 
  624:./FreeRtos/port/ARM_CM4F/port.c **** 				period. */
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  678:./FreeRtos/port/ARM_CM4F/port.c ****  */
  679:./FreeRtos/port/ARM_CM4F/port.c **** __attribute__(( weak )) void vPortSetupTimerInterrupt( void )
  680:./FreeRtos/port/ARM_CM4F/port.c **** {
-ARM GAS  /tmp/ccJubwoR.s 			page 14
+ARM GAS  /tmp/ccaKK50j.s 			page 14
 
 
  681:./FreeRtos/port/ARM_CM4F/port.c **** 	/* Calculate the constants required to configure the tick interrupt. */
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
   88              	.LC0:
   89 0000 2E2F4672 		.ascii	"./FreeRtos/port/ARM_CM4F/port.c\000"
   89      65655274 
-ARM GAS  /tmp/ccJubwoR.s 			page 15
+ARM GAS  /tmp/ccaKK50j.s 			page 15
 
 
   89      6F732F70 
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
    8:./FreeRtos/port/ARM_CM4F/portmacro.h ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
    9:./FreeRtos/port/ARM_CM4F/portmacro.h ****  * the Software, and to permit persons to whom the Software is furnished to do so,
   10:./FreeRtos/port/ARM_CM4F/portmacro.h ****  * subject to the following conditions:
-ARM GAS  /tmp/ccJubwoR.s 			page 16
+ARM GAS  /tmp/ccaKK50j.s 			page 16
 
 
   11:./FreeRtos/port/ARM_CM4F/portmacro.h ****  *
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
   65:./FreeRtos/port/ARM_CM4F/portmacro.h **** 
   66:./FreeRtos/port/ARM_CM4F/portmacro.h **** 	/* 32-bit tick type on a 32-bit architecture, so reads of the tick count do
   67:./FreeRtos/port/ARM_CM4F/portmacro.h **** 	not need to be guarded with a critical section. */
-ARM GAS  /tmp/ccJubwoR.s 			page 17
+ARM GAS  /tmp/ccaKK50j.s 			page 17
 
 
   68:./FreeRtos/port/ARM_CM4F/portmacro.h **** 	#define portTICK_TYPE_IS_ATOMIC 1
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  122:./FreeRtos/port/ARM_CM4F/portmacro.h **** /* Architecture specific optimisations. */
  123:./FreeRtos/port/ARM_CM4F/portmacro.h **** #ifndef configUSE_PORT_OPTIMISED_TASK_SELECTION
  124:./FreeRtos/port/ARM_CM4F/portmacro.h **** 	#define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
-ARM GAS  /tmp/ccJubwoR.s 			page 18
+ARM GAS  /tmp/ccaKK50j.s 			page 18
 
 
  125:./FreeRtos/port/ARM_CM4F/portmacro.h **** #endif
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  179:./FreeRtos/port/ARM_CM4F/portmacro.h **** 		xReturn = pdFALSE;
  180:./FreeRtos/port/ARM_CM4F/portmacro.h **** 	}
  181:./FreeRtos/port/ARM_CM4F/portmacro.h **** 	else
-ARM GAS  /tmp/ccJubwoR.s 			page 19
+ARM GAS  /tmp/ccaKK50j.s 			page 19
 
 
  182:./FreeRtos/port/ARM_CM4F/portmacro.h **** 	{
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  162              		.cfi_restore_state
  227:./FreeRtos/port/ARM_CM4F/port.c **** 	portDISABLE_INTERRUPTS();
  163              		.loc 1 227 2 is_stmt 1 discriminator 1 view .LVU20
-ARM GAS  /tmp/ccJubwoR.s 			page 20
+ARM GAS  /tmp/ccaKK50j.s 			page 20
 
 
  164 002e E322     		movs	r2, #227
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  210              		.loc 1 200 2 view .LVU30
  200:./FreeRtos/port/ARM_CM4F/port.c **** 
  211              		.loc 1 200 18 is_stmt 0 view .LVU31
-ARM GAS  /tmp/ccJubwoR.s 			page 21
+ARM GAS  /tmp/ccaKK50j.s 			page 21
 
 
  212 0010 054B     		ldr	r3, .L11
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  244:./FreeRtos/port/ARM_CM4F/port.c **** 					"	ldr	r3, pxCurrentTCBConst2		\n" /* Restore the context. */
  256              		.loc 1 244 2 view .LVU44
  257              		.syntax unified
-ARM GAS  /tmp/ccJubwoR.s 			page 22
+ARM GAS  /tmp/ccaKK50j.s 			page 22
 
 
  258              	@ 244 "./FreeRtos/port/ARM_CM4F/port.c" 1
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  309 0012 0349     		ldr	r1, .L18+4
  310 0014 0348     		ldr	r0, .L18+8
  311 0016 FFF7FEFF 		bl	printf
-ARM GAS  /tmp/ccJubwoR.s 			page 23
+ARM GAS  /tmp/ccaKK50j.s 			page 23
 
 
  312              	.LVL10:
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  362              		.loc 1 406 2 view .LVU56
  406:./FreeRtos/port/ARM_CM4F/port.c **** 
  363              		.loc 1 406 19 is_stmt 0 view .LVU57
-ARM GAS  /tmp/ccJubwoR.s 			page 24
+ARM GAS  /tmp/ccaKK50j.s 			page 24
 
 
  364 0012 0A4A     		ldr	r2, .L24
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  413              	.LCFI6:
  414              		.cfi_def_cfa_offset 8
  415              		.cfi_offset 3, -8
-ARM GAS  /tmp/ccJubwoR.s 			page 25
+ARM GAS  /tmp/ccaKK50j.s 			page 25
 
 
  416              		.cfi_offset 14, -4
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  225:./FreeRtos/port/ARM_CM4F/portmacro.h **** /*-----------------------------------------------------------*/
  226:./FreeRtos/port/ARM_CM4F/portmacro.h **** 
  227:./FreeRtos/port/ARM_CM4F/portmacro.h **** portFORCE_INLINE static void vPortSetBASEPRI( uint32_t ulNewMaskValue )
-ARM GAS  /tmp/ccJubwoR.s 			page 26
+ARM GAS  /tmp/ccaKK50j.s 			page 26
 
 
  435              		.loc 2 227 30 view .LVU71
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  485              	@ 435 "./FreeRtos/port/ARM_CM4F/port.c" 1
  486 0000 EFF30980 			mrs r0, psp							
  487 0004 BFF36F8F 		isb									
-ARM GAS  /tmp/ccJubwoR.s 			page 27
+ARM GAS  /tmp/ccaKK50j.s 			page 27
 
 
  488              											
@@ -1618,7 +1618,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  542              	xPortSysTickHandler:
  543              	.LFB140:
  489:./FreeRtos/port/ARM_CM4F/port.c **** 	/* The SysTick runs at the lowest interrupt priority, so when this interrupt
-ARM GAS  /tmp/ccJubwoR.s 			page 28
+ARM GAS  /tmp/ccaKK50j.s 			page 28
 
 
  544              		.loc 1 489 1 is_stmt 1 view -0
@@ -1678,7 +1678,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  227:./FreeRtos/port/ARM_CM4F/portmacro.h **** {
  588              		.loc 2 227 30 view .LVU90
  589              	.LBB21:
-ARM GAS  /tmp/ccJubwoR.s 			page 29
+ARM GAS  /tmp/ccaKK50j.s 			page 29
 
 
  590              		.loc 2 229 2 view .LVU91
@@ -1738,7 +1738,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  637              		.loc 1 695 78 view .LVU101
  638 0016 013B     		subs	r3, r3, #1
  695:./FreeRtos/port/ARM_CM4F/port.c **** 	portNVIC_SYSTICK_CTRL_REG = ( portNVIC_SYSTICK_CLK_BIT | portNVIC_SYSTICK_INT_BIT | portNVIC_SYSTI
-ARM GAS  /tmp/ccJubwoR.s 			page 30
+ARM GAS  /tmp/ccaKK50j.s 			page 30
 
 
  639              		.loc 1 695 28 view .LVU102
@@ -1798,7 +1798,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  688 0016 D3F8002D 		ldr	r2, [r3, #3328]
  689 001a 3D4B     		ldr	r3, .L52+4
  690 001c 9A42     		cmp	r2, r3
-ARM GAS  /tmp/ccJubwoR.s 			page 31
+ARM GAS  /tmp/ccaKK50j.s 			page 31
 
 
  691 001e 1AD0     		beq	.L49
@@ -1858,7 +1858,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  326:./FreeRtos/port/ARM_CM4F/port.c **** 		{
  728              		.loc 1 326 8 is_stmt 0 view .LVU127
  729 0046 17E0     		b	.L43
-ARM GAS  /tmp/ccJubwoR.s 			page 32
+ARM GAS  /tmp/ccaKK50j.s 			page 32
 
 
  730              	.LVL19:
@@ -1918,7 +1918,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  773 0084 1B68     		ldr	r3, [r3]
  774 0086 032B     		cmp	r3, #3
  775 0088 32D1     		bne	.L50
-ARM GAS  /tmp/ccJubwoR.s 			page 33
+ARM GAS  /tmp/ccaKK50j.s 			page 33
 
 
  776              	.L45:
@@ -1978,7 +1978,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  816 00c8 0025     		movs	r5, #0
  817 00ca 174B     		ldr	r3, .L52+28
  818 00cc 1D60     		str	r5, [r3]
-ARM GAS  /tmp/ccJubwoR.s 			page 34
+ARM GAS  /tmp/ccaKK50j.s 			page 34
 
 
  373:./FreeRtos/port/ARM_CM4F/port.c **** 
@@ -2038,7 +2038,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  863 010a C2E7     		b	.L46
  864              	.L53:
  865              		.align	2
-ARM GAS  /tmp/ccJubwoR.s 			page 35
+ARM GAS  /tmp/ccaKK50j.s 			page 35
 
 
  866              	.L52:
@@ -2098,7 +2098,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  908              		.thumb
  909              		.syntax unified
  910 0006 0F2B     		cmp	r3, #15
-ARM GAS  /tmp/ccJubwoR.s 			page 36
+ARM GAS  /tmp/ccaKK50j.s 			page 36
 
 
  911 0008 06D9     		bls	.L55
@@ -2158,7 +2158,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  764:./FreeRtos/port/ARM_CM4F/port.c **** 		If the application only uses CMSIS libraries for interrupt
  765:./FreeRtos/port/ARM_CM4F/port.c **** 		configuration then the correct setting can be achieved on all Cortex-M
  766:./FreeRtos/port/ARM_CM4F/port.c **** 		devices by calling NVIC_SetPriorityGrouping( 0 ); before starting the
-ARM GAS  /tmp/ccJubwoR.s 			page 37
+ARM GAS  /tmp/ccaKK50j.s 			page 37
 
 
  767:./FreeRtos/port/ARM_CM4F/port.c **** 		scheduler.  Note however that some vendor specific peripheral libraries
@@ -2218,7 +2218,7 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  977              		.set	.LANCHOR2,. + 0
  980              	ulMaxPRIGROUPValue:
  981 0000 00000000 		.space	4
-ARM GAS  /tmp/ccJubwoR.s 			page 38
+ARM GAS  /tmp/ccaKK50j.s 			page 38
 
 
  982              		.section	.data.uxCriticalNesting,"aw"
@@ -2234,67 +2234,67 @@ ARM GAS  /tmp/ccJubwoR.s 			page 1
  994              		.file 6 "./Libraries/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h"
  995              		.file 7 "/home/hao/Documents/gcc-arm-none-eabi/arm-none-eabi/include/stdio.h"
  996              		.file 8 "./FreeRtos/port/include/task.h"
-ARM GAS  /tmp/ccJubwoR.s 			page 39
+ARM GAS  /tmp/ccaKK50j.s 			page 39
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 port.c
-     /tmp/ccJubwoR.s:18     .text.prvPortStartFirstTask:0000000000000000 $t
-     /tmp/ccJubwoR.s:25     .text.prvPortStartFirstTask:0000000000000000 prvPortStartFirstTask
-     /tmp/ccJubwoR.s:57     .text.vPortEnableVFP:0000000000000000 $t
-     /tmp/ccJubwoR.s:63     .text.vPortEnableVFP:0000000000000000 vPortEnableVFP
-     /tmp/ccJubwoR.s:87     .rodata.prvTaskExitError.str1.4:0000000000000000 $d
-     /tmp/ccJubwoR.s:94     .text.prvTaskExitError:0000000000000000 $t
-     /tmp/ccJubwoR.s:100    .text.prvTaskExitError:0000000000000000 prvTaskExitError
-     /tmp/ccJubwoR.s:173    .text.prvTaskExitError:000000000000003c $d
-     /tmp/ccJubwoR.s:180    .text.pxPortInitialiseStack:0000000000000000 $t
-     /tmp/ccJubwoR.s:187    .text.pxPortInitialiseStack:0000000000000000 pxPortInitialiseStack
-     /tmp/ccJubwoR.s:237    .text.pxPortInitialiseStack:0000000000000028 $d
-     /tmp/ccJubwoR.s:242    .text.SVC_Handler:0000000000000000 $t
-     /tmp/ccJubwoR.s:249    .text.SVC_Handler:0000000000000000 SVC_Handler
-     /tmp/ccJubwoR.s:270    .text.SVC_Handler:0000000000000020 pxCurrentTCBConst2
-     /tmp/ccJubwoR.s:270    .text.SVC_Handler:0000000000000020 $d
-     /tmp/ccJubwoR.s:280    .text.vPortEndScheduler:0000000000000000 $t
-     /tmp/ccJubwoR.s:287    .text.vPortEndScheduler:0000000000000000 vPortEndScheduler
-     /tmp/ccJubwoR.s:318    .text.vPortEndScheduler:000000000000001c $d
-     /tmp/ccJubwoR.s:325    .text.vPortEnterCritical:0000000000000000 $t
-     /tmp/ccJubwoR.s:332    .text.vPortEnterCritical:0000000000000000 vPortEnterCritical
-     /tmp/ccJubwoR.s:392    .text.vPortEnterCritical:000000000000003c $d
-     /tmp/ccJubwoR.s:399    .text.vPortExitCritical:0000000000000000 $t
-     /tmp/ccJubwoR.s:406    .text.vPortExitCritical:0000000000000000 vPortExitCritical
-     /tmp/ccJubwoR.s:462    .text.vPortExitCritical:0000000000000028 $d
-     /tmp/ccJubwoR.s:469    .text.PendSV_Handler:0000000000000000 $t
-     /tmp/ccJubwoR.s:476    .text.PendSV_Handler:0000000000000000 PendSV_Handler
-     /tmp/ccJubwoR.s:525    .text.PendSV_Handler:0000000000000060 pxCurrentTCBConst
-     /tmp/ccJubwoR.s:525    .text.PendSV_Handler:0000000000000060 $d
-     /tmp/ccJubwoR.s:535    .text.xPortSysTickHandler:0000000000000000 $t
-     /tmp/ccJubwoR.s:542    .text.xPortSysTickHandler:0000000000000000 xPortSysTickHandler
-     /tmp/ccJubwoR.s:608    .text.vPortSetupTimerInterrupt:0000000000000000 $t
-     /tmp/ccJubwoR.s:615    .text.vPortSetupTimerInterrupt:0000000000000000 vPortSetupTimerInterrupt
-     /tmp/ccJubwoR.s:650    .text.vPortSetupTimerInterrupt:0000000000000020 $d
-     /tmp/ccJubwoR.s:656    .text.xPortStartScheduler:0000000000000000 $t
-     /tmp/ccJubwoR.s:663    .text.xPortStartScheduler:0000000000000000 xPortStartScheduler
-     /tmp/ccJubwoR.s:867    .text.xPortStartScheduler:000000000000010c $d
-     /tmp/ccJubwoR.s:880    .text.vPortValidateInterruptPriority:0000000000000000 $t
-     /tmp/ccJubwoR.s:887    .text.vPortValidateInterruptPriority:0000000000000000 vPortValidateInterruptPriority
-     /tmp/ccJubwoR.s:961    .text.vPortValidateInterruptPriority:000000000000004c $d
-     /tmp/ccJubwoR.s:973    .bss.ucMaxSysCallPriority:0000000000000000 ucMaxSysCallPriority
-     /tmp/ccJubwoR.s:974    .bss.ucMaxSysCallPriority:0000000000000000 $d
-     /tmp/ccJubwoR.s:976    .bss.ulMaxPRIGROUPValue:0000000000000000 $d
-     /tmp/ccJubwoR.s:980    .bss.ulMaxPRIGROUPValue:0000000000000000 ulMaxPRIGROUPValue
-     /tmp/ccJubwoR.s:983    .data.uxCriticalNesting:0000000000000000 $d
-     /tmp/ccJubwoR.s:987    .data.uxCriticalNesting:0000000000000000 uxCriticalNesting
-     /tmp/ccJubwoR.s:86     .text.vPortEnableVFP:000000000000000e $d
-     /tmp/ccJubwoR.s:2882   .text.vPortEnableVFP:0000000000000010 $d
-     /tmp/ccJubwoR.s:56     .text.prvPortStartFirstTask:0000000000000022 $d
-     /tmp/ccJubwoR.s:2882   .text.prvPortStartFirstTask:0000000000000024 $d
+     /tmp/ccaKK50j.s:18     .text.prvPortStartFirstTask:0000000000000000 $t
+     /tmp/ccaKK50j.s:25     .text.prvPortStartFirstTask:0000000000000000 prvPortStartFirstTask
+     /tmp/ccaKK50j.s:57     .text.vPortEnableVFP:0000000000000000 $t
+     /tmp/ccaKK50j.s:63     .text.vPortEnableVFP:0000000000000000 vPortEnableVFP
+     /tmp/ccaKK50j.s:87     .rodata.prvTaskExitError.str1.4:0000000000000000 $d
+     /tmp/ccaKK50j.s:94     .text.prvTaskExitError:0000000000000000 $t
+     /tmp/ccaKK50j.s:100    .text.prvTaskExitError:0000000000000000 prvTaskExitError
+     /tmp/ccaKK50j.s:173    .text.prvTaskExitError:000000000000003c $d
+     /tmp/ccaKK50j.s:180    .text.pxPortInitialiseStack:0000000000000000 $t
+     /tmp/ccaKK50j.s:187    .text.pxPortInitialiseStack:0000000000000000 pxPortInitialiseStack
+     /tmp/ccaKK50j.s:237    .text.pxPortInitialiseStack:0000000000000028 $d
+     /tmp/ccaKK50j.s:242    .text.SVC_Handler:0000000000000000 $t
+     /tmp/ccaKK50j.s:249    .text.SVC_Handler:0000000000000000 SVC_Handler
+     /tmp/ccaKK50j.s:270    .text.SVC_Handler:0000000000000020 pxCurrentTCBConst2
+     /tmp/ccaKK50j.s:270    .text.SVC_Handler:0000000000000020 $d
+     /tmp/ccaKK50j.s:280    .text.vPortEndScheduler:0000000000000000 $t
+     /tmp/ccaKK50j.s:287    .text.vPortEndScheduler:0000000000000000 vPortEndScheduler
+     /tmp/ccaKK50j.s:318    .text.vPortEndScheduler:000000000000001c $d
+     /tmp/ccaKK50j.s:325    .text.vPortEnterCritical:0000000000000000 $t
+     /tmp/ccaKK50j.s:332    .text.vPortEnterCritical:0000000000000000 vPortEnterCritical
+     /tmp/ccaKK50j.s:392    .text.vPortEnterCritical:000000000000003c $d
+     /tmp/ccaKK50j.s:399    .text.vPortExitCritical:0000000000000000 $t
+     /tmp/ccaKK50j.s:406    .text.vPortExitCritical:0000000000000000 vPortExitCritical
+     /tmp/ccaKK50j.s:462    .text.vPortExitCritical:0000000000000028 $d
+     /tmp/ccaKK50j.s:469    .text.PendSV_Handler:0000000000000000 $t
+     /tmp/ccaKK50j.s:476    .text.PendSV_Handler:0000000000000000 PendSV_Handler
+     /tmp/ccaKK50j.s:525    .text.PendSV_Handler:0000000000000060 pxCurrentTCBConst
+     /tmp/ccaKK50j.s:525    .text.PendSV_Handler:0000000000000060 $d
+     /tmp/ccaKK50j.s:535    .text.xPortSysTickHandler:0000000000000000 $t
+     /tmp/ccaKK50j.s:542    .text.xPortSysTickHandler:0000000000000000 xPortSysTickHandler
+     /tmp/ccaKK50j.s:608    .text.vPortSetupTimerInterrupt:0000000000000000 $t
+     /tmp/ccaKK50j.s:615    .text.vPortSetupTimerInterrupt:0000000000000000 vPortSetupTimerInterrupt
+     /tmp/ccaKK50j.s:650    .text.vPortSetupTimerInterrupt:0000000000000020 $d
+     /tmp/ccaKK50j.s:656    .text.xPortStartScheduler:0000000000000000 $t
+     /tmp/ccaKK50j.s:663    .text.xPortStartScheduler:0000000000000000 xPortStartScheduler
+     /tmp/ccaKK50j.s:867    .text.xPortStartScheduler:000000000000010c $d
+     /tmp/ccaKK50j.s:880    .text.vPortValidateInterruptPriority:0000000000000000 $t
+     /tmp/ccaKK50j.s:887    .text.vPortValidateInterruptPriority:0000000000000000 vPortValidateInterruptPriority
+     /tmp/ccaKK50j.s:961    .text.vPortValidateInterruptPriority:000000000000004c $d
+     /tmp/ccaKK50j.s:973    .bss.ucMaxSysCallPriority:0000000000000000 ucMaxSysCallPriority
+     /tmp/ccaKK50j.s:974    .bss.ucMaxSysCallPriority:0000000000000000 $d
+     /tmp/ccaKK50j.s:976    .bss.ulMaxPRIGROUPValue:0000000000000000 $d
+     /tmp/ccaKK50j.s:980    .bss.ulMaxPRIGROUPValue:0000000000000000 ulMaxPRIGROUPValue
+     /tmp/ccaKK50j.s:983    .data.uxCriticalNesting:0000000000000000 $d
+     /tmp/ccaKK50j.s:987    .data.uxCriticalNesting:0000000000000000 uxCriticalNesting
+     /tmp/ccaKK50j.s:86     .text.vPortEnableVFP:000000000000000e $d
+     /tmp/ccaKK50j.s:2882   .text.vPortEnableVFP:0000000000000010 $d
+     /tmp/ccaKK50j.s:56     .text.prvPortStartFirstTask:0000000000000022 $d
+     /tmp/ccaKK50j.s:2882   .text.prvPortStartFirstTask:0000000000000024 $d
 
 UNDEFINED SYMBOLS
 printf
 pxCurrentTCB
 vTaskSwitchContext
 xTaskIncrementTick
-ARM GAS  /tmp/ccJubwoR.s 			page 40
+ARM GAS  /tmp/ccaKK50j.s 			page 40
 
 
 SystemCoreClock

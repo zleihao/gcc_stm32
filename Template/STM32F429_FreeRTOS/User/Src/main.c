@@ -1,9 +1,9 @@
 /**		 
- * @Date:               2022.3.16 
+ * @Date:               2022.6.5 
  * @Revision:           V1.0
- * @author:             µãµÆ´óÊ¦
- * @Affiliated unit£º   »ÆºÓ¿Æ¼¼Ñ§Ôº
- * @Description:        »ùÓÚSTM32F429µÄFreeRtos¹¤³Ì
+ * @author:             ç‚¹ç¯å¤§å¸ˆ
+ * @Affiliated unitï¼š   é»„æ²³ç§‘æŠ€å­¦é™¢
+ * @Description:        åŸºäºSTM32F429çš„FreeRtoså·¥ç¨‹
  * @Email:              im_leihao@163.com
  * @github:             https://github.com/zleihao
  */
@@ -14,17 +14,17 @@
 #include "task.h"
 #include "bsp_debug_usart.h"
 
-//°å¼¶Ö§³Ö°ü
+//æ¿çº§æ”¯æŒåŒ…
 static void BSP_Init(void)
 {
   NVIC_SetPriorityGrouping(4);
 	 
-	/***********ÏµÍ³Ê±ÖÓ ÎğÉ¾************************/
+	/***********ç³»ç»Ÿæ—¶é’Ÿ å‹¿åˆ ************************/
 	HAL_Init();
   SystemClock_Config();
 	/************************************************/
 	
-	//³õÊ¼»¯ USART1
+	//åˆå§‹åŒ– USART1
 	DEBUG_USART_Config();
 }
 
@@ -35,7 +35,7 @@ int main(void)
 {
 	
   BSP_Init();
-	printf("FreeRtos Ä£°å\n");
+	printf("FreeRtos æ¨¡æ¿\n");
   
   while (1)
   {
@@ -49,7 +49,7 @@ int main(void)
 
 
 /*****************************************************************************/
-//ÒÔÏÂÎªÅäÖÃÏµÍ³Ê±ÖÓ£¬Çë²»ÒªÉ¾³ı
+//ä»¥ä¸‹ä¸ºé…ç½®ç³»ç»Ÿæ—¶é’Ÿï¼Œè¯·ä¸è¦åˆ é™¤
 /**
   * @brief System Clock Configuration
   * @retval None

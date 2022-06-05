@@ -164,7 +164,7 @@ void DebugMon_Handler(void)
 
 /* USER CODE BEGIN 1 */
 extern void xPortSysTickHandler(void);
-//systick中断服务函数
+//systick涓柇鏈嶅姟鍑芥暟
 void SysTick_Handler(void)
 {	
     #if (INCLUDE_xTaskGetSchedulerState  == 1 )
