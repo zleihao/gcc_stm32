@@ -1,0 +1,2211 @@
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"mem.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.heap_ptr,"aw",%nobits
+  18              		.align	2
+  21              	heap_ptr:
+  22 0000 00000000 		.space	4
+  23              		.section	.bss.heap_end,"aw",%nobits
+  24              		.align	2
+  27              	heap_end:
+  28 0000 00000000 		.space	4
+  29              		.section	.bss.lfree,"aw",%nobits
+  30              		.align	2
+  33              	lfree:
+  34 0000 00000000 		.space	4
+  35              		.section	.bss.heap_sem,"aw",%nobits
+  36              		.align	2
+  39              	heap_sem:
+  40 0000 00000000 		.space	32
+  40      00000000 
+  40      00000000 
+  40      00000000 
+  40      00000000 
+  41              		.section	.bss.mem_size_aligned,"aw",%nobits
+  42              		.align	2
+  45              	mem_size_aligned:
+  46 0000 00000000 		.space	4
+  47              		.section	.bss.used_mem,"aw",%nobits
+  48              		.align	2
+  51              	used_mem:
+  52 0000 00000000 		.space	4
+  53              		.section	.bss.max_mem,"aw",%nobits
+  54              		.align	2
+  57              	max_mem:
+  58 0000 00000000 		.space	4
+  59              		.section	.text.plug_holes,"ax",%progbits
+  60              		.align	1
+  61              		.syntax unified
+  62              		.thumb
+  63              		.thumb_func
+  65              	plug_holes:
+  66              	.LFB15:
+  67              		.file 1 "./rt_thread/src/mem.c"
+   1:./rt_thread/src/mem.c **** /*
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 2
+
+
+   2:./rt_thread/src/mem.c ****  * Copyright (c) 2006-2021, RT-Thread Development Team
+   3:./rt_thread/src/mem.c ****  *
+   4:./rt_thread/src/mem.c ****  * SPDX-License-Identifier: Apache-2.0
+   5:./rt_thread/src/mem.c ****  *
+   6:./rt_thread/src/mem.c ****  * Change Logs:
+   7:./rt_thread/src/mem.c ****  * Date           Author       Notes
+   8:./rt_thread/src/mem.c ****  * 2008-7-12      Bernard      the first version
+   9:./rt_thread/src/mem.c ****  * 2010-06-09     Bernard      fix the end stub of heap
+  10:./rt_thread/src/mem.c ****  *                             fix memory check in rt_realloc function
+  11:./rt_thread/src/mem.c ****  * 2010-07-13     Bernard      fix RT_ALIGN issue found by kuronca
+  12:./rt_thread/src/mem.c ****  * 2010-10-14     Bernard      fix rt_realloc issue when realloc a NULL pointer.
+  13:./rt_thread/src/mem.c ****  * 2017-07-14     armink       fix rt_realloc issue when new size is 0
+  14:./rt_thread/src/mem.c ****  * 2018-10-02     Bernard      Add 64bit support
+  15:./rt_thread/src/mem.c ****  */
+  16:./rt_thread/src/mem.c **** 
+  17:./rt_thread/src/mem.c **** /*
+  18:./rt_thread/src/mem.c ****  * Copyright (c) 2001-2004 Swedish Institute of Computer Science.
+  19:./rt_thread/src/mem.c ****  * All rights reserved.
+  20:./rt_thread/src/mem.c ****  *
+  21:./rt_thread/src/mem.c ****  * Redistribution and use in source and binary forms, with or without modification,
+  22:./rt_thread/src/mem.c ****  * are permitted provided that the following conditions are met:
+  23:./rt_thread/src/mem.c ****  *
+  24:./rt_thread/src/mem.c ****  * 1. Redistributions of source code must retain the above copyright notice,
+  25:./rt_thread/src/mem.c ****  *    this list of conditions and the following disclaimer.
+  26:./rt_thread/src/mem.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice,
+  27:./rt_thread/src/mem.c ****  *    this list of conditions and the following disclaimer in the documentation
+  28:./rt_thread/src/mem.c ****  *    and/or other materials provided with the distribution.
+  29:./rt_thread/src/mem.c ****  * 3. The name of the author may not be used to endorse or promote products
+  30:./rt_thread/src/mem.c ****  *    derived from this software without specific prior written permission.
+  31:./rt_thread/src/mem.c ****  *
+  32:./rt_thread/src/mem.c ****  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+  33:./rt_thread/src/mem.c ****  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+  34:./rt_thread/src/mem.c ****  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+  35:./rt_thread/src/mem.c ****  * SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  36:./rt_thread/src/mem.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+  37:./rt_thread/src/mem.c ****  * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  38:./rt_thread/src/mem.c ****  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  39:./rt_thread/src/mem.c ****  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+  40:./rt_thread/src/mem.c ****  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+  41:./rt_thread/src/mem.c ****  * OF SUCH DAMAGE.
+  42:./rt_thread/src/mem.c ****  *
+  43:./rt_thread/src/mem.c ****  * This file is part of the lwIP TCP/IP stack.
+  44:./rt_thread/src/mem.c ****  *
+  45:./rt_thread/src/mem.c ****  * Author: Adam Dunkels <adam@sics.se>
+  46:./rt_thread/src/mem.c ****  *         Simon Goldschmidt
+  47:./rt_thread/src/mem.c ****  *
+  48:./rt_thread/src/mem.c ****  */
+  49:./rt_thread/src/mem.c **** 
+  50:./rt_thread/src/mem.c **** #include <rthw.h>
+  51:./rt_thread/src/mem.c **** #include <rtthread.h>
+  52:./rt_thread/src/mem.c **** 
+  53:./rt_thread/src/mem.c **** #ifndef RT_USING_MEMHEAP_AS_HEAP
+  54:./rt_thread/src/mem.c **** 
+  55:./rt_thread/src/mem.c **** /* #define RT_MEM_DEBUG */
+  56:./rt_thread/src/mem.c **** #define RT_MEM_STATS
+  57:./rt_thread/src/mem.c **** 
+  58:./rt_thread/src/mem.c **** #if defined (RT_USING_HEAP) && defined (RT_USING_SMALL_MEM)
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 3
+
+
+  59:./rt_thread/src/mem.c **** #ifdef RT_USING_HOOK
+  60:./rt_thread/src/mem.c **** static void (*rt_malloc_hook)(void *ptr, rt_size_t size);
+  61:./rt_thread/src/mem.c **** static void (*rt_free_hook)(void *ptr);
+  62:./rt_thread/src/mem.c **** 
+  63:./rt_thread/src/mem.c **** /**
+  64:./rt_thread/src/mem.c ****  * @addtogroup Hook
+  65:./rt_thread/src/mem.c ****  */
+  66:./rt_thread/src/mem.c **** 
+  67:./rt_thread/src/mem.c **** /**@{*/
+  68:./rt_thread/src/mem.c **** 
+  69:./rt_thread/src/mem.c **** /**
+  70:./rt_thread/src/mem.c ****  * This function will set a hook function, which will be invoked when a memory
+  71:./rt_thread/src/mem.c ****  * block is allocated from heap memory.
+  72:./rt_thread/src/mem.c ****  *
+  73:./rt_thread/src/mem.c ****  * @param hook the hook function
+  74:./rt_thread/src/mem.c ****  */
+  75:./rt_thread/src/mem.c **** void rt_malloc_sethook(void (*hook)(void *ptr, rt_size_t size))
+  76:./rt_thread/src/mem.c **** {
+  77:./rt_thread/src/mem.c ****     rt_malloc_hook = hook;
+  78:./rt_thread/src/mem.c **** }
+  79:./rt_thread/src/mem.c **** 
+  80:./rt_thread/src/mem.c **** /**
+  81:./rt_thread/src/mem.c ****  * This function will set a hook function, which will be invoked when a memory
+  82:./rt_thread/src/mem.c ****  * block is released to heap memory.
+  83:./rt_thread/src/mem.c ****  *
+  84:./rt_thread/src/mem.c ****  * @param hook the hook function
+  85:./rt_thread/src/mem.c ****  */
+  86:./rt_thread/src/mem.c **** void rt_free_sethook(void (*hook)(void *ptr))
+  87:./rt_thread/src/mem.c **** {
+  88:./rt_thread/src/mem.c ****     rt_free_hook = hook;
+  89:./rt_thread/src/mem.c **** }
+  90:./rt_thread/src/mem.c **** 
+  91:./rt_thread/src/mem.c **** /**@}*/
+  92:./rt_thread/src/mem.c **** 
+  93:./rt_thread/src/mem.c **** #endif
+  94:./rt_thread/src/mem.c **** 
+  95:./rt_thread/src/mem.c **** #define HEAP_MAGIC 0x1ea0
+  96:./rt_thread/src/mem.c **** struct heap_mem
+  97:./rt_thread/src/mem.c **** {
+  98:./rt_thread/src/mem.c ****     /* magic and used flag */
+  99:./rt_thread/src/mem.c ****     rt_uint16_t magic;
+ 100:./rt_thread/src/mem.c ****     rt_uint16_t used;
+ 101:./rt_thread/src/mem.c **** #ifdef ARCH_CPU_64BIT
+ 102:./rt_thread/src/mem.c ****     rt_uint32_t resv;
+ 103:./rt_thread/src/mem.c **** #endif
+ 104:./rt_thread/src/mem.c **** 
+ 105:./rt_thread/src/mem.c ****     rt_size_t next, prev;
+ 106:./rt_thread/src/mem.c **** 
+ 107:./rt_thread/src/mem.c **** #ifdef RT_USING_MEMTRACE
+ 108:./rt_thread/src/mem.c **** #ifdef ARCH_CPU_64BIT
+ 109:./rt_thread/src/mem.c ****     rt_uint8_t thread[8];
+ 110:./rt_thread/src/mem.c **** #else
+ 111:./rt_thread/src/mem.c ****     rt_uint8_t thread[4];   /* thread name */
+ 112:./rt_thread/src/mem.c **** #endif
+ 113:./rt_thread/src/mem.c **** #endif
+ 114:./rt_thread/src/mem.c **** };
+ 115:./rt_thread/src/mem.c **** 
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 4
+
+
+ 116:./rt_thread/src/mem.c **** /** pointer to the heap: for alignment, heap_ptr is now a pointer instead of an array */
+ 117:./rt_thread/src/mem.c **** static rt_uint8_t *heap_ptr;
+ 118:./rt_thread/src/mem.c **** 
+ 119:./rt_thread/src/mem.c **** /** the last entry, always unused! */
+ 120:./rt_thread/src/mem.c **** static struct heap_mem *heap_end;
+ 121:./rt_thread/src/mem.c **** 
+ 122:./rt_thread/src/mem.c **** #ifdef ARCH_CPU_64BIT
+ 123:./rt_thread/src/mem.c **** #define MIN_SIZE 24
+ 124:./rt_thread/src/mem.c **** #else
+ 125:./rt_thread/src/mem.c **** #define MIN_SIZE 12
+ 126:./rt_thread/src/mem.c **** #endif
+ 127:./rt_thread/src/mem.c **** 
+ 128:./rt_thread/src/mem.c **** #define MIN_SIZE_ALIGNED     RT_ALIGN(MIN_SIZE, RT_ALIGN_SIZE)
+ 129:./rt_thread/src/mem.c **** #define SIZEOF_STRUCT_MEM    RT_ALIGN(sizeof(struct heap_mem), RT_ALIGN_SIZE)
+ 130:./rt_thread/src/mem.c **** 
+ 131:./rt_thread/src/mem.c **** static struct heap_mem *lfree;   /* pointer to the lowest free block */
+ 132:./rt_thread/src/mem.c **** 
+ 133:./rt_thread/src/mem.c **** static struct rt_semaphore heap_sem;
+ 134:./rt_thread/src/mem.c **** static rt_size_t mem_size_aligned;
+ 135:./rt_thread/src/mem.c **** 
+ 136:./rt_thread/src/mem.c **** #ifdef RT_MEM_STATS
+ 137:./rt_thread/src/mem.c **** static rt_size_t used_mem, max_mem;
+ 138:./rt_thread/src/mem.c **** #endif
+ 139:./rt_thread/src/mem.c **** #ifdef RT_USING_MEMTRACE
+ 140:./rt_thread/src/mem.c **** rt_inline void rt_mem_setname(struct heap_mem *mem, const char *name)
+ 141:./rt_thread/src/mem.c **** {
+ 142:./rt_thread/src/mem.c ****     int index;
+ 143:./rt_thread/src/mem.c ****     for (index = 0; index < sizeof(mem->thread); index ++)
+ 144:./rt_thread/src/mem.c ****     {
+ 145:./rt_thread/src/mem.c ****         if (name[index] == '\0') break;
+ 146:./rt_thread/src/mem.c ****         mem->thread[index] = name[index];
+ 147:./rt_thread/src/mem.c ****     }
+ 148:./rt_thread/src/mem.c **** 
+ 149:./rt_thread/src/mem.c ****     for (; index < sizeof(mem->thread); index ++)
+ 150:./rt_thread/src/mem.c ****     {
+ 151:./rt_thread/src/mem.c ****         mem->thread[index] = ' ';
+ 152:./rt_thread/src/mem.c ****     }
+ 153:./rt_thread/src/mem.c **** }
+ 154:./rt_thread/src/mem.c **** #endif
+ 155:./rt_thread/src/mem.c **** 
+ 156:./rt_thread/src/mem.c **** static void plug_holes(struct heap_mem *mem)
+ 157:./rt_thread/src/mem.c **** {
+  68              		.loc 1 157 1
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 16
+  71              		@ frame_needed = 1, uses_anonymous_args = 0
+  72              		@ link register save eliminated.
+  73 0000 80B4     		push	{r7}
+  74              	.LCFI0:
+  75              		.cfi_def_cfa_offset 4
+  76              		.cfi_offset 7, -4
+  77 0002 85B0     		sub	sp, sp, #20
+  78              	.LCFI1:
+  79              		.cfi_def_cfa_offset 24
+  80 0004 00AF     		add	r7, sp, #0
+  81              	.LCFI2:
+  82              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 5
+
+
+  83 0006 7860     		str	r0, [r7, #4]
+ 158:./rt_thread/src/mem.c ****     struct heap_mem *nmem;
+ 159:./rt_thread/src/mem.c ****     struct heap_mem *pmem;
+ 160:./rt_thread/src/mem.c **** 
+ 161:./rt_thread/src/mem.c ****     RT_ASSERT((rt_uint8_t *)mem >= heap_ptr);
+ 162:./rt_thread/src/mem.c ****     RT_ASSERT((rt_uint8_t *)mem < (rt_uint8_t *)heap_end);
+ 163:./rt_thread/src/mem.c ****     RT_ASSERT(mem->used == 0);
+ 164:./rt_thread/src/mem.c **** 
+ 165:./rt_thread/src/mem.c ****     /* plug hole forward */
+ 166:./rt_thread/src/mem.c ****     nmem = (struct heap_mem *)&heap_ptr[mem->next];
+  84              		.loc 1 166 31
+  85 0008 294B     		ldr	r3, .L7
+  86 000a 1A68     		ldr	r2, [r3]
+  87              		.loc 1 166 44
+  88 000c 7B68     		ldr	r3, [r7, #4]
+  89 000e 5B68     		ldr	r3, [r3, #4]
+  90              		.loc 1 166 10
+  91 0010 1344     		add	r3, r3, r2
+  92 0012 FB60     		str	r3, [r7, #12]
+ 167:./rt_thread/src/mem.c ****     if (mem != nmem &&
+  93              		.loc 1 167 8
+  94 0014 7A68     		ldr	r2, [r7, #4]
+  95 0016 FB68     		ldr	r3, [r7, #12]
+  96 0018 9A42     		cmp	r2, r3
+  97 001a 1FD0     		beq	.L2
+ 168:./rt_thread/src/mem.c ****         nmem->used == 0 &&
+  98              		.loc 1 168 13 discriminator 1
+  99 001c FB68     		ldr	r3, [r7, #12]
+ 100 001e 5B88     		ldrh	r3, [r3, #2]
+ 167:./rt_thread/src/mem.c ****     if (mem != nmem &&
+ 101              		.loc 1 167 21 discriminator 1
+ 102 0020 002B     		cmp	r3, #0
+ 103 0022 1BD1     		bne	.L2
+ 169:./rt_thread/src/mem.c ****         (rt_uint8_t *)nmem != (rt_uint8_t *)heap_end)
+ 104              		.loc 1 169 31
+ 105 0024 234B     		ldr	r3, .L7+4
+ 106 0026 1B68     		ldr	r3, [r3]
+ 168:./rt_thread/src/mem.c ****         nmem->used == 0 &&
+ 107              		.loc 1 168 25
+ 108 0028 FA68     		ldr	r2, [r7, #12]
+ 109 002a 9A42     		cmp	r2, r3
+ 110 002c 16D0     		beq	.L2
+ 170:./rt_thread/src/mem.c ****     {
+ 171:./rt_thread/src/mem.c ****         /* if mem->next is unused and not end of heap_ptr,
+ 172:./rt_thread/src/mem.c ****          * combine mem and mem->next
+ 173:./rt_thread/src/mem.c ****          */
+ 174:./rt_thread/src/mem.c ****         if (lfree == nmem)
+ 111              		.loc 1 174 19
+ 112 002e 224B     		ldr	r3, .L7+8
+ 113 0030 1B68     		ldr	r3, [r3]
+ 114              		.loc 1 174 12
+ 115 0032 FA68     		ldr	r2, [r7, #12]
+ 116 0034 9A42     		cmp	r2, r3
+ 117 0036 02D1     		bne	.L3
+ 175:./rt_thread/src/mem.c ****         {
+ 176:./rt_thread/src/mem.c ****             lfree = mem;
+ 118              		.loc 1 176 19
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 6
+
+
+ 119 0038 1F4A     		ldr	r2, .L7+8
+ 120 003a 7B68     		ldr	r3, [r7, #4]
+ 121 003c 1360     		str	r3, [r2]
+ 122              	.L3:
+ 177:./rt_thread/src/mem.c ****         }
+ 178:./rt_thread/src/mem.c ****         mem->next = nmem->next;
+ 123              		.loc 1 178 25
+ 124 003e FB68     		ldr	r3, [r7, #12]
+ 125 0040 5A68     		ldr	r2, [r3, #4]
+ 126              		.loc 1 178 19
+ 127 0042 7B68     		ldr	r3, [r7, #4]
+ 128 0044 5A60     		str	r2, [r3, #4]
+ 179:./rt_thread/src/mem.c ****         ((struct heap_mem *)&heap_ptr[nmem->next])->prev = (rt_uint8_t *)mem - heap_ptr;
+ 129              		.loc 1 179 78
+ 130 0046 1A4B     		ldr	r3, .L7
+ 131 0048 1B68     		ldr	r3, [r3]
+ 132 004a 7A68     		ldr	r2, [r7, #4]
+ 133 004c D11A     		subs	r1, r2, r3
+ 134              		.loc 1 179 10
+ 135 004e 184B     		ldr	r3, .L7
+ 136 0050 1A68     		ldr	r2, [r3]
+ 137              		.loc 1 179 43
+ 138 0052 FB68     		ldr	r3, [r7, #12]
+ 139 0054 5B68     		ldr	r3, [r3, #4]
+ 140              		.loc 1 179 29
+ 141 0056 1344     		add	r3, r3, r2
+ 142              		.loc 1 179 78
+ 143 0058 0A46     		mov	r2, r1
+ 144              		.loc 1 179 58
+ 145 005a 9A60     		str	r2, [r3, #8]
+ 146              	.L2:
+ 180:./rt_thread/src/mem.c ****     }
+ 181:./rt_thread/src/mem.c **** 
+ 182:./rt_thread/src/mem.c ****     /* plug hole backward */
+ 183:./rt_thread/src/mem.c ****     pmem = (struct heap_mem *)&heap_ptr[mem->prev];
+ 147              		.loc 1 183 31
+ 148 005c 144B     		ldr	r3, .L7
+ 149 005e 1A68     		ldr	r2, [r3]
+ 150              		.loc 1 183 44
+ 151 0060 7B68     		ldr	r3, [r7, #4]
+ 152 0062 9B68     		ldr	r3, [r3, #8]
+ 153              		.loc 1 183 10
+ 154 0064 1344     		add	r3, r3, r2
+ 155 0066 BB60     		str	r3, [r7, #8]
+ 184:./rt_thread/src/mem.c ****     if (pmem != mem && pmem->used == 0)
+ 156              		.loc 1 184 8
+ 157 0068 BA68     		ldr	r2, [r7, #8]
+ 158 006a 7B68     		ldr	r3, [r7, #4]
+ 159 006c 9A42     		cmp	r2, r3
+ 160 006e 1AD0     		beq	.L6
+ 161              		.loc 1 184 28 discriminator 1
+ 162 0070 BB68     		ldr	r3, [r7, #8]
+ 163 0072 5B88     		ldrh	r3, [r3, #2]
+ 164              		.loc 1 184 21 discriminator 1
+ 165 0074 002B     		cmp	r3, #0
+ 166 0076 16D1     		bne	.L6
+ 185:./rt_thread/src/mem.c ****     {
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 7
+
+
+ 186:./rt_thread/src/mem.c ****         /* if mem->prev is unused, combine mem and mem->prev */
+ 187:./rt_thread/src/mem.c ****         if (lfree == mem)
+ 167              		.loc 1 187 19
+ 168 0078 0F4B     		ldr	r3, .L7+8
+ 169 007a 1B68     		ldr	r3, [r3]
+ 170              		.loc 1 187 12
+ 171 007c 7A68     		ldr	r2, [r7, #4]
+ 172 007e 9A42     		cmp	r2, r3
+ 173 0080 02D1     		bne	.L5
+ 188:./rt_thread/src/mem.c ****         {
+ 189:./rt_thread/src/mem.c ****             lfree = pmem;
+ 174              		.loc 1 189 19
+ 175 0082 0D4A     		ldr	r2, .L7+8
+ 176 0084 BB68     		ldr	r3, [r7, #8]
+ 177 0086 1360     		str	r3, [r2]
+ 178              	.L5:
+ 190:./rt_thread/src/mem.c ****         }
+ 191:./rt_thread/src/mem.c ****         pmem->next = mem->next;
+ 179              		.loc 1 191 25
+ 180 0088 7B68     		ldr	r3, [r7, #4]
+ 181 008a 5A68     		ldr	r2, [r3, #4]
+ 182              		.loc 1 191 20
+ 183 008c BB68     		ldr	r3, [r7, #8]
+ 184 008e 5A60     		str	r2, [r3, #4]
+ 192:./rt_thread/src/mem.c ****         ((struct heap_mem *)&heap_ptr[mem->next])->prev = (rt_uint8_t *)pmem - heap_ptr;
+ 185              		.loc 1 192 78
+ 186 0090 074B     		ldr	r3, .L7
+ 187 0092 1B68     		ldr	r3, [r3]
+ 188 0094 BA68     		ldr	r2, [r7, #8]
+ 189 0096 D11A     		subs	r1, r2, r3
+ 190              		.loc 1 192 10
+ 191 0098 054B     		ldr	r3, .L7
+ 192 009a 1A68     		ldr	r2, [r3]
+ 193              		.loc 1 192 42
+ 194 009c 7B68     		ldr	r3, [r7, #4]
+ 195 009e 5B68     		ldr	r3, [r3, #4]
+ 196              		.loc 1 192 29
+ 197 00a0 1344     		add	r3, r3, r2
+ 198              		.loc 1 192 78
+ 199 00a2 0A46     		mov	r2, r1
+ 200              		.loc 1 192 57
+ 201 00a4 9A60     		str	r2, [r3, #8]
+ 202              	.L6:
+ 193:./rt_thread/src/mem.c ****     }
+ 194:./rt_thread/src/mem.c **** }
+ 203              		.loc 1 194 1
+ 204 00a6 00BF     		nop
+ 205 00a8 1437     		adds	r7, r7, #20
+ 206              	.LCFI3:
+ 207              		.cfi_def_cfa_offset 4
+ 208 00aa BD46     		mov	sp, r7
+ 209              	.LCFI4:
+ 210              		.cfi_def_cfa_register 13
+ 211              		@ sp needed
+ 212 00ac 80BC     		pop	{r7}
+ 213              	.LCFI5:
+ 214              		.cfi_restore 7
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 8
+
+
+ 215              		.cfi_def_cfa_offset 0
+ 216 00ae 7047     		bx	lr
+ 217              	.L8:
+ 218              		.align	2
+ 219              	.L7:
+ 220 00b0 00000000 		.word	heap_ptr
+ 221 00b4 00000000 		.word	heap_end
+ 222 00b8 00000000 		.word	lfree
+ 223              		.cfi_endproc
+ 224              	.LFE15:
+ 226              		.section	.rodata
+ 227              		.align	2
+ 228              	.LC0:
+ 229 0000 68656170 		.ascii	"heap\000"
+ 229      00
+ 230 0005 000000   		.align	2
+ 231              	.LC1:
+ 232 0008 6D656D20 		.ascii	"mem init, error begin address 0x%x, and end address"
+ 232      696E6974 
+ 232      2C206572 
+ 232      726F7220 
+ 232      62656769 
+ 233 003b 20307825 		.ascii	" 0x%x\012\000"
+ 233      780A00
+ 234              		.section	.text.rt_system_heap_init,"ax",%progbits
+ 235              		.align	1
+ 236              		.global	rt_system_heap_init
+ 237              		.syntax unified
+ 238              		.thumb
+ 239              		.thumb_func
+ 241              	rt_system_heap_init:
+ 242              	.LFB16:
+ 195:./rt_thread/src/mem.c **** 
+ 196:./rt_thread/src/mem.c **** /**
+ 197:./rt_thread/src/mem.c ****  * @ingroup SystemInit
+ 198:./rt_thread/src/mem.c ****  *
+ 199:./rt_thread/src/mem.c ****  * This function will initialize system heap memory.
+ 200:./rt_thread/src/mem.c ****  *
+ 201:./rt_thread/src/mem.c ****  * @param begin_addr the beginning address of system heap memory.
+ 202:./rt_thread/src/mem.c ****  * @param end_addr the end address of system heap memory.
+ 203:./rt_thread/src/mem.c ****  */
+ 204:./rt_thread/src/mem.c **** void rt_system_heap_init(void *begin_addr, void *end_addr)
+ 205:./rt_thread/src/mem.c **** {
+ 243              		.loc 1 205 1
+ 244              		.cfi_startproc
+ 245              		@ args = 0, pretend = 0, frame = 24
+ 246              		@ frame_needed = 1, uses_anonymous_args = 0
+ 247 0000 80B5     		push	{r7, lr}
+ 248              	.LCFI6:
+ 249              		.cfi_def_cfa_offset 8
+ 250              		.cfi_offset 7, -8
+ 251              		.cfi_offset 14, -4
+ 252 0002 86B0     		sub	sp, sp, #24
+ 253              	.LCFI7:
+ 254              		.cfi_def_cfa_offset 32
+ 255 0004 00AF     		add	r7, sp, #0
+ 256              	.LCFI8:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 9
+
+
+ 257              		.cfi_def_cfa_register 7
+ 258 0006 7860     		str	r0, [r7, #4]
+ 259 0008 3960     		str	r1, [r7]
+ 206:./rt_thread/src/mem.c ****     struct heap_mem *mem;
+ 207:./rt_thread/src/mem.c ****     rt_ubase_t begin_align = RT_ALIGN((rt_ubase_t)begin_addr, RT_ALIGN_SIZE);
+ 260              		.loc 1 207 30
+ 261 000a 7B68     		ldr	r3, [r7, #4]
+ 262 000c 0333     		adds	r3, r3, #3
+ 263              		.loc 1 207 16
+ 264 000e 23F00303 		bic	r3, r3, #3
+ 265 0012 7B61     		str	r3, [r7, #20]
+ 208:./rt_thread/src/mem.c ****     rt_ubase_t end_align   = RT_ALIGN_DOWN((rt_ubase_t)end_addr, RT_ALIGN_SIZE);
+ 266              		.loc 1 208 30
+ 267 0014 3B68     		ldr	r3, [r7]
+ 268              		.loc 1 208 16
+ 269 0016 23F00303 		bic	r3, r3, #3
+ 270 001a 3B61     		str	r3, [r7, #16]
+ 209:./rt_thread/src/mem.c **** 
+ 210:./rt_thread/src/mem.c ****     RT_DEBUG_NOT_IN_INTERRUPT;
+ 211:./rt_thread/src/mem.c **** 
+ 212:./rt_thread/src/mem.c ****     /* alignment addr */
+ 213:./rt_thread/src/mem.c ****     if ((end_align > (2 * SIZEOF_STRUCT_MEM)) &&
+ 271              		.loc 1 213 8
+ 272 001c 3B69     		ldr	r3, [r7, #16]
+ 273 001e 182B     		cmp	r3, #24
+ 274 0020 47D9     		bls	.L10
+ 214:./rt_thread/src/mem.c ****         ((end_align - 2 * SIZEOF_STRUCT_MEM) >= begin_align))
+ 275              		.loc 1 214 21 discriminator 1
+ 276 0022 3B69     		ldr	r3, [r7, #16]
+ 277 0024 183B     		subs	r3, r3, #24
+ 213:./rt_thread/src/mem.c ****         ((end_align - 2 * SIZEOF_STRUCT_MEM) >= begin_align))
+ 278              		.loc 1 213 47 discriminator 1
+ 279 0026 7A69     		ldr	r2, [r7, #20]
+ 280 0028 9A42     		cmp	r2, r3
+ 281 002a 42D8     		bhi	.L10
+ 215:./rt_thread/src/mem.c ****     {
+ 216:./rt_thread/src/mem.c ****         /* calculate the aligned memory size */
+ 217:./rt_thread/src/mem.c ****         mem_size_aligned = end_align - begin_align - 2 * SIZEOF_STRUCT_MEM;
+ 282              		.loc 1 217 38
+ 283 002c 3A69     		ldr	r2, [r7, #16]
+ 284 002e 7B69     		ldr	r3, [r7, #20]
+ 285 0030 D31A     		subs	r3, r2, r3
+ 286              		.loc 1 217 52
+ 287 0032 183B     		subs	r3, r3, #24
+ 288              		.loc 1 217 26
+ 289 0034 244A     		ldr	r2, .L12
+ 290 0036 1360     		str	r3, [r2]
+ 218:./rt_thread/src/mem.c ****     }
+ 219:./rt_thread/src/mem.c ****     else
+ 220:./rt_thread/src/mem.c ****     {
+ 221:./rt_thread/src/mem.c ****         rt_kprintf("mem init, error begin address 0x%x, and end address 0x%x\n",
+ 222:./rt_thread/src/mem.c ****                    (rt_ubase_t)begin_addr, (rt_ubase_t)end_addr);
+ 223:./rt_thread/src/mem.c **** 
+ 224:./rt_thread/src/mem.c ****         return;
+ 225:./rt_thread/src/mem.c ****     }
+ 226:./rt_thread/src/mem.c **** 
+ 227:./rt_thread/src/mem.c ****     /* point to begin address of heap */
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 10
+
+
+ 228:./rt_thread/src/mem.c ****     heap_ptr = (rt_uint8_t *)begin_align;
+ 291              		.loc 1 228 16
+ 292 0038 7B69     		ldr	r3, [r7, #20]
+ 293              		.loc 1 228 14
+ 294 003a 244A     		ldr	r2, .L12+4
+ 295 003c 1360     		str	r3, [r2]
+ 229:./rt_thread/src/mem.c **** 
+ 230:./rt_thread/src/mem.c ****     RT_DEBUG_LOG(RT_DEBUG_MEM, ("mem init, heap begin address 0x%x, size %d\n",
+ 231:./rt_thread/src/mem.c ****                                 (rt_ubase_t)heap_ptr, mem_size_aligned));
+ 232:./rt_thread/src/mem.c **** 
+ 233:./rt_thread/src/mem.c ****     /* initialize the start of the heap */
+ 234:./rt_thread/src/mem.c ****     mem        = (struct heap_mem *)heap_ptr;
+ 296              		.loc 1 234 16
+ 297 003e 234B     		ldr	r3, .L12+4
+ 298 0040 1B68     		ldr	r3, [r3]
+ 299 0042 FB60     		str	r3, [r7, #12]
+ 235:./rt_thread/src/mem.c ****     mem->magic = HEAP_MAGIC;
+ 300              		.loc 1 235 16
+ 301 0044 FB68     		ldr	r3, [r7, #12]
+ 302 0046 4FF4F552 		mov	r2, #7840
+ 303 004a 1A80     		strh	r2, [r3]	@ movhi
+ 236:./rt_thread/src/mem.c ****     mem->next  = mem_size_aligned + SIZEOF_STRUCT_MEM;
+ 304              		.loc 1 236 35
+ 305 004c 1E4B     		ldr	r3, .L12
+ 306 004e 1B68     		ldr	r3, [r3]
+ 307 0050 03F10C02 		add	r2, r3, #12
+ 308              		.loc 1 236 16
+ 309 0054 FB68     		ldr	r3, [r7, #12]
+ 310 0056 5A60     		str	r2, [r3, #4]
+ 237:./rt_thread/src/mem.c ****     mem->prev  = 0;
+ 311              		.loc 1 237 16
+ 312 0058 FB68     		ldr	r3, [r7, #12]
+ 313 005a 0022     		movs	r2, #0
+ 314 005c 9A60     		str	r2, [r3, #8]
+ 238:./rt_thread/src/mem.c ****     mem->used  = 0;
+ 315              		.loc 1 238 16
+ 316 005e FB68     		ldr	r3, [r7, #12]
+ 317 0060 0022     		movs	r2, #0
+ 318 0062 5A80     		strh	r2, [r3, #2]	@ movhi
+ 239:./rt_thread/src/mem.c **** #ifdef RT_USING_MEMTRACE
+ 240:./rt_thread/src/mem.c ****     rt_mem_setname(mem, "INIT");
+ 241:./rt_thread/src/mem.c **** #endif
+ 242:./rt_thread/src/mem.c **** 
+ 243:./rt_thread/src/mem.c ****     /* initialize the end of the heap */
+ 244:./rt_thread/src/mem.c ****     heap_end        = (struct heap_mem *)&heap_ptr[mem->next];
+ 319              		.loc 1 244 42
+ 320 0064 194B     		ldr	r3, .L12+4
+ 321 0066 1A68     		ldr	r2, [r3]
+ 322              		.loc 1 244 55
+ 323 0068 FB68     		ldr	r3, [r7, #12]
+ 324 006a 5B68     		ldr	r3, [r3, #4]
+ 325              		.loc 1 244 42
+ 326 006c 1344     		add	r3, r3, r2
+ 327              		.loc 1 244 21
+ 328 006e 184A     		ldr	r2, .L12+8
+ 329 0070 1360     		str	r3, [r2]
+ 245:./rt_thread/src/mem.c ****     heap_end->magic = HEAP_MAGIC;
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 11
+
+
+ 330              		.loc 1 245 13
+ 331 0072 174B     		ldr	r3, .L12+8
+ 332 0074 1B68     		ldr	r3, [r3]
+ 333              		.loc 1 245 21
+ 334 0076 4FF4F552 		mov	r2, #7840
+ 335 007a 1A80     		strh	r2, [r3]	@ movhi
+ 246:./rt_thread/src/mem.c ****     heap_end->used  = 1;
+ 336              		.loc 1 246 13
+ 337 007c 144B     		ldr	r3, .L12+8
+ 338 007e 1B68     		ldr	r3, [r3]
+ 339              		.loc 1 246 21
+ 340 0080 0122     		movs	r2, #1
+ 341 0082 5A80     		strh	r2, [r3, #2]	@ movhi
+ 247:./rt_thread/src/mem.c ****     heap_end->next  = mem_size_aligned + SIZEOF_STRUCT_MEM;
+ 342              		.loc 1 247 40
+ 343 0084 104B     		ldr	r3, .L12
+ 344 0086 1A68     		ldr	r2, [r3]
+ 345              		.loc 1 247 13
+ 346 0088 114B     		ldr	r3, .L12+8
+ 347 008a 1B68     		ldr	r3, [r3]
+ 348              		.loc 1 247 40
+ 349 008c 0C32     		adds	r2, r2, #12
+ 350              		.loc 1 247 21
+ 351 008e 5A60     		str	r2, [r3, #4]
+ 248:./rt_thread/src/mem.c ****     heap_end->prev  = mem_size_aligned + SIZEOF_STRUCT_MEM;
+ 352              		.loc 1 248 40
+ 353 0090 0D4B     		ldr	r3, .L12
+ 354 0092 1A68     		ldr	r2, [r3]
+ 355              		.loc 1 248 13
+ 356 0094 0E4B     		ldr	r3, .L12+8
+ 357 0096 1B68     		ldr	r3, [r3]
+ 358              		.loc 1 248 40
+ 359 0098 0C32     		adds	r2, r2, #12
+ 360              		.loc 1 248 21
+ 361 009a 9A60     		str	r2, [r3, #8]
+ 249:./rt_thread/src/mem.c **** #ifdef RT_USING_MEMTRACE
+ 250:./rt_thread/src/mem.c ****     rt_mem_setname(heap_end, "INIT");
+ 251:./rt_thread/src/mem.c **** #endif
+ 252:./rt_thread/src/mem.c **** 
+ 253:./rt_thread/src/mem.c ****     rt_sem_init(&heap_sem, "heap", 1, RT_IPC_FLAG_FIFO);
+ 362              		.loc 1 253 5
+ 363 009c 0023     		movs	r3, #0
+ 364 009e 0122     		movs	r2, #1
+ 365 00a0 0C49     		ldr	r1, .L12+12
+ 366 00a2 0D48     		ldr	r0, .L12+16
+ 367 00a4 FFF7FEFF 		bl	rt_sem_init
+ 254:./rt_thread/src/mem.c **** 
+ 255:./rt_thread/src/mem.c ****     /* initialize the lowest-free pointer to the start of the heap */
+ 256:./rt_thread/src/mem.c ****     lfree = (struct heap_mem *)heap_ptr;
+ 368              		.loc 1 256 11
+ 369 00a8 084B     		ldr	r3, .L12+4
+ 370 00aa 1B68     		ldr	r3, [r3]
+ 371 00ac 0B4A     		ldr	r2, .L12+20
+ 372 00ae 1360     		str	r3, [r2]
+ 373 00b0 06E0     		b	.L9
+ 374              	.L10:
+ 221:./rt_thread/src/mem.c ****                    (rt_ubase_t)begin_addr, (rt_ubase_t)end_addr);
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 12
+
+
+ 375              		.loc 1 221 9
+ 376 00b2 7B68     		ldr	r3, [r7, #4]
+ 377 00b4 3A68     		ldr	r2, [r7]
+ 378 00b6 1946     		mov	r1, r3
+ 379 00b8 0948     		ldr	r0, .L12+24
+ 380 00ba FFF7FEFF 		bl	rt_kprintf
+ 224:./rt_thread/src/mem.c ****     }
+ 381              		.loc 1 224 9
+ 382 00be 00BF     		nop
+ 383              	.L9:
+ 257:./rt_thread/src/mem.c **** }
+ 384              		.loc 1 257 1
+ 385 00c0 1837     		adds	r7, r7, #24
+ 386              	.LCFI9:
+ 387              		.cfi_def_cfa_offset 8
+ 388 00c2 BD46     		mov	sp, r7
+ 389              	.LCFI10:
+ 390              		.cfi_def_cfa_register 13
+ 391              		@ sp needed
+ 392 00c4 80BD     		pop	{r7, pc}
+ 393              	.L13:
+ 394 00c6 00BF     		.align	2
+ 395              	.L12:
+ 396 00c8 00000000 		.word	mem_size_aligned
+ 397 00cc 00000000 		.word	heap_ptr
+ 398 00d0 00000000 		.word	heap_end
+ 399 00d4 00000000 		.word	.LC0
+ 400 00d8 00000000 		.word	heap_sem
+ 401 00dc 00000000 		.word	lfree
+ 402 00e0 08000000 		.word	.LC1
+ 403              		.cfi_endproc
+ 404              	.LFE16:
+ 406              		.section	.text.rt_malloc,"ax",%progbits
+ 407              		.align	1
+ 408              		.global	rt_malloc
+ 409              		.syntax unified
+ 410              		.thumb
+ 411              		.thumb_func
+ 413              	rt_malloc:
+ 414              	.LFB17:
+ 258:./rt_thread/src/mem.c **** 
+ 259:./rt_thread/src/mem.c **** /**
+ 260:./rt_thread/src/mem.c ****  * @addtogroup MM
+ 261:./rt_thread/src/mem.c ****  */
+ 262:./rt_thread/src/mem.c **** 
+ 263:./rt_thread/src/mem.c **** /**@{*/
+ 264:./rt_thread/src/mem.c **** 
+ 265:./rt_thread/src/mem.c **** /**
+ 266:./rt_thread/src/mem.c ****  * Allocate a block of memory with a minimum of 'size' bytes.
+ 267:./rt_thread/src/mem.c ****  *
+ 268:./rt_thread/src/mem.c ****  * @param size is the minimum size of the requested block in bytes.
+ 269:./rt_thread/src/mem.c ****  *
+ 270:./rt_thread/src/mem.c ****  * @return pointer to allocated memory or NULL if no free memory was found.
+ 271:./rt_thread/src/mem.c ****  */
+ 272:./rt_thread/src/mem.c **** void *rt_malloc(rt_size_t size)
+ 273:./rt_thread/src/mem.c **** {
+ 415              		.loc 1 273 1
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 13
+
+
+ 416              		.cfi_startproc
+ 417              		@ args = 0, pretend = 0, frame = 24
+ 418              		@ frame_needed = 1, uses_anonymous_args = 0
+ 419 0000 80B5     		push	{r7, lr}
+ 420              	.LCFI11:
+ 421              		.cfi_def_cfa_offset 8
+ 422              		.cfi_offset 7, -8
+ 423              		.cfi_offset 14, -4
+ 424 0002 86B0     		sub	sp, sp, #24
+ 425              	.LCFI12:
+ 426              		.cfi_def_cfa_offset 32
+ 427 0004 00AF     		add	r7, sp, #0
+ 428              	.LCFI13:
+ 429              		.cfi_def_cfa_register 7
+ 430 0006 7860     		str	r0, [r7, #4]
+ 274:./rt_thread/src/mem.c ****     rt_size_t ptr, ptr2;
+ 275:./rt_thread/src/mem.c ****     struct heap_mem *mem, *mem2;
+ 276:./rt_thread/src/mem.c **** 
+ 277:./rt_thread/src/mem.c ****     if (size == 0)
+ 431              		.loc 1 277 8
+ 432 0008 7B68     		ldr	r3, [r7, #4]
+ 433 000a 002B     		cmp	r3, #0
+ 434 000c 01D1     		bne	.L15
+ 278:./rt_thread/src/mem.c ****         return RT_NULL;
+ 435              		.loc 1 278 16
+ 436 000e 0023     		movs	r3, #0
+ 437 0010 C5E0     		b	.L16
+ 438              	.L15:
+ 279:./rt_thread/src/mem.c **** 
+ 280:./rt_thread/src/mem.c ****     RT_DEBUG_NOT_IN_INTERRUPT;
+ 281:./rt_thread/src/mem.c **** 
+ 282:./rt_thread/src/mem.c ****     if (size != RT_ALIGN(size, RT_ALIGN_SIZE))
+ 283:./rt_thread/src/mem.c ****         RT_DEBUG_LOG(RT_DEBUG_MEM, ("malloc size %d, but align to %d\n",
+ 284:./rt_thread/src/mem.c ****                                     size, RT_ALIGN(size, RT_ALIGN_SIZE)));
+ 285:./rt_thread/src/mem.c ****     else
+ 286:./rt_thread/src/mem.c ****         RT_DEBUG_LOG(RT_DEBUG_MEM, ("malloc size %d\n", size));
+ 287:./rt_thread/src/mem.c **** 
+ 288:./rt_thread/src/mem.c ****     /* alignment size */
+ 289:./rt_thread/src/mem.c ****     size = RT_ALIGN(size, RT_ALIGN_SIZE);
+ 439              		.loc 1 289 12
+ 440 0012 7B68     		ldr	r3, [r7, #4]
+ 441 0014 0333     		adds	r3, r3, #3
+ 442              		.loc 1 289 10
+ 443 0016 23F00303 		bic	r3, r3, #3
+ 444 001a 7B60     		str	r3, [r7, #4]
+ 290:./rt_thread/src/mem.c **** 
+ 291:./rt_thread/src/mem.c ****     if (size > mem_size_aligned)
+ 445              		.loc 1 291 14
+ 446 001c 624B     		ldr	r3, .L28
+ 447 001e 1B68     		ldr	r3, [r3]
+ 448              		.loc 1 291 8
+ 449 0020 7A68     		ldr	r2, [r7, #4]
+ 450 0022 9A42     		cmp	r2, r3
+ 451 0024 01D9     		bls	.L17
+ 292:./rt_thread/src/mem.c ****     {
+ 293:./rt_thread/src/mem.c ****         RT_DEBUG_LOG(RT_DEBUG_MEM, ("no memory\n"));
+ 294:./rt_thread/src/mem.c **** 
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 14
+
+
+ 295:./rt_thread/src/mem.c ****         return RT_NULL;
+ 452              		.loc 1 295 16
+ 453 0026 0023     		movs	r3, #0
+ 454 0028 B9E0     		b	.L16
+ 455              	.L17:
+ 296:./rt_thread/src/mem.c ****     }
+ 297:./rt_thread/src/mem.c **** 
+ 298:./rt_thread/src/mem.c ****     /* every data block must be at least MIN_SIZE_ALIGNED long */
+ 299:./rt_thread/src/mem.c ****     if (size < MIN_SIZE_ALIGNED)
+ 456              		.loc 1 299 8
+ 457 002a 7B68     		ldr	r3, [r7, #4]
+ 458 002c 0B2B     		cmp	r3, #11
+ 459 002e 01D8     		bhi	.L18
+ 300:./rt_thread/src/mem.c ****         size = MIN_SIZE_ALIGNED;
+ 460              		.loc 1 300 14
+ 461 0030 0C23     		movs	r3, #12
+ 462 0032 7B60     		str	r3, [r7, #4]
+ 463              	.L18:
+ 301:./rt_thread/src/mem.c **** 
+ 302:./rt_thread/src/mem.c ****     /* take memory semaphore */
+ 303:./rt_thread/src/mem.c ****     rt_sem_take(&heap_sem, RT_WAITING_FOREVER);
+ 464              		.loc 1 303 5
+ 465 0034 4FF0FF31 		mov	r1, #-1
+ 466 0038 5C48     		ldr	r0, .L28+4
+ 467 003a FFF7FEFF 		bl	rt_sem_take
+ 304:./rt_thread/src/mem.c **** 
+ 305:./rt_thread/src/mem.c ****     for (ptr = (rt_uint8_t *)lfree - heap_ptr;
+ 468              		.loc 1 305 16
+ 469 003e 5C4B     		ldr	r3, .L28+8
+ 470 0040 1A68     		ldr	r2, [r3]
+ 471              		.loc 1 305 36
+ 472 0042 5C4B     		ldr	r3, .L28+12
+ 473 0044 1B68     		ldr	r3, [r3]
+ 474 0046 D31A     		subs	r3, r2, r3
+ 475              		.loc 1 305 14
+ 476 0048 7B61     		str	r3, [r7, #20]
+ 477              		.loc 1 305 5
+ 478 004a 9CE0     		b	.L19
+ 479              	.L27:
+ 306:./rt_thread/src/mem.c ****          ptr < mem_size_aligned - size;
+ 307:./rt_thread/src/mem.c ****          ptr = ((struct heap_mem *)&heap_ptr[ptr])->next)
+ 308:./rt_thread/src/mem.c ****     {
+ 309:./rt_thread/src/mem.c ****         mem = (struct heap_mem *)&heap_ptr[ptr];
+ 480              		.loc 1 309 34
+ 481 004c 594B     		ldr	r3, .L28+12
+ 482 004e 1A68     		ldr	r2, [r3]
+ 483              		.loc 1 309 13
+ 484 0050 7B69     		ldr	r3, [r7, #20]
+ 485 0052 1344     		add	r3, r3, r2
+ 486 0054 3B61     		str	r3, [r7, #16]
+ 310:./rt_thread/src/mem.c **** 
+ 311:./rt_thread/src/mem.c ****         if ((!mem->used) && (mem->next - (ptr + SIZEOF_STRUCT_MEM)) >= size)
+ 487              		.loc 1 311 18
+ 488 0056 3B69     		ldr	r3, [r7, #16]
+ 489 0058 5B88     		ldrh	r3, [r3, #2]
+ 490              		.loc 1 311 12
+ 491 005a 002B     		cmp	r3, #0
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 15
+
+
+ 492 005c 40F08D80 		bne	.L20
+ 493              		.loc 1 311 33 discriminator 1
+ 494 0060 3B69     		ldr	r3, [r7, #16]
+ 495 0062 5A68     		ldr	r2, [r3, #4]
+ 496              		.loc 1 311 40 discriminator 1
+ 497 0064 7B69     		ldr	r3, [r7, #20]
+ 498 0066 D31A     		subs	r3, r2, r3
+ 499 0068 0C3B     		subs	r3, r3, #12
+ 500              		.loc 1 311 26 discriminator 1
+ 501 006a 7A68     		ldr	r2, [r7, #4]
+ 502 006c 9A42     		cmp	r2, r3
+ 503 006e 00F28480 		bhi	.L20
+ 312:./rt_thread/src/mem.c ****         {
+ 313:./rt_thread/src/mem.c ****             /* mem is not used and at least perfect fit is possible:
+ 314:./rt_thread/src/mem.c ****              * mem->next - (ptr + SIZEOF_STRUCT_MEM) gives us the 'user data size' of mem */
+ 315:./rt_thread/src/mem.c **** 
+ 316:./rt_thread/src/mem.c ****             if (mem->next - (ptr + SIZEOF_STRUCT_MEM) >=
+ 504              		.loc 1 316 20
+ 505 0072 3B69     		ldr	r3, [r7, #16]
+ 506 0074 5A68     		ldr	r2, [r3, #4]
+ 507              		.loc 1 316 27
+ 508 0076 7B69     		ldr	r3, [r7, #20]
+ 509 0078 D31A     		subs	r3, r2, r3
+ 510 007a A3F10C02 		sub	r2, r3, #12
+ 317:./rt_thread/src/mem.c ****                 (size + SIZEOF_STRUCT_MEM + MIN_SIZE_ALIGNED))
+ 511              		.loc 1 317 43
+ 512 007e 7B68     		ldr	r3, [r7, #4]
+ 513 0080 1833     		adds	r3, r3, #24
+ 316:./rt_thread/src/mem.c ****                 (size + SIZEOF_STRUCT_MEM + MIN_SIZE_ALIGNED))
+ 514              		.loc 1 316 16
+ 515 0082 9A42     		cmp	r2, r3
+ 516 0084 3DD3     		bcc	.L21
+ 318:./rt_thread/src/mem.c ****             {
+ 319:./rt_thread/src/mem.c ****                 /* (in addition to the above, we test if another struct heap_mem (SIZEOF_STRUCT_MEM
+ 320:./rt_thread/src/mem.c ****                  * at least MIN_SIZE_ALIGNED of data also fits in the 'user data space' of 'mem')
+ 321:./rt_thread/src/mem.c ****                  * -> split large block, create empty remainder,
+ 322:./rt_thread/src/mem.c ****                  * remainder must be large enough to contain MIN_SIZE_ALIGNED data: if
+ 323:./rt_thread/src/mem.c ****                  * mem->next - (ptr + (2*SIZEOF_STRUCT_MEM)) == size,
+ 324:./rt_thread/src/mem.c ****                  * struct heap_mem would fit in but no data between mem2 and mem2->next
+ 325:./rt_thread/src/mem.c ****                  * @todo we could leave out MIN_SIZE_ALIGNED. We would create an empty
+ 326:./rt_thread/src/mem.c ****                  *       region that couldn't hold data, but when mem->next gets freed,
+ 327:./rt_thread/src/mem.c ****                  *       the 2 regions would be combined, resulting in more free memory
+ 328:./rt_thread/src/mem.c ****                  */
+ 329:./rt_thread/src/mem.c ****                 ptr2 = ptr + SIZEOF_STRUCT_MEM + size;
+ 517              		.loc 1 329 48
+ 518 0086 7A69     		ldr	r2, [r7, #20]
+ 519 0088 7B68     		ldr	r3, [r7, #4]
+ 520 008a 1344     		add	r3, r3, r2
+ 521              		.loc 1 329 22
+ 522 008c 0C33     		adds	r3, r3, #12
+ 523 008e FB60     		str	r3, [r7, #12]
+ 330:./rt_thread/src/mem.c **** 
+ 331:./rt_thread/src/mem.c ****                 /* create mem2 struct */
+ 332:./rt_thread/src/mem.c ****                 mem2       = (struct heap_mem *)&heap_ptr[ptr2];
+ 524              		.loc 1 332 49
+ 525 0090 484B     		ldr	r3, .L28+12
+ 526 0092 1A68     		ldr	r2, [r3]
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 16
+
+
+ 527              		.loc 1 332 28
+ 528 0094 FB68     		ldr	r3, [r7, #12]
+ 529 0096 1344     		add	r3, r3, r2
+ 530 0098 BB60     		str	r3, [r7, #8]
+ 333:./rt_thread/src/mem.c ****                 mem2->magic = HEAP_MAGIC;
+ 531              		.loc 1 333 29
+ 532 009a BB68     		ldr	r3, [r7, #8]
+ 533 009c 4FF4F552 		mov	r2, #7840
+ 534 00a0 1A80     		strh	r2, [r3]	@ movhi
+ 334:./rt_thread/src/mem.c ****                 mem2->used = 0;
+ 535              		.loc 1 334 28
+ 536 00a2 BB68     		ldr	r3, [r7, #8]
+ 537 00a4 0022     		movs	r2, #0
+ 538 00a6 5A80     		strh	r2, [r3, #2]	@ movhi
+ 335:./rt_thread/src/mem.c ****                 mem2->next = mem->next;
+ 539              		.loc 1 335 33
+ 540 00a8 3B69     		ldr	r3, [r7, #16]
+ 541 00aa 5A68     		ldr	r2, [r3, #4]
+ 542              		.loc 1 335 28
+ 543 00ac BB68     		ldr	r3, [r7, #8]
+ 544 00ae 5A60     		str	r2, [r3, #4]
+ 336:./rt_thread/src/mem.c ****                 mem2->prev = ptr;
+ 545              		.loc 1 336 28
+ 546 00b0 BB68     		ldr	r3, [r7, #8]
+ 547 00b2 7A69     		ldr	r2, [r7, #20]
+ 548 00b4 9A60     		str	r2, [r3, #8]
+ 337:./rt_thread/src/mem.c **** #ifdef RT_USING_MEMTRACE
+ 338:./rt_thread/src/mem.c ****                 rt_mem_setname(mem2, "    ");
+ 339:./rt_thread/src/mem.c **** #endif
+ 340:./rt_thread/src/mem.c **** 
+ 341:./rt_thread/src/mem.c ****                 /* and insert it between mem and mem->next */
+ 342:./rt_thread/src/mem.c ****                 mem->next = ptr2;
+ 549              		.loc 1 342 27
+ 550 00b6 3B69     		ldr	r3, [r7, #16]
+ 551 00b8 FA68     		ldr	r2, [r7, #12]
+ 552 00ba 5A60     		str	r2, [r3, #4]
+ 343:./rt_thread/src/mem.c ****                 mem->used = 1;
+ 553              		.loc 1 343 27
+ 554 00bc 3B69     		ldr	r3, [r7, #16]
+ 555 00be 0122     		movs	r2, #1
+ 556 00c0 5A80     		strh	r2, [r3, #2]	@ movhi
+ 344:./rt_thread/src/mem.c **** 
+ 345:./rt_thread/src/mem.c ****                 if (mem2->next != mem_size_aligned + SIZEOF_STRUCT_MEM)
+ 557              		.loc 1 345 25
+ 558 00c2 BB68     		ldr	r3, [r7, #8]
+ 559 00c4 5A68     		ldr	r2, [r3, #4]
+ 560              		.loc 1 345 52
+ 561 00c6 384B     		ldr	r3, .L28
+ 562 00c8 1B68     		ldr	r3, [r3]
+ 563 00ca 0C33     		adds	r3, r3, #12
+ 564              		.loc 1 345 20
+ 565 00cc 9A42     		cmp	r2, r3
+ 566 00ce 06D0     		beq	.L22
+ 346:./rt_thread/src/mem.c ****                 {
+ 347:./rt_thread/src/mem.c ****                     ((struct heap_mem *)&heap_ptr[mem2->next])->prev = ptr2;
+ 567              		.loc 1 347 22
+ 568 00d0 384B     		ldr	r3, .L28+12
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 17
+
+
+ 569 00d2 1A68     		ldr	r2, [r3]
+ 570              		.loc 1 347 55
+ 571 00d4 BB68     		ldr	r3, [r7, #8]
+ 572 00d6 5B68     		ldr	r3, [r3, #4]
+ 573              		.loc 1 347 41
+ 574 00d8 1344     		add	r3, r3, r2
+ 575              		.loc 1 347 70
+ 576 00da FA68     		ldr	r2, [r7, #12]
+ 577 00dc 9A60     		str	r2, [r3, #8]
+ 578              	.L22:
+ 348:./rt_thread/src/mem.c ****                 }
+ 349:./rt_thread/src/mem.c **** #ifdef RT_MEM_STATS
+ 350:./rt_thread/src/mem.c ****                 used_mem += (size + SIZEOF_STRUCT_MEM);
+ 579              		.loc 1 350 26
+ 580 00de 364B     		ldr	r3, .L28+16
+ 581 00e0 1A68     		ldr	r2, [r3]
+ 582 00e2 7B68     		ldr	r3, [r7, #4]
+ 583 00e4 1344     		add	r3, r3, r2
+ 584 00e6 0C33     		adds	r3, r3, #12
+ 585 00e8 334A     		ldr	r2, .L28+16
+ 586 00ea 1360     		str	r3, [r2]
+ 351:./rt_thread/src/mem.c ****                 if (max_mem < used_mem)
+ 587              		.loc 1 351 29
+ 588 00ec 334B     		ldr	r3, .L28+20
+ 589 00ee 1A68     		ldr	r2, [r3]
+ 590 00f0 314B     		ldr	r3, .L28+16
+ 591 00f2 1B68     		ldr	r3, [r3]
+ 592              		.loc 1 351 20
+ 593 00f4 9A42     		cmp	r2, r3
+ 594 00f6 1DD2     		bcs	.L23
+ 352:./rt_thread/src/mem.c ****                     max_mem = used_mem;
+ 595              		.loc 1 352 29
+ 596 00f8 2F4B     		ldr	r3, .L28+16
+ 597 00fa 1B68     		ldr	r3, [r3]
+ 598 00fc 2F4A     		ldr	r2, .L28+20
+ 599 00fe 1360     		str	r3, [r2]
+ 600 0100 18E0     		b	.L23
+ 601              	.L21:
+ 353:./rt_thread/src/mem.c **** #endif
+ 354:./rt_thread/src/mem.c ****             }
+ 355:./rt_thread/src/mem.c ****             else
+ 356:./rt_thread/src/mem.c ****             {
+ 357:./rt_thread/src/mem.c ****                 /* (a mem2 struct does no fit into the user data space of mem and mem->next will al
+ 358:./rt_thread/src/mem.c ****                  * be used at this point: if not we have 2 unused structs in a row, plug_holes shou
+ 359:./rt_thread/src/mem.c ****                  * take care of this).
+ 360:./rt_thread/src/mem.c ****                  * -> near fit or excact fit: do not split, no mem2 creation
+ 361:./rt_thread/src/mem.c ****                  * also can't move mem->next directly behind mem, since mem->next
+ 362:./rt_thread/src/mem.c ****                  * will always be used at this point!
+ 363:./rt_thread/src/mem.c ****                  */
+ 364:./rt_thread/src/mem.c ****                 mem->used = 1;
+ 602              		.loc 1 364 27
+ 603 0102 3B69     		ldr	r3, [r7, #16]
+ 604 0104 0122     		movs	r2, #1
+ 605 0106 5A80     		strh	r2, [r3, #2]	@ movhi
+ 365:./rt_thread/src/mem.c **** #ifdef RT_MEM_STATS
+ 366:./rt_thread/src/mem.c ****                 used_mem += mem->next - ((rt_uint8_t *)mem - heap_ptr);
+ 606              		.loc 1 366 32
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 18
+
+
+ 607 0108 3B69     		ldr	r3, [r7, #16]
+ 608 010a 5B68     		ldr	r3, [r3, #4]
+ 609              		.loc 1 366 60
+ 610 010c 294A     		ldr	r2, .L28+12
+ 611 010e 1268     		ldr	r2, [r2]
+ 612 0110 3969     		ldr	r1, [r7, #16]
+ 613 0112 8A1A     		subs	r2, r1, r2
+ 614              		.loc 1 366 39
+ 615 0114 9A1A     		subs	r2, r3, r2
+ 616              		.loc 1 366 26
+ 617 0116 284B     		ldr	r3, .L28+16
+ 618 0118 1B68     		ldr	r3, [r3]
+ 619 011a 1344     		add	r3, r3, r2
+ 620 011c 264A     		ldr	r2, .L28+16
+ 621 011e 1360     		str	r3, [r2]
+ 367:./rt_thread/src/mem.c ****                 if (max_mem < used_mem)
+ 622              		.loc 1 367 29
+ 623 0120 264B     		ldr	r3, .L28+20
+ 624 0122 1A68     		ldr	r2, [r3]
+ 625 0124 244B     		ldr	r3, .L28+16
+ 626 0126 1B68     		ldr	r3, [r3]
+ 627              		.loc 1 367 20
+ 628 0128 9A42     		cmp	r2, r3
+ 629 012a 03D2     		bcs	.L23
+ 368:./rt_thread/src/mem.c ****                     max_mem = used_mem;
+ 630              		.loc 1 368 29
+ 631 012c 224B     		ldr	r3, .L28+16
+ 632 012e 1B68     		ldr	r3, [r3]
+ 633 0130 224A     		ldr	r2, .L28+20
+ 634 0132 1360     		str	r3, [r2]
+ 635              	.L23:
+ 369:./rt_thread/src/mem.c **** #endif
+ 370:./rt_thread/src/mem.c ****             }
+ 371:./rt_thread/src/mem.c ****             /* set memory block magic */
+ 372:./rt_thread/src/mem.c ****             mem->magic = HEAP_MAGIC;
+ 636              		.loc 1 372 24
+ 637 0134 3B69     		ldr	r3, [r7, #16]
+ 638 0136 4FF4F552 		mov	r2, #7840
+ 639 013a 1A80     		strh	r2, [r3]	@ movhi
+ 373:./rt_thread/src/mem.c **** #ifdef RT_USING_MEMTRACE
+ 374:./rt_thread/src/mem.c ****             if (rt_thread_self())
+ 375:./rt_thread/src/mem.c ****                 rt_mem_setname(mem, rt_thread_self()->name);
+ 376:./rt_thread/src/mem.c ****             else
+ 377:./rt_thread/src/mem.c ****                 rt_mem_setname(mem, "NONE");
+ 378:./rt_thread/src/mem.c **** #endif
+ 379:./rt_thread/src/mem.c **** 
+ 380:./rt_thread/src/mem.c ****             if (mem == lfree)
+ 640              		.loc 1 380 21
+ 641 013c 1C4B     		ldr	r3, .L28+8
+ 642 013e 1B68     		ldr	r3, [r3]
+ 643              		.loc 1 380 16
+ 644 0140 3A69     		ldr	r2, [r7, #16]
+ 645 0142 9A42     		cmp	r2, r3
+ 646 0144 13D1     		bne	.L24
+ 381:./rt_thread/src/mem.c ****             {
+ 382:./rt_thread/src/mem.c ****                 /* Find next free block after mem and update lowest free pointer */
+ 383:./rt_thread/src/mem.c ****                 while (lfree->used && lfree != heap_end)
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 19
+
+
+ 647              		.loc 1 383 23
+ 648 0146 07E0     		b	.L25
+ 649              	.L26:
+ 384:./rt_thread/src/mem.c ****                     lfree = (struct heap_mem *)&heap_ptr[lfree->next];
+ 650              		.loc 1 384 48
+ 651 0148 1A4B     		ldr	r3, .L28+12
+ 652 014a 1A68     		ldr	r2, [r3]
+ 653              		.loc 1 384 63
+ 654 014c 184B     		ldr	r3, .L28+8
+ 655 014e 1B68     		ldr	r3, [r3]
+ 656 0150 5B68     		ldr	r3, [r3, #4]
+ 657              		.loc 1 384 48
+ 658 0152 1344     		add	r3, r3, r2
+ 659              		.loc 1 384 27
+ 660 0154 164A     		ldr	r2, .L28+8
+ 661 0156 1360     		str	r3, [r2]
+ 662              	.L25:
+ 383:./rt_thread/src/mem.c ****                     lfree = (struct heap_mem *)&heap_ptr[lfree->next];
+ 663              		.loc 1 383 29
+ 664 0158 154B     		ldr	r3, .L28+8
+ 665 015a 1B68     		ldr	r3, [r3]
+ 666 015c 5B88     		ldrh	r3, [r3, #2]
+ 383:./rt_thread/src/mem.c ****                     lfree = (struct heap_mem *)&heap_ptr[lfree->next];
+ 667              		.loc 1 383 23
+ 668 015e 002B     		cmp	r3, #0
+ 669 0160 05D0     		beq	.L24
+ 383:./rt_thread/src/mem.c ****                     lfree = (struct heap_mem *)&heap_ptr[lfree->next];
+ 670              		.loc 1 383 45 discriminator 1
+ 671 0162 134B     		ldr	r3, .L28+8
+ 672 0164 1A68     		ldr	r2, [r3]
+ 673 0166 164B     		ldr	r3, .L28+24
+ 674 0168 1B68     		ldr	r3, [r3]
+ 383:./rt_thread/src/mem.c ****                     lfree = (struct heap_mem *)&heap_ptr[lfree->next];
+ 675              		.loc 1 383 36 discriminator 1
+ 676 016a 9A42     		cmp	r2, r3
+ 677 016c ECD1     		bne	.L26
+ 678              	.L24:
+ 385:./rt_thread/src/mem.c **** 
+ 386:./rt_thread/src/mem.c ****                 RT_ASSERT(((lfree == heap_end) || (!lfree->used)));
+ 387:./rt_thread/src/mem.c ****             }
+ 388:./rt_thread/src/mem.c **** 
+ 389:./rt_thread/src/mem.c ****             rt_sem_release(&heap_sem);
+ 679              		.loc 1 389 13
+ 680 016e 0F48     		ldr	r0, .L28+4
+ 681 0170 FFF7FEFF 		bl	rt_sem_release
+ 390:./rt_thread/src/mem.c ****             RT_ASSERT((rt_ubase_t)mem + SIZEOF_STRUCT_MEM + size <= (rt_ubase_t)heap_end);
+ 391:./rt_thread/src/mem.c ****             RT_ASSERT((rt_ubase_t)((rt_uint8_t *)mem + SIZEOF_STRUCT_MEM) % RT_ALIGN_SIZE == 0);
+ 392:./rt_thread/src/mem.c ****             RT_ASSERT((((rt_ubase_t)mem) & (RT_ALIGN_SIZE - 1)) == 0);
+ 393:./rt_thread/src/mem.c **** 
+ 394:./rt_thread/src/mem.c ****             RT_DEBUG_LOG(RT_DEBUG_MEM,
+ 395:./rt_thread/src/mem.c ****                          ("allocate memory at 0x%x, size: %d\n",
+ 396:./rt_thread/src/mem.c ****                           (rt_ubase_t)((rt_uint8_t *)mem + SIZEOF_STRUCT_MEM),
+ 397:./rt_thread/src/mem.c ****                           (rt_ubase_t)(mem->next - ((rt_uint8_t *)mem - heap_ptr))));
+ 398:./rt_thread/src/mem.c **** 
+ 399:./rt_thread/src/mem.c ****             RT_OBJECT_HOOK_CALL(rt_malloc_hook,
+ 400:./rt_thread/src/mem.c ****                                 (((void *)((rt_uint8_t *)mem + SIZEOF_STRUCT_MEM)), size));
+ 401:./rt_thread/src/mem.c **** 
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 20
+
+
+ 402:./rt_thread/src/mem.c ****             /* return the memory data except mem struct */
+ 403:./rt_thread/src/mem.c ****             return (rt_uint8_t *)mem + SIZEOF_STRUCT_MEM;
+ 682              		.loc 1 403 38
+ 683 0174 3B69     		ldr	r3, [r7, #16]
+ 684 0176 0C33     		adds	r3, r3, #12
+ 685 0178 11E0     		b	.L16
+ 686              	.L20:
+ 307:./rt_thread/src/mem.c ****     {
+ 687              		.loc 1 307 17
+ 688 017a 0E4B     		ldr	r3, .L28+12
+ 689 017c 1A68     		ldr	r2, [r3]
+ 307:./rt_thread/src/mem.c ****     {
+ 690              		.loc 1 307 36
+ 691 017e 7B69     		ldr	r3, [r7, #20]
+ 692 0180 1344     		add	r3, r3, r2
+ 307:./rt_thread/src/mem.c ****     {
+ 693              		.loc 1 307 14
+ 694 0182 5B68     		ldr	r3, [r3, #4]
+ 695 0184 7B61     		str	r3, [r7, #20]
+ 696              	.L19:
+ 306:./rt_thread/src/mem.c ****          ptr = ((struct heap_mem *)&heap_ptr[ptr])->next)
+ 697              		.loc 1 306 33 discriminator 1
+ 698 0186 084B     		ldr	r3, .L28
+ 699 0188 1A68     		ldr	r2, [r3]
+ 700 018a 7B68     		ldr	r3, [r7, #4]
+ 701 018c D31A     		subs	r3, r2, r3
+ 305:./rt_thread/src/mem.c ****          ptr < mem_size_aligned - size;
+ 702              		.loc 1 305 5 discriminator 1
+ 703 018e 7A69     		ldr	r2, [r7, #20]
+ 704 0190 9A42     		cmp	r2, r3
+ 705 0192 FFF45BAF 		bcc	.L27
+ 404:./rt_thread/src/mem.c ****         }
+ 405:./rt_thread/src/mem.c ****     }
+ 406:./rt_thread/src/mem.c **** 
+ 407:./rt_thread/src/mem.c ****     rt_sem_release(&heap_sem);
+ 706              		.loc 1 407 5
+ 707 0196 0548     		ldr	r0, .L28+4
+ 708 0198 FFF7FEFF 		bl	rt_sem_release
+ 408:./rt_thread/src/mem.c **** 
+ 409:./rt_thread/src/mem.c ****     return RT_NULL;
+ 709              		.loc 1 409 12
+ 710 019c 0023     		movs	r3, #0
+ 711              	.L16:
+ 410:./rt_thread/src/mem.c **** }
+ 712              		.loc 1 410 1
+ 713 019e 1846     		mov	r0, r3
+ 714 01a0 1837     		adds	r7, r7, #24
+ 715              	.LCFI14:
+ 716              		.cfi_def_cfa_offset 8
+ 717 01a2 BD46     		mov	sp, r7
+ 718              	.LCFI15:
+ 719              		.cfi_def_cfa_register 13
+ 720              		@ sp needed
+ 721 01a4 80BD     		pop	{r7, pc}
+ 722              	.L29:
+ 723 01a6 00BF     		.align	2
+ 724              	.L28:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 21
+
+
+ 725 01a8 00000000 		.word	mem_size_aligned
+ 726 01ac 00000000 		.word	heap_sem
+ 727 01b0 00000000 		.word	lfree
+ 728 01b4 00000000 		.word	heap_ptr
+ 729 01b8 00000000 		.word	used_mem
+ 730 01bc 00000000 		.word	max_mem
+ 731 01c0 00000000 		.word	heap_end
+ 732              		.cfi_endproc
+ 733              	.LFE17:
+ 735              		.section	.text.rt_realloc,"ax",%progbits
+ 736              		.align	1
+ 737              		.global	rt_realloc
+ 738              		.syntax unified
+ 739              		.thumb
+ 740              		.thumb_func
+ 742              	rt_realloc:
+ 743              	.LFB18:
+ 411:./rt_thread/src/mem.c **** 
+ 412:./rt_thread/src/mem.c **** /**
+ 413:./rt_thread/src/mem.c ****  * This function will change the previously allocated memory block.
+ 414:./rt_thread/src/mem.c ****  *
+ 415:./rt_thread/src/mem.c ****  * @param rmem pointer to memory allocated by rt_malloc
+ 416:./rt_thread/src/mem.c ****  * @param newsize the required new size
+ 417:./rt_thread/src/mem.c ****  *
+ 418:./rt_thread/src/mem.c ****  * @return the changed memory block address
+ 419:./rt_thread/src/mem.c ****  */
+ 420:./rt_thread/src/mem.c **** void *rt_realloc(void *rmem, rt_size_t newsize)
+ 421:./rt_thread/src/mem.c **** {
+ 744              		.loc 1 421 1
+ 745              		.cfi_startproc
+ 746              		@ args = 0, pretend = 0, frame = 32
+ 747              		@ frame_needed = 1, uses_anonymous_args = 0
+ 748 0000 80B5     		push	{r7, lr}
+ 749              	.LCFI16:
+ 750              		.cfi_def_cfa_offset 8
+ 751              		.cfi_offset 7, -8
+ 752              		.cfi_offset 14, -4
+ 753 0002 88B0     		sub	sp, sp, #32
+ 754              	.LCFI17:
+ 755              		.cfi_def_cfa_offset 40
+ 756 0004 00AF     		add	r7, sp, #0
+ 757              	.LCFI18:
+ 758              		.cfi_def_cfa_register 7
+ 759 0006 7860     		str	r0, [r7, #4]
+ 760 0008 3960     		str	r1, [r7]
+ 422:./rt_thread/src/mem.c ****     rt_size_t size;
+ 423:./rt_thread/src/mem.c ****     rt_size_t ptr, ptr2;
+ 424:./rt_thread/src/mem.c ****     struct heap_mem *mem, *mem2;
+ 425:./rt_thread/src/mem.c ****     void *nmem;
+ 426:./rt_thread/src/mem.c **** 
+ 427:./rt_thread/src/mem.c ****     RT_DEBUG_NOT_IN_INTERRUPT;
+ 428:./rt_thread/src/mem.c **** 
+ 429:./rt_thread/src/mem.c ****     /* alignment size */
+ 430:./rt_thread/src/mem.c ****     newsize = RT_ALIGN(newsize, RT_ALIGN_SIZE);
+ 761              		.loc 1 430 15
+ 762 000a 3B68     		ldr	r3, [r7]
+ 763 000c 0333     		adds	r3, r3, #3
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 22
+
+
+ 764              		.loc 1 430 13
+ 765 000e 23F00303 		bic	r3, r3, #3
+ 766 0012 3B60     		str	r3, [r7]
+ 431:./rt_thread/src/mem.c ****     if (newsize > mem_size_aligned)
+ 767              		.loc 1 431 17
+ 768 0014 514B     		ldr	r3, .L42
+ 769 0016 1B68     		ldr	r3, [r3]
+ 770              		.loc 1 431 8
+ 771 0018 3A68     		ldr	r2, [r7]
+ 772 001a 9A42     		cmp	r2, r3
+ 773 001c 01D9     		bls	.L31
+ 432:./rt_thread/src/mem.c ****     {
+ 433:./rt_thread/src/mem.c ****         RT_DEBUG_LOG(RT_DEBUG_MEM, ("realloc: out of memory\n"));
+ 434:./rt_thread/src/mem.c **** 
+ 435:./rt_thread/src/mem.c ****         return RT_NULL;
+ 774              		.loc 1 435 16
+ 775 001e 0023     		movs	r3, #0
+ 776 0020 98E0     		b	.L32
+ 777              	.L31:
+ 436:./rt_thread/src/mem.c ****     }
+ 437:./rt_thread/src/mem.c ****     else if (newsize == 0)
+ 778              		.loc 1 437 13
+ 779 0022 3B68     		ldr	r3, [r7]
+ 780 0024 002B     		cmp	r3, #0
+ 781 0026 04D1     		bne	.L33
+ 438:./rt_thread/src/mem.c ****     {
+ 439:./rt_thread/src/mem.c ****         rt_free(rmem);
+ 782              		.loc 1 439 9
+ 783 0028 7868     		ldr	r0, [r7, #4]
+ 784 002a FFF7FEFF 		bl	rt_free
+ 440:./rt_thread/src/mem.c ****         return RT_NULL;
+ 785              		.loc 1 440 16
+ 786 002e 0023     		movs	r3, #0
+ 787 0030 90E0     		b	.L32
+ 788              	.L33:
+ 441:./rt_thread/src/mem.c ****     }
+ 442:./rt_thread/src/mem.c **** 
+ 443:./rt_thread/src/mem.c ****     /* allocate a new memory block */
+ 444:./rt_thread/src/mem.c ****     if (rmem == RT_NULL)
+ 789              		.loc 1 444 8
+ 790 0032 7B68     		ldr	r3, [r7, #4]
+ 791 0034 002B     		cmp	r3, #0
+ 792 0036 04D1     		bne	.L34
+ 445:./rt_thread/src/mem.c ****         return rt_malloc(newsize);
+ 793              		.loc 1 445 16
+ 794 0038 3868     		ldr	r0, [r7]
+ 795 003a FFF7FEFF 		bl	rt_malloc
+ 796 003e 0346     		mov	r3, r0
+ 797 0040 88E0     		b	.L32
+ 798              	.L34:
+ 446:./rt_thread/src/mem.c **** 
+ 447:./rt_thread/src/mem.c ****     rt_sem_take(&heap_sem, RT_WAITING_FOREVER);
+ 799              		.loc 1 447 5
+ 800 0042 4FF0FF31 		mov	r1, #-1
+ 801 0046 4648     		ldr	r0, .L42+4
+ 802 0048 FFF7FEFF 		bl	rt_sem_take
+ 448:./rt_thread/src/mem.c **** 
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 23
+
+
+ 449:./rt_thread/src/mem.c ****     if ((rt_uint8_t *)rmem < (rt_uint8_t *)heap_ptr ||
+ 803              		.loc 1 449 28
+ 804 004c 454B     		ldr	r3, .L42+8
+ 805 004e 1B68     		ldr	r3, [r3]
+ 806              		.loc 1 449 8
+ 807 0050 7A68     		ldr	r2, [r7, #4]
+ 808 0052 9A42     		cmp	r2, r3
+ 809 0054 04D3     		bcc	.L35
+ 450:./rt_thread/src/mem.c ****         (rt_uint8_t *)rmem >= (rt_uint8_t *)heap_end)
+ 810              		.loc 1 450 31 discriminator 1
+ 811 0056 444B     		ldr	r3, .L42+12
+ 812 0058 1B68     		ldr	r3, [r3]
+ 449:./rt_thread/src/mem.c ****         (rt_uint8_t *)rmem >= (rt_uint8_t *)heap_end)
+ 813              		.loc 1 449 53 discriminator 1
+ 814 005a 7A68     		ldr	r2, [r7, #4]
+ 815 005c 9A42     		cmp	r2, r3
+ 816 005e 04D3     		bcc	.L36
+ 817              	.L35:
+ 451:./rt_thread/src/mem.c ****     {
+ 452:./rt_thread/src/mem.c ****         /* illegal memory */
+ 453:./rt_thread/src/mem.c ****         rt_sem_release(&heap_sem);
+ 818              		.loc 1 453 9
+ 819 0060 3F48     		ldr	r0, .L42+4
+ 820 0062 FFF7FEFF 		bl	rt_sem_release
+ 454:./rt_thread/src/mem.c **** 
+ 455:./rt_thread/src/mem.c ****         return rmem;
+ 821              		.loc 1 455 16
+ 822 0066 7B68     		ldr	r3, [r7, #4]
+ 823 0068 74E0     		b	.L32
+ 824              	.L36:
+ 456:./rt_thread/src/mem.c ****     }
+ 457:./rt_thread/src/mem.c **** 
+ 458:./rt_thread/src/mem.c ****     mem = (struct heap_mem *)((rt_uint8_t *)rmem - SIZEOF_STRUCT_MEM);
+ 825              		.loc 1 458 9
+ 826 006a 7B68     		ldr	r3, [r7, #4]
+ 827 006c 0C3B     		subs	r3, r3, #12
+ 828 006e FB61     		str	r3, [r7, #28]
+ 459:./rt_thread/src/mem.c **** 
+ 460:./rt_thread/src/mem.c ****     ptr = (rt_uint8_t *)mem - heap_ptr;
+ 829              		.loc 1 460 29
+ 830 0070 3C4B     		ldr	r3, .L42+8
+ 831 0072 1B68     		ldr	r3, [r3]
+ 832 0074 FA69     		ldr	r2, [r7, #28]
+ 833 0076 D31A     		subs	r3, r2, r3
+ 834              		.loc 1 460 9
+ 835 0078 BB61     		str	r3, [r7, #24]
+ 461:./rt_thread/src/mem.c ****     size = mem->next - ptr - SIZEOF_STRUCT_MEM;
+ 836              		.loc 1 461 15
+ 837 007a FB69     		ldr	r3, [r7, #28]
+ 838 007c 5A68     		ldr	r2, [r3, #4]
+ 839              		.loc 1 461 22
+ 840 007e BB69     		ldr	r3, [r7, #24]
+ 841 0080 D31A     		subs	r3, r2, r3
+ 842              		.loc 1 461 10
+ 843 0082 0C3B     		subs	r3, r3, #12
+ 844 0084 7B61     		str	r3, [r7, #20]
+ 462:./rt_thread/src/mem.c ****     if (size == newsize)
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 24
+
+
+ 845              		.loc 1 462 8
+ 846 0086 7A69     		ldr	r2, [r7, #20]
+ 847 0088 3B68     		ldr	r3, [r7]
+ 848 008a 9A42     		cmp	r2, r3
+ 849 008c 04D1     		bne	.L37
+ 463:./rt_thread/src/mem.c ****     {
+ 464:./rt_thread/src/mem.c ****         /* the size is the same as */
+ 465:./rt_thread/src/mem.c ****         rt_sem_release(&heap_sem);
+ 850              		.loc 1 465 9
+ 851 008e 3448     		ldr	r0, .L42+4
+ 852 0090 FFF7FEFF 		bl	rt_sem_release
+ 466:./rt_thread/src/mem.c **** 
+ 467:./rt_thread/src/mem.c ****         return rmem;
+ 853              		.loc 1 467 16
+ 854 0094 7B68     		ldr	r3, [r7, #4]
+ 855 0096 5DE0     		b	.L32
+ 856              	.L37:
+ 468:./rt_thread/src/mem.c ****     }
+ 469:./rt_thread/src/mem.c **** 
+ 470:./rt_thread/src/mem.c ****     if (newsize + SIZEOF_STRUCT_MEM + MIN_SIZE < size)
+ 857              		.loc 1 470 37
+ 858 0098 3B68     		ldr	r3, [r7]
+ 859 009a 1833     		adds	r3, r3, #24
+ 860              		.loc 1 470 8
+ 861 009c 7A69     		ldr	r2, [r7, #20]
+ 862 009e 9A42     		cmp	r2, r3
+ 863 00a0 40D9     		bls	.L38
+ 471:./rt_thread/src/mem.c ****     {
+ 472:./rt_thread/src/mem.c ****         /* split memory block */
+ 473:./rt_thread/src/mem.c **** #ifdef RT_MEM_STATS
+ 474:./rt_thread/src/mem.c ****         used_mem -= (size - newsize);
+ 864              		.loc 1 474 18
+ 865 00a2 3A68     		ldr	r2, [r7]
+ 866 00a4 7B69     		ldr	r3, [r7, #20]
+ 867 00a6 D21A     		subs	r2, r2, r3
+ 868 00a8 304B     		ldr	r3, .L42+16
+ 869 00aa 1B68     		ldr	r3, [r3]
+ 870 00ac 1344     		add	r3, r3, r2
+ 871 00ae 2F4A     		ldr	r2, .L42+16
+ 872 00b0 1360     		str	r3, [r2]
+ 475:./rt_thread/src/mem.c **** #endif
+ 476:./rt_thread/src/mem.c **** 
+ 477:./rt_thread/src/mem.c ****         ptr2 = ptr + SIZEOF_STRUCT_MEM + newsize;
+ 873              		.loc 1 477 40
+ 874 00b2 BA69     		ldr	r2, [r7, #24]
+ 875 00b4 3B68     		ldr	r3, [r7]
+ 876 00b6 1344     		add	r3, r3, r2
+ 877              		.loc 1 477 14
+ 878 00b8 0C33     		adds	r3, r3, #12
+ 879 00ba FB60     		str	r3, [r7, #12]
+ 478:./rt_thread/src/mem.c ****         mem2 = (struct heap_mem *)&heap_ptr[ptr2];
+ 880              		.loc 1 478 35
+ 881 00bc 294B     		ldr	r3, .L42+8
+ 882 00be 1A68     		ldr	r2, [r3]
+ 883              		.loc 1 478 14
+ 884 00c0 FB68     		ldr	r3, [r7, #12]
+ 885 00c2 1344     		add	r3, r3, r2
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 25
+
+
+ 886 00c4 BB60     		str	r3, [r7, #8]
+ 479:./rt_thread/src/mem.c ****         mem2->magic = HEAP_MAGIC;
+ 887              		.loc 1 479 21
+ 888 00c6 BB68     		ldr	r3, [r7, #8]
+ 889 00c8 4FF4F552 		mov	r2, #7840
+ 890 00cc 1A80     		strh	r2, [r3]	@ movhi
+ 480:./rt_thread/src/mem.c ****         mem2->used = 0;
+ 891              		.loc 1 480 20
+ 892 00ce BB68     		ldr	r3, [r7, #8]
+ 893 00d0 0022     		movs	r2, #0
+ 894 00d2 5A80     		strh	r2, [r3, #2]	@ movhi
+ 481:./rt_thread/src/mem.c ****         mem2->next = mem->next;
+ 895              		.loc 1 481 25
+ 896 00d4 FB69     		ldr	r3, [r7, #28]
+ 897 00d6 5A68     		ldr	r2, [r3, #4]
+ 898              		.loc 1 481 20
+ 899 00d8 BB68     		ldr	r3, [r7, #8]
+ 900 00da 5A60     		str	r2, [r3, #4]
+ 482:./rt_thread/src/mem.c ****         mem2->prev = ptr;
+ 901              		.loc 1 482 20
+ 902 00dc BB68     		ldr	r3, [r7, #8]
+ 903 00de BA69     		ldr	r2, [r7, #24]
+ 904 00e0 9A60     		str	r2, [r3, #8]
+ 483:./rt_thread/src/mem.c **** #ifdef RT_USING_MEMTRACE
+ 484:./rt_thread/src/mem.c ****         rt_mem_setname(mem2, "    ");
+ 485:./rt_thread/src/mem.c **** #endif
+ 486:./rt_thread/src/mem.c ****         mem->next = ptr2;
+ 905              		.loc 1 486 19
+ 906 00e2 FB69     		ldr	r3, [r7, #28]
+ 907 00e4 FA68     		ldr	r2, [r7, #12]
+ 908 00e6 5A60     		str	r2, [r3, #4]
+ 487:./rt_thread/src/mem.c ****         if (mem2->next != mem_size_aligned + SIZEOF_STRUCT_MEM)
+ 909              		.loc 1 487 17
+ 910 00e8 BB68     		ldr	r3, [r7, #8]
+ 911 00ea 5A68     		ldr	r2, [r3, #4]
+ 912              		.loc 1 487 44
+ 913 00ec 1B4B     		ldr	r3, .L42
+ 914 00ee 1B68     		ldr	r3, [r3]
+ 915 00f0 0C33     		adds	r3, r3, #12
+ 916              		.loc 1 487 12
+ 917 00f2 9A42     		cmp	r2, r3
+ 918 00f4 06D0     		beq	.L39
+ 488:./rt_thread/src/mem.c ****         {
+ 489:./rt_thread/src/mem.c ****             ((struct heap_mem *)&heap_ptr[mem2->next])->prev = ptr2;
+ 919              		.loc 1 489 14
+ 920 00f6 1B4B     		ldr	r3, .L42+8
+ 921 00f8 1A68     		ldr	r2, [r3]
+ 922              		.loc 1 489 47
+ 923 00fa BB68     		ldr	r3, [r7, #8]
+ 924 00fc 5B68     		ldr	r3, [r3, #4]
+ 925              		.loc 1 489 33
+ 926 00fe 1344     		add	r3, r3, r2
+ 927              		.loc 1 489 62
+ 928 0100 FA68     		ldr	r2, [r7, #12]
+ 929 0102 9A60     		str	r2, [r3, #8]
+ 930              	.L39:
+ 490:./rt_thread/src/mem.c ****         }
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 26
+
+
+ 491:./rt_thread/src/mem.c **** 
+ 492:./rt_thread/src/mem.c ****         if (mem2 < lfree)
+ 931              		.loc 1 492 18
+ 932 0104 1A4B     		ldr	r3, .L42+20
+ 933 0106 1B68     		ldr	r3, [r3]
+ 934              		.loc 1 492 12
+ 935 0108 BA68     		ldr	r2, [r7, #8]
+ 936 010a 9A42     		cmp	r2, r3
+ 937 010c 02D2     		bcs	.L40
+ 493:./rt_thread/src/mem.c ****         {
+ 494:./rt_thread/src/mem.c ****             /* the splited struct is now the lowest */
+ 495:./rt_thread/src/mem.c ****             lfree = mem2;
+ 938              		.loc 1 495 19
+ 939 010e 184A     		ldr	r2, .L42+20
+ 940 0110 BB68     		ldr	r3, [r7, #8]
+ 941 0112 1360     		str	r3, [r2]
+ 942              	.L40:
+ 496:./rt_thread/src/mem.c ****         }
+ 497:./rt_thread/src/mem.c **** 
+ 498:./rt_thread/src/mem.c ****         plug_holes(mem2);
+ 943              		.loc 1 498 9
+ 944 0114 B868     		ldr	r0, [r7, #8]
+ 945 0116 FFF7FEFF 		bl	plug_holes
+ 499:./rt_thread/src/mem.c **** 
+ 500:./rt_thread/src/mem.c ****         rt_sem_release(&heap_sem);
+ 946              		.loc 1 500 9
+ 947 011a 1148     		ldr	r0, .L42+4
+ 948 011c FFF7FEFF 		bl	rt_sem_release
+ 501:./rt_thread/src/mem.c **** 
+ 502:./rt_thread/src/mem.c ****         return rmem;
+ 949              		.loc 1 502 16
+ 950 0120 7B68     		ldr	r3, [r7, #4]
+ 951 0122 17E0     		b	.L32
+ 952              	.L38:
+ 503:./rt_thread/src/mem.c ****     }
+ 504:./rt_thread/src/mem.c ****     rt_sem_release(&heap_sem);
+ 953              		.loc 1 504 5
+ 954 0124 0E48     		ldr	r0, .L42+4
+ 955 0126 FFF7FEFF 		bl	rt_sem_release
+ 505:./rt_thread/src/mem.c **** 
+ 506:./rt_thread/src/mem.c ****     /* expand memory */
+ 507:./rt_thread/src/mem.c ****     nmem = rt_malloc(newsize);
+ 956              		.loc 1 507 12
+ 957 012a 3868     		ldr	r0, [r7]
+ 958 012c FFF7FEFF 		bl	rt_malloc
+ 959 0130 3861     		str	r0, [r7, #16]
+ 508:./rt_thread/src/mem.c ****     if (nmem != RT_NULL) /* check memory */
+ 960              		.loc 1 508 8
+ 961 0132 3B69     		ldr	r3, [r7, #16]
+ 962 0134 002B     		cmp	r3, #0
+ 963 0136 0CD0     		beq	.L41
+ 509:./rt_thread/src/mem.c ****     {
+ 510:./rt_thread/src/mem.c ****         rt_memcpy(nmem, rmem, size < newsize ? size : newsize);
+ 964              		.loc 1 510 9
+ 965 0138 3A68     		ldr	r2, [r7]
+ 966 013a 7B69     		ldr	r3, [r7, #20]
+ 967 013c 9342     		cmp	r3, r2
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 27
+
+
+ 968 013e 28BF     		it	cs
+ 969 0140 1346     		movcs	r3, r2
+ 970 0142 1A46     		mov	r2, r3
+ 971 0144 7968     		ldr	r1, [r7, #4]
+ 972 0146 3869     		ldr	r0, [r7, #16]
+ 973 0148 FFF7FEFF 		bl	rt_memcpy
+ 511:./rt_thread/src/mem.c ****         rt_free(rmem);
+ 974              		.loc 1 511 9
+ 975 014c 7868     		ldr	r0, [r7, #4]
+ 976 014e FFF7FEFF 		bl	rt_free
+ 977              	.L41:
+ 512:./rt_thread/src/mem.c ****     }
+ 513:./rt_thread/src/mem.c **** 
+ 514:./rt_thread/src/mem.c ****     return nmem;
+ 978              		.loc 1 514 12
+ 979 0152 3B69     		ldr	r3, [r7, #16]
+ 980              	.L32:
+ 515:./rt_thread/src/mem.c **** }
+ 981              		.loc 1 515 1
+ 982 0154 1846     		mov	r0, r3
+ 983 0156 2037     		adds	r7, r7, #32
+ 984              	.LCFI19:
+ 985              		.cfi_def_cfa_offset 8
+ 986 0158 BD46     		mov	sp, r7
+ 987              	.LCFI20:
+ 988              		.cfi_def_cfa_register 13
+ 989              		@ sp needed
+ 990 015a 80BD     		pop	{r7, pc}
+ 991              	.L43:
+ 992              		.align	2
+ 993              	.L42:
+ 994 015c 00000000 		.word	mem_size_aligned
+ 995 0160 00000000 		.word	heap_sem
+ 996 0164 00000000 		.word	heap_ptr
+ 997 0168 00000000 		.word	heap_end
+ 998 016c 00000000 		.word	used_mem
+ 999 0170 00000000 		.word	lfree
+ 1000              		.cfi_endproc
+ 1001              	.LFE18:
+ 1003              		.section	.text.rt_calloc,"ax",%progbits
+ 1004              		.align	1
+ 1005              		.global	rt_calloc
+ 1006              		.syntax unified
+ 1007              		.thumb
+ 1008              		.thumb_func
+ 1010              	rt_calloc:
+ 1011              	.LFB19:
+ 516:./rt_thread/src/mem.c **** 
+ 517:./rt_thread/src/mem.c **** /**
+ 518:./rt_thread/src/mem.c ****  * This function will contiguously allocate enough space for count objects
+ 519:./rt_thread/src/mem.c ****  * that are size bytes of memory each and returns a pointer to the allocated
+ 520:./rt_thread/src/mem.c ****  * memory.
+ 521:./rt_thread/src/mem.c ****  *
+ 522:./rt_thread/src/mem.c ****  * The allocated memory is filled with bytes of value zero.
+ 523:./rt_thread/src/mem.c ****  *
+ 524:./rt_thread/src/mem.c ****  * @param count number of objects to allocate
+ 525:./rt_thread/src/mem.c ****  * @param size size of the objects to allocate
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 28
+
+
+ 526:./rt_thread/src/mem.c ****  *
+ 527:./rt_thread/src/mem.c ****  * @return pointer to allocated memory / NULL pointer if there is an error
+ 528:./rt_thread/src/mem.c ****  */
+ 529:./rt_thread/src/mem.c **** void *rt_calloc(rt_size_t count, rt_size_t size)
+ 530:./rt_thread/src/mem.c **** {
+ 1012              		.loc 1 530 1
+ 1013              		.cfi_startproc
+ 1014              		@ args = 0, pretend = 0, frame = 16
+ 1015              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1016 0000 80B5     		push	{r7, lr}
+ 1017              	.LCFI21:
+ 1018              		.cfi_def_cfa_offset 8
+ 1019              		.cfi_offset 7, -8
+ 1020              		.cfi_offset 14, -4
+ 1021 0002 84B0     		sub	sp, sp, #16
+ 1022              	.LCFI22:
+ 1023              		.cfi_def_cfa_offset 24
+ 1024 0004 00AF     		add	r7, sp, #0
+ 1025              	.LCFI23:
+ 1026              		.cfi_def_cfa_register 7
+ 1027 0006 7860     		str	r0, [r7, #4]
+ 1028 0008 3960     		str	r1, [r7]
+ 531:./rt_thread/src/mem.c ****     void *p;
+ 532:./rt_thread/src/mem.c **** 
+ 533:./rt_thread/src/mem.c ****     /* allocate 'count' objects of size 'size' */
+ 534:./rt_thread/src/mem.c ****     p = rt_malloc(count * size);
+ 1029              		.loc 1 534 9
+ 1030 000a 7B68     		ldr	r3, [r7, #4]
+ 1031 000c 3A68     		ldr	r2, [r7]
+ 1032 000e 02FB03F3 		mul	r3, r2, r3
+ 1033 0012 1846     		mov	r0, r3
+ 1034 0014 FFF7FEFF 		bl	rt_malloc
+ 1035 0018 F860     		str	r0, [r7, #12]
+ 535:./rt_thread/src/mem.c **** 
+ 536:./rt_thread/src/mem.c ****     /* zero the memory */
+ 537:./rt_thread/src/mem.c ****     if (p)
+ 1036              		.loc 1 537 8
+ 1037 001a FB68     		ldr	r3, [r7, #12]
+ 1038 001c 002B     		cmp	r3, #0
+ 1039 001e 08D0     		beq	.L45
+ 538:./rt_thread/src/mem.c ****         rt_memset(p, 0, count * size);
+ 1040              		.loc 1 538 9
+ 1041 0020 7B68     		ldr	r3, [r7, #4]
+ 1042 0022 3A68     		ldr	r2, [r7]
+ 1043 0024 02FB03F3 		mul	r3, r2, r3
+ 1044 0028 1A46     		mov	r2, r3
+ 1045 002a 0021     		movs	r1, #0
+ 1046 002c F868     		ldr	r0, [r7, #12]
+ 1047 002e FFF7FEFF 		bl	rt_memset
+ 1048              	.L45:
+ 539:./rt_thread/src/mem.c **** 
+ 540:./rt_thread/src/mem.c ****     return p;
+ 1049              		.loc 1 540 12
+ 1050 0032 FB68     		ldr	r3, [r7, #12]
+ 541:./rt_thread/src/mem.c **** }
+ 1051              		.loc 1 541 1
+ 1052 0034 1846     		mov	r0, r3
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 29
+
+
+ 1053 0036 1037     		adds	r7, r7, #16
+ 1054              	.LCFI24:
+ 1055              		.cfi_def_cfa_offset 8
+ 1056 0038 BD46     		mov	sp, r7
+ 1057              	.LCFI25:
+ 1058              		.cfi_def_cfa_register 13
+ 1059              		@ sp needed
+ 1060 003a 80BD     		pop	{r7, pc}
+ 1061              		.cfi_endproc
+ 1062              	.LFE19:
+ 1064              		.section	.rodata
+ 1065 0042 0000     		.align	2
+ 1066              	.LC2:
+ 1067 0044 746F2066 		.ascii	"to free a bad data block:\012\000"
+ 1067      72656520 
+ 1067      61206261 
+ 1067      64206461 
+ 1067      74612062 
+ 1068 005f 00       		.align	2
+ 1069              	.LC3:
+ 1070 0060 6D656D3A 		.ascii	"mem: 0x%08x, used flag: %d, magic code: 0x%04x\012\000"
+ 1070      20307825 
+ 1070      3038782C 
+ 1070      20757365 
+ 1070      6420666C 
+ 1071              		.section	.text.rt_free,"ax",%progbits
+ 1072              		.align	1
+ 1073              		.global	rt_free
+ 1074              		.syntax unified
+ 1075              		.thumb
+ 1076              		.thumb_func
+ 1078              	rt_free:
+ 1079              	.LFB20:
+ 542:./rt_thread/src/mem.c **** 
+ 543:./rt_thread/src/mem.c **** /**
+ 544:./rt_thread/src/mem.c ****  * This function will release the previously allocated memory block by
+ 545:./rt_thread/src/mem.c ****  * rt_malloc. The released memory block is taken back to system heap.
+ 546:./rt_thread/src/mem.c ****  *
+ 547:./rt_thread/src/mem.c ****  * @param rmem the address of memory which will be released
+ 548:./rt_thread/src/mem.c ****  */
+ 549:./rt_thread/src/mem.c **** void rt_free(void *rmem)
+ 550:./rt_thread/src/mem.c **** {
+ 1080              		.loc 1 550 1
+ 1081              		.cfi_startproc
+ 1082              		@ args = 0, pretend = 0, frame = 16
+ 1083              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1084 0000 80B5     		push	{r7, lr}
+ 1085              	.LCFI26:
+ 1086              		.cfi_def_cfa_offset 8
+ 1087              		.cfi_offset 7, -8
+ 1088              		.cfi_offset 14, -4
+ 1089 0002 84B0     		sub	sp, sp, #16
+ 1090              	.LCFI27:
+ 1091              		.cfi_def_cfa_offset 24
+ 1092 0004 00AF     		add	r7, sp, #0
+ 1093              	.LCFI28:
+ 1094              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 30
+
+
+ 1095 0006 7860     		str	r0, [r7, #4]
+ 551:./rt_thread/src/mem.c ****     struct heap_mem *mem;
+ 552:./rt_thread/src/mem.c **** 
+ 553:./rt_thread/src/mem.c ****     if (rmem == RT_NULL)
+ 1096              		.loc 1 553 8
+ 1097 0008 7B68     		ldr	r3, [r7, #4]
+ 1098 000a 002B     		cmp	r3, #0
+ 1099 000c 49D0     		beq	.L55
+ 554:./rt_thread/src/mem.c ****         return;
+ 555:./rt_thread/src/mem.c **** 
+ 556:./rt_thread/src/mem.c ****     RT_DEBUG_NOT_IN_INTERRUPT;
+ 557:./rt_thread/src/mem.c **** 
+ 558:./rt_thread/src/mem.c ****     RT_ASSERT((((rt_ubase_t)rmem) & (RT_ALIGN_SIZE - 1)) == 0);
+ 559:./rt_thread/src/mem.c ****     RT_ASSERT((rt_uint8_t *)rmem >= (rt_uint8_t *)heap_ptr &&
+ 560:./rt_thread/src/mem.c ****               (rt_uint8_t *)rmem < (rt_uint8_t *)heap_end);
+ 561:./rt_thread/src/mem.c **** 
+ 562:./rt_thread/src/mem.c ****     RT_OBJECT_HOOK_CALL(rt_free_hook, (rmem));
+ 563:./rt_thread/src/mem.c **** 
+ 564:./rt_thread/src/mem.c ****     if ((rt_uint8_t *)rmem < (rt_uint8_t *)heap_ptr ||
+ 1100              		.loc 1 564 28
+ 1101 000e 284B     		ldr	r3, .L57
+ 1102 0010 1B68     		ldr	r3, [r3]
+ 1103              		.loc 1 564 8
+ 1104 0012 7A68     		ldr	r2, [r7, #4]
+ 1105 0014 9A42     		cmp	r2, r3
+ 1106 0016 46D3     		bcc	.L56
+ 565:./rt_thread/src/mem.c ****         (rt_uint8_t *)rmem >= (rt_uint8_t *)heap_end)
+ 1107              		.loc 1 565 31 discriminator 1
+ 1108 0018 264B     		ldr	r3, .L57+4
+ 1109 001a 1B68     		ldr	r3, [r3]
+ 564:./rt_thread/src/mem.c ****         (rt_uint8_t *)rmem >= (rt_uint8_t *)heap_end)
+ 1110              		.loc 1 564 53 discriminator 1
+ 1111 001c 7A68     		ldr	r2, [r7, #4]
+ 1112 001e 9A42     		cmp	r2, r3
+ 1113 0020 41D2     		bcs	.L56
+ 566:./rt_thread/src/mem.c ****     {
+ 567:./rt_thread/src/mem.c ****         RT_DEBUG_LOG(RT_DEBUG_MEM, ("illegal memory\n"));
+ 568:./rt_thread/src/mem.c **** 
+ 569:./rt_thread/src/mem.c ****         return;
+ 570:./rt_thread/src/mem.c ****     }
+ 571:./rt_thread/src/mem.c **** 
+ 572:./rt_thread/src/mem.c ****     /* Get the corresponding struct heap_mem ... */
+ 573:./rt_thread/src/mem.c ****     mem = (struct heap_mem *)((rt_uint8_t *)rmem - SIZEOF_STRUCT_MEM);
+ 1114              		.loc 1 573 9
+ 1115 0022 7B68     		ldr	r3, [r7, #4]
+ 1116 0024 0C3B     		subs	r3, r3, #12
+ 1117 0026 FB60     		str	r3, [r7, #12]
+ 574:./rt_thread/src/mem.c **** 
+ 575:./rt_thread/src/mem.c ****     RT_DEBUG_LOG(RT_DEBUG_MEM,
+ 576:./rt_thread/src/mem.c ****                  ("release memory 0x%x, size: %d\n",
+ 577:./rt_thread/src/mem.c ****                   (rt_ubase_t)rmem,
+ 578:./rt_thread/src/mem.c ****                   (rt_ubase_t)(mem->next - ((rt_uint8_t *)mem - heap_ptr))));
+ 579:./rt_thread/src/mem.c **** 
+ 580:./rt_thread/src/mem.c **** 
+ 581:./rt_thread/src/mem.c ****     /* protect the heap from concurrent access */
+ 582:./rt_thread/src/mem.c ****     rt_sem_take(&heap_sem, RT_WAITING_FOREVER);
+ 1118              		.loc 1 582 5
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 31
+
+
+ 1119 0028 4FF0FF31 		mov	r1, #-1
+ 1120 002c 2248     		ldr	r0, .L57+8
+ 1121 002e FFF7FEFF 		bl	rt_sem_take
+ 583:./rt_thread/src/mem.c **** 
+ 584:./rt_thread/src/mem.c ****     /* ... which has to be in a used state ... */
+ 585:./rt_thread/src/mem.c ****     if (!mem->used || mem->magic != HEAP_MAGIC)
+ 1122              		.loc 1 585 13
+ 1123 0032 FB68     		ldr	r3, [r7, #12]
+ 1124 0034 5B88     		ldrh	r3, [r3, #2]
+ 1125              		.loc 1 585 8
+ 1126 0036 002B     		cmp	r3, #0
+ 1127 0038 04D0     		beq	.L52
+ 1128              		.loc 1 585 26 discriminator 1
+ 1129 003a FB68     		ldr	r3, [r7, #12]
+ 1130 003c 1B88     		ldrh	r3, [r3]
+ 1131              		.loc 1 585 20 discriminator 1
+ 1132 003e B3F5F55F 		cmp	r3, #7840
+ 1133 0042 0BD0     		beq	.L53
+ 1134              	.L52:
+ 586:./rt_thread/src/mem.c ****     {
+ 587:./rt_thread/src/mem.c ****         rt_kprintf("to free a bad data block:\n");
+ 1135              		.loc 1 587 9
+ 1136 0044 1D48     		ldr	r0, .L57+12
+ 1137 0046 FFF7FEFF 		bl	rt_kprintf
+ 588:./rt_thread/src/mem.c ****         rt_kprintf("mem: 0x%08x, used flag: %d, magic code: 0x%04x\n", mem, mem->used, mem->magic);
+ 1138              		.loc 1 588 80
+ 1139 004a FB68     		ldr	r3, [r7, #12]
+ 1140 004c 5B88     		ldrh	r3, [r3, #2]
+ 1141              		.loc 1 588 9
+ 1142 004e 1A46     		mov	r2, r3
+ 1143              		.loc 1 588 91
+ 1144 0050 FB68     		ldr	r3, [r7, #12]
+ 1145 0052 1B88     		ldrh	r3, [r3]
+ 1146              		.loc 1 588 9
+ 1147 0054 F968     		ldr	r1, [r7, #12]
+ 1148 0056 1A48     		ldr	r0, .L57+16
+ 1149 0058 FFF7FEFF 		bl	rt_kprintf
+ 1150              	.L53:
+ 589:./rt_thread/src/mem.c ****     }
+ 590:./rt_thread/src/mem.c ****     RT_ASSERT(mem->used);
+ 591:./rt_thread/src/mem.c ****     RT_ASSERT(mem->magic == HEAP_MAGIC);
+ 592:./rt_thread/src/mem.c ****     /* ... and is now unused. */
+ 593:./rt_thread/src/mem.c ****     mem->used  = 0;
+ 1151              		.loc 1 593 16
+ 1152 005c FB68     		ldr	r3, [r7, #12]
+ 1153 005e 0022     		movs	r2, #0
+ 1154 0060 5A80     		strh	r2, [r3, #2]	@ movhi
+ 594:./rt_thread/src/mem.c ****     mem->magic = HEAP_MAGIC;
+ 1155              		.loc 1 594 16
+ 1156 0062 FB68     		ldr	r3, [r7, #12]
+ 1157 0064 4FF4F552 		mov	r2, #7840
+ 1158 0068 1A80     		strh	r2, [r3]	@ movhi
+ 595:./rt_thread/src/mem.c **** #ifdef RT_USING_MEMTRACE
+ 596:./rt_thread/src/mem.c ****     rt_mem_setname(mem, "    ");
+ 597:./rt_thread/src/mem.c **** #endif
+ 598:./rt_thread/src/mem.c **** 
+ 599:./rt_thread/src/mem.c ****     if (mem < lfree)
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 32
+
+
+ 1159              		.loc 1 599 13
+ 1160 006a 164B     		ldr	r3, .L57+20
+ 1161 006c 1B68     		ldr	r3, [r3]
+ 1162              		.loc 1 599 8
+ 1163 006e FA68     		ldr	r2, [r7, #12]
+ 1164 0070 9A42     		cmp	r2, r3
+ 1165 0072 02D2     		bcs	.L54
+ 600:./rt_thread/src/mem.c ****     {
+ 601:./rt_thread/src/mem.c ****         /* the newly freed struct is now the lowest */
+ 602:./rt_thread/src/mem.c ****         lfree = mem;
+ 1166              		.loc 1 602 15
+ 1167 0074 134A     		ldr	r2, .L57+20
+ 1168 0076 FB68     		ldr	r3, [r7, #12]
+ 1169 0078 1360     		str	r3, [r2]
+ 1170              	.L54:
+ 603:./rt_thread/src/mem.c ****     }
+ 604:./rt_thread/src/mem.c **** 
+ 605:./rt_thread/src/mem.c **** #ifdef RT_MEM_STATS
+ 606:./rt_thread/src/mem.c ****     used_mem -= (mem->next - ((rt_uint8_t *)mem - heap_ptr));
+ 1171              		.loc 1 606 49
+ 1172 007a 0D4B     		ldr	r3, .L57
+ 1173 007c 1B68     		ldr	r3, [r3]
+ 1174 007e FA68     		ldr	r2, [r7, #12]
+ 1175 0080 D31A     		subs	r3, r2, r3
+ 1176 0082 1A46     		mov	r2, r3
+ 1177              		.loc 1 606 21
+ 1178 0084 FB68     		ldr	r3, [r7, #12]
+ 1179 0086 5B68     		ldr	r3, [r3, #4]
+ 1180              		.loc 1 606 14
+ 1181 0088 D21A     		subs	r2, r2, r3
+ 1182 008a 0F4B     		ldr	r3, .L57+24
+ 1183 008c 1B68     		ldr	r3, [r3]
+ 1184 008e 1344     		add	r3, r3, r2
+ 1185 0090 0D4A     		ldr	r2, .L57+24
+ 1186 0092 1360     		str	r3, [r2]
+ 607:./rt_thread/src/mem.c **** #endif
+ 608:./rt_thread/src/mem.c **** 
+ 609:./rt_thread/src/mem.c ****     /* finally, see if prev or next are free also */
+ 610:./rt_thread/src/mem.c ****     plug_holes(mem);
+ 1187              		.loc 1 610 5
+ 1188 0094 F868     		ldr	r0, [r7, #12]
+ 1189 0096 FFF7FEFF 		bl	plug_holes
+ 611:./rt_thread/src/mem.c ****     rt_sem_release(&heap_sem);
+ 1190              		.loc 1 611 5
+ 1191 009a 0748     		ldr	r0, .L57+8
+ 1192 009c FFF7FEFF 		bl	rt_sem_release
+ 1193 00a0 02E0     		b	.L47
+ 1194              	.L55:
+ 554:./rt_thread/src/mem.c **** 
+ 1195              		.loc 1 554 9
+ 1196 00a2 00BF     		nop
+ 1197 00a4 00E0     		b	.L47
+ 1198              	.L56:
+ 569:./rt_thread/src/mem.c ****     }
+ 1199              		.loc 1 569 9
+ 1200 00a6 00BF     		nop
+ 1201              	.L47:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 33
+
+
+ 612:./rt_thread/src/mem.c **** }
+ 1202              		.loc 1 612 1
+ 1203 00a8 1037     		adds	r7, r7, #16
+ 1204              	.LCFI29:
+ 1205              		.cfi_def_cfa_offset 8
+ 1206 00aa BD46     		mov	sp, r7
+ 1207              	.LCFI30:
+ 1208              		.cfi_def_cfa_register 13
+ 1209              		@ sp needed
+ 1210 00ac 80BD     		pop	{r7, pc}
+ 1211              	.L58:
+ 1212 00ae 00BF     		.align	2
+ 1213              	.L57:
+ 1214 00b0 00000000 		.word	heap_ptr
+ 1215 00b4 00000000 		.word	heap_end
+ 1216 00b8 00000000 		.word	heap_sem
+ 1217 00bc 44000000 		.word	.LC2
+ 1218 00c0 60000000 		.word	.LC3
+ 1219 00c4 00000000 		.word	lfree
+ 1220 00c8 00000000 		.word	used_mem
+ 1221              		.cfi_endproc
+ 1222              	.LFE20:
+ 1224              		.section	.text.rt_memory_info,"ax",%progbits
+ 1225              		.align	1
+ 1226              		.global	rt_memory_info
+ 1227              		.syntax unified
+ 1228              		.thumb
+ 1229              		.thumb_func
+ 1231              	rt_memory_info:
+ 1232              	.LFB21:
+ 613:./rt_thread/src/mem.c **** 
+ 614:./rt_thread/src/mem.c **** #ifdef RT_MEM_STATS
+ 615:./rt_thread/src/mem.c **** void rt_memory_info(rt_uint32_t *total,
+ 616:./rt_thread/src/mem.c ****                     rt_uint32_t *used,
+ 617:./rt_thread/src/mem.c ****                     rt_uint32_t *max_used)
+ 618:./rt_thread/src/mem.c **** {
+ 1233              		.loc 1 618 1
+ 1234              		.cfi_startproc
+ 1235              		@ args = 0, pretend = 0, frame = 16
+ 1236              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1237              		@ link register save eliminated.
+ 1238 0000 80B4     		push	{r7}
+ 1239              	.LCFI31:
+ 1240              		.cfi_def_cfa_offset 4
+ 1241              		.cfi_offset 7, -4
+ 1242 0002 85B0     		sub	sp, sp, #20
+ 1243              	.LCFI32:
+ 1244              		.cfi_def_cfa_offset 24
+ 1245 0004 00AF     		add	r7, sp, #0
+ 1246              	.LCFI33:
+ 1247              		.cfi_def_cfa_register 7
+ 1248 0006 F860     		str	r0, [r7, #12]
+ 1249 0008 B960     		str	r1, [r7, #8]
+ 1250 000a 7A60     		str	r2, [r7, #4]
+ 619:./rt_thread/src/mem.c ****     if (total != RT_NULL)
+ 1251              		.loc 1 619 8
+ 1252 000c FB68     		ldr	r3, [r7, #12]
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 34
+
+
+ 1253 000e 002B     		cmp	r3, #0
+ 1254 0010 03D0     		beq	.L60
+ 620:./rt_thread/src/mem.c ****         *total = mem_size_aligned;
+ 1255              		.loc 1 620 16
+ 1256 0012 0B4B     		ldr	r3, .L64
+ 1257 0014 1A68     		ldr	r2, [r3]
+ 1258 0016 FB68     		ldr	r3, [r7, #12]
+ 1259 0018 1A60     		str	r2, [r3]
+ 1260              	.L60:
+ 621:./rt_thread/src/mem.c ****     if (used  != RT_NULL)
+ 1261              		.loc 1 621 8
+ 1262 001a BB68     		ldr	r3, [r7, #8]
+ 1263 001c 002B     		cmp	r3, #0
+ 1264 001e 03D0     		beq	.L61
+ 622:./rt_thread/src/mem.c ****         *used = used_mem;
+ 1265              		.loc 1 622 15
+ 1266 0020 084B     		ldr	r3, .L64+4
+ 1267 0022 1A68     		ldr	r2, [r3]
+ 1268 0024 BB68     		ldr	r3, [r7, #8]
+ 1269 0026 1A60     		str	r2, [r3]
+ 1270              	.L61:
+ 623:./rt_thread/src/mem.c ****     if (max_used != RT_NULL)
+ 1271              		.loc 1 623 8
+ 1272 0028 7B68     		ldr	r3, [r7, #4]
+ 1273 002a 002B     		cmp	r3, #0
+ 1274 002c 03D0     		beq	.L63
+ 624:./rt_thread/src/mem.c ****         *max_used = max_mem;
+ 1275              		.loc 1 624 19
+ 1276 002e 064B     		ldr	r3, .L64+8
+ 1277 0030 1A68     		ldr	r2, [r3]
+ 1278 0032 7B68     		ldr	r3, [r7, #4]
+ 1279 0034 1A60     		str	r2, [r3]
+ 1280              	.L63:
+ 625:./rt_thread/src/mem.c **** }
+ 1281              		.loc 1 625 1
+ 1282 0036 00BF     		nop
+ 1283 0038 1437     		adds	r7, r7, #20
+ 1284              	.LCFI34:
+ 1285              		.cfi_def_cfa_offset 4
+ 1286 003a BD46     		mov	sp, r7
+ 1287              	.LCFI35:
+ 1288              		.cfi_def_cfa_register 13
+ 1289              		@ sp needed
+ 1290 003c 80BC     		pop	{r7}
+ 1291              	.LCFI36:
+ 1292              		.cfi_restore 7
+ 1293              		.cfi_def_cfa_offset 0
+ 1294 003e 7047     		bx	lr
+ 1295              	.L65:
+ 1296              		.align	2
+ 1297              	.L64:
+ 1298 0040 00000000 		.word	mem_size_aligned
+ 1299 0044 00000000 		.word	used_mem
+ 1300 0048 00000000 		.word	max_mem
+ 1301              		.cfi_endproc
+ 1302              	.LFE21:
+ 1304              		.section	.rodata
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 35
+
+
+ 1305              		.align	2
+ 1306              	.LC4:
+ 1307 0090 746F7461 		.ascii	"total memory: %d\012\000"
+ 1307      6C206D65 
+ 1307      6D6F7279 
+ 1307      3A202564 
+ 1307      0A00
+ 1308 00a2 0000     		.align	2
+ 1309              	.LC5:
+ 1310 00a4 75736564 		.ascii	"used memory : %d\012\000"
+ 1310      206D656D 
+ 1310      6F727920 
+ 1310      3A202564 
+ 1310      0A00
+ 1311 00b6 0000     		.align	2
+ 1312              	.LC6:
+ 1313 00b8 6D617869 		.ascii	"maximum allocated memory: %d\012\000"
+ 1313      6D756D20 
+ 1313      616C6C6F 
+ 1313      63617465 
+ 1313      64206D65 
+ 1314              		.section	.text.list_mem,"ax",%progbits
+ 1315              		.align	1
+ 1316              		.global	list_mem
+ 1317              		.syntax unified
+ 1318              		.thumb
+ 1319              		.thumb_func
+ 1321              	list_mem:
+ 1322              	.LFB26:
+ 626:./rt_thread/src/mem.c **** 
+ 627:./rt_thread/src/mem.c **** #ifdef RT_USING_FINSH
+ 628:./rt_thread/src/mem.c **** #include <finsh.h>
+ 629:./rt_thread/src/mem.c **** 
+ 630:./rt_thread/src/mem.c **** void list_mem(void)
+ 631:./rt_thread/src/mem.c **** {
+ 1323              		.loc 1 631 1
+ 1324              		.cfi_startproc
+ 1325              		@ args = 0, pretend = 0, frame = 0
+ 1326              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1327 0000 80B5     		push	{r7, lr}
+ 1328              	.LCFI37:
+ 1329              		.cfi_def_cfa_offset 8
+ 1330              		.cfi_offset 7, -8
+ 1331              		.cfi_offset 14, -4
+ 1332 0002 00AF     		add	r7, sp, #0
+ 1333              	.LCFI38:
+ 1334              		.cfi_def_cfa_register 7
+ 632:./rt_thread/src/mem.c ****     rt_kprintf("total memory: %d\n", mem_size_aligned);
+ 1335              		.loc 1 632 5
+ 1336 0004 094B     		ldr	r3, .L67
+ 1337 0006 1B68     		ldr	r3, [r3]
+ 1338 0008 1946     		mov	r1, r3
+ 1339 000a 0948     		ldr	r0, .L67+4
+ 1340 000c FFF7FEFF 		bl	rt_kprintf
+ 633:./rt_thread/src/mem.c ****     rt_kprintf("used memory : %d\n", used_mem);
+ 1341              		.loc 1 633 5
+ 1342 0010 084B     		ldr	r3, .L67+8
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 36
+
+
+ 1343 0012 1B68     		ldr	r3, [r3]
+ 1344 0014 1946     		mov	r1, r3
+ 1345 0016 0848     		ldr	r0, .L67+12
+ 1346 0018 FFF7FEFF 		bl	rt_kprintf
+ 634:./rt_thread/src/mem.c ****     rt_kprintf("maximum allocated memory: %d\n", max_mem);
+ 1347              		.loc 1 634 5
+ 1348 001c 074B     		ldr	r3, .L67+16
+ 1349 001e 1B68     		ldr	r3, [r3]
+ 1350 0020 1946     		mov	r1, r3
+ 1351 0022 0748     		ldr	r0, .L67+20
+ 1352 0024 FFF7FEFF 		bl	rt_kprintf
+ 635:./rt_thread/src/mem.c **** }
+ 1353              		.loc 1 635 1
+ 1354 0028 00BF     		nop
+ 1355 002a 80BD     		pop	{r7, pc}
+ 1356              	.L68:
+ 1357              		.align	2
+ 1358              	.L67:
+ 1359 002c 00000000 		.word	mem_size_aligned
+ 1360 0030 90000000 		.word	.LC4
+ 1361 0034 00000000 		.word	used_mem
+ 1362 0038 A4000000 		.word	.LC5
+ 1363 003c 00000000 		.word	max_mem
+ 1364 0040 B8000000 		.word	.LC6
+ 1365              		.cfi_endproc
+ 1366              	.LFE26:
+ 1368              		.global	__fsym_list_mem_name
+ 1369              		.section	.rodata.name,"a"
+ 1370              		.align	2
+ 1373              	__fsym_list_mem_name:
+ 1374 0000 6C697374 		.ascii	"list_mem\000"
+ 1374      5F6D656D 
+ 1374      00
+ 1375              		.global	__fsym_list_mem_desc
+ 1376 0009 000000   		.align	2
+ 1379              	__fsym_list_mem_desc:
+ 1380 000c 6C697374 		.ascii	"list memory usage information\000"
+ 1380      206D656D 
+ 1380      6F727920 
+ 1380      75736167 
+ 1380      6520696E 
+ 1381              		.global	__fsym_list_mem
+ 1382              		.section	FSymTab,"a"
+ 1383              		.align	2
+ 1386              	__fsym_list_mem:
+ 1387 0000 00000000 		.word	__fsym_list_mem_name
+ 1388 0004 00000000 		.word	__fsym_list_mem_desc
+ 1389 0008 00000000 		.word	list_mem
+ 1390              		.text
+ 1391              	.Letext0:
+ 1392              		.file 2 "./rt_thread/include/rtdef.h"
+ 1393              		.file 3 "./rt_thread/components/finsh/finsh_api.h"
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s 			page 37
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 mem.c
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:18     .bss.heap_ptr:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:21     .bss.heap_ptr:00000000 heap_ptr
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:24     .bss.heap_end:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:27     .bss.heap_end:00000000 heap_end
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:30     .bss.lfree:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:33     .bss.lfree:00000000 lfree
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:36     .bss.heap_sem:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:39     .bss.heap_sem:00000000 heap_sem
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:42     .bss.mem_size_aligned:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:45     .bss.mem_size_aligned:00000000 mem_size_aligned
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:48     .bss.used_mem:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:51     .bss.used_mem:00000000 used_mem
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:54     .bss.max_mem:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:57     .bss.max_mem:00000000 max_mem
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:60     .text.plug_holes:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:65     .text.plug_holes:00000000 plug_holes
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:220    .text.plug_holes:000000b0 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:227    .rodata:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:235    .text.rt_system_heap_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:241    .text.rt_system_heap_init:00000000 rt_system_heap_init
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:396    .text.rt_system_heap_init:000000c8 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:407    .text.rt_malloc:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:413    .text.rt_malloc:00000000 rt_malloc
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:725    .text.rt_malloc:000001a8 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:736    .text.rt_realloc:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:742    .text.rt_realloc:00000000 rt_realloc
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1078   .text.rt_free:00000000 rt_free
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:994    .text.rt_realloc:0000015c $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1004   .text.rt_calloc:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1010   .text.rt_calloc:00000000 rt_calloc
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1072   .text.rt_free:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1214   .text.rt_free:000000b0 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1225   .text.rt_memory_info:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1231   .text.rt_memory_info:00000000 rt_memory_info
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1298   .text.rt_memory_info:00000040 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1315   .text.list_mem:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1321   .text.list_mem:00000000 list_mem
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1359   .text.list_mem:0000002c $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1373   .rodata.name:00000000 __fsym_list_mem_name
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1370   .rodata.name:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1379   .rodata.name:0000000c __fsym_list_mem_desc
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1386   FSymTab:00000000 __fsym_list_mem
+C:\Users\hao\AppData\Local\Temp\ccfuLSnn.s:1383   FSymTab:00000000 $d
+
+UNDEFINED SYMBOLS
+rt_sem_init
+rt_kprintf
+rt_sem_take
+rt_sem_release
+rt_memcpy
+rt_memset

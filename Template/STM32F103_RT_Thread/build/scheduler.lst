@@ -1,0 +1,1519 @@
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"scheduler.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.rt_list_init,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  23              	rt_list_init:
+  24              	.LFB0:
+  25              		.file 1 "./rt_thread/include/rtservice.h"
+   1:./rt_thread/include/rtservice.h **** /*
+   2:./rt_thread/include/rtservice.h ****  * Copyright (c) 2006-2021, RT-Thread Development Team
+   3:./rt_thread/include/rtservice.h ****  *
+   4:./rt_thread/include/rtservice.h ****  * SPDX-License-Identifier: Apache-2.0
+   5:./rt_thread/include/rtservice.h ****  *
+   6:./rt_thread/include/rtservice.h ****  * Change Logs:
+   7:./rt_thread/include/rtservice.h ****  * Date           Author       Notes
+   8:./rt_thread/include/rtservice.h ****  * 2006-03-16     Bernard      the first version
+   9:./rt_thread/include/rtservice.h ****  * 2006-09-07     Bernard      move the kservice APIs to rtthread.h
+  10:./rt_thread/include/rtservice.h ****  * 2007-06-27     Bernard      fix the rt_list_remove bug
+  11:./rt_thread/include/rtservice.h ****  * 2012-03-22     Bernard      rename kservice.h to rtservice.h
+  12:./rt_thread/include/rtservice.h ****  * 2017-11-15     JasonJia     Modify rt_slist_foreach to rt_slist_for_each_entry.
+  13:./rt_thread/include/rtservice.h ****  *                             Make code cleanup.
+  14:./rt_thread/include/rtservice.h ****  */
+  15:./rt_thread/include/rtservice.h **** 
+  16:./rt_thread/include/rtservice.h **** #ifndef __RT_SERVICE_H__
+  17:./rt_thread/include/rtservice.h **** #define __RT_SERVICE_H__
+  18:./rt_thread/include/rtservice.h **** 
+  19:./rt_thread/include/rtservice.h **** #ifdef __cplusplus
+  20:./rt_thread/include/rtservice.h **** extern "C" {
+  21:./rt_thread/include/rtservice.h **** #endif
+  22:./rt_thread/include/rtservice.h **** 
+  23:./rt_thread/include/rtservice.h **** /**
+  24:./rt_thread/include/rtservice.h ****  * @addtogroup KernelService
+  25:./rt_thread/include/rtservice.h ****  */
+  26:./rt_thread/include/rtservice.h **** 
+  27:./rt_thread/include/rtservice.h **** /**@{*/
+  28:./rt_thread/include/rtservice.h **** 
+  29:./rt_thread/include/rtservice.h **** /**
+  30:./rt_thread/include/rtservice.h ****  * rt_container_of - return the member address of ptr, if the type of ptr is the
+  31:./rt_thread/include/rtservice.h ****  * struct type.
+  32:./rt_thread/include/rtservice.h ****  */
+  33:./rt_thread/include/rtservice.h **** #define rt_container_of(ptr, type, member) \
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 2
+
+
+  34:./rt_thread/include/rtservice.h ****     ((type *)((char *)(ptr) - (unsigned long)(&((type *)0)->member)))
+  35:./rt_thread/include/rtservice.h **** 
+  36:./rt_thread/include/rtservice.h **** 
+  37:./rt_thread/include/rtservice.h **** /**
+  38:./rt_thread/include/rtservice.h ****  * @brief initialize a list object
+  39:./rt_thread/include/rtservice.h ****  */
+  40:./rt_thread/include/rtservice.h **** #define RT_LIST_OBJECT_INIT(object) { &(object), &(object) }
+  41:./rt_thread/include/rtservice.h **** 
+  42:./rt_thread/include/rtservice.h **** /**
+  43:./rt_thread/include/rtservice.h ****  * @brief initialize a list
+  44:./rt_thread/include/rtservice.h ****  *
+  45:./rt_thread/include/rtservice.h ****  * @param l list to be initialized
+  46:./rt_thread/include/rtservice.h ****  */
+  47:./rt_thread/include/rtservice.h **** rt_inline void rt_list_init(rt_list_t *l)
+  48:./rt_thread/include/rtservice.h **** {
+  26              		.loc 1 48 1
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 8
+  29              		@ frame_needed = 1, uses_anonymous_args = 0
+  30              		@ link register save eliminated.
+  31 0000 80B4     		push	{r7}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 4
+  34              		.cfi_offset 7, -4
+  35 0002 83B0     		sub	sp, sp, #12
+  36              	.LCFI1:
+  37              		.cfi_def_cfa_offset 16
+  38 0004 00AF     		add	r7, sp, #0
+  39              	.LCFI2:
+  40              		.cfi_def_cfa_register 7
+  41 0006 7860     		str	r0, [r7, #4]
+  49:./rt_thread/include/rtservice.h ****     l->next = l->prev = l;
+  42              		.loc 1 49 23
+  43 0008 7B68     		ldr	r3, [r7, #4]
+  44 000a 7A68     		ldr	r2, [r7, #4]
+  45 000c 5A60     		str	r2, [r3, #4]
+  46              		.loc 1 49 16
+  47 000e 7B68     		ldr	r3, [r7, #4]
+  48 0010 5A68     		ldr	r2, [r3, #4]
+  49              		.loc 1 49 13
+  50 0012 7B68     		ldr	r3, [r7, #4]
+  51 0014 1A60     		str	r2, [r3]
+  50:./rt_thread/include/rtservice.h **** }
+  52              		.loc 1 50 1
+  53 0016 00BF     		nop
+  54 0018 0C37     		adds	r7, r7, #12
+  55              	.LCFI3:
+  56              		.cfi_def_cfa_offset 4
+  57 001a BD46     		mov	sp, r7
+  58              	.LCFI4:
+  59              		.cfi_def_cfa_register 13
+  60              		@ sp needed
+  61 001c 80BC     		pop	{r7}
+  62              	.LCFI5:
+  63              		.cfi_restore 7
+  64              		.cfi_def_cfa_offset 0
+  65 001e 7047     		bx	lr
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 3
+
+
+  66              		.cfi_endproc
+  67              	.LFE0:
+  69              		.section	.text.rt_list_insert_before,"ax",%progbits
+  70              		.align	1
+  71              		.syntax unified
+  72              		.thumb
+  73              		.thumb_func
+  75              	rt_list_insert_before:
+  76              	.LFB2:
+  51:./rt_thread/include/rtservice.h **** 
+  52:./rt_thread/include/rtservice.h **** /**
+  53:./rt_thread/include/rtservice.h ****  * @brief insert a node after a list
+  54:./rt_thread/include/rtservice.h ****  *
+  55:./rt_thread/include/rtservice.h ****  * @param l list to insert it
+  56:./rt_thread/include/rtservice.h ****  * @param n new node to be inserted
+  57:./rt_thread/include/rtservice.h ****  */
+  58:./rt_thread/include/rtservice.h **** rt_inline void rt_list_insert_after(rt_list_t *l, rt_list_t *n)
+  59:./rt_thread/include/rtservice.h **** {
+  60:./rt_thread/include/rtservice.h ****     l->next->prev = n;
+  61:./rt_thread/include/rtservice.h ****     n->next = l->next;
+  62:./rt_thread/include/rtservice.h **** 
+  63:./rt_thread/include/rtservice.h ****     l->next = n;
+  64:./rt_thread/include/rtservice.h ****     n->prev = l;
+  65:./rt_thread/include/rtservice.h **** }
+  66:./rt_thread/include/rtservice.h **** 
+  67:./rt_thread/include/rtservice.h **** /**
+  68:./rt_thread/include/rtservice.h ****  * @brief insert a node before a list
+  69:./rt_thread/include/rtservice.h ****  *
+  70:./rt_thread/include/rtservice.h ****  * @param n new node to be inserted
+  71:./rt_thread/include/rtservice.h ****  * @param l list to insert it
+  72:./rt_thread/include/rtservice.h ****  */
+  73:./rt_thread/include/rtservice.h **** rt_inline void rt_list_insert_before(rt_list_t *l, rt_list_t *n)
+  74:./rt_thread/include/rtservice.h **** {
+  77              		.loc 1 74 1
+  78              		.cfi_startproc
+  79              		@ args = 0, pretend = 0, frame = 8
+  80              		@ frame_needed = 1, uses_anonymous_args = 0
+  81              		@ link register save eliminated.
+  82 0000 80B4     		push	{r7}
+  83              	.LCFI6:
+  84              		.cfi_def_cfa_offset 4
+  85              		.cfi_offset 7, -4
+  86 0002 83B0     		sub	sp, sp, #12
+  87              	.LCFI7:
+  88              		.cfi_def_cfa_offset 16
+  89 0004 00AF     		add	r7, sp, #0
+  90              	.LCFI8:
+  91              		.cfi_def_cfa_register 7
+  92 0006 7860     		str	r0, [r7, #4]
+  93 0008 3960     		str	r1, [r7]
+  75:./rt_thread/include/rtservice.h ****     l->prev->next = n;
+  94              		.loc 1 75 6
+  95 000a 7B68     		ldr	r3, [r7, #4]
+  96 000c 5B68     		ldr	r3, [r3, #4]
+  97              		.loc 1 75 19
+  98 000e 3A68     		ldr	r2, [r7]
+  99 0010 1A60     		str	r2, [r3]
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 4
+
+
+  76:./rt_thread/include/rtservice.h ****     n->prev = l->prev;
+ 100              		.loc 1 76 16
+ 101 0012 7B68     		ldr	r3, [r7, #4]
+ 102 0014 5A68     		ldr	r2, [r3, #4]
+ 103              		.loc 1 76 13
+ 104 0016 3B68     		ldr	r3, [r7]
+ 105 0018 5A60     		str	r2, [r3, #4]
+  77:./rt_thread/include/rtservice.h **** 
+  78:./rt_thread/include/rtservice.h ****     l->prev = n;
+ 106              		.loc 1 78 13
+ 107 001a 7B68     		ldr	r3, [r7, #4]
+ 108 001c 3A68     		ldr	r2, [r7]
+ 109 001e 5A60     		str	r2, [r3, #4]
+  79:./rt_thread/include/rtservice.h ****     n->next = l;
+ 110              		.loc 1 79 13
+ 111 0020 3B68     		ldr	r3, [r7]
+ 112 0022 7A68     		ldr	r2, [r7, #4]
+ 113 0024 1A60     		str	r2, [r3]
+  80:./rt_thread/include/rtservice.h **** }
+ 114              		.loc 1 80 1
+ 115 0026 00BF     		nop
+ 116 0028 0C37     		adds	r7, r7, #12
+ 117              	.LCFI9:
+ 118              		.cfi_def_cfa_offset 4
+ 119 002a BD46     		mov	sp, r7
+ 120              	.LCFI10:
+ 121              		.cfi_def_cfa_register 13
+ 122              		@ sp needed
+ 123 002c 80BC     		pop	{r7}
+ 124              	.LCFI11:
+ 125              		.cfi_restore 7
+ 126              		.cfi_def_cfa_offset 0
+ 127 002e 7047     		bx	lr
+ 128              		.cfi_endproc
+ 129              	.LFE2:
+ 131              		.section	.text.rt_list_remove,"ax",%progbits
+ 132              		.align	1
+ 133              		.syntax unified
+ 134              		.thumb
+ 135              		.thumb_func
+ 137              	rt_list_remove:
+ 138              	.LFB3:
+  81:./rt_thread/include/rtservice.h **** 
+  82:./rt_thread/include/rtservice.h **** /**
+  83:./rt_thread/include/rtservice.h ****  * @brief remove node from list.
+  84:./rt_thread/include/rtservice.h ****  * @param n the node to remove from the list.
+  85:./rt_thread/include/rtservice.h ****  */
+  86:./rt_thread/include/rtservice.h **** rt_inline void rt_list_remove(rt_list_t *n)
+  87:./rt_thread/include/rtservice.h **** {
+ 139              		.loc 1 87 1
+ 140              		.cfi_startproc
+ 141              		@ args = 0, pretend = 0, frame = 8
+ 142              		@ frame_needed = 1, uses_anonymous_args = 0
+ 143              		@ link register save eliminated.
+ 144 0000 80B4     		push	{r7}
+ 145              	.LCFI12:
+ 146              		.cfi_def_cfa_offset 4
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 5
+
+
+ 147              		.cfi_offset 7, -4
+ 148 0002 83B0     		sub	sp, sp, #12
+ 149              	.LCFI13:
+ 150              		.cfi_def_cfa_offset 16
+ 151 0004 00AF     		add	r7, sp, #0
+ 152              	.LCFI14:
+ 153              		.cfi_def_cfa_register 7
+ 154 0006 7860     		str	r0, [r7, #4]
+  88:./rt_thread/include/rtservice.h ****     n->next->prev = n->prev;
+ 155              		.loc 1 88 6
+ 156 0008 7B68     		ldr	r3, [r7, #4]
+ 157 000a 1B68     		ldr	r3, [r3]
+ 158              		.loc 1 88 22
+ 159 000c 7A68     		ldr	r2, [r7, #4]
+ 160 000e 5268     		ldr	r2, [r2, #4]
+ 161              		.loc 1 88 19
+ 162 0010 5A60     		str	r2, [r3, #4]
+  89:./rt_thread/include/rtservice.h ****     n->prev->next = n->next;
+ 163              		.loc 1 89 6
+ 164 0012 7B68     		ldr	r3, [r7, #4]
+ 165 0014 5B68     		ldr	r3, [r3, #4]
+ 166              		.loc 1 89 22
+ 167 0016 7A68     		ldr	r2, [r7, #4]
+ 168 0018 1268     		ldr	r2, [r2]
+ 169              		.loc 1 89 19
+ 170 001a 1A60     		str	r2, [r3]
+  90:./rt_thread/include/rtservice.h **** 
+  91:./rt_thread/include/rtservice.h ****     n->next = n->prev = n;
+ 171              		.loc 1 91 23
+ 172 001c 7B68     		ldr	r3, [r7, #4]
+ 173 001e 7A68     		ldr	r2, [r7, #4]
+ 174 0020 5A60     		str	r2, [r3, #4]
+ 175              		.loc 1 91 16
+ 176 0022 7B68     		ldr	r3, [r7, #4]
+ 177 0024 5A68     		ldr	r2, [r3, #4]
+ 178              		.loc 1 91 13
+ 179 0026 7B68     		ldr	r3, [r7, #4]
+ 180 0028 1A60     		str	r2, [r3]
+  92:./rt_thread/include/rtservice.h **** }
+ 181              		.loc 1 92 1
+ 182 002a 00BF     		nop
+ 183 002c 0C37     		adds	r7, r7, #12
+ 184              	.LCFI15:
+ 185              		.cfi_def_cfa_offset 4
+ 186 002e BD46     		mov	sp, r7
+ 187              	.LCFI16:
+ 188              		.cfi_def_cfa_register 13
+ 189              		@ sp needed
+ 190 0030 80BC     		pop	{r7}
+ 191              	.LCFI17:
+ 192              		.cfi_restore 7
+ 193              		.cfi_def_cfa_offset 0
+ 194 0032 7047     		bx	lr
+ 195              		.cfi_endproc
+ 196              	.LFE3:
+ 198              		.section	.text.rt_list_isempty,"ax",%progbits
+ 199              		.align	1
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 6
+
+
+ 200              		.syntax unified
+ 201              		.thumb
+ 202              		.thumb_func
+ 204              	rt_list_isempty:
+ 205              	.LFB4:
+  93:./rt_thread/include/rtservice.h **** 
+  94:./rt_thread/include/rtservice.h **** /**
+  95:./rt_thread/include/rtservice.h ****  * @brief tests whether a list is empty
+  96:./rt_thread/include/rtservice.h ****  * @param l the list to test.
+  97:./rt_thread/include/rtservice.h ****  */
+  98:./rt_thread/include/rtservice.h **** rt_inline int rt_list_isempty(const rt_list_t *l)
+  99:./rt_thread/include/rtservice.h **** {
+ 206              		.loc 1 99 1
+ 207              		.cfi_startproc
+ 208              		@ args = 0, pretend = 0, frame = 8
+ 209              		@ frame_needed = 1, uses_anonymous_args = 0
+ 210              		@ link register save eliminated.
+ 211 0000 80B4     		push	{r7}
+ 212              	.LCFI18:
+ 213              		.cfi_def_cfa_offset 4
+ 214              		.cfi_offset 7, -4
+ 215 0002 83B0     		sub	sp, sp, #12
+ 216              	.LCFI19:
+ 217              		.cfi_def_cfa_offset 16
+ 218 0004 00AF     		add	r7, sp, #0
+ 219              	.LCFI20:
+ 220              		.cfi_def_cfa_register 7
+ 221 0006 7860     		str	r0, [r7, #4]
+ 100:./rt_thread/include/rtservice.h ****     return l->next == l;
+ 222              		.loc 1 100 13
+ 223 0008 7B68     		ldr	r3, [r7, #4]
+ 224 000a 1B68     		ldr	r3, [r3]
+ 225              		.loc 1 100 20
+ 226 000c 7A68     		ldr	r2, [r7, #4]
+ 227 000e 9A42     		cmp	r2, r3
+ 228 0010 0CBF     		ite	eq
+ 229 0012 0123     		moveq	r3, #1
+ 230 0014 0023     		movne	r3, #0
+ 231 0016 DBB2     		uxtb	r3, r3
+ 101:./rt_thread/include/rtservice.h **** }
+ 232              		.loc 1 101 1
+ 233 0018 1846     		mov	r0, r3
+ 234 001a 0C37     		adds	r7, r7, #12
+ 235              	.LCFI21:
+ 236              		.cfi_def_cfa_offset 4
+ 237 001c BD46     		mov	sp, r7
+ 238              	.LCFI22:
+ 239              		.cfi_def_cfa_register 13
+ 240              		@ sp needed
+ 241 001e 80BC     		pop	{r7}
+ 242              	.LCFI23:
+ 243              		.cfi_restore 7
+ 244              		.cfi_def_cfa_offset 0
+ 245 0020 7047     		bx	lr
+ 246              		.cfi_endproc
+ 247              	.LFE4:
+ 249              		.global	rt_thread_priority_table
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 7
+
+
+ 250              		.section	.bss.rt_thread_priority_table,"aw",%nobits
+ 251              		.align	2
+ 254              	rt_thread_priority_table:
+ 255 0000 00000000 		.space	64
+ 255      00000000 
+ 255      00000000 
+ 255      00000000 
+ 255      00000000 
+ 256              		.global	rt_thread_ready_priority_group
+ 257              		.section	.bss.rt_thread_ready_priority_group,"aw",%nobits
+ 258              		.align	2
+ 261              	rt_thread_ready_priority_group:
+ 262 0000 00000000 		.space	4
+ 263              		.section	.bss.rt_scheduler_lock_nest,"aw",%nobits
+ 264              		.align	1
+ 267              	rt_scheduler_lock_nest:
+ 268 0000 0000     		.space	2
+ 269              		.global	rt_current_thread
+ 270              		.section	.bss.rt_current_thread,"aw",%nobits
+ 271              		.align	2
+ 274              	rt_current_thread:
+ 275 0000 00000000 		.space	4
+ 276              		.global	rt_current_priority
+ 277              		.section	.bss.rt_current_priority,"aw",%nobits
+ 280              	rt_current_priority:
+ 281 0000 00       		.space	1
+ 282              		.global	rt_thread_defunct
+ 283              		.section	.bss.rt_thread_defunct,"aw",%nobits
+ 284              		.align	2
+ 287              	rt_thread_defunct:
+ 288 0000 00000000 		.space	8
+ 288      00000000 
+ 289              		.section	.text.rt_system_scheduler_init,"ax",%progbits
+ 290              		.align	1
+ 291              		.global	rt_system_scheduler_init
+ 292              		.syntax unified
+ 293              		.thumb
+ 294              		.thumb_func
+ 296              	rt_system_scheduler_init:
+ 297              	.LFB15:
+ 298              		.file 2 "./rt_thread/src/scheduler.c"
+   1:./rt_thread/src/scheduler.c **** /*
+   2:./rt_thread/src/scheduler.c ****  * Copyright (c) 2006-2021, RT-Thread Development Team
+   3:./rt_thread/src/scheduler.c ****  *
+   4:./rt_thread/src/scheduler.c ****  * SPDX-License-Identifier: Apache-2.0
+   5:./rt_thread/src/scheduler.c ****  *
+   6:./rt_thread/src/scheduler.c ****  * Change Logs:
+   7:./rt_thread/src/scheduler.c ****  * Date           Author       Notes
+   8:./rt_thread/src/scheduler.c ****  * 2006-03-17     Bernard      the first version
+   9:./rt_thread/src/scheduler.c ****  * 2006-04-28     Bernard      fix the scheduler algorthm
+  10:./rt_thread/src/scheduler.c ****  * 2006-04-30     Bernard      add SCHEDULER_DEBUG
+  11:./rt_thread/src/scheduler.c ****  * 2006-05-27     Bernard      fix the scheduler algorthm for same priority
+  12:./rt_thread/src/scheduler.c ****  *                             thread schedule
+  13:./rt_thread/src/scheduler.c ****  * 2006-06-04     Bernard      rewrite the scheduler algorithm
+  14:./rt_thread/src/scheduler.c ****  * 2006-08-03     Bernard      add hook support
+  15:./rt_thread/src/scheduler.c ****  * 2006-09-05     Bernard      add 32 priority level support
+  16:./rt_thread/src/scheduler.c ****  * 2006-09-24     Bernard      add rt_system_scheduler_start function
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 8
+
+
+  17:./rt_thread/src/scheduler.c ****  * 2009-09-16     Bernard      fix _rt_scheduler_stack_check
+  18:./rt_thread/src/scheduler.c ****  * 2010-04-11     yi.qiu       add module feature
+  19:./rt_thread/src/scheduler.c ****  * 2010-07-13     Bernard      fix the maximal number of rt_scheduler_lock_nest
+  20:./rt_thread/src/scheduler.c ****  *                             issue found by kuronca
+  21:./rt_thread/src/scheduler.c ****  * 2010-12-13     Bernard      add defunct list initialization even if not use heap.
+  22:./rt_thread/src/scheduler.c ****  * 2011-05-10     Bernard      clean scheduler debug log.
+  23:./rt_thread/src/scheduler.c ****  * 2013-12-21     Grissiom     add rt_critical_level
+  24:./rt_thread/src/scheduler.c ****  * 2018-11-22     Jesven       remove the current task from ready queue
+  25:./rt_thread/src/scheduler.c ****  *                             add per cpu ready queue
+  26:./rt_thread/src/scheduler.c ****  *                             add _get_highest_priority_thread to find highest priority task
+  27:./rt_thread/src/scheduler.c ****  *                             rt_schedule_insert_thread won't insert current task to ready queue
+  28:./rt_thread/src/scheduler.c ****  *                             in smp version, rt_hw_context_switch_interrupt maybe switch to
+  29:./rt_thread/src/scheduler.c ****  *                               new task directly
+  30:./rt_thread/src/scheduler.c ****  *
+  31:./rt_thread/src/scheduler.c ****  */
+  32:./rt_thread/src/scheduler.c **** 
+  33:./rt_thread/src/scheduler.c **** #include <rtthread.h>
+  34:./rt_thread/src/scheduler.c **** #include <rthw.h>
+  35:./rt_thread/src/scheduler.c **** 
+  36:./rt_thread/src/scheduler.c **** rt_list_t rt_thread_priority_table[RT_THREAD_PRIORITY_MAX];
+  37:./rt_thread/src/scheduler.c **** rt_uint32_t rt_thread_ready_priority_group;
+  38:./rt_thread/src/scheduler.c **** 
+  39:./rt_thread/src/scheduler.c **** #if RT_THREAD_PRIORITY_MAX > 32
+  40:./rt_thread/src/scheduler.c **** /* Maximum priority level, 256 */
+  41:./rt_thread/src/scheduler.c **** rt_uint8_t rt_thread_ready_table[32];
+  42:./rt_thread/src/scheduler.c **** #endif
+  43:./rt_thread/src/scheduler.c **** 
+  44:./rt_thread/src/scheduler.c **** 
+  45:./rt_thread/src/scheduler.c **** extern volatile rt_uint8_t rt_interrupt_nest;
+  46:./rt_thread/src/scheduler.c **** static rt_int16_t rt_scheduler_lock_nest;
+  47:./rt_thread/src/scheduler.c **** struct rt_thread *rt_current_thread = RT_NULL;
+  48:./rt_thread/src/scheduler.c **** rt_uint8_t rt_current_priority;
+  49:./rt_thread/src/scheduler.c **** 
+  50:./rt_thread/src/scheduler.c **** 
+  51:./rt_thread/src/scheduler.c **** rt_list_t rt_thread_defunct;
+  52:./rt_thread/src/scheduler.c **** 
+  53:./rt_thread/src/scheduler.c **** #ifdef RT_USING_HOOK
+  54:./rt_thread/src/scheduler.c **** static void (*rt_scheduler_hook)(struct rt_thread *from, struct rt_thread *to);
+  55:./rt_thread/src/scheduler.c **** 
+  56:./rt_thread/src/scheduler.c **** /**
+  57:./rt_thread/src/scheduler.c ****  * @addtogroup Hook
+  58:./rt_thread/src/scheduler.c ****  */
+  59:./rt_thread/src/scheduler.c **** 
+  60:./rt_thread/src/scheduler.c **** /**@{*/
+  61:./rt_thread/src/scheduler.c **** 
+  62:./rt_thread/src/scheduler.c **** /**
+  63:./rt_thread/src/scheduler.c ****  * This function will set a hook function, which will be invoked when thread
+  64:./rt_thread/src/scheduler.c ****  * switch happens.
+  65:./rt_thread/src/scheduler.c ****  *
+  66:./rt_thread/src/scheduler.c ****  * @param hook the hook function
+  67:./rt_thread/src/scheduler.c ****  */
+  68:./rt_thread/src/scheduler.c **** void
+  69:./rt_thread/src/scheduler.c **** rt_scheduler_sethook(void (*hook)(struct rt_thread *from, struct rt_thread *to))
+  70:./rt_thread/src/scheduler.c **** {
+  71:./rt_thread/src/scheduler.c ****     rt_scheduler_hook = hook;
+  72:./rt_thread/src/scheduler.c **** }
+  73:./rt_thread/src/scheduler.c **** 
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 9
+
+
+  74:./rt_thread/src/scheduler.c **** /**@}*/
+  75:./rt_thread/src/scheduler.c **** #endif
+  76:./rt_thread/src/scheduler.c **** 
+  77:./rt_thread/src/scheduler.c **** #ifdef RT_USING_OVERFLOW_CHECK
+  78:./rt_thread/src/scheduler.c **** static void _rt_scheduler_stack_check(struct rt_thread *thread)
+  79:./rt_thread/src/scheduler.c **** {
+  80:./rt_thread/src/scheduler.c ****     RT_ASSERT(thread != RT_NULL);
+  81:./rt_thread/src/scheduler.c **** 
+  82:./rt_thread/src/scheduler.c **** #if defined(ARCH_CPU_STACK_GROWS_UPWARD)
+  83:./rt_thread/src/scheduler.c ****     if (*((rt_uint8_t *)((rt_ubase_t)thread->stack_addr + thread->stack_size - 1)) != '#' ||
+  84:./rt_thread/src/scheduler.c **** #else
+  85:./rt_thread/src/scheduler.c ****     if (*((rt_uint8_t *)thread->stack_addr) != '#' ||
+  86:./rt_thread/src/scheduler.c **** #endif
+  87:./rt_thread/src/scheduler.c ****         (rt_ubase_t)thread->sp <= (rt_ubase_t)thread->stack_addr ||
+  88:./rt_thread/src/scheduler.c ****         (rt_ubase_t)thread->sp >
+  89:./rt_thread/src/scheduler.c ****         (rt_ubase_t)thread->stack_addr + (rt_ubase_t)thread->stack_size)
+  90:./rt_thread/src/scheduler.c ****     {
+  91:./rt_thread/src/scheduler.c ****         rt_ubase_t level;
+  92:./rt_thread/src/scheduler.c **** 
+  93:./rt_thread/src/scheduler.c ****         rt_kprintf("thread:%s stack overflow\n", thread->name);
+  94:./rt_thread/src/scheduler.c **** #ifdef RT_USING_FINSH
+  95:./rt_thread/src/scheduler.c ****         {
+  96:./rt_thread/src/scheduler.c ****             extern long list_thread(void);
+  97:./rt_thread/src/scheduler.c ****             list_thread();
+  98:./rt_thread/src/scheduler.c ****         }
+  99:./rt_thread/src/scheduler.c **** #endif
+ 100:./rt_thread/src/scheduler.c ****         level = rt_hw_interrupt_disable();
+ 101:./rt_thread/src/scheduler.c ****         while (level);
+ 102:./rt_thread/src/scheduler.c ****     }
+ 103:./rt_thread/src/scheduler.c **** #if defined(ARCH_CPU_STACK_GROWS_UPWARD)
+ 104:./rt_thread/src/scheduler.c ****     else if ((rt_ubase_t)thread->sp > ((rt_ubase_t)thread->stack_addr + thread->stack_size))
+ 105:./rt_thread/src/scheduler.c ****     {
+ 106:./rt_thread/src/scheduler.c ****         rt_kprintf("warning: %s stack is close to the top of stack address.\n",
+ 107:./rt_thread/src/scheduler.c ****                    thread->name);
+ 108:./rt_thread/src/scheduler.c ****     }
+ 109:./rt_thread/src/scheduler.c **** #else
+ 110:./rt_thread/src/scheduler.c ****     else if ((rt_ubase_t)thread->sp <= ((rt_ubase_t)thread->stack_addr + 32))
+ 111:./rt_thread/src/scheduler.c ****     {
+ 112:./rt_thread/src/scheduler.c ****         rt_kprintf("warning: %s stack is close to end of stack address.\n",
+ 113:./rt_thread/src/scheduler.c ****                    thread->name);
+ 114:./rt_thread/src/scheduler.c ****     }
+ 115:./rt_thread/src/scheduler.c **** #endif
+ 116:./rt_thread/src/scheduler.c **** }
+ 117:./rt_thread/src/scheduler.c **** #endif
+ 118:./rt_thread/src/scheduler.c **** 
+ 119:./rt_thread/src/scheduler.c **** /**
+ 120:./rt_thread/src/scheduler.c ****  * @ingroup SystemInit
+ 121:./rt_thread/src/scheduler.c ****  * This function will initialize the system scheduler
+ 122:./rt_thread/src/scheduler.c ****  */
+ 123:./rt_thread/src/scheduler.c **** void rt_system_scheduler_init(void)
+ 124:./rt_thread/src/scheduler.c **** {
+ 299              		.loc 2 124 1
+ 300              		.cfi_startproc
+ 301              		@ args = 0, pretend = 0, frame = 0
+ 302              		@ frame_needed = 1, uses_anonymous_args = 0
+ 303 0000 98B5     		push	{r3, r4, r7, lr}
+ 304              	.LCFI24:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 10
+
+
+ 305              		.cfi_def_cfa_offset 16
+ 306              		.cfi_offset 3, -16
+ 307              		.cfi_offset 4, -12
+ 308              		.cfi_offset 7, -8
+ 309              		.cfi_offset 14, -4
+ 310 0002 00AF     		add	r7, sp, #0
+ 311              	.LCFI25:
+ 312              		.cfi_def_cfa_register 7
+ 125:./rt_thread/src/scheduler.c ****     register rt_base_t offset;
+ 126:./rt_thread/src/scheduler.c **** 
+ 127:./rt_thread/src/scheduler.c ****     rt_scheduler_lock_nest = 0;
+ 313              		.loc 2 127 28
+ 314 0004 0D4B     		ldr	r3, .L9
+ 315 0006 0022     		movs	r2, #0
+ 316 0008 1A80     		strh	r2, [r3]	@ movhi
+ 128:./rt_thread/src/scheduler.c **** 
+ 129:./rt_thread/src/scheduler.c ****     RT_DEBUG_LOG(RT_DEBUG_SCHEDULER, ("start scheduler: max priority 0x%02x\n",
+ 130:./rt_thread/src/scheduler.c ****                                       RT_THREAD_PRIORITY_MAX));
+ 131:./rt_thread/src/scheduler.c **** 
+ 132:./rt_thread/src/scheduler.c ****     for (offset = 0; offset < RT_THREAD_PRIORITY_MAX; offset ++)
+ 317              		.loc 2 132 17
+ 318 000a 0024     		movs	r4, #0
+ 319              		.loc 2 132 5
+ 320 000c 06E0     		b	.L7
+ 321              	.L8:
+ 133:./rt_thread/src/scheduler.c ****     {
+ 134:./rt_thread/src/scheduler.c ****         rt_list_init(&rt_thread_priority_table[offset]);
+ 322              		.loc 2 134 9 discriminator 3
+ 323 000e E300     		lsls	r3, r4, #3
+ 324 0010 0B4A     		ldr	r2, .L9+4
+ 325 0012 1344     		add	r3, r3, r2
+ 326 0014 1846     		mov	r0, r3
+ 327 0016 FFF7FEFF 		bl	rt_list_init
+ 132:./rt_thread/src/scheduler.c ****     {
+ 328              		.loc 2 132 62 discriminator 3
+ 329 001a 0134     		adds	r4, r4, #1
+ 330              	.L7:
+ 132:./rt_thread/src/scheduler.c ****     {
+ 331              		.loc 2 132 5 discriminator 1
+ 332 001c 072C     		cmp	r4, #7
+ 333 001e F6DD     		ble	.L8
+ 135:./rt_thread/src/scheduler.c ****     }
+ 136:./rt_thread/src/scheduler.c **** 
+ 137:./rt_thread/src/scheduler.c ****     rt_current_priority = RT_THREAD_PRIORITY_MAX - 1;
+ 334              		.loc 2 137 25
+ 335 0020 084B     		ldr	r3, .L9+8
+ 336 0022 0722     		movs	r2, #7
+ 337 0024 1A70     		strb	r2, [r3]
+ 138:./rt_thread/src/scheduler.c ****     rt_current_thread = RT_NULL;
+ 338              		.loc 2 138 23
+ 339 0026 084B     		ldr	r3, .L9+12
+ 340 0028 0022     		movs	r2, #0
+ 341 002a 1A60     		str	r2, [r3]
+ 139:./rt_thread/src/scheduler.c **** 
+ 140:./rt_thread/src/scheduler.c ****     /* initialize ready priority group */
+ 141:./rt_thread/src/scheduler.c ****     rt_thread_ready_priority_group = 0;
+ 342              		.loc 2 141 36
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 11
+
+
+ 343 002c 074B     		ldr	r3, .L9+16
+ 344 002e 0022     		movs	r2, #0
+ 345 0030 1A60     		str	r2, [r3]
+ 142:./rt_thread/src/scheduler.c **** 
+ 143:./rt_thread/src/scheduler.c **** #if RT_THREAD_PRIORITY_MAX > 32
+ 144:./rt_thread/src/scheduler.c ****     /* initialize ready table */
+ 145:./rt_thread/src/scheduler.c ****     rt_memset(rt_thread_ready_table, 0, sizeof(rt_thread_ready_table));
+ 146:./rt_thread/src/scheduler.c **** #endif
+ 147:./rt_thread/src/scheduler.c **** 
+ 148:./rt_thread/src/scheduler.c ****     /* initialize thread defunct */
+ 149:./rt_thread/src/scheduler.c ****     rt_list_init(&rt_thread_defunct);
+ 346              		.loc 2 149 5
+ 347 0032 0748     		ldr	r0, .L9+20
+ 348 0034 FFF7FEFF 		bl	rt_list_init
+ 150:./rt_thread/src/scheduler.c **** }
+ 349              		.loc 2 150 1
+ 350 0038 00BF     		nop
+ 351 003a 98BD     		pop	{r3, r4, r7, pc}
+ 352              	.L10:
+ 353              		.align	2
+ 354              	.L9:
+ 355 003c 00000000 		.word	rt_scheduler_lock_nest
+ 356 0040 00000000 		.word	rt_thread_priority_table
+ 357 0044 00000000 		.word	rt_current_priority
+ 358 0048 00000000 		.word	rt_current_thread
+ 359 004c 00000000 		.word	rt_thread_ready_priority_group
+ 360 0050 00000000 		.word	rt_thread_defunct
+ 361              		.cfi_endproc
+ 362              	.LFE15:
+ 364              		.section	.text.rt_system_scheduler_start,"ax",%progbits
+ 365              		.align	1
+ 366              		.global	rt_system_scheduler_start
+ 367              		.syntax unified
+ 368              		.thumb
+ 369              		.thumb_func
+ 371              	rt_system_scheduler_start:
+ 372              	.LFB16:
+ 151:./rt_thread/src/scheduler.c **** 
+ 152:./rt_thread/src/scheduler.c **** /**
+ 153:./rt_thread/src/scheduler.c ****  * @ingroup SystemInit
+ 154:./rt_thread/src/scheduler.c ****  * This function will startup scheduler. It will select one thread
+ 155:./rt_thread/src/scheduler.c ****  * with the highest priority level, then switch to it.
+ 156:./rt_thread/src/scheduler.c ****  */
+ 157:./rt_thread/src/scheduler.c **** void rt_system_scheduler_start(void)
+ 158:./rt_thread/src/scheduler.c **** {
+ 373              		.loc 2 158 1
+ 374              		.cfi_startproc
+ 375              		@ args = 0, pretend = 0, frame = 0
+ 376              		@ frame_needed = 1, uses_anonymous_args = 0
+ 377 0000 98B5     		push	{r3, r4, r7, lr}
+ 378              	.LCFI26:
+ 379              		.cfi_def_cfa_offset 16
+ 380              		.cfi_offset 3, -16
+ 381              		.cfi_offset 4, -12
+ 382              		.cfi_offset 7, -8
+ 383              		.cfi_offset 14, -4
+ 384 0002 00AF     		add	r7, sp, #0
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 12
+
+
+ 385              	.LCFI27:
+ 386              		.cfi_def_cfa_register 7
+ 159:./rt_thread/src/scheduler.c ****     register struct rt_thread *to_thread;
+ 160:./rt_thread/src/scheduler.c ****     register rt_ubase_t highest_ready_priority;
+ 161:./rt_thread/src/scheduler.c **** 
+ 162:./rt_thread/src/scheduler.c **** #if RT_THREAD_PRIORITY_MAX > 32
+ 163:./rt_thread/src/scheduler.c ****     register rt_ubase_t number;
+ 164:./rt_thread/src/scheduler.c **** 
+ 165:./rt_thread/src/scheduler.c ****     number = __rt_ffs(rt_thread_ready_priority_group) - 1;
+ 166:./rt_thread/src/scheduler.c ****     highest_ready_priority = (number << 3) + __rt_ffs(rt_thread_ready_table[number]) - 1;
+ 167:./rt_thread/src/scheduler.c **** #else
+ 168:./rt_thread/src/scheduler.c ****     highest_ready_priority = __rt_ffs(rt_thread_ready_priority_group) - 1;
+ 387              		.loc 2 168 30
+ 388 0004 0A4B     		ldr	r3, .L12
+ 389 0006 1B68     		ldr	r3, [r3]
+ 390 0008 1846     		mov	r0, r3
+ 391 000a FFF7FEFF 		bl	__rt_ffs
+ 392 000e 0346     		mov	r3, r0
+ 393              		.loc 2 168 71
+ 394 0010 013B     		subs	r3, r3, #1
+ 395              		.loc 2 168 28
+ 396 0012 1C46     		mov	r4, r3
+ 169:./rt_thread/src/scheduler.c **** #endif
+ 170:./rt_thread/src/scheduler.c **** 
+ 171:./rt_thread/src/scheduler.c ****     /* get switch to thread */
+ 172:./rt_thread/src/scheduler.c ****     to_thread = rt_list_entry(rt_thread_priority_table[highest_ready_priority].next,
+ 397              		.loc 2 172 17
+ 398 0014 074B     		ldr	r3, .L12+4
+ 399 0016 53F83430 		ldr	r3, [r3, r4, lsl #3]
+ 400              		.loc 2 172 15
+ 401 001a A3F11404 		sub	r4, r3, #20
+ 173:./rt_thread/src/scheduler.c ****                               struct rt_thread,
+ 174:./rt_thread/src/scheduler.c ****                               tlist);
+ 175:./rt_thread/src/scheduler.c **** 
+ 176:./rt_thread/src/scheduler.c ****     rt_current_thread = to_thread;
+ 402              		.loc 2 176 23
+ 403 001e 064B     		ldr	r3, .L12+8
+ 404 0020 1C60     		str	r4, [r3]
+ 177:./rt_thread/src/scheduler.c **** 
+ 178:./rt_thread/src/scheduler.c ****     /* switch to new thread */
+ 179:./rt_thread/src/scheduler.c ****     rt_hw_context_switch_to((rt_uint32_t)&to_thread->sp);
+ 405              		.loc 2 179 42
+ 406 0022 04F11C03 		add	r3, r4, #28
+ 407              		.loc 2 179 5
+ 408 0026 1846     		mov	r0, r3
+ 409 0028 FFF7FEFF 		bl	rt_hw_context_switch_to
+ 180:./rt_thread/src/scheduler.c **** 
+ 181:./rt_thread/src/scheduler.c ****     /* never come back */
+ 182:./rt_thread/src/scheduler.c **** }
+ 410              		.loc 2 182 1
+ 411 002c 00BF     		nop
+ 412 002e 98BD     		pop	{r3, r4, r7, pc}
+ 413              	.L13:
+ 414              		.align	2
+ 415              	.L12:
+ 416 0030 00000000 		.word	rt_thread_ready_priority_group
+ 417 0034 00000000 		.word	rt_thread_priority_table
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 13
+
+
+ 418 0038 00000000 		.word	rt_current_thread
+ 419              		.cfi_endproc
+ 420              	.LFE16:
+ 422              		.section	.text.rt_schedule,"ax",%progbits
+ 423              		.align	1
+ 424              		.global	rt_schedule
+ 425              		.syntax unified
+ 426              		.thumb
+ 427              		.thumb_func
+ 429              	rt_schedule:
+ 430              	.LFB17:
+ 183:./rt_thread/src/scheduler.c **** 
+ 184:./rt_thread/src/scheduler.c **** /**
+ 185:./rt_thread/src/scheduler.c ****  * @addtogroup Thread
+ 186:./rt_thread/src/scheduler.c ****  */
+ 187:./rt_thread/src/scheduler.c **** 
+ 188:./rt_thread/src/scheduler.c **** /**@{*/
+ 189:./rt_thread/src/scheduler.c **** 
+ 190:./rt_thread/src/scheduler.c **** /**
+ 191:./rt_thread/src/scheduler.c ****  * This function will perform one schedule. It will select one thread
+ 192:./rt_thread/src/scheduler.c ****  * with the highest priority level, then switch to it.
+ 193:./rt_thread/src/scheduler.c ****  */
+ 194:./rt_thread/src/scheduler.c **** void rt_schedule(void)
+ 195:./rt_thread/src/scheduler.c **** {
+ 431              		.loc 2 195 1
+ 432              		.cfi_startproc
+ 433              		@ args = 0, pretend = 0, frame = 16
+ 434              		@ frame_needed = 1, uses_anonymous_args = 0
+ 435 0000 90B5     		push	{r4, r7, lr}
+ 436              	.LCFI28:
+ 437              		.cfi_def_cfa_offset 12
+ 438              		.cfi_offset 4, -12
+ 439              		.cfi_offset 7, -8
+ 440              		.cfi_offset 14, -4
+ 441 0002 85B0     		sub	sp, sp, #20
+ 442              	.LCFI29:
+ 443              		.cfi_def_cfa_offset 32
+ 444 0004 00AF     		add	r7, sp, #0
+ 445              	.LCFI30:
+ 446              		.cfi_def_cfa_register 7
+ 196:./rt_thread/src/scheduler.c ****     rt_base_t level;
+ 197:./rt_thread/src/scheduler.c ****     struct rt_thread *to_thread;
+ 198:./rt_thread/src/scheduler.c ****     struct rt_thread *from_thread;
+ 199:./rt_thread/src/scheduler.c **** 
+ 200:./rt_thread/src/scheduler.c ****     /* disable interrupt */
+ 201:./rt_thread/src/scheduler.c ****     level = rt_hw_interrupt_disable();
+ 447              		.loc 2 201 13
+ 448 0006 FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 449 000a F860     		str	r0, [r7, #12]
+ 202:./rt_thread/src/scheduler.c **** 
+ 203:./rt_thread/src/scheduler.c ****     /* check the scheduler is enabled or not */
+ 204:./rt_thread/src/scheduler.c ****     if (rt_scheduler_lock_nest == 0)
+ 450              		.loc 2 204 32
+ 451 000c 204B     		ldr	r3, .L18
+ 452 000e B3F90030 		ldrsh	r3, [r3]
+ 453              		.loc 2 204 8
+ 454 0012 002B     		cmp	r3, #0
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 14
+
+
+ 455 0014 35D1     		bne	.L15
+ 456              	.LBB2:
+ 205:./rt_thread/src/scheduler.c ****     {
+ 206:./rt_thread/src/scheduler.c ****         register rt_ubase_t highest_ready_priority;
+ 207:./rt_thread/src/scheduler.c **** 
+ 208:./rt_thread/src/scheduler.c **** #if RT_THREAD_PRIORITY_MAX <= 32
+ 209:./rt_thread/src/scheduler.c ****         highest_ready_priority = __rt_ffs(rt_thread_ready_priority_group) - 1;
+ 457              		.loc 2 209 34
+ 458 0016 1F4B     		ldr	r3, .L18+4
+ 459 0018 1B68     		ldr	r3, [r3]
+ 460 001a 1846     		mov	r0, r3
+ 461 001c FFF7FEFF 		bl	__rt_ffs
+ 462 0020 0346     		mov	r3, r0
+ 463              		.loc 2 209 75
+ 464 0022 013B     		subs	r3, r3, #1
+ 465              		.loc 2 209 32
+ 466 0024 1C46     		mov	r4, r3
+ 210:./rt_thread/src/scheduler.c **** #else
+ 211:./rt_thread/src/scheduler.c ****         register rt_ubase_t number;
+ 212:./rt_thread/src/scheduler.c **** 
+ 213:./rt_thread/src/scheduler.c ****         number = __rt_ffs(rt_thread_ready_priority_group) - 1;
+ 214:./rt_thread/src/scheduler.c ****         highest_ready_priority = (number << 3) + __rt_ffs(rt_thread_ready_table[number]) - 1;
+ 215:./rt_thread/src/scheduler.c **** #endif
+ 216:./rt_thread/src/scheduler.c **** 
+ 217:./rt_thread/src/scheduler.c ****         /* get switch to thread */
+ 218:./rt_thread/src/scheduler.c ****         to_thread = rt_list_entry(rt_thread_priority_table[highest_ready_priority].next,
+ 467              		.loc 2 218 21
+ 468 0026 1C4B     		ldr	r3, .L18+8
+ 469 0028 53F83430 		ldr	r3, [r3, r4, lsl #3]
+ 470              		.loc 2 218 19
+ 471 002c 143B     		subs	r3, r3, #20
+ 472 002e BB60     		str	r3, [r7, #8]
+ 219:./rt_thread/src/scheduler.c ****                                   struct rt_thread,
+ 220:./rt_thread/src/scheduler.c ****                                   tlist);
+ 221:./rt_thread/src/scheduler.c **** 
+ 222:./rt_thread/src/scheduler.c ****         /* if the destination thread is not the same as current thread */
+ 223:./rt_thread/src/scheduler.c ****         if (to_thread != rt_current_thread)
+ 473              		.loc 2 223 23
+ 474 0030 1A4B     		ldr	r3, .L18+12
+ 475 0032 1B68     		ldr	r3, [r3]
+ 476              		.loc 2 223 12
+ 477 0034 BA68     		ldr	r2, [r7, #8]
+ 478 0036 9A42     		cmp	r2, r3
+ 479 0038 23D0     		beq	.L15
+ 224:./rt_thread/src/scheduler.c ****         {
+ 225:./rt_thread/src/scheduler.c ****             rt_current_priority = (rt_uint8_t)highest_ready_priority;
+ 480              		.loc 2 225 35
+ 481 003a E2B2     		uxtb	r2, r4
+ 482              		.loc 2 225 33
+ 483 003c 184B     		ldr	r3, .L18+16
+ 484 003e 1A70     		strb	r2, [r3]
+ 226:./rt_thread/src/scheduler.c ****             from_thread         = rt_current_thread;
+ 485              		.loc 2 226 33
+ 486 0040 164B     		ldr	r3, .L18+12
+ 487 0042 1B68     		ldr	r3, [r3]
+ 488 0044 7B60     		str	r3, [r7, #4]
+ 227:./rt_thread/src/scheduler.c ****             rt_current_thread   = to_thread;
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 15
+
+
+ 489              		.loc 2 227 33
+ 490 0046 154A     		ldr	r2, .L18+12
+ 491 0048 BB68     		ldr	r3, [r7, #8]
+ 492 004a 1360     		str	r3, [r2]
+ 228:./rt_thread/src/scheduler.c **** 
+ 229:./rt_thread/src/scheduler.c ****             RT_OBJECT_HOOK_CALL(rt_scheduler_hook, (from_thread, to_thread));
+ 230:./rt_thread/src/scheduler.c **** 
+ 231:./rt_thread/src/scheduler.c ****             /* switch to new thread */
+ 232:./rt_thread/src/scheduler.c ****             RT_DEBUG_LOG(RT_DEBUG_SCHEDULER,
+ 233:./rt_thread/src/scheduler.c ****                          ("[%d]switch to priority#%d "
+ 234:./rt_thread/src/scheduler.c ****                           "thread:%.*s(sp:0x%p), "
+ 235:./rt_thread/src/scheduler.c ****                           "from thread:%.*s(sp: 0x%p)\n",
+ 236:./rt_thread/src/scheduler.c ****                           rt_interrupt_nest, highest_ready_priority,
+ 237:./rt_thread/src/scheduler.c ****                           RT_NAME_MAX, to_thread->name, to_thread->sp,
+ 238:./rt_thread/src/scheduler.c ****                           RT_NAME_MAX, from_thread->name, from_thread->sp));
+ 239:./rt_thread/src/scheduler.c **** 
+ 240:./rt_thread/src/scheduler.c **** #ifdef RT_USING_OVERFLOW_CHECK
+ 241:./rt_thread/src/scheduler.c ****             _rt_scheduler_stack_check(to_thread);
+ 242:./rt_thread/src/scheduler.c **** #endif
+ 243:./rt_thread/src/scheduler.c **** 
+ 244:./rt_thread/src/scheduler.c ****             if (rt_interrupt_nest == 0)
+ 493              		.loc 2 244 35
+ 494 004c 154B     		ldr	r3, .L18+20
+ 495 004e 1B78     		ldrb	r3, [r3]
+ 496 0050 DBB2     		uxtb	r3, r3
+ 497              		.loc 2 244 16
+ 498 0052 002B     		cmp	r3, #0
+ 499 0054 0CD1     		bne	.L16
+ 245:./rt_thread/src/scheduler.c ****             {
+ 246:./rt_thread/src/scheduler.c ****                 rt_hw_context_switch((rt_ubase_t)&from_thread->sp,
+ 500              		.loc 2 246 50
+ 501 0056 7B68     		ldr	r3, [r7, #4]
+ 502 0058 1C33     		adds	r3, r3, #28
+ 503              		.loc 2 246 17
+ 504 005a 1A46     		mov	r2, r3
+ 247:./rt_thread/src/scheduler.c ****                                      (rt_ubase_t)&to_thread->sp);
+ 505              		.loc 2 247 50
+ 506 005c BB68     		ldr	r3, [r7, #8]
+ 507 005e 1C33     		adds	r3, r3, #28
+ 246:./rt_thread/src/scheduler.c ****                                      (rt_ubase_t)&to_thread->sp);
+ 508              		.loc 2 246 17
+ 509 0060 1946     		mov	r1, r3
+ 510 0062 1046     		mov	r0, r2
+ 511 0064 FFF7FEFF 		bl	rt_hw_context_switch
+ 248:./rt_thread/src/scheduler.c **** 
+ 249:./rt_thread/src/scheduler.c ****                 /* enable interrupt */
+ 250:./rt_thread/src/scheduler.c ****                 rt_hw_interrupt_enable(level);
+ 512              		.loc 2 250 17
+ 513 0068 F868     		ldr	r0, [r7, #12]
+ 514 006a FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 251:./rt_thread/src/scheduler.c **** 
+ 252:./rt_thread/src/scheduler.c ****                 return ;
+ 515              		.loc 2 252 17
+ 516 006e 0BE0     		b	.L14
+ 517              	.L16:
+ 253:./rt_thread/src/scheduler.c ****             }
+ 254:./rt_thread/src/scheduler.c ****             else
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 16
+
+
+ 255:./rt_thread/src/scheduler.c ****             {
+ 256:./rt_thread/src/scheduler.c ****                 RT_DEBUG_LOG(RT_DEBUG_SCHEDULER, ("switch in interrupt\n"));
+ 257:./rt_thread/src/scheduler.c **** 
+ 258:./rt_thread/src/scheduler.c ****                 rt_hw_context_switch_interrupt((rt_ubase_t)&from_thread->sp,
+ 518              		.loc 2 258 60
+ 519 0070 7B68     		ldr	r3, [r7, #4]
+ 520 0072 1C33     		adds	r3, r3, #28
+ 521              		.loc 2 258 17
+ 522 0074 1A46     		mov	r2, r3
+ 259:./rt_thread/src/scheduler.c ****                                                (rt_ubase_t)&to_thread->sp);
+ 523              		.loc 2 259 60
+ 524 0076 BB68     		ldr	r3, [r7, #8]
+ 525 0078 1C33     		adds	r3, r3, #28
+ 258:./rt_thread/src/scheduler.c ****                                                (rt_ubase_t)&to_thread->sp);
+ 526              		.loc 2 258 17
+ 527 007a 1946     		mov	r1, r3
+ 528 007c 1046     		mov	r0, r2
+ 529 007e FFF7FEFF 		bl	rt_hw_context_switch_interrupt
+ 530              	.L15:
+ 531              	.LBE2:
+ 260:./rt_thread/src/scheduler.c ****             }
+ 261:./rt_thread/src/scheduler.c ****         }
+ 262:./rt_thread/src/scheduler.c ****     }
+ 263:./rt_thread/src/scheduler.c **** 
+ 264:./rt_thread/src/scheduler.c ****     /* enable interrupt */
+ 265:./rt_thread/src/scheduler.c ****     rt_hw_interrupt_enable(level);
+ 532              		.loc 2 265 5
+ 533 0082 F868     		ldr	r0, [r7, #12]
+ 534 0084 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 535              	.L14:
+ 266:./rt_thread/src/scheduler.c **** }
+ 536              		.loc 2 266 1
+ 537 0088 1437     		adds	r7, r7, #20
+ 538              	.LCFI31:
+ 539              		.cfi_def_cfa_offset 12
+ 540 008a BD46     		mov	sp, r7
+ 541              	.LCFI32:
+ 542              		.cfi_def_cfa_register 13
+ 543              		@ sp needed
+ 544 008c 90BD     		pop	{r4, r7, pc}
+ 545              	.L19:
+ 546 008e 00BF     		.align	2
+ 547              	.L18:
+ 548 0090 00000000 		.word	rt_scheduler_lock_nest
+ 549 0094 00000000 		.word	rt_thread_ready_priority_group
+ 550 0098 00000000 		.word	rt_thread_priority_table
+ 551 009c 00000000 		.word	rt_current_thread
+ 552 00a0 00000000 		.word	rt_current_priority
+ 553 00a4 00000000 		.word	rt_interrupt_nest
+ 554              		.cfi_endproc
+ 555              	.LFE17:
+ 557              		.section	.text.rt_schedule_insert_thread,"ax",%progbits
+ 558              		.align	1
+ 559              		.global	rt_schedule_insert_thread
+ 560              		.syntax unified
+ 561              		.thumb
+ 562              		.thumb_func
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 17
+
+
+ 564              	rt_schedule_insert_thread:
+ 565              	.LFB18:
+ 267:./rt_thread/src/scheduler.c **** 
+ 268:./rt_thread/src/scheduler.c **** /*
+ 269:./rt_thread/src/scheduler.c ****  * This function will insert a thread to system ready queue. The state of
+ 270:./rt_thread/src/scheduler.c ****  * thread will be set as READY and remove from suspend queue.
+ 271:./rt_thread/src/scheduler.c ****  *
+ 272:./rt_thread/src/scheduler.c ****  * @param thread the thread to be inserted
+ 273:./rt_thread/src/scheduler.c ****  * @note Please do not invoke this function in user application.
+ 274:./rt_thread/src/scheduler.c ****  */
+ 275:./rt_thread/src/scheduler.c **** void rt_schedule_insert_thread(struct rt_thread *thread)
+ 276:./rt_thread/src/scheduler.c **** {
+ 566              		.loc 2 276 1
+ 567              		.cfi_startproc
+ 568              		@ args = 0, pretend = 0, frame = 8
+ 569              		@ frame_needed = 1, uses_anonymous_args = 0
+ 570 0000 90B5     		push	{r4, r7, lr}
+ 571              	.LCFI33:
+ 572              		.cfi_def_cfa_offset 12
+ 573              		.cfi_offset 4, -12
+ 574              		.cfi_offset 7, -8
+ 575              		.cfi_offset 14, -4
+ 576 0002 83B0     		sub	sp, sp, #12
+ 577              	.LCFI34:
+ 578              		.cfi_def_cfa_offset 24
+ 579 0004 00AF     		add	r7, sp, #0
+ 580              	.LCFI35:
+ 581              		.cfi_def_cfa_register 7
+ 582 0006 7860     		str	r0, [r7, #4]
+ 277:./rt_thread/src/scheduler.c ****     register rt_base_t temp;
+ 278:./rt_thread/src/scheduler.c **** 
+ 279:./rt_thread/src/scheduler.c ****     RT_ASSERT(thread != RT_NULL);
+ 280:./rt_thread/src/scheduler.c **** 
+ 281:./rt_thread/src/scheduler.c ****     /* disable interrupt */
+ 282:./rt_thread/src/scheduler.c ****     temp = rt_hw_interrupt_disable();
+ 583              		.loc 2 282 12
+ 584 0008 FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 585 000c 0446     		mov	r4, r0
+ 283:./rt_thread/src/scheduler.c **** 
+ 284:./rt_thread/src/scheduler.c ****     /* change stat */
+ 285:./rt_thread/src/scheduler.c ****     thread->stat = RT_THREAD_READY | (thread->stat & ~RT_THREAD_STAT_MASK);
+ 586              		.loc 2 285 45
+ 587 000e 7B68     		ldr	r3, [r7, #4]
+ 588 0010 93F83430 		ldrb	r3, [r3, #52]	@ zero_extendqisi2
+ 589 0014 5BB2     		sxtb	r3, r3
+ 590              		.loc 2 285 52
+ 591 0016 23F00F03 		bic	r3, r3, #15
+ 592 001a 5BB2     		sxtb	r3, r3
+ 593              		.loc 2 285 36
+ 594 001c 43F00103 		orr	r3, r3, #1
+ 595 0020 5BB2     		sxtb	r3, r3
+ 596 0022 DAB2     		uxtb	r2, r3
+ 597              		.loc 2 285 18
+ 598 0024 7B68     		ldr	r3, [r7, #4]
+ 599 0026 83F83420 		strb	r2, [r3, #52]
+ 286:./rt_thread/src/scheduler.c **** 
+ 287:./rt_thread/src/scheduler.c ****     /* insert thread to ready list */
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 18
+
+
+ 288:./rt_thread/src/scheduler.c ****     rt_list_insert_before(&(rt_thread_priority_table[thread->current_priority]),
+ 600              		.loc 2 288 60
+ 601 002a 7B68     		ldr	r3, [r7, #4]
+ 602 002c 93F83530 		ldrb	r3, [r3, #53]	@ zero_extendqisi2
+ 603              		.loc 2 288 5
+ 604 0030 DB00     		lsls	r3, r3, #3
+ 605 0032 0B4A     		ldr	r2, .L21
+ 606 0034 1A44     		add	r2, r2, r3
+ 607 0036 7B68     		ldr	r3, [r7, #4]
+ 608 0038 1433     		adds	r3, r3, #20
+ 609 003a 1946     		mov	r1, r3
+ 610 003c 1046     		mov	r0, r2
+ 611 003e FFF7FEFF 		bl	rt_list_insert_before
+ 289:./rt_thread/src/scheduler.c ****                           &(thread->tlist));
+ 290:./rt_thread/src/scheduler.c **** 
+ 291:./rt_thread/src/scheduler.c ****     /* set priority mask */
+ 292:./rt_thread/src/scheduler.c **** #if RT_THREAD_PRIORITY_MAX <= 32
+ 293:./rt_thread/src/scheduler.c ****     RT_DEBUG_LOG(RT_DEBUG_SCHEDULER, ("insert thread[%.*s], the priority: %d\n",
+ 294:./rt_thread/src/scheduler.c ****                                       RT_NAME_MAX, thread->name, thread->current_priority));
+ 295:./rt_thread/src/scheduler.c **** #else
+ 296:./rt_thread/src/scheduler.c ****     RT_DEBUG_LOG(RT_DEBUG_SCHEDULER,
+ 297:./rt_thread/src/scheduler.c ****                  ("insert thread[%.*s], the priority: %d 0x%x %d\n",
+ 298:./rt_thread/src/scheduler.c ****                   RT_NAME_MAX,
+ 299:./rt_thread/src/scheduler.c ****                   thread->name,
+ 300:./rt_thread/src/scheduler.c ****                   thread->number,
+ 301:./rt_thread/src/scheduler.c ****                   thread->number_mask,
+ 302:./rt_thread/src/scheduler.c ****                   thread->high_mask));
+ 303:./rt_thread/src/scheduler.c **** #endif
+ 304:./rt_thread/src/scheduler.c **** 
+ 305:./rt_thread/src/scheduler.c **** #if RT_THREAD_PRIORITY_MAX > 32
+ 306:./rt_thread/src/scheduler.c ****     rt_thread_ready_table[thread->number] |= thread->high_mask;
+ 307:./rt_thread/src/scheduler.c **** #endif
+ 308:./rt_thread/src/scheduler.c ****     rt_thread_ready_priority_group |= thread->number_mask;
+ 612              		.loc 2 308 45
+ 613 0042 7B68     		ldr	r3, [r7, #4]
+ 614 0044 9A6B     		ldr	r2, [r3, #56]
+ 615              		.loc 2 308 36
+ 616 0046 074B     		ldr	r3, .L21+4
+ 617 0048 1B68     		ldr	r3, [r3]
+ 618 004a 1343     		orrs	r3, r3, r2
+ 619 004c 054A     		ldr	r2, .L21+4
+ 620 004e 1360     		str	r3, [r2]
+ 309:./rt_thread/src/scheduler.c **** 
+ 310:./rt_thread/src/scheduler.c ****     /* enable interrupt */
+ 311:./rt_thread/src/scheduler.c ****     rt_hw_interrupt_enable(temp);
+ 621              		.loc 2 311 5
+ 622 0050 2046     		mov	r0, r4
+ 623 0052 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 312:./rt_thread/src/scheduler.c **** }
+ 624              		.loc 2 312 1
+ 625 0056 00BF     		nop
+ 626 0058 0C37     		adds	r7, r7, #12
+ 627              	.LCFI36:
+ 628              		.cfi_def_cfa_offset 12
+ 629 005a BD46     		mov	sp, r7
+ 630              	.LCFI37:
+ 631              		.cfi_def_cfa_register 13
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 19
+
+
+ 632              		@ sp needed
+ 633 005c 90BD     		pop	{r4, r7, pc}
+ 634              	.L22:
+ 635 005e 00BF     		.align	2
+ 636              	.L21:
+ 637 0060 00000000 		.word	rt_thread_priority_table
+ 638 0064 00000000 		.word	rt_thread_ready_priority_group
+ 639              		.cfi_endproc
+ 640              	.LFE18:
+ 642              		.section	.text.rt_schedule_remove_thread,"ax",%progbits
+ 643              		.align	1
+ 644              		.global	rt_schedule_remove_thread
+ 645              		.syntax unified
+ 646              		.thumb
+ 647              		.thumb_func
+ 649              	rt_schedule_remove_thread:
+ 650              	.LFB19:
+ 313:./rt_thread/src/scheduler.c **** 
+ 314:./rt_thread/src/scheduler.c **** /*
+ 315:./rt_thread/src/scheduler.c ****  * This function will remove a thread from system ready queue.
+ 316:./rt_thread/src/scheduler.c ****  *
+ 317:./rt_thread/src/scheduler.c ****  * @param thread the thread to be removed
+ 318:./rt_thread/src/scheduler.c ****  *
+ 319:./rt_thread/src/scheduler.c ****  * @note Please do not invoke this function in user application.
+ 320:./rt_thread/src/scheduler.c ****  */
+ 321:./rt_thread/src/scheduler.c **** void rt_schedule_remove_thread(struct rt_thread *thread)
+ 322:./rt_thread/src/scheduler.c **** {
+ 651              		.loc 2 322 1
+ 652              		.cfi_startproc
+ 653              		@ args = 0, pretend = 0, frame = 8
+ 654              		@ frame_needed = 1, uses_anonymous_args = 0
+ 655 0000 90B5     		push	{r4, r7, lr}
+ 656              	.LCFI38:
+ 657              		.cfi_def_cfa_offset 12
+ 658              		.cfi_offset 4, -12
+ 659              		.cfi_offset 7, -8
+ 660              		.cfi_offset 14, -4
+ 661 0002 83B0     		sub	sp, sp, #12
+ 662              	.LCFI39:
+ 663              		.cfi_def_cfa_offset 24
+ 664 0004 00AF     		add	r7, sp, #0
+ 665              	.LCFI40:
+ 666              		.cfi_def_cfa_register 7
+ 667 0006 7860     		str	r0, [r7, #4]
+ 323:./rt_thread/src/scheduler.c ****     register rt_base_t temp;
+ 324:./rt_thread/src/scheduler.c **** 
+ 325:./rt_thread/src/scheduler.c ****     RT_ASSERT(thread != RT_NULL);
+ 326:./rt_thread/src/scheduler.c **** 
+ 327:./rt_thread/src/scheduler.c ****     /* disable interrupt */
+ 328:./rt_thread/src/scheduler.c ****     temp = rt_hw_interrupt_disable();
+ 668              		.loc 2 328 12
+ 669 0008 FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 670 000c 0446     		mov	r4, r0
+ 329:./rt_thread/src/scheduler.c **** 
+ 330:./rt_thread/src/scheduler.c **** #if RT_THREAD_PRIORITY_MAX <= 32
+ 331:./rt_thread/src/scheduler.c ****     RT_DEBUG_LOG(RT_DEBUG_SCHEDULER, ("remove thread[%.*s], the priority: %d\n",
+ 332:./rt_thread/src/scheduler.c ****                                       RT_NAME_MAX, thread->name,
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 20
+
+
+ 333:./rt_thread/src/scheduler.c ****                                       thread->current_priority));
+ 334:./rt_thread/src/scheduler.c **** #else
+ 335:./rt_thread/src/scheduler.c ****     RT_DEBUG_LOG(RT_DEBUG_SCHEDULER,
+ 336:./rt_thread/src/scheduler.c ****                  ("remove thread[%.*s], the priority: %d 0x%x %d\n",
+ 337:./rt_thread/src/scheduler.c ****                   RT_NAME_MAX,
+ 338:./rt_thread/src/scheduler.c ****                   thread->name,
+ 339:./rt_thread/src/scheduler.c ****                   thread->number,
+ 340:./rt_thread/src/scheduler.c ****                   thread->number_mask,
+ 341:./rt_thread/src/scheduler.c ****                   thread->high_mask));
+ 342:./rt_thread/src/scheduler.c **** #endif
+ 343:./rt_thread/src/scheduler.c **** 
+ 344:./rt_thread/src/scheduler.c ****     /* remove thread from ready list */
+ 345:./rt_thread/src/scheduler.c ****     rt_list_remove(&(thread->tlist));
+ 671              		.loc 2 345 5
+ 672 000e 7B68     		ldr	r3, [r7, #4]
+ 673 0010 1433     		adds	r3, r3, #20
+ 674 0012 1846     		mov	r0, r3
+ 675 0014 FFF7FEFF 		bl	rt_list_remove
+ 346:./rt_thread/src/scheduler.c ****     if (rt_list_isempty(&(rt_thread_priority_table[thread->current_priority])))
+ 676              		.loc 2 346 58
+ 677 0018 7B68     		ldr	r3, [r7, #4]
+ 678 001a 93F83530 		ldrb	r3, [r3, #53]	@ zero_extendqisi2
+ 679              		.loc 2 346 25
+ 680 001e DB00     		lsls	r3, r3, #3
+ 681 0020 0B4A     		ldr	r2, .L25
+ 682 0022 1344     		add	r3, r3, r2
+ 683              		.loc 2 346 9
+ 684 0024 1846     		mov	r0, r3
+ 685 0026 FFF7FEFF 		bl	rt_list_isempty
+ 686 002a 0346     		mov	r3, r0
+ 687              		.loc 2 346 8
+ 688 002c 002B     		cmp	r3, #0
+ 689 002e 07D0     		beq	.L24
+ 347:./rt_thread/src/scheduler.c ****     {
+ 348:./rt_thread/src/scheduler.c **** #if RT_THREAD_PRIORITY_MAX > 32
+ 349:./rt_thread/src/scheduler.c ****         rt_thread_ready_table[thread->number] &= ~thread->high_mask;
+ 350:./rt_thread/src/scheduler.c ****         if (rt_thread_ready_table[thread->number] == 0)
+ 351:./rt_thread/src/scheduler.c ****         {
+ 352:./rt_thread/src/scheduler.c ****             rt_thread_ready_priority_group &= ~thread->number_mask;
+ 353:./rt_thread/src/scheduler.c ****         }
+ 354:./rt_thread/src/scheduler.c **** #else
+ 355:./rt_thread/src/scheduler.c ****         rt_thread_ready_priority_group &= ~thread->number_mask;
+ 690              		.loc 2 355 50
+ 691 0030 7B68     		ldr	r3, [r7, #4]
+ 692 0032 9B6B     		ldr	r3, [r3, #56]
+ 693              		.loc 2 355 43
+ 694 0034 DA43     		mvns	r2, r3
+ 695              		.loc 2 355 40
+ 696 0036 074B     		ldr	r3, .L25+4
+ 697 0038 1B68     		ldr	r3, [r3]
+ 698 003a 1340     		ands	r3, r3, r2
+ 699 003c 054A     		ldr	r2, .L25+4
+ 700 003e 1360     		str	r3, [r2]
+ 701              	.L24:
+ 356:./rt_thread/src/scheduler.c **** #endif
+ 357:./rt_thread/src/scheduler.c ****     }
+ 358:./rt_thread/src/scheduler.c **** 
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 21
+
+
+ 359:./rt_thread/src/scheduler.c ****     /* enable interrupt */
+ 360:./rt_thread/src/scheduler.c ****     rt_hw_interrupt_enable(temp);
+ 702              		.loc 2 360 5
+ 703 0040 2046     		mov	r0, r4
+ 704 0042 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 361:./rt_thread/src/scheduler.c **** }
+ 705              		.loc 2 361 1
+ 706 0046 00BF     		nop
+ 707 0048 0C37     		adds	r7, r7, #12
+ 708              	.LCFI41:
+ 709              		.cfi_def_cfa_offset 12
+ 710 004a BD46     		mov	sp, r7
+ 711              	.LCFI42:
+ 712              		.cfi_def_cfa_register 13
+ 713              		@ sp needed
+ 714 004c 90BD     		pop	{r4, r7, pc}
+ 715              	.L26:
+ 716 004e 00BF     		.align	2
+ 717              	.L25:
+ 718 0050 00000000 		.word	rt_thread_priority_table
+ 719 0054 00000000 		.word	rt_thread_ready_priority_group
+ 720              		.cfi_endproc
+ 721              	.LFE19:
+ 723              		.section	.text.rt_enter_critical,"ax",%progbits
+ 724              		.align	1
+ 725              		.global	rt_enter_critical
+ 726              		.syntax unified
+ 727              		.thumb
+ 728              		.thumb_func
+ 730              	rt_enter_critical:
+ 731              	.LFB20:
+ 362:./rt_thread/src/scheduler.c **** 
+ 363:./rt_thread/src/scheduler.c **** /**
+ 364:./rt_thread/src/scheduler.c ****  * This function will lock the thread scheduler.
+ 365:./rt_thread/src/scheduler.c ****  */
+ 366:./rt_thread/src/scheduler.c **** void rt_enter_critical(void)
+ 367:./rt_thread/src/scheduler.c **** {
+ 732              		.loc 2 367 1
+ 733              		.cfi_startproc
+ 734              		@ args = 0, pretend = 0, frame = 0
+ 735              		@ frame_needed = 1, uses_anonymous_args = 0
+ 736 0000 98B5     		push	{r3, r4, r7, lr}
+ 737              	.LCFI43:
+ 738              		.cfi_def_cfa_offset 16
+ 739              		.cfi_offset 3, -16
+ 740              		.cfi_offset 4, -12
+ 741              		.cfi_offset 7, -8
+ 742              		.cfi_offset 14, -4
+ 743 0002 00AF     		add	r7, sp, #0
+ 744              	.LCFI44:
+ 745              		.cfi_def_cfa_register 7
+ 368:./rt_thread/src/scheduler.c ****     register rt_base_t level;
+ 369:./rt_thread/src/scheduler.c **** 
+ 370:./rt_thread/src/scheduler.c ****     /* disable interrupt */
+ 371:./rt_thread/src/scheduler.c ****     level = rt_hw_interrupt_disable();
+ 746              		.loc 2 371 13
+ 747 0004 FFF7FEFF 		bl	rt_hw_interrupt_disable
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 22
+
+
+ 748 0008 0446     		mov	r4, r0
+ 372:./rt_thread/src/scheduler.c **** 
+ 373:./rt_thread/src/scheduler.c ****     /*
+ 374:./rt_thread/src/scheduler.c ****      * the maximal number of nest is RT_UINT16_MAX, which is big
+ 375:./rt_thread/src/scheduler.c ****      * enough and does not check here
+ 376:./rt_thread/src/scheduler.c ****      */
+ 377:./rt_thread/src/scheduler.c ****     rt_scheduler_lock_nest ++;
+ 749              		.loc 2 377 28
+ 750 000a 074B     		ldr	r3, .L28
+ 751 000c B3F90030 		ldrsh	r3, [r3]
+ 752 0010 9BB2     		uxth	r3, r3
+ 753 0012 0133     		adds	r3, r3, #1
+ 754 0014 9BB2     		uxth	r3, r3
+ 755 0016 1AB2     		sxth	r2, r3
+ 756 0018 034B     		ldr	r3, .L28
+ 757 001a 1A80     		strh	r2, [r3]	@ movhi
+ 378:./rt_thread/src/scheduler.c **** 
+ 379:./rt_thread/src/scheduler.c ****     /* enable interrupt */
+ 380:./rt_thread/src/scheduler.c ****     rt_hw_interrupt_enable(level);
+ 758              		.loc 2 380 5
+ 759 001c 2046     		mov	r0, r4
+ 760 001e FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 381:./rt_thread/src/scheduler.c **** }
+ 761              		.loc 2 381 1
+ 762 0022 00BF     		nop
+ 763 0024 98BD     		pop	{r3, r4, r7, pc}
+ 764              	.L29:
+ 765 0026 00BF     		.align	2
+ 766              	.L28:
+ 767 0028 00000000 		.word	rt_scheduler_lock_nest
+ 768              		.cfi_endproc
+ 769              	.LFE20:
+ 771              		.section	.text.rt_exit_critical,"ax",%progbits
+ 772              		.align	1
+ 773              		.global	rt_exit_critical
+ 774              		.syntax unified
+ 775              		.thumb
+ 776              		.thumb_func
+ 778              	rt_exit_critical:
+ 779              	.LFB21:
+ 382:./rt_thread/src/scheduler.c **** 
+ 383:./rt_thread/src/scheduler.c **** /**
+ 384:./rt_thread/src/scheduler.c ****  * This function will unlock the thread scheduler.
+ 385:./rt_thread/src/scheduler.c ****  */
+ 386:./rt_thread/src/scheduler.c **** void rt_exit_critical(void)
+ 387:./rt_thread/src/scheduler.c **** {
+ 780              		.loc 2 387 1
+ 781              		.cfi_startproc
+ 782              		@ args = 0, pretend = 0, frame = 0
+ 783              		@ frame_needed = 1, uses_anonymous_args = 0
+ 784 0000 98B5     		push	{r3, r4, r7, lr}
+ 785              	.LCFI45:
+ 786              		.cfi_def_cfa_offset 16
+ 787              		.cfi_offset 3, -16
+ 788              		.cfi_offset 4, -12
+ 789              		.cfi_offset 7, -8
+ 790              		.cfi_offset 14, -4
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 23
+
+
+ 791 0002 00AF     		add	r7, sp, #0
+ 792              	.LCFI46:
+ 793              		.cfi_def_cfa_register 7
+ 388:./rt_thread/src/scheduler.c ****     register rt_base_t level;
+ 389:./rt_thread/src/scheduler.c **** 
+ 390:./rt_thread/src/scheduler.c ****     /* disable interrupt */
+ 391:./rt_thread/src/scheduler.c ****     level = rt_hw_interrupt_disable();
+ 794              		.loc 2 391 13
+ 795 0004 FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 796 0008 0446     		mov	r4, r0
+ 392:./rt_thread/src/scheduler.c **** 
+ 393:./rt_thread/src/scheduler.c ****     rt_scheduler_lock_nest --;
+ 797              		.loc 2 393 28
+ 798 000a 104B     		ldr	r3, .L34
+ 799 000c B3F90030 		ldrsh	r3, [r3]
+ 800 0010 9BB2     		uxth	r3, r3
+ 801 0012 013B     		subs	r3, r3, #1
+ 802 0014 9BB2     		uxth	r3, r3
+ 803 0016 1AB2     		sxth	r2, r3
+ 804 0018 0C4B     		ldr	r3, .L34
+ 805 001a 1A80     		strh	r2, [r3]	@ movhi
+ 394:./rt_thread/src/scheduler.c ****     if (rt_scheduler_lock_nest <= 0)
+ 806              		.loc 2 394 32
+ 807 001c 0B4B     		ldr	r3, .L34
+ 808 001e B3F90030 		ldrsh	r3, [r3]
+ 809              		.loc 2 394 8
+ 810 0022 002B     		cmp	r3, #0
+ 811 0024 0CDC     		bgt	.L31
+ 395:./rt_thread/src/scheduler.c ****     {
+ 396:./rt_thread/src/scheduler.c ****         rt_scheduler_lock_nest = 0;
+ 812              		.loc 2 396 32
+ 813 0026 094B     		ldr	r3, .L34
+ 814 0028 0022     		movs	r2, #0
+ 815 002a 1A80     		strh	r2, [r3]	@ movhi
+ 397:./rt_thread/src/scheduler.c ****         /* enable interrupt */
+ 398:./rt_thread/src/scheduler.c ****         rt_hw_interrupt_enable(level);
+ 816              		.loc 2 398 9
+ 817 002c 2046     		mov	r0, r4
+ 818 002e FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 399:./rt_thread/src/scheduler.c **** 
+ 400:./rt_thread/src/scheduler.c ****         if (rt_current_thread)
+ 819              		.loc 2 400 13
+ 820 0032 074B     		ldr	r3, .L34+4
+ 821 0034 1B68     		ldr	r3, [r3]
+ 822              		.loc 2 400 12
+ 823 0036 002B     		cmp	r3, #0
+ 824 0038 05D0     		beq	.L33
+ 401:./rt_thread/src/scheduler.c ****         {
+ 402:./rt_thread/src/scheduler.c ****             /* if scheduler is started, do a schedule */
+ 403:./rt_thread/src/scheduler.c ****             rt_schedule();
+ 825              		.loc 2 403 13
+ 826 003a FFF7FEFF 		bl	rt_schedule
+ 404:./rt_thread/src/scheduler.c ****         }
+ 405:./rt_thread/src/scheduler.c ****     }
+ 406:./rt_thread/src/scheduler.c ****     else
+ 407:./rt_thread/src/scheduler.c ****     {
+ 408:./rt_thread/src/scheduler.c ****         /* enable interrupt */
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 24
+
+
+ 409:./rt_thread/src/scheduler.c ****         rt_hw_interrupt_enable(level);
+ 410:./rt_thread/src/scheduler.c ****     }
+ 411:./rt_thread/src/scheduler.c **** }
+ 827              		.loc 2 411 1
+ 828 003e 02E0     		b	.L33
+ 829              	.L31:
+ 409:./rt_thread/src/scheduler.c ****     }
+ 830              		.loc 2 409 9
+ 831 0040 2046     		mov	r0, r4
+ 832 0042 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 833              	.L33:
+ 834              		.loc 2 411 1
+ 835 0046 00BF     		nop
+ 836 0048 98BD     		pop	{r3, r4, r7, pc}
+ 837              	.L35:
+ 838 004a 00BF     		.align	2
+ 839              	.L34:
+ 840 004c 00000000 		.word	rt_scheduler_lock_nest
+ 841 0050 00000000 		.word	rt_current_thread
+ 842              		.cfi_endproc
+ 843              	.LFE21:
+ 845              		.section	.text.rt_critical_level,"ax",%progbits
+ 846              		.align	1
+ 847              		.global	rt_critical_level
+ 848              		.syntax unified
+ 849              		.thumb
+ 850              		.thumb_func
+ 852              	rt_critical_level:
+ 853              	.LFB22:
+ 412:./rt_thread/src/scheduler.c **** 
+ 413:./rt_thread/src/scheduler.c **** /**
+ 414:./rt_thread/src/scheduler.c ****  * Get the scheduler lock level
+ 415:./rt_thread/src/scheduler.c ****  *
+ 416:./rt_thread/src/scheduler.c ****  * @return the level of the scheduler lock. 0 means unlocked.
+ 417:./rt_thread/src/scheduler.c ****  */
+ 418:./rt_thread/src/scheduler.c **** rt_uint16_t rt_critical_level(void)
+ 419:./rt_thread/src/scheduler.c **** {
+ 854              		.loc 2 419 1
+ 855              		.cfi_startproc
+ 856              		@ args = 0, pretend = 0, frame = 0
+ 857              		@ frame_needed = 1, uses_anonymous_args = 0
+ 858              		@ link register save eliminated.
+ 859 0000 80B4     		push	{r7}
+ 860              	.LCFI47:
+ 861              		.cfi_def_cfa_offset 4
+ 862              		.cfi_offset 7, -4
+ 863 0002 00AF     		add	r7, sp, #0
+ 864              	.LCFI48:
+ 865              		.cfi_def_cfa_register 7
+ 420:./rt_thread/src/scheduler.c ****     return rt_scheduler_lock_nest;
+ 866              		.loc 2 420 12
+ 867 0004 034B     		ldr	r3, .L38
+ 868 0006 B3F90030 		ldrsh	r3, [r3]
+ 869 000a 9BB2     		uxth	r3, r3
+ 421:./rt_thread/src/scheduler.c **** }
+ 870              		.loc 2 421 1
+ 871 000c 1846     		mov	r0, r3
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 25
+
+
+ 872 000e BD46     		mov	sp, r7
+ 873              	.LCFI49:
+ 874              		.cfi_def_cfa_register 13
+ 875              		@ sp needed
+ 876 0010 80BC     		pop	{r7}
+ 877              	.LCFI50:
+ 878              		.cfi_restore 7
+ 879              		.cfi_def_cfa_offset 0
+ 880 0012 7047     		bx	lr
+ 881              	.L39:
+ 882              		.align	2
+ 883              	.L38:
+ 884 0014 00000000 		.word	rt_scheduler_lock_nest
+ 885              		.cfi_endproc
+ 886              	.LFE22:
+ 888              		.text
+ 889              	.Letext0:
+ 890              		.file 3 "./rt_thread/include/rtdef.h"
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccdjDcth.s 			page 26
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 scheduler.c
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:18     .text.rt_list_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:23     .text.rt_list_init:00000000 rt_list_init
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:70     .text.rt_list_insert_before:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:75     .text.rt_list_insert_before:00000000 rt_list_insert_before
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:132    .text.rt_list_remove:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:137    .text.rt_list_remove:00000000 rt_list_remove
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:199    .text.rt_list_isempty:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:204    .text.rt_list_isempty:00000000 rt_list_isempty
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:254    .bss.rt_thread_priority_table:00000000 rt_thread_priority_table
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:251    .bss.rt_thread_priority_table:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:261    .bss.rt_thread_ready_priority_group:00000000 rt_thread_ready_priority_group
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:258    .bss.rt_thread_ready_priority_group:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:264    .bss.rt_scheduler_lock_nest:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:267    .bss.rt_scheduler_lock_nest:00000000 rt_scheduler_lock_nest
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:274    .bss.rt_current_thread:00000000 rt_current_thread
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:271    .bss.rt_current_thread:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:280    .bss.rt_current_priority:00000000 rt_current_priority
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:281    .bss.rt_current_priority:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:287    .bss.rt_thread_defunct:00000000 rt_thread_defunct
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:284    .bss.rt_thread_defunct:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:290    .text.rt_system_scheduler_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:296    .text.rt_system_scheduler_init:00000000 rt_system_scheduler_init
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:355    .text.rt_system_scheduler_init:0000003c $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:365    .text.rt_system_scheduler_start:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:371    .text.rt_system_scheduler_start:00000000 rt_system_scheduler_start
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:416    .text.rt_system_scheduler_start:00000030 $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:423    .text.rt_schedule:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:429    .text.rt_schedule:00000000 rt_schedule
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:548    .text.rt_schedule:00000090 $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:558    .text.rt_schedule_insert_thread:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:564    .text.rt_schedule_insert_thread:00000000 rt_schedule_insert_thread
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:637    .text.rt_schedule_insert_thread:00000060 $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:643    .text.rt_schedule_remove_thread:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:649    .text.rt_schedule_remove_thread:00000000 rt_schedule_remove_thread
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:718    .text.rt_schedule_remove_thread:00000050 $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:724    .text.rt_enter_critical:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:730    .text.rt_enter_critical:00000000 rt_enter_critical
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:767    .text.rt_enter_critical:00000028 $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:772    .text.rt_exit_critical:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:778    .text.rt_exit_critical:00000000 rt_exit_critical
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:840    .text.rt_exit_critical:0000004c $d
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:846    .text.rt_critical_level:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:852    .text.rt_critical_level:00000000 rt_critical_level
+C:\Users\hao\AppData\Local\Temp\ccdjDcth.s:884    .text.rt_critical_level:00000014 $d
+
+UNDEFINED SYMBOLS
+__rt_ffs
+rt_hw_context_switch_to
+rt_hw_interrupt_disable
+rt_hw_context_switch
+rt_hw_interrupt_enable
+rt_hw_context_switch_interrupt
+rt_interrupt_nest

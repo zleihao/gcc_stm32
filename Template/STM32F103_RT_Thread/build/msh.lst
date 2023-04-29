@@ -1,0 +1,2104 @@
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"msh.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.msh_is_used,"ax",%progbits
+  18              		.align	1
+  19              		.global	msh_is_used
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	msh_is_used:
+  25              	.LFB19:
+  26              		.file 1 "./rt_thread/components/finsh/msh.c"
+   1:./rt_thread/components/finsh/msh.c **** /*
+   2:./rt_thread/components/finsh/msh.c ****  * Copyright (c) 2006-2021, RT-Thread Development Team
+   3:./rt_thread/components/finsh/msh.c ****  *
+   4:./rt_thread/components/finsh/msh.c ****  * SPDX-License-Identifier: Apache-2.0
+   5:./rt_thread/components/finsh/msh.c ****  *
+   6:./rt_thread/components/finsh/msh.c ****  * Change Logs:
+   7:./rt_thread/components/finsh/msh.c ****  * Date           Author       Notes
+   8:./rt_thread/components/finsh/msh.c ****  * 2013-03-30     Bernard      the first verion for finsh
+   9:./rt_thread/components/finsh/msh.c ****  * 2014-01-03     Bernard      msh can execute module.
+  10:./rt_thread/components/finsh/msh.c ****  * 2017-07-19     Aubr.Cool    limit argc to RT_FINSH_ARG_MAX
+  11:./rt_thread/components/finsh/msh.c ****  */
+  12:./rt_thread/components/finsh/msh.c **** #include <rtthread.h>
+  13:./rt_thread/components/finsh/msh.c **** #include <finsh_config.h>
+  14:./rt_thread/components/finsh/msh.c **** 
+  15:./rt_thread/components/finsh/msh.c **** #ifdef FINSH_USING_MSH
+  16:./rt_thread/components/finsh/msh.c **** 
+  17:./rt_thread/components/finsh/msh.c **** #include "msh.h"
+  18:./rt_thread/components/finsh/msh.c **** #include <finsh.h>
+  19:./rt_thread/components/finsh/msh.c **** #include <shell.h>
+  20:./rt_thread/components/finsh/msh.c **** 
+  21:./rt_thread/components/finsh/msh.c **** #ifdef RT_USING_DFS
+  22:./rt_thread/components/finsh/msh.c **** #include <dfs_posix.h>
+  23:./rt_thread/components/finsh/msh.c **** #endif
+  24:./rt_thread/components/finsh/msh.c **** 
+  25:./rt_thread/components/finsh/msh.c **** #ifdef RT_USING_MODULE
+  26:./rt_thread/components/finsh/msh.c **** #include <dlmodule.h>
+  27:./rt_thread/components/finsh/msh.c **** #endif
+  28:./rt_thread/components/finsh/msh.c **** 
+  29:./rt_thread/components/finsh/msh.c **** #ifndef FINSH_ARG_MAX
+  30:./rt_thread/components/finsh/msh.c **** #define FINSH_ARG_MAX    8
+  31:./rt_thread/components/finsh/msh.c **** #endif
+  32:./rt_thread/components/finsh/msh.c **** 
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 2
+
+
+  33:./rt_thread/components/finsh/msh.c **** typedef int (*cmd_function_t)(int argc, char **argv);
+  34:./rt_thread/components/finsh/msh.c **** 
+  35:./rt_thread/components/finsh/msh.c **** #ifdef FINSH_USING_MSH
+  36:./rt_thread/components/finsh/msh.c **** #ifdef FINSH_USING_MSH_ONLY
+  37:./rt_thread/components/finsh/msh.c **** rt_bool_t msh_is_used(void)
+  38:./rt_thread/components/finsh/msh.c **** {
+  27              		.loc 1 38 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32 0000 80B4     		push	{r7}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 4
+  35              		.cfi_offset 7, -4
+  36 0002 00AF     		add	r7, sp, #0
+  37              	.LCFI1:
+  38              		.cfi_def_cfa_register 7
+  39:./rt_thread/components/finsh/msh.c ****     return RT_TRUE;
+  39              		.loc 1 39 12
+  40 0004 0123     		movs	r3, #1
+  40:./rt_thread/components/finsh/msh.c **** }
+  41              		.loc 1 40 1
+  42 0006 1846     		mov	r0, r3
+  43 0008 BD46     		mov	sp, r7
+  44              	.LCFI2:
+  45              		.cfi_def_cfa_register 13
+  46              		@ sp needed
+  47 000a 80BC     		pop	{r7}
+  48              	.LCFI3:
+  49              		.cfi_restore 7
+  50              		.cfi_def_cfa_offset 0
+  51 000c 7047     		bx	lr
+  52              		.cfi_endproc
+  53              	.LFE19:
+  55              		.section	.rodata
+  56              		.align	2
+  57              	.LC0:
+  58 0000 52542D54 		.ascii	"RT-Thread shell commands:\012\000"
+  58      68726561 
+  58      64207368 
+  58      656C6C20 
+  58      636F6D6D 
+  59 001b 00       		.align	2
+  60              	.LC1:
+  61 001c 5F5F636D 		.ascii	"__cmd_\000"
+  61      645F00
+  62 0023 00       		.align	2
+  63              	.LC2:
+  64 0024 252D3136 		.ascii	"%-16s - %s\012\000"
+  64      73202D20 
+  64      25730A00 
+  65              		.align	2
+  66              	.LC3:
+  67 0030 0A00     		.ascii	"\012\000"
+  68              		.section	.text.msh_help,"ax",%progbits
+  69              		.align	1
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 3
+
+
+  70              		.global	msh_help
+  71              		.syntax unified
+  72              		.thumb
+  73              		.thumb_func
+  75              	msh_help:
+  76              	.LFB20:
+  41:./rt_thread/components/finsh/msh.c **** #else
+  42:./rt_thread/components/finsh/msh.c **** #ifdef FINSH_USING_MSH_DEFAULT
+  43:./rt_thread/components/finsh/msh.c **** static rt_bool_t __msh_state = RT_TRUE;
+  44:./rt_thread/components/finsh/msh.c **** #else
+  45:./rt_thread/components/finsh/msh.c **** static rt_bool_t __msh_state = RT_FALSE;
+  46:./rt_thread/components/finsh/msh.c **** #endif
+  47:./rt_thread/components/finsh/msh.c **** rt_bool_t msh_is_used(void)
+  48:./rt_thread/components/finsh/msh.c **** {
+  49:./rt_thread/components/finsh/msh.c ****     return __msh_state;
+  50:./rt_thread/components/finsh/msh.c **** }
+  51:./rt_thread/components/finsh/msh.c **** 
+  52:./rt_thread/components/finsh/msh.c **** static int msh_exit(int argc, char **argv)
+  53:./rt_thread/components/finsh/msh.c **** {
+  54:./rt_thread/components/finsh/msh.c ****     /* return to finsh shell mode */
+  55:./rt_thread/components/finsh/msh.c ****     __msh_state = RT_FALSE;
+  56:./rt_thread/components/finsh/msh.c ****     return 0;
+  57:./rt_thread/components/finsh/msh.c **** }
+  58:./rt_thread/components/finsh/msh.c **** FINSH_FUNCTION_EXPORT_ALIAS(msh_exit, __cmd_exit, return to RT-Thread shell mode.);
+  59:./rt_thread/components/finsh/msh.c **** 
+  60:./rt_thread/components/finsh/msh.c **** static int msh_enter(void)
+  61:./rt_thread/components/finsh/msh.c **** {
+  62:./rt_thread/components/finsh/msh.c ****     /* enter module shell mode */
+  63:./rt_thread/components/finsh/msh.c ****     __msh_state = RT_TRUE;
+  64:./rt_thread/components/finsh/msh.c ****     return 0;
+  65:./rt_thread/components/finsh/msh.c **** }
+  66:./rt_thread/components/finsh/msh.c **** FINSH_FUNCTION_EXPORT_ALIAS(msh_enter, msh, use module shell);
+  67:./rt_thread/components/finsh/msh.c **** #endif
+  68:./rt_thread/components/finsh/msh.c **** 
+  69:./rt_thread/components/finsh/msh.c **** int msh_help(int argc, char **argv)
+  70:./rt_thread/components/finsh/msh.c **** {
+  77              		.loc 1 70 1
+  78              		.cfi_startproc
+  79              		@ args = 0, pretend = 0, frame = 16
+  80              		@ frame_needed = 1, uses_anonymous_args = 0
+  81 0000 80B5     		push	{r7, lr}
+  82              	.LCFI4:
+  83              		.cfi_def_cfa_offset 8
+  84              		.cfi_offset 7, -8
+  85              		.cfi_offset 14, -4
+  86 0002 84B0     		sub	sp, sp, #16
+  87              	.LCFI5:
+  88              		.cfi_def_cfa_offset 24
+  89 0004 00AF     		add	r7, sp, #0
+  90              	.LCFI6:
+  91              		.cfi_def_cfa_register 7
+  92 0006 7860     		str	r0, [r7, #4]
+  93 0008 3960     		str	r1, [r7]
+  71:./rt_thread/components/finsh/msh.c ****     rt_kprintf("RT-Thread shell commands:\n");
+  94              		.loc 1 71 5
+  95 000a 1648     		ldr	r0, .L10
+  96 000c FFF7FEFF 		bl	rt_kprintf
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 4
+
+
+  97              	.LBB2:
+  72:./rt_thread/components/finsh/msh.c ****     {
+  73:./rt_thread/components/finsh/msh.c ****         struct finsh_syscall *index;
+  74:./rt_thread/components/finsh/msh.c **** 
+  75:./rt_thread/components/finsh/msh.c ****         for (index = _syscall_table_begin;
+  98              		.loc 1 75 20
+  99 0010 154B     		ldr	r3, .L10+4
+ 100 0012 1B68     		ldr	r3, [r3]
+ 101 0014 FB60     		str	r3, [r7, #12]
+ 102              		.loc 1 75 9
+ 103 0016 17E0     		b	.L4
+ 104              	.L7:
+  76:./rt_thread/components/finsh/msh.c ****                 index < _syscall_table_end;
+  77:./rt_thread/components/finsh/msh.c ****                 FINSH_NEXT_SYSCALL(index))
+  78:./rt_thread/components/finsh/msh.c ****         {
+  79:./rt_thread/components/finsh/msh.c ****             if (strncmp(index->name, "__cmd_", 6) != 0) continue;
+ 105              		.loc 1 79 17
+ 106 0018 FB68     		ldr	r3, [r7, #12]
+ 107 001a 1B68     		ldr	r3, [r3]
+ 108 001c 0622     		movs	r2, #6
+ 109 001e 1349     		ldr	r1, .L10+8
+ 110 0020 1846     		mov	r0, r3
+ 111 0022 FFF7FEFF 		bl	strncmp
+ 112 0026 0346     		mov	r3, r0
+ 113              		.loc 1 79 16
+ 114 0028 002B     		cmp	r3, #0
+ 115 002a 09D1     		bne	.L9
+  80:./rt_thread/components/finsh/msh.c **** #if defined(FINSH_USING_DESCRIPTION) && defined(FINSH_USING_SYMTAB)
+  81:./rt_thread/components/finsh/msh.c ****             rt_kprintf("%-16s - %s\n", &index->name[6], index->desc);
+ 116              		.loc 1 81 46
+ 117 002c FB68     		ldr	r3, [r7, #12]
+ 118 002e 1B68     		ldr	r3, [r3]
+ 119              		.loc 1 81 13
+ 120 0030 991D     		adds	r1, r3, #6
+ 121 0032 FB68     		ldr	r3, [r7, #12]
+ 122 0034 5B68     		ldr	r3, [r3, #4]
+ 123 0036 1A46     		mov	r2, r3
+ 124 0038 0D48     		ldr	r0, .L10+12
+ 125 003a FFF7FEFF 		bl	rt_kprintf
+ 126 003e 00E0     		b	.L6
+ 127              	.L9:
+  79:./rt_thread/components/finsh/msh.c **** #if defined(FINSH_USING_DESCRIPTION) && defined(FINSH_USING_SYMTAB)
+ 128              		.loc 1 79 13
+ 129 0040 00BF     		nop
+ 130              	.L6:
+  77:./rt_thread/components/finsh/msh.c ****         {
+ 131              		.loc 1 77 17
+ 132 0042 FB68     		ldr	r3, [r7, #12]
+ 133 0044 0C33     		adds	r3, r3, #12
+ 134 0046 FB60     		str	r3, [r7, #12]
+ 135              	.L4:
+  76:./rt_thread/components/finsh/msh.c ****                 FINSH_NEXT_SYSCALL(index))
+ 136              		.loc 1 76 23 discriminator 1
+ 137 0048 0A4B     		ldr	r3, .L10+16
+ 138 004a 1B68     		ldr	r3, [r3]
+  75:./rt_thread/components/finsh/msh.c ****                 index < _syscall_table_end;
+ 139              		.loc 1 75 9 discriminator 1
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 5
+
+
+ 140 004c FA68     		ldr	r2, [r7, #12]
+ 141 004e 9A42     		cmp	r2, r3
+ 142 0050 E2D3     		bcc	.L7
+ 143              	.LBE2:
+  82:./rt_thread/components/finsh/msh.c **** #else
+  83:./rt_thread/components/finsh/msh.c ****             rt_kprintf("%s ", &index->name[6]);
+  84:./rt_thread/components/finsh/msh.c **** #endif
+  85:./rt_thread/components/finsh/msh.c ****         }
+  86:./rt_thread/components/finsh/msh.c ****     }
+  87:./rt_thread/components/finsh/msh.c ****     rt_kprintf("\n");
+ 144              		.loc 1 87 5
+ 145 0052 0948     		ldr	r0, .L10+20
+ 146 0054 FFF7FEFF 		bl	rt_kprintf
+  88:./rt_thread/components/finsh/msh.c **** 
+  89:./rt_thread/components/finsh/msh.c ****     return 0;
+ 147              		.loc 1 89 12
+ 148 0058 0023     		movs	r3, #0
+  90:./rt_thread/components/finsh/msh.c **** }
+ 149              		.loc 1 90 1
+ 150 005a 1846     		mov	r0, r3
+ 151 005c 1037     		adds	r7, r7, #16
+ 152              	.LCFI7:
+ 153              		.cfi_def_cfa_offset 8
+ 154 005e BD46     		mov	sp, r7
+ 155              	.LCFI8:
+ 156              		.cfi_def_cfa_register 13
+ 157              		@ sp needed
+ 158 0060 80BD     		pop	{r7, pc}
+ 159              	.L11:
+ 160 0062 00BF     		.align	2
+ 161              	.L10:
+ 162 0064 00000000 		.word	.LC0
+ 163 0068 00000000 		.word	_syscall_table_begin
+ 164 006c 1C000000 		.word	.LC1
+ 165 0070 24000000 		.word	.LC2
+ 166 0074 00000000 		.word	_syscall_table_end
+ 167 0078 30000000 		.word	.LC3
+ 168              		.cfi_endproc
+ 169              	.LFE20:
+ 171              		.global	__fsym___cmd_help_name
+ 172              		.section	.rodata.name,"a"
+ 173              		.align	2
+ 176              	__fsym___cmd_help_name:
+ 177 0000 5F5F636D 		.ascii	"__cmd_help\000"
+ 177      645F6865 
+ 177      6C7000
+ 178              		.global	__fsym___cmd_help_desc
+ 179 000b 00       		.align	2
+ 182              	__fsym___cmd_help_desc:
+ 183 000c 52542D54 		.ascii	"RT-Thread shell help.\000"
+ 183      68726561 
+ 183      64207368 
+ 183      656C6C20 
+ 183      68656C70 
+ 184              		.global	__fsym___cmd_help
+ 185              		.section	FSymTab,"a"
+ 186              		.align	2
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 6
+
+
+ 189              	__fsym___cmd_help:
+ 190 0000 00000000 		.word	__fsym___cmd_help_name
+ 191 0004 00000000 		.word	__fsym___cmd_help_desc
+ 192 0008 00000000 		.word	msh_help
+ 193              		.section	.text.cmd_ps,"ax",%progbits
+ 194              		.align	1
+ 195              		.global	cmd_ps
+ 196              		.syntax unified
+ 197              		.thumb
+ 198              		.thumb_func
+ 200              	cmd_ps:
+ 201              	.LFB21:
+  91:./rt_thread/components/finsh/msh.c **** FINSH_FUNCTION_EXPORT_ALIAS(msh_help, __cmd_help, RT-Thread shell help.);
+  92:./rt_thread/components/finsh/msh.c **** 
+  93:./rt_thread/components/finsh/msh.c **** int cmd_ps(int argc, char **argv)
+  94:./rt_thread/components/finsh/msh.c **** {
+ 202              		.loc 1 94 1
+ 203              		.cfi_startproc
+ 204              		@ args = 0, pretend = 0, frame = 8
+ 205              		@ frame_needed = 1, uses_anonymous_args = 0
+ 206 0000 80B5     		push	{r7, lr}
+ 207              	.LCFI9:
+ 208              		.cfi_def_cfa_offset 8
+ 209              		.cfi_offset 7, -8
+ 210              		.cfi_offset 14, -4
+ 211 0002 82B0     		sub	sp, sp, #8
+ 212              	.LCFI10:
+ 213              		.cfi_def_cfa_offset 16
+ 214 0004 00AF     		add	r7, sp, #0
+ 215              	.LCFI11:
+ 216              		.cfi_def_cfa_register 7
+ 217 0006 7860     		str	r0, [r7, #4]
+ 218 0008 3960     		str	r1, [r7]
+  95:./rt_thread/components/finsh/msh.c ****     extern long list_thread(void);
+  96:./rt_thread/components/finsh/msh.c ****     extern int list_module(void);
+  97:./rt_thread/components/finsh/msh.c **** 
+  98:./rt_thread/components/finsh/msh.c **** #ifdef RT_USING_MODULE
+  99:./rt_thread/components/finsh/msh.c ****     if ((argc == 2) && (strcmp(argv[1], "-m") == 0))
+ 100:./rt_thread/components/finsh/msh.c ****         list_module();
+ 101:./rt_thread/components/finsh/msh.c ****     else
+ 102:./rt_thread/components/finsh/msh.c **** #endif
+ 103:./rt_thread/components/finsh/msh.c ****         list_thread();
+ 219              		.loc 1 103 9
+ 220 000a FFF7FEFF 		bl	list_thread
+ 104:./rt_thread/components/finsh/msh.c ****     return 0;
+ 221              		.loc 1 104 12
+ 222 000e 0023     		movs	r3, #0
+ 105:./rt_thread/components/finsh/msh.c **** }
+ 223              		.loc 1 105 1
+ 224 0010 1846     		mov	r0, r3
+ 225 0012 0837     		adds	r7, r7, #8
+ 226              	.LCFI12:
+ 227              		.cfi_def_cfa_offset 8
+ 228 0014 BD46     		mov	sp, r7
+ 229              	.LCFI13:
+ 230              		.cfi_def_cfa_register 13
+ 231              		@ sp needed
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 7
+
+
+ 232 0016 80BD     		pop	{r7, pc}
+ 233              		.cfi_endproc
+ 234              	.LFE21:
+ 236              		.global	__fsym___cmd_ps_name
+ 237              		.section	.rodata.name
+ 238 0022 0000     		.align	2
+ 241              	__fsym___cmd_ps_name:
+ 242 0024 5F5F636D 		.ascii	"__cmd_ps\000"
+ 242      645F7073 
+ 242      00
+ 243              		.global	__fsym___cmd_ps_desc
+ 244 002d 000000   		.align	2
+ 247              	__fsym___cmd_ps_desc:
+ 248 0030 4C697374 		.ascii	"List threads in the system.\000"
+ 248      20746872 
+ 248      65616473 
+ 248      20696E20 
+ 248      74686520 
+ 249              		.global	__fsym___cmd_ps
+ 250              		.section	FSymTab
+ 251              		.align	2
+ 254              	__fsym___cmd_ps:
+ 255 000c 00000000 		.word	__fsym___cmd_ps_name
+ 256 0010 00000000 		.word	__fsym___cmd_ps_desc
+ 257 0014 00000000 		.word	cmd_ps
+ 258              		.section	.text.cmd_free,"ax",%progbits
+ 259              		.align	1
+ 260              		.global	cmd_free
+ 261              		.syntax unified
+ 262              		.thumb
+ 263              		.thumb_func
+ 265              	cmd_free:
+ 266              	.LFB22:
+ 106:./rt_thread/components/finsh/msh.c **** FINSH_FUNCTION_EXPORT_ALIAS(cmd_ps, __cmd_ps, List threads in the system.);
+ 107:./rt_thread/components/finsh/msh.c **** 
+ 108:./rt_thread/components/finsh/msh.c **** #ifdef RT_USING_HEAP
+ 109:./rt_thread/components/finsh/msh.c **** int cmd_free(int argc, char **argv)
+ 110:./rt_thread/components/finsh/msh.c **** {
+ 267              		.loc 1 110 1
+ 268              		.cfi_startproc
+ 269              		@ args = 0, pretend = 0, frame = 8
+ 270              		@ frame_needed = 1, uses_anonymous_args = 0
+ 271 0000 80B5     		push	{r7, lr}
+ 272              	.LCFI14:
+ 273              		.cfi_def_cfa_offset 8
+ 274              		.cfi_offset 7, -8
+ 275              		.cfi_offset 14, -4
+ 276 0002 82B0     		sub	sp, sp, #8
+ 277              	.LCFI15:
+ 278              		.cfi_def_cfa_offset 16
+ 279 0004 00AF     		add	r7, sp, #0
+ 280              	.LCFI16:
+ 281              		.cfi_def_cfa_register 7
+ 282 0006 7860     		str	r0, [r7, #4]
+ 283 0008 3960     		str	r1, [r7]
+ 111:./rt_thread/components/finsh/msh.c ****     extern void list_mem(void);
+ 112:./rt_thread/components/finsh/msh.c ****     extern void list_memheap(void);
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 8
+
+
+ 113:./rt_thread/components/finsh/msh.c **** 
+ 114:./rt_thread/components/finsh/msh.c **** #ifdef RT_USING_MEMHEAP_AS_HEAP
+ 115:./rt_thread/components/finsh/msh.c ****     list_memheap();
+ 116:./rt_thread/components/finsh/msh.c **** #else
+ 117:./rt_thread/components/finsh/msh.c ****     list_mem();
+ 284              		.loc 1 117 5
+ 285 000a FFF7FEFF 		bl	list_mem
+ 118:./rt_thread/components/finsh/msh.c **** #endif
+ 119:./rt_thread/components/finsh/msh.c ****     return 0;
+ 286              		.loc 1 119 12
+ 287 000e 0023     		movs	r3, #0
+ 120:./rt_thread/components/finsh/msh.c **** }
+ 288              		.loc 1 120 1
+ 289 0010 1846     		mov	r0, r3
+ 290 0012 0837     		adds	r7, r7, #8
+ 291              	.LCFI17:
+ 292              		.cfi_def_cfa_offset 8
+ 293 0014 BD46     		mov	sp, r7
+ 294              	.LCFI18:
+ 295              		.cfi_def_cfa_register 13
+ 296              		@ sp needed
+ 297 0016 80BD     		pop	{r7, pc}
+ 298              		.cfi_endproc
+ 299              	.LFE22:
+ 301              		.global	__fsym___cmd_free_name
+ 302              		.section	.rodata.name
+ 303              		.align	2
+ 306              	__fsym___cmd_free_name:
+ 307 004c 5F5F636D 		.ascii	"__cmd_free\000"
+ 307      645F6672 
+ 307      656500
+ 308              		.global	__fsym___cmd_free_desc
+ 309 0057 00       		.align	2
+ 312              	__fsym___cmd_free_desc:
+ 313 0058 53686F77 		.ascii	"Show the memory usage in the system.\000"
+ 313      20746865 
+ 313      206D656D 
+ 313      6F727920 
+ 313      75736167 
+ 314              		.global	__fsym___cmd_free
+ 315              		.section	FSymTab
+ 316              		.align	2
+ 319              	__fsym___cmd_free:
+ 320 0018 00000000 		.word	__fsym___cmd_free_name
+ 321 001c 00000000 		.word	__fsym___cmd_free_desc
+ 322 0020 00000000 		.word	cmd_free
+ 323              		.section	.rodata
+ 324 0032 0000     		.align	2
+ 325              	.LC4:
+ 326 0034 546F6F20 		.ascii	"Too many args ! We only Use:\012\000"
+ 326      6D616E79 
+ 326      20617267 
+ 326      73202120 
+ 326      5765206F 
+ 327 0052 0000     		.align	2
+ 328              	.LC5:
+ 329 0054 25732000 		.ascii	"%s \000"
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 9
+
+
+ 330              		.section	.text.msh_split,"ax",%progbits
+ 331              		.align	1
+ 332              		.syntax unified
+ 333              		.thumb
+ 334              		.thumb_func
+ 336              	msh_split:
+ 337              	.LFB23:
+ 121:./rt_thread/components/finsh/msh.c **** FINSH_FUNCTION_EXPORT_ALIAS(cmd_free, __cmd_free, Show the memory usage in the system.);
+ 122:./rt_thread/components/finsh/msh.c **** #endif
+ 123:./rt_thread/components/finsh/msh.c **** 
+ 124:./rt_thread/components/finsh/msh.c **** static int msh_split(char *cmd, rt_size_t length, char *argv[FINSH_ARG_MAX])
+ 125:./rt_thread/components/finsh/msh.c **** {
+ 338              		.loc 1 125 1
+ 339              		.cfi_startproc
+ 340              		@ args = 0, pretend = 0, frame = 32
+ 341              		@ frame_needed = 1, uses_anonymous_args = 0
+ 342 0000 80B5     		push	{r7, lr}
+ 343              	.LCFI19:
+ 344              		.cfi_def_cfa_offset 8
+ 345              		.cfi_offset 7, -8
+ 346              		.cfi_offset 14, -4
+ 347 0002 88B0     		sub	sp, sp, #32
+ 348              	.LCFI20:
+ 349              		.cfi_def_cfa_offset 40
+ 350 0004 00AF     		add	r7, sp, #0
+ 351              	.LCFI21:
+ 352              		.cfi_def_cfa_register 7
+ 353 0006 F860     		str	r0, [r7, #12]
+ 354 0008 B960     		str	r1, [r7, #8]
+ 355 000a 7A60     		str	r2, [r7, #4]
+ 126:./rt_thread/components/finsh/msh.c ****     char *ptr;
+ 127:./rt_thread/components/finsh/msh.c ****     rt_size_t position;
+ 128:./rt_thread/components/finsh/msh.c ****     rt_size_t argc;
+ 129:./rt_thread/components/finsh/msh.c ****     rt_size_t i;
+ 130:./rt_thread/components/finsh/msh.c **** 
+ 131:./rt_thread/components/finsh/msh.c ****     ptr = cmd;
+ 356              		.loc 1 131 9
+ 357 000c FB68     		ldr	r3, [r7, #12]
+ 358 000e FB61     		str	r3, [r7, #28]
+ 132:./rt_thread/components/finsh/msh.c ****     position = 0; argc = 0;
+ 359              		.loc 1 132 14
+ 360 0010 0023     		movs	r3, #0
+ 361 0012 BB61     		str	r3, [r7, #24]
+ 362              		.loc 1 132 24
+ 363 0014 0023     		movs	r3, #0
+ 364 0016 7B61     		str	r3, [r7, #20]
+ 133:./rt_thread/components/finsh/msh.c **** 
+ 134:./rt_thread/components/finsh/msh.c ****     while (position < length)
+ 365              		.loc 1 134 11
+ 366 0018 94E0     		b	.L17
+ 367              	.L21:
+ 135:./rt_thread/components/finsh/msh.c ****     {
+ 136:./rt_thread/components/finsh/msh.c ****         /* strip bank and tab */
+ 137:./rt_thread/components/finsh/msh.c ****         while ((*ptr == ' ' || *ptr == '\t') && position < length)
+ 138:./rt_thread/components/finsh/msh.c ****         {
+ 139:./rt_thread/components/finsh/msh.c ****             *ptr = '\0';
+ 368              		.loc 1 139 18
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 10
+
+
+ 369 001a FB69     		ldr	r3, [r7, #28]
+ 370 001c 0022     		movs	r2, #0
+ 371 001e 1A70     		strb	r2, [r3]
+ 140:./rt_thread/components/finsh/msh.c ****             ptr ++; position ++;
+ 372              		.loc 1 140 17
+ 373 0020 FB69     		ldr	r3, [r7, #28]
+ 374 0022 0133     		adds	r3, r3, #1
+ 375 0024 FB61     		str	r3, [r7, #28]
+ 376              		.loc 1 140 30
+ 377 0026 BB69     		ldr	r3, [r7, #24]
+ 378 0028 0133     		adds	r3, r3, #1
+ 379 002a BB61     		str	r3, [r7, #24]
+ 380              	.L18:
+ 137:./rt_thread/components/finsh/msh.c ****         {
+ 381              		.loc 1 137 17
+ 382 002c FB69     		ldr	r3, [r7, #28]
+ 383 002e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 137:./rt_thread/components/finsh/msh.c ****         {
+ 384              		.loc 1 137 15
+ 385 0030 202B     		cmp	r3, #32
+ 386 0032 03D0     		beq	.L19
+ 137:./rt_thread/components/finsh/msh.c ****         {
+ 387              		.loc 1 137 32 discriminator 2
+ 388 0034 FB69     		ldr	r3, [r7, #28]
+ 389 0036 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 137:./rt_thread/components/finsh/msh.c ****         {
+ 390              		.loc 1 137 29 discriminator 2
+ 391 0038 092B     		cmp	r3, #9
+ 392 003a 03D1     		bne	.L20
+ 393              	.L19:
+ 137:./rt_thread/components/finsh/msh.c ****         {
+ 394              		.loc 1 137 46 discriminator 3
+ 395 003c BA69     		ldr	r2, [r7, #24]
+ 396 003e BB68     		ldr	r3, [r7, #8]
+ 397 0040 9A42     		cmp	r2, r3
+ 398 0042 EAD3     		bcc	.L21
+ 399              	.L20:
+ 141:./rt_thread/components/finsh/msh.c ****         }
+ 142:./rt_thread/components/finsh/msh.c **** 
+ 143:./rt_thread/components/finsh/msh.c ****         if(argc >= FINSH_ARG_MAX)
+ 400              		.loc 1 143 11
+ 401 0044 7B69     		ldr	r3, [r7, #20]
+ 402 0046 072B     		cmp	r3, #7
+ 403 0048 19D9     		bls	.L22
+ 144:./rt_thread/components/finsh/msh.c ****         {
+ 145:./rt_thread/components/finsh/msh.c ****             rt_kprintf("Too many args ! We only Use:\n");
+ 404              		.loc 1 145 13
+ 405 004a 4648     		ldr	r0, .L41
+ 406 004c FFF7FEFF 		bl	rt_kprintf
+ 146:./rt_thread/components/finsh/msh.c ****             for(i = 0; i < argc; i++)
+ 407              		.loc 1 146 19
+ 408 0050 0023     		movs	r3, #0
+ 409 0052 3B61     		str	r3, [r7, #16]
+ 410              		.loc 1 146 13
+ 411 0054 0BE0     		b	.L23
+ 412              	.L24:
+ 147:./rt_thread/components/finsh/msh.c ****             {
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 11
+
+
+ 148:./rt_thread/components/finsh/msh.c ****                 rt_kprintf("%s ", argv[i]);
+ 413              		.loc 1 148 39 discriminator 3
+ 414 0056 3B69     		ldr	r3, [r7, #16]
+ 415 0058 9B00     		lsls	r3, r3, #2
+ 416 005a 7A68     		ldr	r2, [r7, #4]
+ 417 005c 1344     		add	r3, r3, r2
+ 418              		.loc 1 148 17 discriminator 3
+ 419 005e 1B68     		ldr	r3, [r3]
+ 420 0060 1946     		mov	r1, r3
+ 421 0062 4148     		ldr	r0, .L41+4
+ 422 0064 FFF7FEFF 		bl	rt_kprintf
+ 146:./rt_thread/components/finsh/msh.c ****             for(i = 0; i < argc; i++)
+ 423              		.loc 1 146 35 discriminator 3
+ 424 0068 3B69     		ldr	r3, [r7, #16]
+ 425 006a 0133     		adds	r3, r3, #1
+ 426 006c 3B61     		str	r3, [r7, #16]
+ 427              	.L23:
+ 146:./rt_thread/components/finsh/msh.c ****             for(i = 0; i < argc; i++)
+ 428              		.loc 1 146 13 discriminator 1
+ 429 006e 3A69     		ldr	r2, [r7, #16]
+ 430 0070 7B69     		ldr	r3, [r7, #20]
+ 431 0072 9A42     		cmp	r2, r3
+ 432 0074 EFD3     		bcc	.L24
+ 149:./rt_thread/components/finsh/msh.c ****             }
+ 150:./rt_thread/components/finsh/msh.c ****             rt_kprintf("\n");
+ 433              		.loc 1 150 13
+ 434 0076 3D48     		ldr	r0, .L41+8
+ 435 0078 FFF7FEFF 		bl	rt_kprintf
+ 151:./rt_thread/components/finsh/msh.c ****             break;
+ 436              		.loc 1 151 13
+ 437 007c 6DE0     		b	.L25
+ 438              	.L22:
+ 152:./rt_thread/components/finsh/msh.c ****         }
+ 153:./rt_thread/components/finsh/msh.c **** 
+ 154:./rt_thread/components/finsh/msh.c ****         if (position >= length) break;
+ 439              		.loc 1 154 12
+ 440 007e BA69     		ldr	r2, [r7, #24]
+ 441 0080 BB68     		ldr	r3, [r7, #8]
+ 442 0082 9A42     		cmp	r2, r3
+ 443 0084 64D2     		bcs	.L38
+ 155:./rt_thread/components/finsh/msh.c **** 
+ 156:./rt_thread/components/finsh/msh.c ****         /* handle string */
+ 157:./rt_thread/components/finsh/msh.c ****         if (*ptr == '"')
+ 444              		.loc 1 157 13
+ 445 0086 FB69     		ldr	r3, [r7, #28]
+ 446 0088 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 447              		.loc 1 157 12
+ 448 008a 222B     		cmp	r3, #34
+ 449 008c 3AD1     		bne	.L27
+ 158:./rt_thread/components/finsh/msh.c ****         {
+ 159:./rt_thread/components/finsh/msh.c ****             ptr ++; position ++;
+ 450              		.loc 1 159 17
+ 451 008e FB69     		ldr	r3, [r7, #28]
+ 452 0090 0133     		adds	r3, r3, #1
+ 453 0092 FB61     		str	r3, [r7, #28]
+ 454              		.loc 1 159 30
+ 455 0094 BB69     		ldr	r3, [r7, #24]
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 12
+
+
+ 456 0096 0133     		adds	r3, r3, #1
+ 457 0098 BB61     		str	r3, [r7, #24]
+ 160:./rt_thread/components/finsh/msh.c ****             argv[argc] = ptr; argc ++;
+ 458              		.loc 1 160 17
+ 459 009a 7B69     		ldr	r3, [r7, #20]
+ 460 009c 9B00     		lsls	r3, r3, #2
+ 461 009e 7A68     		ldr	r2, [r7, #4]
+ 462 00a0 1344     		add	r3, r3, r2
+ 463              		.loc 1 160 24
+ 464 00a2 FA69     		ldr	r2, [r7, #28]
+ 465 00a4 1A60     		str	r2, [r3]
+ 466              		.loc 1 160 36
+ 467 00a6 7B69     		ldr	r3, [r7, #20]
+ 468 00a8 0133     		adds	r3, r3, #1
+ 469 00aa 7B61     		str	r3, [r7, #20]
+ 161:./rt_thread/components/finsh/msh.c **** 
+ 162:./rt_thread/components/finsh/msh.c ****             /* skip this string */
+ 163:./rt_thread/components/finsh/msh.c ****             while (*ptr != '"' && position < length)
+ 470              		.loc 1 163 19
+ 471 00ac 14E0     		b	.L28
+ 472              	.L31:
+ 164:./rt_thread/components/finsh/msh.c ****             {
+ 165:./rt_thread/components/finsh/msh.c ****                 if (*ptr == '\\')
+ 473              		.loc 1 165 21
+ 474 00ae FB69     		ldr	r3, [r7, #28]
+ 475 00b0 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 476              		.loc 1 165 20
+ 477 00b2 5C2B     		cmp	r3, #92
+ 478 00b4 0AD1     		bne	.L29
+ 166:./rt_thread/components/finsh/msh.c ****                 {
+ 167:./rt_thread/components/finsh/msh.c ****                     if (*(ptr + 1) == '"')
+ 479              		.loc 1 167 31
+ 480 00b6 FB69     		ldr	r3, [r7, #28]
+ 481 00b8 0133     		adds	r3, r3, #1
+ 482              		.loc 1 167 25
+ 483 00ba 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 484              		.loc 1 167 24
+ 485 00bc 222B     		cmp	r3, #34
+ 486 00be 05D1     		bne	.L29
+ 168:./rt_thread/components/finsh/msh.c ****                     {
+ 169:./rt_thread/components/finsh/msh.c ****                         ptr ++; position ++;
+ 487              		.loc 1 169 29
+ 488 00c0 FB69     		ldr	r3, [r7, #28]
+ 489 00c2 0133     		adds	r3, r3, #1
+ 490 00c4 FB61     		str	r3, [r7, #28]
+ 491              		.loc 1 169 42
+ 492 00c6 BB69     		ldr	r3, [r7, #24]
+ 493 00c8 0133     		adds	r3, r3, #1
+ 494 00ca BB61     		str	r3, [r7, #24]
+ 495              	.L29:
+ 170:./rt_thread/components/finsh/msh.c ****                     }
+ 171:./rt_thread/components/finsh/msh.c ****                 }
+ 172:./rt_thread/components/finsh/msh.c ****                 ptr ++; position ++;
+ 496              		.loc 1 172 21
+ 497 00cc FB69     		ldr	r3, [r7, #28]
+ 498 00ce 0133     		adds	r3, r3, #1
+ 499 00d0 FB61     		str	r3, [r7, #28]
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 13
+
+
+ 500              		.loc 1 172 34
+ 501 00d2 BB69     		ldr	r3, [r7, #24]
+ 502 00d4 0133     		adds	r3, r3, #1
+ 503 00d6 BB61     		str	r3, [r7, #24]
+ 504              	.L28:
+ 163:./rt_thread/components/finsh/msh.c ****             {
+ 505              		.loc 1 163 20
+ 506 00d8 FB69     		ldr	r3, [r7, #28]
+ 507 00da 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 163:./rt_thread/components/finsh/msh.c ****             {
+ 508              		.loc 1 163 19
+ 509 00dc 222B     		cmp	r3, #34
+ 510 00de 03D0     		beq	.L30
+ 163:./rt_thread/components/finsh/msh.c ****             {
+ 511              		.loc 1 163 32 discriminator 1
+ 512 00e0 BA69     		ldr	r2, [r7, #24]
+ 513 00e2 BB68     		ldr	r3, [r7, #8]
+ 514 00e4 9A42     		cmp	r2, r3
+ 515 00e6 E2D3     		bcc	.L31
+ 516              	.L30:
+ 173:./rt_thread/components/finsh/msh.c ****             }
+ 174:./rt_thread/components/finsh/msh.c ****             if (position >= length) break;
+ 517              		.loc 1 174 16
+ 518 00e8 BA69     		ldr	r2, [r7, #24]
+ 519 00ea BB68     		ldr	r3, [r7, #8]
+ 520 00ec 9A42     		cmp	r2, r3
+ 521 00ee 31D2     		bcs	.L39
+ 175:./rt_thread/components/finsh/msh.c **** 
+ 176:./rt_thread/components/finsh/msh.c ****             /* skip '"' */
+ 177:./rt_thread/components/finsh/msh.c ****             *ptr = '\0'; ptr ++; position ++;
+ 522              		.loc 1 177 18
+ 523 00f0 FB69     		ldr	r3, [r7, #28]
+ 524 00f2 0022     		movs	r2, #0
+ 525 00f4 1A70     		strb	r2, [r3]
+ 526              		.loc 1 177 30
+ 527 00f6 FB69     		ldr	r3, [r7, #28]
+ 528 00f8 0133     		adds	r3, r3, #1
+ 529 00fa FB61     		str	r3, [r7, #28]
+ 530              		.loc 1 177 43
+ 531 00fc BB69     		ldr	r3, [r7, #24]
+ 532 00fe 0133     		adds	r3, r3, #1
+ 533 0100 BB61     		str	r3, [r7, #24]
+ 534 0102 1FE0     		b	.L17
+ 535              	.L27:
+ 178:./rt_thread/components/finsh/msh.c ****         }
+ 179:./rt_thread/components/finsh/msh.c ****         else
+ 180:./rt_thread/components/finsh/msh.c ****         {
+ 181:./rt_thread/components/finsh/msh.c ****             argv[argc] = ptr;
+ 536              		.loc 1 181 17
+ 537 0104 7B69     		ldr	r3, [r7, #20]
+ 538 0106 9B00     		lsls	r3, r3, #2
+ 539 0108 7A68     		ldr	r2, [r7, #4]
+ 540 010a 1344     		add	r3, r3, r2
+ 541              		.loc 1 181 24
+ 542 010c FA69     		ldr	r2, [r7, #28]
+ 543 010e 1A60     		str	r2, [r3]
+ 182:./rt_thread/components/finsh/msh.c ****             argc ++;
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 14
+
+
+ 544              		.loc 1 182 18
+ 545 0110 7B69     		ldr	r3, [r7, #20]
+ 546 0112 0133     		adds	r3, r3, #1
+ 547 0114 7B61     		str	r3, [r7, #20]
+ 183:./rt_thread/components/finsh/msh.c ****             while ((*ptr != ' ' && *ptr != '\t') && position < length)
+ 548              		.loc 1 183 19
+ 549 0116 05E0     		b	.L33
+ 550              	.L35:
+ 184:./rt_thread/components/finsh/msh.c ****             {
+ 185:./rt_thread/components/finsh/msh.c ****                 ptr ++; position ++;
+ 551              		.loc 1 185 21
+ 552 0118 FB69     		ldr	r3, [r7, #28]
+ 553 011a 0133     		adds	r3, r3, #1
+ 554 011c FB61     		str	r3, [r7, #28]
+ 555              		.loc 1 185 34
+ 556 011e BB69     		ldr	r3, [r7, #24]
+ 557 0120 0133     		adds	r3, r3, #1
+ 558 0122 BB61     		str	r3, [r7, #24]
+ 559              	.L33:
+ 183:./rt_thread/components/finsh/msh.c ****             while ((*ptr != ' ' && *ptr != '\t') && position < length)
+ 560              		.loc 1 183 21
+ 561 0124 FB69     		ldr	r3, [r7, #28]
+ 562 0126 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 183:./rt_thread/components/finsh/msh.c ****             while ((*ptr != ' ' && *ptr != '\t') && position < length)
+ 563              		.loc 1 183 19
+ 564 0128 202B     		cmp	r3, #32
+ 565 012a 07D0     		beq	.L34
+ 183:./rt_thread/components/finsh/msh.c ****             while ((*ptr != ' ' && *ptr != '\t') && position < length)
+ 566              		.loc 1 183 36 discriminator 1
+ 567 012c FB69     		ldr	r3, [r7, #28]
+ 568 012e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 183:./rt_thread/components/finsh/msh.c ****             while ((*ptr != ' ' && *ptr != '\t') && position < length)
+ 569              		.loc 1 183 33 discriminator 1
+ 570 0130 092B     		cmp	r3, #9
+ 571 0132 03D0     		beq	.L34
+ 183:./rt_thread/components/finsh/msh.c ****             while ((*ptr != ' ' && *ptr != '\t') && position < length)
+ 572              		.loc 1 183 50 discriminator 2
+ 573 0134 BA69     		ldr	r2, [r7, #24]
+ 574 0136 BB68     		ldr	r3, [r7, #8]
+ 575 0138 9A42     		cmp	r2, r3
+ 576 013a EDD3     		bcc	.L35
+ 577              	.L34:
+ 186:./rt_thread/components/finsh/msh.c ****             }
+ 187:./rt_thread/components/finsh/msh.c ****             if (position >= length) break;
+ 578              		.loc 1 187 16
+ 579 013c BA69     		ldr	r2, [r7, #24]
+ 580 013e BB68     		ldr	r3, [r7, #8]
+ 581 0140 9A42     		cmp	r2, r3
+ 582 0142 09D2     		bcs	.L40
+ 583              	.L17:
+ 134:./rt_thread/components/finsh/msh.c ****     {
+ 584              		.loc 1 134 11
+ 585 0144 BA69     		ldr	r2, [r7, #24]
+ 586 0146 BB68     		ldr	r3, [r7, #8]
+ 587 0148 9A42     		cmp	r2, r3
+ 588 014a FFF46FAF 		bcc	.L18
+ 589 014e 04E0     		b	.L25
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 15
+
+
+ 590              	.L38:
+ 154:./rt_thread/components/finsh/msh.c **** 
+ 591              		.loc 1 154 9
+ 592 0150 00BF     		nop
+ 593 0152 02E0     		b	.L25
+ 594              	.L39:
+ 174:./rt_thread/components/finsh/msh.c **** 
+ 595              		.loc 1 174 13
+ 596 0154 00BF     		nop
+ 597 0156 00E0     		b	.L25
+ 598              	.L40:
+ 599              		.loc 1 187 13
+ 600 0158 00BF     		nop
+ 601              	.L25:
+ 188:./rt_thread/components/finsh/msh.c ****         }
+ 189:./rt_thread/components/finsh/msh.c ****     }
+ 190:./rt_thread/components/finsh/msh.c **** 
+ 191:./rt_thread/components/finsh/msh.c ****     return argc;
+ 602              		.loc 1 191 12
+ 603 015a 7B69     		ldr	r3, [r7, #20]
+ 192:./rt_thread/components/finsh/msh.c **** }
+ 604              		.loc 1 192 1
+ 605 015c 1846     		mov	r0, r3
+ 606 015e 2037     		adds	r7, r7, #32
+ 607              	.LCFI22:
+ 608              		.cfi_def_cfa_offset 8
+ 609 0160 BD46     		mov	sp, r7
+ 610              	.LCFI23:
+ 611              		.cfi_def_cfa_register 13
+ 612              		@ sp needed
+ 613 0162 80BD     		pop	{r7, pc}
+ 614              	.L42:
+ 615              		.align	2
+ 616              	.L41:
+ 617 0164 34000000 		.word	.LC4
+ 618 0168 54000000 		.word	.LC5
+ 619 016c 30000000 		.word	.LC3
+ 620              		.cfi_endproc
+ 621              	.LFE23:
+ 623              		.section	.text.msh_get_cmd,"ax",%progbits
+ 624              		.align	1
+ 625              		.syntax unified
+ 626              		.thumb
+ 627              		.thumb_func
+ 629              	msh_get_cmd:
+ 630              	.LFB24:
+ 193:./rt_thread/components/finsh/msh.c **** 
+ 194:./rt_thread/components/finsh/msh.c **** static cmd_function_t msh_get_cmd(char *cmd, int size)
+ 195:./rt_thread/components/finsh/msh.c **** {
+ 631              		.loc 1 195 1
+ 632              		.cfi_startproc
+ 633              		@ args = 0, pretend = 0, frame = 16
+ 634              		@ frame_needed = 1, uses_anonymous_args = 0
+ 635 0000 80B5     		push	{r7, lr}
+ 636              	.LCFI24:
+ 637              		.cfi_def_cfa_offset 8
+ 638              		.cfi_offset 7, -8
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 16
+
+
+ 639              		.cfi_offset 14, -4
+ 640 0002 84B0     		sub	sp, sp, #16
+ 641              	.LCFI25:
+ 642              		.cfi_def_cfa_offset 24
+ 643 0004 00AF     		add	r7, sp, #0
+ 644              	.LCFI26:
+ 645              		.cfi_def_cfa_register 7
+ 646 0006 7860     		str	r0, [r7, #4]
+ 647 0008 3960     		str	r1, [r7]
+ 196:./rt_thread/components/finsh/msh.c ****     struct finsh_syscall *index;
+ 197:./rt_thread/components/finsh/msh.c ****     cmd_function_t cmd_func = RT_NULL;
+ 648              		.loc 1 197 20
+ 649 000a 0023     		movs	r3, #0
+ 650 000c BB60     		str	r3, [r7, #8]
+ 198:./rt_thread/components/finsh/msh.c **** 
+ 199:./rt_thread/components/finsh/msh.c ****     for (index = _syscall_table_begin;
+ 651              		.loc 1 199 16
+ 652 000e 194B     		ldr	r3, .L51
+ 653 0010 1B68     		ldr	r3, [r3]
+ 654 0012 FB60     		str	r3, [r7, #12]
+ 655              		.loc 1 199 5
+ 656 0014 24E0     		b	.L44
+ 657              	.L48:
+ 200:./rt_thread/components/finsh/msh.c ****             index < _syscall_table_end;
+ 201:./rt_thread/components/finsh/msh.c ****             FINSH_NEXT_SYSCALL(index))
+ 202:./rt_thread/components/finsh/msh.c ****     {
+ 203:./rt_thread/components/finsh/msh.c ****         if (strncmp(index->name, "__cmd_", 6) != 0) continue;
+ 658              		.loc 1 203 13
+ 659 0016 FB68     		ldr	r3, [r7, #12]
+ 660 0018 1B68     		ldr	r3, [r3]
+ 661 001a 0622     		movs	r2, #6
+ 662 001c 1649     		ldr	r1, .L51+4
+ 663 001e 1846     		mov	r0, r3
+ 664 0020 FFF7FEFF 		bl	strncmp
+ 665 0024 0346     		mov	r3, r0
+ 666              		.loc 1 203 12
+ 667 0026 002B     		cmp	r3, #0
+ 668 0028 16D1     		bne	.L50
+ 204:./rt_thread/components/finsh/msh.c **** 
+ 205:./rt_thread/components/finsh/msh.c ****         if (strncmp(&index->name[6], cmd, size) == 0 &&
+ 669              		.loc 1 205 27
+ 670 002a FB68     		ldr	r3, [r7, #12]
+ 671 002c 1B68     		ldr	r3, [r3]
+ 672              		.loc 1 205 13
+ 673 002e 0633     		adds	r3, r3, #6
+ 674 0030 3A68     		ldr	r2, [r7]
+ 675 0032 7968     		ldr	r1, [r7, #4]
+ 676 0034 1846     		mov	r0, r3
+ 677 0036 FFF7FEFF 		bl	strncmp
+ 678 003a 0346     		mov	r3, r0
+ 679              		.loc 1 205 12
+ 680 003c 002B     		cmp	r3, #0
+ 681 003e 0CD1     		bne	.L46
+ 206:./rt_thread/components/finsh/msh.c ****                 index->name[6 + size] == '\0')
+ 682              		.loc 1 206 22 discriminator 1
+ 683 0040 FB68     		ldr	r3, [r7, #12]
+ 684 0042 1B68     		ldr	r3, [r3]
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 17
+
+
+ 685              		.loc 1 206 31 discriminator 1
+ 686 0044 3A68     		ldr	r2, [r7]
+ 687 0046 0632     		adds	r2, r2, #6
+ 688              		.loc 1 206 28 discriminator 1
+ 689 0048 1344     		add	r3, r3, r2
+ 690 004a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 205:./rt_thread/components/finsh/msh.c ****                 index->name[6 + size] == '\0')
+ 691              		.loc 1 205 54 discriminator 1
+ 692 004c 002B     		cmp	r3, #0
+ 693 004e 04D1     		bne	.L46
+ 207:./rt_thread/components/finsh/msh.c ****         {
+ 208:./rt_thread/components/finsh/msh.c ****             cmd_func = (cmd_function_t)index->func;
+ 694              		.loc 1 208 22
+ 695 0050 FB68     		ldr	r3, [r7, #12]
+ 696 0052 9B68     		ldr	r3, [r3, #8]
+ 697 0054 BB60     		str	r3, [r7, #8]
+ 209:./rt_thread/components/finsh/msh.c ****             break;
+ 698              		.loc 1 209 13
+ 699 0056 08E0     		b	.L47
+ 700              	.L50:
+ 203:./rt_thread/components/finsh/msh.c **** 
+ 701              		.loc 1 203 9
+ 702 0058 00BF     		nop
+ 703              	.L46:
+ 201:./rt_thread/components/finsh/msh.c ****     {
+ 704              		.loc 1 201 13
+ 705 005a FB68     		ldr	r3, [r7, #12]
+ 706 005c 0C33     		adds	r3, r3, #12
+ 707 005e FB60     		str	r3, [r7, #12]
+ 708              	.L44:
+ 200:./rt_thread/components/finsh/msh.c ****             FINSH_NEXT_SYSCALL(index))
+ 709              		.loc 1 200 19 discriminator 1
+ 710 0060 064B     		ldr	r3, .L51+8
+ 711 0062 1B68     		ldr	r3, [r3]
+ 199:./rt_thread/components/finsh/msh.c ****             index < _syscall_table_end;
+ 712              		.loc 1 199 5 discriminator 1
+ 713 0064 FA68     		ldr	r2, [r7, #12]
+ 714 0066 9A42     		cmp	r2, r3
+ 715 0068 D5D3     		bcc	.L48
+ 716              	.L47:
+ 210:./rt_thread/components/finsh/msh.c ****         }
+ 211:./rt_thread/components/finsh/msh.c ****     }
+ 212:./rt_thread/components/finsh/msh.c **** 
+ 213:./rt_thread/components/finsh/msh.c ****     return cmd_func;
+ 717              		.loc 1 213 12
+ 718 006a BB68     		ldr	r3, [r7, #8]
+ 214:./rt_thread/components/finsh/msh.c **** }
+ 719              		.loc 1 214 1
+ 720 006c 1846     		mov	r0, r3
+ 721 006e 1037     		adds	r7, r7, #16
+ 722              	.LCFI27:
+ 723              		.cfi_def_cfa_offset 8
+ 724 0070 BD46     		mov	sp, r7
+ 725              	.LCFI28:
+ 726              		.cfi_def_cfa_register 13
+ 727              		@ sp needed
+ 728 0072 80BD     		pop	{r7, pc}
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 18
+
+
+ 729              	.L52:
+ 730              		.align	2
+ 731              	.L51:
+ 732 0074 00000000 		.word	_syscall_table_begin
+ 733 0078 1C000000 		.word	.LC1
+ 734 007c 00000000 		.word	_syscall_table_end
+ 735              		.cfi_endproc
+ 736              	.LFE24:
+ 738              		.section	.text._msh_exec_cmd,"ax",%progbits
+ 739              		.align	1
+ 740              		.syntax unified
+ 741              		.thumb
+ 742              		.thumb_func
+ 744              	_msh_exec_cmd:
+ 745              	.LFB25:
+ 215:./rt_thread/components/finsh/msh.c **** 
+ 216:./rt_thread/components/finsh/msh.c **** #if defined(RT_USING_MODULE) && defined(RT_USING_DFS)
+ 217:./rt_thread/components/finsh/msh.c **** /* Return 0 on module executed. Other value indicate error.
+ 218:./rt_thread/components/finsh/msh.c ****  */
+ 219:./rt_thread/components/finsh/msh.c **** int msh_exec_module(const char *cmd_line, int size)
+ 220:./rt_thread/components/finsh/msh.c **** {
+ 221:./rt_thread/components/finsh/msh.c ****     int ret;
+ 222:./rt_thread/components/finsh/msh.c ****     int fd = -1;
+ 223:./rt_thread/components/finsh/msh.c ****     char *pg_name;
+ 224:./rt_thread/components/finsh/msh.c ****     int length, cmd_length = 0;
+ 225:./rt_thread/components/finsh/msh.c **** 
+ 226:./rt_thread/components/finsh/msh.c ****     if (size == 0)
+ 227:./rt_thread/components/finsh/msh.c ****         return -RT_ERROR;
+ 228:./rt_thread/components/finsh/msh.c ****     /* get the length of command0 */
+ 229:./rt_thread/components/finsh/msh.c ****     while ((cmd_line[cmd_length] != ' ' && cmd_line[cmd_length] != '\t') && cmd_length < size)
+ 230:./rt_thread/components/finsh/msh.c ****         cmd_length ++;
+ 231:./rt_thread/components/finsh/msh.c **** 
+ 232:./rt_thread/components/finsh/msh.c ****     /* get name length */
+ 233:./rt_thread/components/finsh/msh.c ****     length = cmd_length + 32;
+ 234:./rt_thread/components/finsh/msh.c **** 
+ 235:./rt_thread/components/finsh/msh.c ****     /* allocate program name memory */
+ 236:./rt_thread/components/finsh/msh.c ****     pg_name = (char *) rt_malloc(length);
+ 237:./rt_thread/components/finsh/msh.c ****     if (pg_name == RT_NULL)
+ 238:./rt_thread/components/finsh/msh.c ****         return -RT_ENOMEM;
+ 239:./rt_thread/components/finsh/msh.c **** 
+ 240:./rt_thread/components/finsh/msh.c ****     /* copy command0 */
+ 241:./rt_thread/components/finsh/msh.c ****     memcpy(pg_name, cmd_line, cmd_length);
+ 242:./rt_thread/components/finsh/msh.c ****     pg_name[cmd_length] = '\0';
+ 243:./rt_thread/components/finsh/msh.c **** 
+ 244:./rt_thread/components/finsh/msh.c ****     if (strstr(pg_name, ".mo") != RT_NULL || strstr(pg_name, ".MO") != RT_NULL)
+ 245:./rt_thread/components/finsh/msh.c ****     {
+ 246:./rt_thread/components/finsh/msh.c ****         /* try to open program */
+ 247:./rt_thread/components/finsh/msh.c ****         fd = open(pg_name, O_RDONLY, 0);
+ 248:./rt_thread/components/finsh/msh.c **** 
+ 249:./rt_thread/components/finsh/msh.c ****         /* search in /bin path */
+ 250:./rt_thread/components/finsh/msh.c ****         if (fd < 0)
+ 251:./rt_thread/components/finsh/msh.c ****         {
+ 252:./rt_thread/components/finsh/msh.c ****             rt_snprintf(pg_name, length - 1, "/bin/%.*s", cmd_length, cmd_line);
+ 253:./rt_thread/components/finsh/msh.c ****             fd = open(pg_name, O_RDONLY, 0);
+ 254:./rt_thread/components/finsh/msh.c ****         }
+ 255:./rt_thread/components/finsh/msh.c ****     }
+ 256:./rt_thread/components/finsh/msh.c ****     else
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 19
+
+
+ 257:./rt_thread/components/finsh/msh.c ****     {
+ 258:./rt_thread/components/finsh/msh.c ****         /* add .mo and open program */
+ 259:./rt_thread/components/finsh/msh.c **** 
+ 260:./rt_thread/components/finsh/msh.c ****         /* try to open program */
+ 261:./rt_thread/components/finsh/msh.c ****         strcat(pg_name, ".mo");
+ 262:./rt_thread/components/finsh/msh.c ****         fd = open(pg_name, O_RDONLY, 0);
+ 263:./rt_thread/components/finsh/msh.c **** 
+ 264:./rt_thread/components/finsh/msh.c ****         /* search in /bin path */
+ 265:./rt_thread/components/finsh/msh.c ****         if (fd < 0)
+ 266:./rt_thread/components/finsh/msh.c ****         {
+ 267:./rt_thread/components/finsh/msh.c ****             rt_snprintf(pg_name, length - 1, "/bin/%.*s.mo", cmd_length, cmd_line);
+ 268:./rt_thread/components/finsh/msh.c ****             fd = open(pg_name, O_RDONLY, 0);
+ 269:./rt_thread/components/finsh/msh.c ****         }
+ 270:./rt_thread/components/finsh/msh.c ****     }
+ 271:./rt_thread/components/finsh/msh.c **** 
+ 272:./rt_thread/components/finsh/msh.c ****     if (fd >= 0)
+ 273:./rt_thread/components/finsh/msh.c ****     {
+ 274:./rt_thread/components/finsh/msh.c ****         /* found program */
+ 275:./rt_thread/components/finsh/msh.c ****         close(fd);
+ 276:./rt_thread/components/finsh/msh.c ****         dlmodule_exec(pg_name, cmd_line, size);
+ 277:./rt_thread/components/finsh/msh.c ****         ret = 0;
+ 278:./rt_thread/components/finsh/msh.c ****     }
+ 279:./rt_thread/components/finsh/msh.c ****     else
+ 280:./rt_thread/components/finsh/msh.c ****     {
+ 281:./rt_thread/components/finsh/msh.c ****         ret = -1;
+ 282:./rt_thread/components/finsh/msh.c ****     }
+ 283:./rt_thread/components/finsh/msh.c **** 
+ 284:./rt_thread/components/finsh/msh.c ****     rt_free(pg_name);
+ 285:./rt_thread/components/finsh/msh.c ****     return ret;
+ 286:./rt_thread/components/finsh/msh.c **** }
+ 287:./rt_thread/components/finsh/msh.c **** 
+ 288:./rt_thread/components/finsh/msh.c **** int system(const char *command)
+ 289:./rt_thread/components/finsh/msh.c **** {
+ 290:./rt_thread/components/finsh/msh.c ****     int ret = -RT_ENOMEM;
+ 291:./rt_thread/components/finsh/msh.c ****     char *cmd = rt_strdup(command);
+ 292:./rt_thread/components/finsh/msh.c **** 
+ 293:./rt_thread/components/finsh/msh.c ****     if (cmd)
+ 294:./rt_thread/components/finsh/msh.c ****     {
+ 295:./rt_thread/components/finsh/msh.c ****         ret = msh_exec(cmd, rt_strlen(cmd));
+ 296:./rt_thread/components/finsh/msh.c ****         rt_free(cmd);
+ 297:./rt_thread/components/finsh/msh.c ****     }
+ 298:./rt_thread/components/finsh/msh.c **** 
+ 299:./rt_thread/components/finsh/msh.c ****     return ret;
+ 300:./rt_thread/components/finsh/msh.c **** }
+ 301:./rt_thread/components/finsh/msh.c **** 
+ 302:./rt_thread/components/finsh/msh.c **** #endif
+ 303:./rt_thread/components/finsh/msh.c **** 
+ 304:./rt_thread/components/finsh/msh.c **** static int _msh_exec_cmd(char *cmd, rt_size_t length, int *retp)
+ 305:./rt_thread/components/finsh/msh.c **** {
+ 746              		.loc 1 305 1
+ 747              		.cfi_startproc
+ 748              		@ args = 0, pretend = 0, frame = 64
+ 749              		@ frame_needed = 1, uses_anonymous_args = 0
+ 750 0000 80B5     		push	{r7, lr}
+ 751              	.LCFI29:
+ 752              		.cfi_def_cfa_offset 8
+ 753              		.cfi_offset 7, -8
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 20
+
+
+ 754              		.cfi_offset 14, -4
+ 755 0002 90B0     		sub	sp, sp, #64
+ 756              	.LCFI30:
+ 757              		.cfi_def_cfa_offset 72
+ 758 0004 00AF     		add	r7, sp, #0
+ 759              	.LCFI31:
+ 760              		.cfi_def_cfa_register 7
+ 761 0006 F860     		str	r0, [r7, #12]
+ 762 0008 B960     		str	r1, [r7, #8]
+ 763 000a 7A60     		str	r2, [r7, #4]
+ 306:./rt_thread/components/finsh/msh.c ****     int argc;
+ 307:./rt_thread/components/finsh/msh.c ****     rt_size_t cmd0_size = 0;
+ 764              		.loc 1 307 15
+ 765 000c 0023     		movs	r3, #0
+ 766 000e FB63     		str	r3, [r7, #60]
+ 308:./rt_thread/components/finsh/msh.c ****     cmd_function_t cmd_func;
+ 309:./rt_thread/components/finsh/msh.c ****     char *argv[FINSH_ARG_MAX];
+ 310:./rt_thread/components/finsh/msh.c **** 
+ 311:./rt_thread/components/finsh/msh.c ****     RT_ASSERT(cmd);
+ 312:./rt_thread/components/finsh/msh.c ****     RT_ASSERT(retp);
+ 313:./rt_thread/components/finsh/msh.c **** 
+ 314:./rt_thread/components/finsh/msh.c ****     /* find the size of first command */
+ 315:./rt_thread/components/finsh/msh.c ****     while ((cmd[cmd0_size] != ' ' && cmd[cmd0_size] != '\t') && cmd0_size < length)
+ 767              		.loc 1 315 11
+ 768 0010 02E0     		b	.L54
+ 769              	.L56:
+ 316:./rt_thread/components/finsh/msh.c ****         cmd0_size ++;
+ 770              		.loc 1 316 19
+ 771 0012 FB6B     		ldr	r3, [r7, #60]
+ 772 0014 0133     		adds	r3, r3, #1
+ 773 0016 FB63     		str	r3, [r7, #60]
+ 774              	.L54:
+ 315:./rt_thread/components/finsh/msh.c ****         cmd0_size ++;
+ 775              		.loc 1 315 16
+ 776 0018 FA68     		ldr	r2, [r7, #12]
+ 777 001a FB6B     		ldr	r3, [r7, #60]
+ 778 001c 1344     		add	r3, r3, r2
+ 779 001e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 315:./rt_thread/components/finsh/msh.c ****         cmd0_size ++;
+ 780              		.loc 1 315 11
+ 781 0020 202B     		cmp	r3, #32
+ 782 0022 09D0     		beq	.L55
+ 315:./rt_thread/components/finsh/msh.c ****         cmd0_size ++;
+ 783              		.loc 1 315 41 discriminator 1
+ 784 0024 FA68     		ldr	r2, [r7, #12]
+ 785 0026 FB6B     		ldr	r3, [r7, #60]
+ 786 0028 1344     		add	r3, r3, r2
+ 787 002a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 315:./rt_thread/components/finsh/msh.c ****         cmd0_size ++;
+ 788              		.loc 1 315 35 discriminator 1
+ 789 002c 092B     		cmp	r3, #9
+ 790 002e 03D0     		beq	.L55
+ 315:./rt_thread/components/finsh/msh.c ****         cmd0_size ++;
+ 791              		.loc 1 315 62 discriminator 2
+ 792 0030 FA6B     		ldr	r2, [r7, #60]
+ 793 0032 BB68     		ldr	r3, [r7, #8]
+ 794 0034 9A42     		cmp	r2, r3
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 21
+
+
+ 795 0036 ECD3     		bcc	.L56
+ 796              	.L55:
+ 317:./rt_thread/components/finsh/msh.c ****     if (cmd0_size == 0)
+ 797              		.loc 1 317 8
+ 798 0038 FB6B     		ldr	r3, [r7, #60]
+ 799 003a 002B     		cmp	r3, #0
+ 800 003c 02D1     		bne	.L57
+ 318:./rt_thread/components/finsh/msh.c ****         return -RT_ERROR;
+ 801              		.loc 1 318 16
+ 802 003e 4FF0FF33 		mov	r3, #-1
+ 803 0042 2AE0     		b	.L61
+ 804              	.L57:
+ 319:./rt_thread/components/finsh/msh.c **** 
+ 320:./rt_thread/components/finsh/msh.c ****     cmd_func = msh_get_cmd(cmd, cmd0_size);
+ 805              		.loc 1 320 16
+ 806 0044 FB6B     		ldr	r3, [r7, #60]
+ 807 0046 1946     		mov	r1, r3
+ 808 0048 F868     		ldr	r0, [r7, #12]
+ 809 004a FFF7FEFF 		bl	msh_get_cmd
+ 810 004e B863     		str	r0, [r7, #56]
+ 321:./rt_thread/components/finsh/msh.c ****     if (cmd_func == RT_NULL)
+ 811              		.loc 1 321 8
+ 812 0050 BB6B     		ldr	r3, [r7, #56]
+ 813 0052 002B     		cmp	r3, #0
+ 814 0054 02D1     		bne	.L59
+ 322:./rt_thread/components/finsh/msh.c ****         return -RT_ERROR;
+ 815              		.loc 1 322 16
+ 816 0056 4FF0FF33 		mov	r3, #-1
+ 817 005a 1EE0     		b	.L61
+ 818              	.L59:
+ 323:./rt_thread/components/finsh/msh.c **** 
+ 324:./rt_thread/components/finsh/msh.c ****     /* split arguments */
+ 325:./rt_thread/components/finsh/msh.c ****     memset(argv, 0x00, sizeof(argv));
+ 819              		.loc 1 325 5
+ 820 005c 07F11403 		add	r3, r7, #20
+ 821 0060 2022     		movs	r2, #32
+ 822 0062 0021     		movs	r1, #0
+ 823 0064 1846     		mov	r0, r3
+ 824 0066 FFF7FEFF 		bl	memset
+ 326:./rt_thread/components/finsh/msh.c ****     argc = msh_split(cmd, length, argv);
+ 825              		.loc 1 326 12
+ 826 006a 07F11403 		add	r3, r7, #20
+ 827 006e 1A46     		mov	r2, r3
+ 828 0070 B968     		ldr	r1, [r7, #8]
+ 829 0072 F868     		ldr	r0, [r7, #12]
+ 830 0074 FFF7FEFF 		bl	msh_split
+ 831 0078 7863     		str	r0, [r7, #52]
+ 327:./rt_thread/components/finsh/msh.c ****     if (argc == 0)
+ 832              		.loc 1 327 8
+ 833 007a 7B6B     		ldr	r3, [r7, #52]
+ 834 007c 002B     		cmp	r3, #0
+ 835 007e 02D1     		bne	.L60
+ 328:./rt_thread/components/finsh/msh.c ****         return -RT_ERROR;
+ 836              		.loc 1 328 16
+ 837 0080 4FF0FF33 		mov	r3, #-1
+ 838 0084 09E0     		b	.L61
+ 839              	.L60:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 22
+
+
+ 329:./rt_thread/components/finsh/msh.c **** 
+ 330:./rt_thread/components/finsh/msh.c ****     /* exec this command */
+ 331:./rt_thread/components/finsh/msh.c ****     *retp = cmd_func(argc, argv);
+ 840              		.loc 1 331 13
+ 841 0086 07F11402 		add	r2, r7, #20
+ 842 008a BB6B     		ldr	r3, [r7, #56]
+ 843 008c 1146     		mov	r1, r2
+ 844 008e 786B     		ldr	r0, [r7, #52]
+ 845 0090 9847     		blx	r3
+ 846              	.LVL0:
+ 847 0092 0246     		mov	r2, r0
+ 848              		.loc 1 331 11
+ 849 0094 7B68     		ldr	r3, [r7, #4]
+ 850 0096 1A60     		str	r2, [r3]
+ 332:./rt_thread/components/finsh/msh.c ****     return 0;
+ 851              		.loc 1 332 12
+ 852 0098 0023     		movs	r3, #0
+ 853              	.L61:
+ 333:./rt_thread/components/finsh/msh.c **** }
+ 854              		.loc 1 333 1 discriminator 1
+ 855 009a 1846     		mov	r0, r3
+ 856 009c 4037     		adds	r7, r7, #64
+ 857              	.LCFI32:
+ 858              		.cfi_def_cfa_offset 8
+ 859 009e BD46     		mov	sp, r7
+ 860              	.LCFI33:
+ 861              		.cfi_def_cfa_register 13
+ 862              		@ sp needed
+ 863 00a0 80BD     		pop	{r7, pc}
+ 864              		.cfi_endproc
+ 865              	.LFE25:
+ 867              		.section	.rodata
+ 868              		.align	2
+ 869              	.LC6:
+ 870 0058 25733A20 		.ascii	"%s: command not found.\012\000"
+ 870      636F6D6D 
+ 870      616E6420 
+ 870      6E6F7420 
+ 870      666F756E 
+ 871              		.section	.text.msh_exec,"ax",%progbits
+ 872              		.align	1
+ 873              		.global	msh_exec
+ 874              		.syntax unified
+ 875              		.thumb
+ 876              		.thumb_func
+ 878              	msh_exec:
+ 879              	.LFB26:
+ 334:./rt_thread/components/finsh/msh.c **** 
+ 335:./rt_thread/components/finsh/msh.c **** #if defined(RT_USING_LWP) && defined(RT_USING_DFS)
+ 336:./rt_thread/components/finsh/msh.c **** static int _msh_exec_lwp(char *cmd, rt_size_t length)
+ 337:./rt_thread/components/finsh/msh.c **** {
+ 338:./rt_thread/components/finsh/msh.c ****     int argc;
+ 339:./rt_thread/components/finsh/msh.c ****     int cmd0_size = 0;
+ 340:./rt_thread/components/finsh/msh.c ****     char *argv[FINSH_ARG_MAX];
+ 341:./rt_thread/components/finsh/msh.c ****     int fd = -1;
+ 342:./rt_thread/components/finsh/msh.c ****     char *pg_name;
+ 343:./rt_thread/components/finsh/msh.c **** 
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 23
+
+
+ 344:./rt_thread/components/finsh/msh.c ****     extern int exec(char*, int, char**);
+ 345:./rt_thread/components/finsh/msh.c **** 
+ 346:./rt_thread/components/finsh/msh.c ****     /* find the size of first command */
+ 347:./rt_thread/components/finsh/msh.c ****     while ((cmd[cmd0_size] != ' ' && cmd[cmd0_size] != '\t') && cmd0_size < length)
+ 348:./rt_thread/components/finsh/msh.c ****         cmd0_size ++;
+ 349:./rt_thread/components/finsh/msh.c ****     if (cmd0_size == 0)
+ 350:./rt_thread/components/finsh/msh.c ****         return -1;
+ 351:./rt_thread/components/finsh/msh.c **** 
+ 352:./rt_thread/components/finsh/msh.c ****     /* split arguments */
+ 353:./rt_thread/components/finsh/msh.c ****     rt_memset(argv, 0x00, sizeof(argv));
+ 354:./rt_thread/components/finsh/msh.c ****     argc = msh_split(cmd, length, argv);
+ 355:./rt_thread/components/finsh/msh.c ****     if (argc == 0)
+ 356:./rt_thread/components/finsh/msh.c ****         return -1;
+ 357:./rt_thread/components/finsh/msh.c **** 
+ 358:./rt_thread/components/finsh/msh.c ****     pg_name = argv[0];
+ 359:./rt_thread/components/finsh/msh.c ****     /* try to open program */
+ 360:./rt_thread/components/finsh/msh.c ****     fd = open(pg_name, O_RDONLY, 0);
+ 361:./rt_thread/components/finsh/msh.c **** 
+ 362:./rt_thread/components/finsh/msh.c ****     if (fd < 0)
+ 363:./rt_thread/components/finsh/msh.c ****         return -1;
+ 364:./rt_thread/components/finsh/msh.c **** 
+ 365:./rt_thread/components/finsh/msh.c ****     /* found program */
+ 366:./rt_thread/components/finsh/msh.c ****     close(fd);
+ 367:./rt_thread/components/finsh/msh.c ****     exec(pg_name, argc, argv);
+ 368:./rt_thread/components/finsh/msh.c **** 
+ 369:./rt_thread/components/finsh/msh.c ****     return 0;
+ 370:./rt_thread/components/finsh/msh.c **** }
+ 371:./rt_thread/components/finsh/msh.c **** #endif
+ 372:./rt_thread/components/finsh/msh.c **** 
+ 373:./rt_thread/components/finsh/msh.c **** int msh_exec(char *cmd, rt_size_t length)
+ 374:./rt_thread/components/finsh/msh.c **** {
+ 880              		.loc 1 374 1
+ 881              		.cfi_startproc
+ 882              		@ args = 0, pretend = 0, frame = 16
+ 883              		@ frame_needed = 1, uses_anonymous_args = 0
+ 884 0000 80B5     		push	{r7, lr}
+ 885              	.LCFI34:
+ 886              		.cfi_def_cfa_offset 8
+ 887              		.cfi_offset 7, -8
+ 888              		.cfi_offset 14, -4
+ 889 0002 84B0     		sub	sp, sp, #16
+ 890              	.LCFI35:
+ 891              		.cfi_def_cfa_offset 24
+ 892 0004 00AF     		add	r7, sp, #0
+ 893              	.LCFI36:
+ 894              		.cfi_def_cfa_register 7
+ 895 0006 7860     		str	r0, [r7, #4]
+ 896 0008 3960     		str	r1, [r7]
+ 375:./rt_thread/components/finsh/msh.c ****     int cmd_ret;
+ 376:./rt_thread/components/finsh/msh.c **** 
+ 377:./rt_thread/components/finsh/msh.c ****     /* strim the beginning of command */
+ 378:./rt_thread/components/finsh/msh.c ****     while ((length > 0) && (*cmd == ' ' || *cmd == '\t'))
+ 897              		.loc 1 378 11
+ 898 000a 05E0     		b	.L63
+ 899              	.L65:
+ 379:./rt_thread/components/finsh/msh.c ****     {
+ 380:./rt_thread/components/finsh/msh.c ****         cmd++;
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 24
+
+
+ 900              		.loc 1 380 12
+ 901 000c 7B68     		ldr	r3, [r7, #4]
+ 902 000e 0133     		adds	r3, r3, #1
+ 903 0010 7B60     		str	r3, [r7, #4]
+ 381:./rt_thread/components/finsh/msh.c ****         length--;
+ 904              		.loc 1 381 15
+ 905 0012 3B68     		ldr	r3, [r7]
+ 906 0014 013B     		subs	r3, r3, #1
+ 907 0016 3B60     		str	r3, [r7]
+ 908              	.L63:
+ 378:./rt_thread/components/finsh/msh.c ****     {
+ 909              		.loc 1 378 11
+ 910 0018 3B68     		ldr	r3, [r7]
+ 911 001a 002B     		cmp	r3, #0
+ 912 001c 07D0     		beq	.L64
+ 378:./rt_thread/components/finsh/msh.c ****     {
+ 913              		.loc 1 378 29 discriminator 1
+ 914 001e 7B68     		ldr	r3, [r7, #4]
+ 915 0020 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 378:./rt_thread/components/finsh/msh.c ****     {
+ 916              		.loc 1 378 25 discriminator 1
+ 917 0022 202B     		cmp	r3, #32
+ 918 0024 F2D0     		beq	.L65
+ 378:./rt_thread/components/finsh/msh.c ****     {
+ 919              		.loc 1 378 44 discriminator 2
+ 920 0026 7B68     		ldr	r3, [r7, #4]
+ 921 0028 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 378:./rt_thread/components/finsh/msh.c ****     {
+ 922              		.loc 1 378 41 discriminator 2
+ 923 002a 092B     		cmp	r3, #9
+ 924 002c EED0     		beq	.L65
+ 925              	.L64:
+ 382:./rt_thread/components/finsh/msh.c ****     }
+ 383:./rt_thread/components/finsh/msh.c **** 
+ 384:./rt_thread/components/finsh/msh.c ****     if (length == 0)
+ 926              		.loc 1 384 8
+ 927 002e 3B68     		ldr	r3, [r7]
+ 928 0030 002B     		cmp	r3, #0
+ 929 0032 01D1     		bne	.L66
+ 385:./rt_thread/components/finsh/msh.c ****         return 0;
+ 930              		.loc 1 385 16
+ 931 0034 0023     		movs	r3, #0
+ 932 0036 22E0     		b	.L72
+ 933              	.L66:
+ 386:./rt_thread/components/finsh/msh.c **** 
+ 387:./rt_thread/components/finsh/msh.c ****     /* Exec sequence:
+ 388:./rt_thread/components/finsh/msh.c ****      * 1. built-in command
+ 389:./rt_thread/components/finsh/msh.c ****      * 2. module(if enabled)
+ 390:./rt_thread/components/finsh/msh.c ****      */
+ 391:./rt_thread/components/finsh/msh.c ****     if (_msh_exec_cmd(cmd, length, &cmd_ret) == 0)
+ 934              		.loc 1 391 9
+ 935 0038 07F10803 		add	r3, r7, #8
+ 936 003c 1A46     		mov	r2, r3
+ 937 003e 3968     		ldr	r1, [r7]
+ 938 0040 7868     		ldr	r0, [r7, #4]
+ 939 0042 FFF7FEFF 		bl	_msh_exec_cmd
+ 940 0046 0346     		mov	r3, r0
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 25
+
+
+ 941              		.loc 1 391 8
+ 942 0048 002B     		cmp	r3, #0
+ 943 004a 01D1     		bne	.L68
+ 392:./rt_thread/components/finsh/msh.c ****     {
+ 393:./rt_thread/components/finsh/msh.c ****         return cmd_ret;
+ 944              		.loc 1 393 16
+ 945 004c BB68     		ldr	r3, [r7, #8]
+ 946 004e 16E0     		b	.L72
+ 947              	.L68:
+ 948              	.LBB3:
+ 394:./rt_thread/components/finsh/msh.c ****     }
+ 395:./rt_thread/components/finsh/msh.c **** #ifdef RT_USING_DFS
+ 396:./rt_thread/components/finsh/msh.c **** #ifdef DFS_USING_WORKDIR
+ 397:./rt_thread/components/finsh/msh.c ****     if (msh_exec_script(cmd, length) == 0)
+ 398:./rt_thread/components/finsh/msh.c ****     {
+ 399:./rt_thread/components/finsh/msh.c ****         return 0;
+ 400:./rt_thread/components/finsh/msh.c ****     }
+ 401:./rt_thread/components/finsh/msh.c **** #endif
+ 402:./rt_thread/components/finsh/msh.c **** 
+ 403:./rt_thread/components/finsh/msh.c **** #ifdef RT_USING_MODULE
+ 404:./rt_thread/components/finsh/msh.c ****     if (msh_exec_module(cmd, length) == 0)
+ 405:./rt_thread/components/finsh/msh.c ****     {
+ 406:./rt_thread/components/finsh/msh.c ****         return 0;
+ 407:./rt_thread/components/finsh/msh.c ****     }
+ 408:./rt_thread/components/finsh/msh.c **** #endif
+ 409:./rt_thread/components/finsh/msh.c **** 
+ 410:./rt_thread/components/finsh/msh.c **** #ifdef RT_USING_LWP
+ 411:./rt_thread/components/finsh/msh.c ****     if (_msh_exec_lwp(cmd, length) == 0)
+ 412:./rt_thread/components/finsh/msh.c ****     {
+ 413:./rt_thread/components/finsh/msh.c ****         return 0;
+ 414:./rt_thread/components/finsh/msh.c ****     }
+ 415:./rt_thread/components/finsh/msh.c **** #endif
+ 416:./rt_thread/components/finsh/msh.c **** #endif
+ 417:./rt_thread/components/finsh/msh.c **** 
+ 418:./rt_thread/components/finsh/msh.c ****     /* truncate the cmd at the first space. */
+ 419:./rt_thread/components/finsh/msh.c ****     {
+ 420:./rt_thread/components/finsh/msh.c ****         char *tcmd;
+ 421:./rt_thread/components/finsh/msh.c ****         tcmd = cmd;
+ 949              		.loc 1 421 14
+ 950 0050 7B68     		ldr	r3, [r7, #4]
+ 951 0052 FB60     		str	r3, [r7, #12]
+ 422:./rt_thread/components/finsh/msh.c ****         while (*tcmd != ' ' && *tcmd != '\0')
+ 952              		.loc 1 422 15
+ 953 0054 02E0     		b	.L69
+ 954              	.L71:
+ 423:./rt_thread/components/finsh/msh.c ****         {
+ 424:./rt_thread/components/finsh/msh.c ****             tcmd++;
+ 955              		.loc 1 424 17
+ 956 0056 FB68     		ldr	r3, [r7, #12]
+ 957 0058 0133     		adds	r3, r3, #1
+ 958 005a FB60     		str	r3, [r7, #12]
+ 959              	.L69:
+ 422:./rt_thread/components/finsh/msh.c ****         while (*tcmd != ' ' && *tcmd != '\0')
+ 960              		.loc 1 422 16
+ 961 005c FB68     		ldr	r3, [r7, #12]
+ 962 005e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 422:./rt_thread/components/finsh/msh.c ****         while (*tcmd != ' ' && *tcmd != '\0')
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 26
+
+
+ 963              		.loc 1 422 15
+ 964 0060 202B     		cmp	r3, #32
+ 965 0062 03D0     		beq	.L70
+ 422:./rt_thread/components/finsh/msh.c ****         while (*tcmd != ' ' && *tcmd != '\0')
+ 966              		.loc 1 422 32 discriminator 1
+ 967 0064 FB68     		ldr	r3, [r7, #12]
+ 968 0066 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 422:./rt_thread/components/finsh/msh.c ****         while (*tcmd != ' ' && *tcmd != '\0')
+ 969              		.loc 1 422 29 discriminator 1
+ 970 0068 002B     		cmp	r3, #0
+ 971 006a F4D1     		bne	.L71
+ 972              	.L70:
+ 425:./rt_thread/components/finsh/msh.c ****         }
+ 426:./rt_thread/components/finsh/msh.c ****         *tcmd = '\0';
+ 973              		.loc 1 426 15
+ 974 006c FB68     		ldr	r3, [r7, #12]
+ 975 006e 0022     		movs	r2, #0
+ 976 0070 1A70     		strb	r2, [r3]
+ 977              	.LBE3:
+ 427:./rt_thread/components/finsh/msh.c ****     }
+ 428:./rt_thread/components/finsh/msh.c ****     rt_kprintf("%s: command not found.\n", cmd);
+ 978              		.loc 1 428 5
+ 979 0072 7968     		ldr	r1, [r7, #4]
+ 980 0074 0448     		ldr	r0, .L73
+ 981 0076 FFF7FEFF 		bl	rt_kprintf
+ 429:./rt_thread/components/finsh/msh.c ****     return -1;
+ 982              		.loc 1 429 12
+ 983 007a 4FF0FF33 		mov	r3, #-1
+ 984              	.L72:
+ 430:./rt_thread/components/finsh/msh.c **** }
+ 985              		.loc 1 430 1 discriminator 1
+ 986 007e 1846     		mov	r0, r3
+ 987 0080 1037     		adds	r7, r7, #16
+ 988              	.LCFI37:
+ 989              		.cfi_def_cfa_offset 8
+ 990 0082 BD46     		mov	sp, r7
+ 991              	.LCFI38:
+ 992              		.cfi_def_cfa_register 13
+ 993              		@ sp needed
+ 994 0084 80BD     		pop	{r7, pc}
+ 995              	.L74:
+ 996 0086 00BF     		.align	2
+ 997              	.L73:
+ 998 0088 58000000 		.word	.LC6
+ 999              		.cfi_endproc
+ 1000              	.LFE26:
+ 1002              		.section	.text.str_common,"ax",%progbits
+ 1003              		.align	1
+ 1004              		.syntax unified
+ 1005              		.thumb
+ 1006              		.thumb_func
+ 1008              	str_common:
+ 1009              	.LFB27:
+ 431:./rt_thread/components/finsh/msh.c **** 
+ 432:./rt_thread/components/finsh/msh.c **** static int str_common(const char *str1, const char *str2)
+ 433:./rt_thread/components/finsh/msh.c **** {
+ 1010              		.loc 1 433 1
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 27
+
+
+ 1011              		.cfi_startproc
+ 1012              		@ args = 0, pretend = 0, frame = 16
+ 1013              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1014              		@ link register save eliminated.
+ 1015 0000 80B4     		push	{r7}
+ 1016              	.LCFI39:
+ 1017              		.cfi_def_cfa_offset 4
+ 1018              		.cfi_offset 7, -4
+ 1019 0002 85B0     		sub	sp, sp, #20
+ 1020              	.LCFI40:
+ 1021              		.cfi_def_cfa_offset 24
+ 1022 0004 00AF     		add	r7, sp, #0
+ 1023              	.LCFI41:
+ 1024              		.cfi_def_cfa_register 7
+ 1025 0006 7860     		str	r0, [r7, #4]
+ 1026 0008 3960     		str	r1, [r7]
+ 434:./rt_thread/components/finsh/msh.c ****     const char *str = str1;
+ 1027              		.loc 1 434 17
+ 1028 000a 7B68     		ldr	r3, [r7, #4]
+ 1029 000c FB60     		str	r3, [r7, #12]
+ 435:./rt_thread/components/finsh/msh.c **** 
+ 436:./rt_thread/components/finsh/msh.c ****     while ((*str != 0) && (*str2 != 0) && (*str == *str2))
+ 1030              		.loc 1 436 11
+ 1031 000e 05E0     		b	.L76
+ 1032              	.L78:
+ 437:./rt_thread/components/finsh/msh.c ****     {
+ 438:./rt_thread/components/finsh/msh.c ****         str ++;
+ 1033              		.loc 1 438 13
+ 1034 0010 FB68     		ldr	r3, [r7, #12]
+ 1035 0012 0133     		adds	r3, r3, #1
+ 1036 0014 FB60     		str	r3, [r7, #12]
+ 439:./rt_thread/components/finsh/msh.c ****         str2 ++;
+ 1037              		.loc 1 439 14
+ 1038 0016 3B68     		ldr	r3, [r7]
+ 1039 0018 0133     		adds	r3, r3, #1
+ 1040 001a 3B60     		str	r3, [r7]
+ 1041              	.L76:
+ 436:./rt_thread/components/finsh/msh.c ****     {
+ 1042              		.loc 1 436 13
+ 1043 001c FB68     		ldr	r3, [r7, #12]
+ 1044 001e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 436:./rt_thread/components/finsh/msh.c ****     {
+ 1045              		.loc 1 436 11
+ 1046 0020 002B     		cmp	r3, #0
+ 1047 0022 09D0     		beq	.L77
+ 436:./rt_thread/components/finsh/msh.c ****     {
+ 1048              		.loc 1 436 28 discriminator 1
+ 1049 0024 3B68     		ldr	r3, [r7]
+ 1050 0026 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 436:./rt_thread/components/finsh/msh.c ****     {
+ 1051              		.loc 1 436 24 discriminator 1
+ 1052 0028 002B     		cmp	r3, #0
+ 1053 002a 05D0     		beq	.L77
+ 436:./rt_thread/components/finsh/msh.c ****     {
+ 1054              		.loc 1 436 44 discriminator 2
+ 1055 002c FB68     		ldr	r3, [r7, #12]
+ 1056 002e 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 28
+
+
+ 436:./rt_thread/components/finsh/msh.c ****     {
+ 1057              		.loc 1 436 52 discriminator 2
+ 1058 0030 3B68     		ldr	r3, [r7]
+ 1059 0032 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 436:./rt_thread/components/finsh/msh.c ****     {
+ 1060              		.loc 1 436 40 discriminator 2
+ 1061 0034 9A42     		cmp	r2, r3
+ 1062 0036 EBD0     		beq	.L78
+ 1063              	.L77:
+ 440:./rt_thread/components/finsh/msh.c ****     }
+ 441:./rt_thread/components/finsh/msh.c **** 
+ 442:./rt_thread/components/finsh/msh.c ****     return (str - str1);
+ 1064              		.loc 1 442 17
+ 1065 0038 FA68     		ldr	r2, [r7, #12]
+ 1066 003a 7B68     		ldr	r3, [r7, #4]
+ 1067 003c D31A     		subs	r3, r2, r3
+ 443:./rt_thread/components/finsh/msh.c **** }
+ 1068              		.loc 1 443 1
+ 1069 003e 1846     		mov	r0, r3
+ 1070 0040 1437     		adds	r7, r7, #20
+ 1071              	.LCFI42:
+ 1072              		.cfi_def_cfa_offset 4
+ 1073 0042 BD46     		mov	sp, r7
+ 1074              	.LCFI43:
+ 1075              		.cfi_def_cfa_register 13
+ 1076              		@ sp needed
+ 1077 0044 80BC     		pop	{r7}
+ 1078              	.LCFI44:
+ 1079              		.cfi_restore 7
+ 1080              		.cfi_def_cfa_offset 0
+ 1081 0046 7047     		bx	lr
+ 1082              		.cfi_endproc
+ 1083              	.LFE27:
+ 1085              		.section	.rodata
+ 1086              		.align	2
+ 1087              	.LC7:
+ 1088 0070 25730A00 		.ascii	"%s\012\000"
+ 1089              		.section	.text.msh_auto_complete,"ax",%progbits
+ 1090              		.align	1
+ 1091              		.global	msh_auto_complete
+ 1092              		.syntax unified
+ 1093              		.thumb
+ 1094              		.thumb_func
+ 1096              	msh_auto_complete:
+ 1097              	.LFB28:
+ 444:./rt_thread/components/finsh/msh.c **** 
+ 445:./rt_thread/components/finsh/msh.c **** #ifdef RT_USING_DFS
+ 446:./rt_thread/components/finsh/msh.c **** void msh_auto_complete_path(char *path)
+ 447:./rt_thread/components/finsh/msh.c **** {
+ 448:./rt_thread/components/finsh/msh.c ****     DIR *dir = RT_NULL;
+ 449:./rt_thread/components/finsh/msh.c ****     struct dirent *dirent = RT_NULL;
+ 450:./rt_thread/components/finsh/msh.c ****     char *full_path, *ptr, *index;
+ 451:./rt_thread/components/finsh/msh.c **** 
+ 452:./rt_thread/components/finsh/msh.c ****     if (!path)
+ 453:./rt_thread/components/finsh/msh.c ****         return;
+ 454:./rt_thread/components/finsh/msh.c **** 
+ 455:./rt_thread/components/finsh/msh.c ****     full_path = (char *)rt_malloc(256);
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 29
+
+
+ 456:./rt_thread/components/finsh/msh.c ****     if (full_path == RT_NULL) return; /* out of memory */
+ 457:./rt_thread/components/finsh/msh.c **** 
+ 458:./rt_thread/components/finsh/msh.c ****     if (*path != '/')
+ 459:./rt_thread/components/finsh/msh.c ****     {
+ 460:./rt_thread/components/finsh/msh.c ****         getcwd(full_path, 256);
+ 461:./rt_thread/components/finsh/msh.c ****         if (full_path[rt_strlen(full_path) - 1]  != '/')
+ 462:./rt_thread/components/finsh/msh.c ****             strcat(full_path, "/");
+ 463:./rt_thread/components/finsh/msh.c ****     }
+ 464:./rt_thread/components/finsh/msh.c ****     else *full_path = '\0';
+ 465:./rt_thread/components/finsh/msh.c **** 
+ 466:./rt_thread/components/finsh/msh.c ****     index = RT_NULL;
+ 467:./rt_thread/components/finsh/msh.c ****     ptr = path;
+ 468:./rt_thread/components/finsh/msh.c ****     for (;;)
+ 469:./rt_thread/components/finsh/msh.c ****     {
+ 470:./rt_thread/components/finsh/msh.c ****         if (*ptr == '/') index = ptr + 1;
+ 471:./rt_thread/components/finsh/msh.c ****         if (!*ptr) break;
+ 472:./rt_thread/components/finsh/msh.c **** 
+ 473:./rt_thread/components/finsh/msh.c ****         ptr ++;
+ 474:./rt_thread/components/finsh/msh.c ****     }
+ 475:./rt_thread/components/finsh/msh.c ****     if (index == RT_NULL) index = path;
+ 476:./rt_thread/components/finsh/msh.c **** 
+ 477:./rt_thread/components/finsh/msh.c ****     if (index != RT_NULL)
+ 478:./rt_thread/components/finsh/msh.c ****     {
+ 479:./rt_thread/components/finsh/msh.c ****         char *dest = index;
+ 480:./rt_thread/components/finsh/msh.c **** 
+ 481:./rt_thread/components/finsh/msh.c ****         /* fill the parent path */
+ 482:./rt_thread/components/finsh/msh.c ****         ptr = full_path;
+ 483:./rt_thread/components/finsh/msh.c ****         while (*ptr) ptr ++;
+ 484:./rt_thread/components/finsh/msh.c **** 
+ 485:./rt_thread/components/finsh/msh.c ****         for (index = path; index != dest;)
+ 486:./rt_thread/components/finsh/msh.c ****             *ptr++ = *index++;
+ 487:./rt_thread/components/finsh/msh.c ****         *ptr = '\0';
+ 488:./rt_thread/components/finsh/msh.c **** 
+ 489:./rt_thread/components/finsh/msh.c ****         dir = opendir(full_path);
+ 490:./rt_thread/components/finsh/msh.c ****         if (dir == RT_NULL) /* open directory failed! */
+ 491:./rt_thread/components/finsh/msh.c ****         {
+ 492:./rt_thread/components/finsh/msh.c ****             rt_free(full_path);
+ 493:./rt_thread/components/finsh/msh.c ****             return;
+ 494:./rt_thread/components/finsh/msh.c ****         }
+ 495:./rt_thread/components/finsh/msh.c **** 
+ 496:./rt_thread/components/finsh/msh.c ****         /* restore the index position */
+ 497:./rt_thread/components/finsh/msh.c ****         index = dest;
+ 498:./rt_thread/components/finsh/msh.c ****     }
+ 499:./rt_thread/components/finsh/msh.c **** 
+ 500:./rt_thread/components/finsh/msh.c ****     /* auto complete the file or directory name */
+ 501:./rt_thread/components/finsh/msh.c ****     if (*index == '\0') /* display all of files and directories */
+ 502:./rt_thread/components/finsh/msh.c ****     {
+ 503:./rt_thread/components/finsh/msh.c ****         for (;;)
+ 504:./rt_thread/components/finsh/msh.c ****         {
+ 505:./rt_thread/components/finsh/msh.c ****             dirent = readdir(dir);
+ 506:./rt_thread/components/finsh/msh.c ****             if (dirent == RT_NULL) break;
+ 507:./rt_thread/components/finsh/msh.c **** 
+ 508:./rt_thread/components/finsh/msh.c ****             rt_kprintf("%s\n", dirent->d_name);
+ 509:./rt_thread/components/finsh/msh.c ****         }
+ 510:./rt_thread/components/finsh/msh.c ****     }
+ 511:./rt_thread/components/finsh/msh.c ****     else
+ 512:./rt_thread/components/finsh/msh.c ****     {
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 30
+
+
+ 513:./rt_thread/components/finsh/msh.c ****         rt_size_t length, min_length;
+ 514:./rt_thread/components/finsh/msh.c **** 
+ 515:./rt_thread/components/finsh/msh.c ****         min_length = 0;
+ 516:./rt_thread/components/finsh/msh.c ****         for (;;)
+ 517:./rt_thread/components/finsh/msh.c ****         {
+ 518:./rt_thread/components/finsh/msh.c ****             dirent = readdir(dir);
+ 519:./rt_thread/components/finsh/msh.c ****             if (dirent == RT_NULL) break;
+ 520:./rt_thread/components/finsh/msh.c **** 
+ 521:./rt_thread/components/finsh/msh.c ****             /* matched the prefix string */
+ 522:./rt_thread/components/finsh/msh.c ****             if (strncmp(index, dirent->d_name, rt_strlen(index)) == 0)
+ 523:./rt_thread/components/finsh/msh.c ****             {
+ 524:./rt_thread/components/finsh/msh.c ****                 if (min_length == 0)
+ 525:./rt_thread/components/finsh/msh.c ****                 {
+ 526:./rt_thread/components/finsh/msh.c ****                     min_length = rt_strlen(dirent->d_name);
+ 527:./rt_thread/components/finsh/msh.c ****                     /* save dirent name */
+ 528:./rt_thread/components/finsh/msh.c ****                     strcpy(full_path, dirent->d_name);
+ 529:./rt_thread/components/finsh/msh.c ****                 }
+ 530:./rt_thread/components/finsh/msh.c **** 
+ 531:./rt_thread/components/finsh/msh.c ****                 length = str_common(dirent->d_name, full_path);
+ 532:./rt_thread/components/finsh/msh.c **** 
+ 533:./rt_thread/components/finsh/msh.c ****                 if (length < min_length)
+ 534:./rt_thread/components/finsh/msh.c ****                 {
+ 535:./rt_thread/components/finsh/msh.c ****                     min_length = length;
+ 536:./rt_thread/components/finsh/msh.c ****                 }
+ 537:./rt_thread/components/finsh/msh.c ****             }
+ 538:./rt_thread/components/finsh/msh.c ****         }
+ 539:./rt_thread/components/finsh/msh.c **** 
+ 540:./rt_thread/components/finsh/msh.c ****         if (min_length)
+ 541:./rt_thread/components/finsh/msh.c ****         {
+ 542:./rt_thread/components/finsh/msh.c ****             if (min_length < rt_strlen(full_path))
+ 543:./rt_thread/components/finsh/msh.c ****             {
+ 544:./rt_thread/components/finsh/msh.c ****                 /* list the candidate */
+ 545:./rt_thread/components/finsh/msh.c ****                 rewinddir(dir);
+ 546:./rt_thread/components/finsh/msh.c **** 
+ 547:./rt_thread/components/finsh/msh.c ****                 for (;;)
+ 548:./rt_thread/components/finsh/msh.c ****                 {
+ 549:./rt_thread/components/finsh/msh.c ****                     dirent = readdir(dir);
+ 550:./rt_thread/components/finsh/msh.c ****                     if (dirent == RT_NULL) break;
+ 551:./rt_thread/components/finsh/msh.c **** 
+ 552:./rt_thread/components/finsh/msh.c ****                     if (strncmp(index, dirent->d_name, rt_strlen(index)) == 0)
+ 553:./rt_thread/components/finsh/msh.c ****                         rt_kprintf("%s\n", dirent->d_name);
+ 554:./rt_thread/components/finsh/msh.c ****                 }
+ 555:./rt_thread/components/finsh/msh.c ****             }
+ 556:./rt_thread/components/finsh/msh.c **** 
+ 557:./rt_thread/components/finsh/msh.c ****             length = index - path;
+ 558:./rt_thread/components/finsh/msh.c ****             memcpy(index, full_path, min_length);
+ 559:./rt_thread/components/finsh/msh.c ****             path[length + min_length] = '\0';
+ 560:./rt_thread/components/finsh/msh.c ****         }
+ 561:./rt_thread/components/finsh/msh.c ****     }
+ 562:./rt_thread/components/finsh/msh.c **** 
+ 563:./rt_thread/components/finsh/msh.c ****     closedir(dir);
+ 564:./rt_thread/components/finsh/msh.c ****     rt_free(full_path);
+ 565:./rt_thread/components/finsh/msh.c **** }
+ 566:./rt_thread/components/finsh/msh.c **** #endif
+ 567:./rt_thread/components/finsh/msh.c **** 
+ 568:./rt_thread/components/finsh/msh.c **** void msh_auto_complete(char *prefix)
+ 569:./rt_thread/components/finsh/msh.c **** {
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 31
+
+
+ 1098              		.loc 1 569 1
+ 1099              		.cfi_startproc
+ 1100              		@ args = 0, pretend = 0, frame = 32
+ 1101              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1102 0000 80B5     		push	{r7, lr}
+ 1103              	.LCFI45:
+ 1104              		.cfi_def_cfa_offset 8
+ 1105              		.cfi_offset 7, -8
+ 1106              		.cfi_offset 14, -4
+ 1107 0002 88B0     		sub	sp, sp, #32
+ 1108              	.LCFI46:
+ 1109              		.cfi_def_cfa_offset 40
+ 1110 0004 00AF     		add	r7, sp, #0
+ 1111              	.LCFI47:
+ 1112              		.cfi_def_cfa_register 7
+ 1113 0006 7860     		str	r0, [r7, #4]
+ 570:./rt_thread/components/finsh/msh.c ****     int length, min_length;
+ 571:./rt_thread/components/finsh/msh.c ****     const char *name_ptr, *cmd_name;
+ 572:./rt_thread/components/finsh/msh.c ****     struct finsh_syscall *index;
+ 573:./rt_thread/components/finsh/msh.c **** 
+ 574:./rt_thread/components/finsh/msh.c ****     min_length = 0;
+ 1114              		.loc 1 574 16
+ 1115 0008 0023     		movs	r3, #0
+ 1116 000a FB61     		str	r3, [r7, #28]
+ 575:./rt_thread/components/finsh/msh.c ****     name_ptr = RT_NULL;
+ 1117              		.loc 1 575 14
+ 1118 000c 0023     		movs	r3, #0
+ 1119 000e BB61     		str	r3, [r7, #24]
+ 576:./rt_thread/components/finsh/msh.c **** 
+ 577:./rt_thread/components/finsh/msh.c ****     if (*prefix == '\0')
+ 1120              		.loc 1 577 9
+ 1121 0010 7B68     		ldr	r3, [r7, #4]
+ 1122 0012 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1123              		.loc 1 577 8
+ 1124 0014 002B     		cmp	r3, #0
+ 1125 0016 04D1     		bne	.L81
+ 578:./rt_thread/components/finsh/msh.c ****     {
+ 579:./rt_thread/components/finsh/msh.c ****         msh_help(0, RT_NULL);
+ 1126              		.loc 1 579 9
+ 1127 0018 0021     		movs	r1, #0
+ 1128 001a 0020     		movs	r0, #0
+ 1129 001c FFF7FEFF 		bl	msh_help
+ 580:./rt_thread/components/finsh/msh.c ****         return;
+ 1130              		.loc 1 580 9
+ 1131 0020 4AE0     		b	.L80
+ 1132              	.L81:
+ 581:./rt_thread/components/finsh/msh.c ****     }
+ 582:./rt_thread/components/finsh/msh.c **** 
+ 583:./rt_thread/components/finsh/msh.c **** #ifdef RT_USING_DFS
+ 584:./rt_thread/components/finsh/msh.c ****     /* check whether a spare in the command */
+ 585:./rt_thread/components/finsh/msh.c ****     {
+ 586:./rt_thread/components/finsh/msh.c ****         char *ptr;
+ 587:./rt_thread/components/finsh/msh.c **** 
+ 588:./rt_thread/components/finsh/msh.c ****         ptr = prefix + rt_strlen(prefix);
+ 589:./rt_thread/components/finsh/msh.c ****         while (ptr != prefix)
+ 590:./rt_thread/components/finsh/msh.c ****         {
+ 591:./rt_thread/components/finsh/msh.c ****             if (*ptr == ' ')
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 32
+
+
+ 592:./rt_thread/components/finsh/msh.c ****             {
+ 593:./rt_thread/components/finsh/msh.c ****                 msh_auto_complete_path(ptr + 1);
+ 594:./rt_thread/components/finsh/msh.c ****                 break;
+ 595:./rt_thread/components/finsh/msh.c ****             }
+ 596:./rt_thread/components/finsh/msh.c **** 
+ 597:./rt_thread/components/finsh/msh.c ****             ptr --;
+ 598:./rt_thread/components/finsh/msh.c ****         }
+ 599:./rt_thread/components/finsh/msh.c **** #ifdef RT_USING_MODULE
+ 600:./rt_thread/components/finsh/msh.c ****         /* There is a chance that the user want to run the module directly. So
+ 601:./rt_thread/components/finsh/msh.c ****          * try to complete the file names. If the completed path is not a
+ 602:./rt_thread/components/finsh/msh.c ****          * module, the system won't crash anyway. */
+ 603:./rt_thread/components/finsh/msh.c ****         if (ptr == prefix)
+ 604:./rt_thread/components/finsh/msh.c ****         {
+ 605:./rt_thread/components/finsh/msh.c ****             msh_auto_complete_path(ptr);
+ 606:./rt_thread/components/finsh/msh.c ****         }
+ 607:./rt_thread/components/finsh/msh.c **** #endif
+ 608:./rt_thread/components/finsh/msh.c ****     }
+ 609:./rt_thread/components/finsh/msh.c **** #endif
+ 610:./rt_thread/components/finsh/msh.c **** 
+ 611:./rt_thread/components/finsh/msh.c ****     /* checks in internal command */
+ 612:./rt_thread/components/finsh/msh.c ****     {
+ 613:./rt_thread/components/finsh/msh.c ****         for (index = _syscall_table_begin; index < _syscall_table_end; FINSH_NEXT_SYSCALL(index))
+ 1133              		.loc 1 613 20
+ 1134 0022 274B     		ldr	r3, .L92
+ 1135 0024 1B68     		ldr	r3, [r3]
+ 1136 0026 7B61     		str	r3, [r7, #20]
+ 1137              		.loc 1 613 9
+ 1138 0028 37E0     		b	.L83
+ 1139              	.L88:
+ 614:./rt_thread/components/finsh/msh.c ****         {
+ 615:./rt_thread/components/finsh/msh.c ****             /* skip finsh shell function */
+ 616:./rt_thread/components/finsh/msh.c ****             if (strncmp(index->name, "__cmd_", 6) != 0) continue;
+ 1140              		.loc 1 616 17
+ 1141 002a 7B69     		ldr	r3, [r7, #20]
+ 1142 002c 1B68     		ldr	r3, [r3]
+ 1143 002e 0622     		movs	r2, #6
+ 1144 0030 2449     		ldr	r1, .L92+4
+ 1145 0032 1846     		mov	r0, r3
+ 1146 0034 FFF7FEFF 		bl	strncmp
+ 1147 0038 0346     		mov	r3, r0
+ 1148              		.loc 1 616 16
+ 1149 003a 002B     		cmp	r3, #0
+ 1150 003c 29D1     		bne	.L90
+ 617:./rt_thread/components/finsh/msh.c **** 
+ 618:./rt_thread/components/finsh/msh.c ****             cmd_name = (const char *) &index->name[6];
+ 1151              		.loc 1 618 45
+ 1152 003e 7B69     		ldr	r3, [r7, #20]
+ 1153 0040 1B68     		ldr	r3, [r3]
+ 1154              		.loc 1 618 22
+ 1155 0042 0633     		adds	r3, r3, #6
+ 1156 0044 3B61     		str	r3, [r7, #16]
+ 619:./rt_thread/components/finsh/msh.c ****             if (strncmp(prefix, cmd_name, strlen(prefix)) == 0)
+ 1157              		.loc 1 619 17
+ 1158 0046 7868     		ldr	r0, [r7, #4]
+ 1159 0048 FFF7FEFF 		bl	strlen
+ 1160 004c 0346     		mov	r3, r0
+ 1161 004e 1A46     		mov	r2, r3
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 33
+
+
+ 1162 0050 3969     		ldr	r1, [r7, #16]
+ 1163 0052 7868     		ldr	r0, [r7, #4]
+ 1164 0054 FFF7FEFF 		bl	strncmp
+ 1165 0058 0346     		mov	r3, r0
+ 1166              		.loc 1 619 16
+ 1167 005a 002B     		cmp	r3, #0
+ 1168 005c 1AD1     		bne	.L85
+ 620:./rt_thread/components/finsh/msh.c ****             {
+ 621:./rt_thread/components/finsh/msh.c ****                 if (min_length == 0)
+ 1169              		.loc 1 621 20
+ 1170 005e FB69     		ldr	r3, [r7, #28]
+ 1171 0060 002B     		cmp	r3, #0
+ 1172 0062 06D1     		bne	.L86
+ 622:./rt_thread/components/finsh/msh.c ****                 {
+ 623:./rt_thread/components/finsh/msh.c ****                     /* set name_ptr */
+ 624:./rt_thread/components/finsh/msh.c ****                     name_ptr = cmd_name;
+ 1173              		.loc 1 624 30
+ 1174 0064 3B69     		ldr	r3, [r7, #16]
+ 1175 0066 BB61     		str	r3, [r7, #24]
+ 625:./rt_thread/components/finsh/msh.c ****                     /* set initial length */
+ 626:./rt_thread/components/finsh/msh.c ****                     min_length = strlen(name_ptr);
+ 1176              		.loc 1 626 34
+ 1177 0068 B869     		ldr	r0, [r7, #24]
+ 1178 006a FFF7FEFF 		bl	strlen
+ 1179 006e 0346     		mov	r3, r0
+ 1180              		.loc 1 626 32
+ 1181 0070 FB61     		str	r3, [r7, #28]
+ 1182              	.L86:
+ 627:./rt_thread/components/finsh/msh.c ****                 }
+ 628:./rt_thread/components/finsh/msh.c **** 
+ 629:./rt_thread/components/finsh/msh.c ****                 length = str_common(name_ptr, cmd_name);
+ 1183              		.loc 1 629 26
+ 1184 0072 3969     		ldr	r1, [r7, #16]
+ 1185 0074 B869     		ldr	r0, [r7, #24]
+ 1186 0076 FFF7FEFF 		bl	str_common
+ 1187 007a F860     		str	r0, [r7, #12]
+ 630:./rt_thread/components/finsh/msh.c ****                 if (length < min_length)
+ 1188              		.loc 1 630 20
+ 1189 007c FA68     		ldr	r2, [r7, #12]
+ 1190 007e FB69     		ldr	r3, [r7, #28]
+ 1191 0080 9A42     		cmp	r2, r3
+ 1192 0082 01DA     		bge	.L87
+ 631:./rt_thread/components/finsh/msh.c ****                     min_length = length;
+ 1193              		.loc 1 631 32
+ 1194 0084 FB68     		ldr	r3, [r7, #12]
+ 1195 0086 FB61     		str	r3, [r7, #28]
+ 1196              	.L87:
+ 632:./rt_thread/components/finsh/msh.c **** 
+ 633:./rt_thread/components/finsh/msh.c ****                 rt_kprintf("%s\n", cmd_name);
+ 1197              		.loc 1 633 17
+ 1198 0088 3969     		ldr	r1, [r7, #16]
+ 1199 008a 0F48     		ldr	r0, .L92+8
+ 1200 008c FFF7FEFF 		bl	rt_kprintf
+ 1201 0090 00E0     		b	.L85
+ 1202              	.L90:
+ 616:./rt_thread/components/finsh/msh.c **** 
+ 1203              		.loc 1 616 13
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 34
+
+
+ 1204 0092 00BF     		nop
+ 1205              	.L85:
+ 613:./rt_thread/components/finsh/msh.c ****         {
+ 1206              		.loc 1 613 72 discriminator 2
+ 1207 0094 7B69     		ldr	r3, [r7, #20]
+ 1208 0096 0C33     		adds	r3, r3, #12
+ 1209 0098 7B61     		str	r3, [r7, #20]
+ 1210              	.L83:
+ 613:./rt_thread/components/finsh/msh.c ****         {
+ 1211              		.loc 1 613 50 discriminator 1
+ 1212 009a 0C4B     		ldr	r3, .L92+12
+ 1213 009c 1B68     		ldr	r3, [r3]
+ 613:./rt_thread/components/finsh/msh.c ****         {
+ 1214              		.loc 1 613 9 discriminator 1
+ 1215 009e 7A69     		ldr	r2, [r7, #20]
+ 1216 00a0 9A42     		cmp	r2, r3
+ 1217 00a2 C2D3     		bcc	.L88
+ 634:./rt_thread/components/finsh/msh.c ****             }
+ 635:./rt_thread/components/finsh/msh.c ****         }
+ 636:./rt_thread/components/finsh/msh.c ****     }
+ 637:./rt_thread/components/finsh/msh.c **** 
+ 638:./rt_thread/components/finsh/msh.c ****     /* auto complete string */
+ 639:./rt_thread/components/finsh/msh.c ****     if (name_ptr != NULL)
+ 1218              		.loc 1 639 8
+ 1219 00a4 BB69     		ldr	r3, [r7, #24]
+ 1220 00a6 002B     		cmp	r3, #0
+ 1221 00a8 05D0     		beq	.L91
+ 640:./rt_thread/components/finsh/msh.c ****     {
+ 641:./rt_thread/components/finsh/msh.c ****         rt_strncpy(prefix, name_ptr, min_length);
+ 1222              		.loc 1 641 9
+ 1223 00aa FB69     		ldr	r3, [r7, #28]
+ 1224 00ac 1A46     		mov	r2, r3
+ 1225 00ae B969     		ldr	r1, [r7, #24]
+ 1226 00b0 7868     		ldr	r0, [r7, #4]
+ 1227 00b2 FFF7FEFF 		bl	rt_strncpy
+ 1228              	.L91:
+ 642:./rt_thread/components/finsh/msh.c ****     }
+ 643:./rt_thread/components/finsh/msh.c **** 
+ 644:./rt_thread/components/finsh/msh.c ****     return ;
+ 1229              		.loc 1 644 5
+ 1230 00b6 00BF     		nop
+ 1231              	.L80:
+ 645:./rt_thread/components/finsh/msh.c **** }
+ 1232              		.loc 1 645 1
+ 1233 00b8 2037     		adds	r7, r7, #32
+ 1234              	.LCFI48:
+ 1235              		.cfi_def_cfa_offset 8
+ 1236 00ba BD46     		mov	sp, r7
+ 1237              	.LCFI49:
+ 1238              		.cfi_def_cfa_register 13
+ 1239              		@ sp needed
+ 1240 00bc 80BD     		pop	{r7, pc}
+ 1241              	.L93:
+ 1242 00be 00BF     		.align	2
+ 1243              	.L92:
+ 1244 00c0 00000000 		.word	_syscall_table_begin
+ 1245 00c4 1C000000 		.word	.LC1
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 35
+
+
+ 1246 00c8 70000000 		.word	.LC7
+ 1247 00cc 00000000 		.word	_syscall_table_end
+ 1248              		.cfi_endproc
+ 1249              	.LFE28:
+ 1251              		.text
+ 1252              	.Letext0:
+ 1253              		.file 2 "./rt_thread/include/rtdef.h"
+ 1254              		.file 3 "./rt_thread/components/finsh/finsh_api.h"
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s 			page 36
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 msh.c
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:18     .text.msh_is_used:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:24     .text.msh_is_used:00000000 msh_is_used
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:56     .rodata:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:69     .text.msh_help:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:75     .text.msh_help:00000000 msh_help
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:162    .text.msh_help:00000064 $d
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:176    .rodata.name:00000000 __fsym___cmd_help_name
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:173    .rodata.name:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:182    .rodata.name:0000000c __fsym___cmd_help_desc
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:189    FSymTab:00000000 __fsym___cmd_help
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:186    FSymTab:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:194    .text.cmd_ps:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:200    .text.cmd_ps:00000000 cmd_ps
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:241    .rodata.name:00000024 __fsym___cmd_ps_name
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:247    .rodata.name:00000030 __fsym___cmd_ps_desc
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:254    FSymTab:0000000c __fsym___cmd_ps
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:259    .text.cmd_free:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:265    .text.cmd_free:00000000 cmd_free
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:306    .rodata.name:0000004c __fsym___cmd_free_name
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:312    .rodata.name:00000058 __fsym___cmd_free_desc
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:319    FSymTab:00000018 __fsym___cmd_free
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:331    .text.msh_split:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:336    .text.msh_split:00000000 msh_split
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:617    .text.msh_split:00000164 $d
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:624    .text.msh_get_cmd:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:629    .text.msh_get_cmd:00000000 msh_get_cmd
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:732    .text.msh_get_cmd:00000074 $d
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:739    .text._msh_exec_cmd:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:744    .text._msh_exec_cmd:00000000 _msh_exec_cmd
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:872    .text.msh_exec:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:878    .text.msh_exec:00000000 msh_exec
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:998    .text.msh_exec:00000088 $d
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:1003   .text.str_common:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:1008   .text.str_common:00000000 str_common
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:1090   .text.msh_auto_complete:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:1096   .text.msh_auto_complete:00000000 msh_auto_complete
+C:\Users\hao\AppData\Local\Temp\ccLz7SGm.s:1244   .text.msh_auto_complete:000000c0 $d
+
+UNDEFINED SYMBOLS
+rt_kprintf
+strncmp
+_syscall_table_begin
+_syscall_table_end
+list_thread
+list_mem
+memset
+strlen
+rt_strncpy

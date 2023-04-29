@@ -1,0 +1,166 @@
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cceRMx2d.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"finsh_port.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.rt_hw_console_getchar,"ax",%progbits
+  18              		.align	1
+  19              		.weak	rt_hw_console_getchar
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	rt_hw_console_getchar:
+  25              	.LFB47:
+  26              		.file 1 "./rt_thread/components/finsh/finsh_port.c"
+   1:./rt_thread/components/finsh/finsh_port.c **** /*
+   2:./rt_thread/components/finsh/finsh_port.c ****  * Copyright (c) 2006-2021, RT-Thread Development Team
+   3:./rt_thread/components/finsh/finsh_port.c ****  *
+   4:./rt_thread/components/finsh/finsh_port.c ****  * SPDX-License-Identifier: Apache-2.0
+   5:./rt_thread/components/finsh/finsh_port.c ****  *
+   6:./rt_thread/components/finsh/finsh_port.c ****  * Change Logs:
+   7:./rt_thread/components/finsh/finsh_port.c ****  * Date           Author       Notes
+   8:./rt_thread/components/finsh/finsh_port.c ****  */
+   9:./rt_thread/components/finsh/finsh_port.c **** 
+  10:./rt_thread/components/finsh/finsh_port.c **** #include <rthw.h>
+  11:./rt_thread/components/finsh/finsh_port.c **** #include <rtconfig.h>
+  12:./rt_thread/components/finsh/finsh_port.c **** #include "bsp_debug_usart.h"
+  13:./rt_thread/components/finsh/finsh_port.c **** 
+  14:./rt_thread/components/finsh/finsh_port.c **** #ifndef RT_USING_FINSH
+  15:./rt_thread/components/finsh/finsh_port.c **** #error Please uncomment the line <#include "finsh_config.h"> in the rtconfig.h 
+  16:./rt_thread/components/finsh/finsh_port.c **** #endif
+  17:./rt_thread/components/finsh/finsh_port.c **** 
+  18:./rt_thread/components/finsh/finsh_port.c **** #ifdef RT_USING_FINSH
+  19:./rt_thread/components/finsh/finsh_port.c **** 
+  20:./rt_thread/components/finsh/finsh_port.c **** RT_WEAK char rt_hw_console_getchar(void)
+  21:./rt_thread/components/finsh/finsh_port.c **** {
+  27              		.loc 1 21 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 7, -8
+  35              		.cfi_offset 14, -4
+  36 0002 82B0     		sub	sp, sp, #8
+  37              	.LCFI1:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cceRMx2d.s 			page 2
+
+
+  38              		.cfi_def_cfa_offset 16
+  39 0004 00AF     		add	r7, sp, #0
+  40              	.LCFI2:
+  41              		.cfi_def_cfa_register 7
+  22:./rt_thread/components/finsh/finsh_port.c ****      int ch = -1;
+  42              		.loc 1 22 10
+  43 0006 4FF0FF33 		mov	r3, #-1
+  44 000a 7B60     		str	r3, [r7, #4]
+  23:./rt_thread/components/finsh/finsh_port.c **** 
+  24:./rt_thread/components/finsh/finsh_port.c ****     if (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) != RESET)
+  45              		.loc 1 24 9
+  46 000c 2021     		movs	r1, #32
+  47 000e 1248     		ldr	r0, .L6
+  48 0010 FFF7FEFF 		bl	USART_GetFlagStatus
+  49 0014 0346     		mov	r3, r0
+  50              		.loc 1 24 8
+  51 0016 002B     		cmp	r3, #0
+  52 0018 09D0     		beq	.L2
+  25:./rt_thread/components/finsh/finsh_port.c ****     {
+  26:./rt_thread/components/finsh/finsh_port.c ****         ch = (int)USART_ReceiveData(USART1);
+  53              		.loc 1 26 19
+  54 001a 0F48     		ldr	r0, .L6
+  55 001c FFF7FEFF 		bl	USART_ReceiveData
+  56 0020 0346     		mov	r3, r0
+  57              		.loc 1 26 12
+  58 0022 7B60     		str	r3, [r7, #4]
+  27:./rt_thread/components/finsh/finsh_port.c ****         USART_ClearFlag(USART1, USART_FLAG_RXNE);
+  59              		.loc 1 27 9
+  60 0024 2021     		movs	r1, #32
+  61 0026 0C48     		ldr	r0, .L6
+  62 0028 FFF7FEFF 		bl	USART_ClearFlag
+  63 002c 0DE0     		b	.L3
+  64              	.L2:
+  28:./rt_thread/components/finsh/finsh_port.c ****     }
+  29:./rt_thread/components/finsh/finsh_port.c ****     else
+  30:./rt_thread/components/finsh/finsh_port.c ****     {
+  31:./rt_thread/components/finsh/finsh_port.c ****         if(USART_GetFlagStatus(USART1, USART_FLAG_ORE) != RESET)
+  65              		.loc 1 31 12
+  66 002e 0821     		movs	r1, #8
+  67 0030 0948     		ldr	r0, .L6
+  68 0032 FFF7FEFF 		bl	USART_GetFlagStatus
+  69 0036 0346     		mov	r3, r0
+  70              		.loc 1 31 11
+  71 0038 002B     		cmp	r3, #0
+  72 003a 03D0     		beq	.L4
+  32:./rt_thread/components/finsh/finsh_port.c ****         {
+  33:./rt_thread/components/finsh/finsh_port.c ****             USART_ClearFlag(USART1, USART_FLAG_ORE);
+  73              		.loc 1 33 13
+  74 003c 0821     		movs	r1, #8
+  75 003e 0648     		ldr	r0, .L6
+  76 0040 FFF7FEFF 		bl	USART_ClearFlag
+  77              	.L4:
+  34:./rt_thread/components/finsh/finsh_port.c ****         }
+  35:./rt_thread/components/finsh/finsh_port.c ****         rt_thread_mdelay(10);
+  78              		.loc 1 35 9
+  79 0044 0A20     		movs	r0, #10
+  80 0046 FFF7FEFF 		bl	rt_thread_mdelay
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cceRMx2d.s 			page 3
+
+
+  81              	.L3:
+  36:./rt_thread/components/finsh/finsh_port.c ****     }
+  37:./rt_thread/components/finsh/finsh_port.c ****     
+  38:./rt_thread/components/finsh/finsh_port.c ****     return ch;
+  82              		.loc 1 38 12
+  83 004a 7B68     		ldr	r3, [r7, #4]
+  84 004c DBB2     		uxtb	r3, r3
+  39:./rt_thread/components/finsh/finsh_port.c **** }
+  85              		.loc 1 39 1
+  86 004e 1846     		mov	r0, r3
+  87 0050 0837     		adds	r7, r7, #8
+  88              	.LCFI3:
+  89              		.cfi_def_cfa_offset 8
+  90 0052 BD46     		mov	sp, r7
+  91              	.LCFI4:
+  92              		.cfi_def_cfa_register 13
+  93              		@ sp needed
+  94 0054 80BD     		pop	{r7, pc}
+  95              	.L7:
+  96 0056 00BF     		.align	2
+  97              	.L6:
+  98 0058 00380140 		.word	1073821696
+  99              		.cfi_endproc
+ 100              	.LFE47:
+ 102              		.text
+ 103              	.Letext0:
+ 104              		.file 2 "c:\\gcc-arm-none-eabi\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 105              		.file 3 "c:\\gcc-arm-none-eabi\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 106              		.file 4 "./Libraries/CMSIS/stm32f10x.h"
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cceRMx2d.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 finsh_port.c
+C:\Users\hao\AppData\Local\Temp\cceRMx2d.s:18     .text.rt_hw_console_getchar:00000000 $t
+C:\Users\hao\AppData\Local\Temp\cceRMx2d.s:24     .text.rt_hw_console_getchar:00000000 rt_hw_console_getchar
+C:\Users\hao\AppData\Local\Temp\cceRMx2d.s:98     .text.rt_hw_console_getchar:00000058 $d
+
+UNDEFINED SYMBOLS
+USART_GetFlagStatus
+USART_ReceiveData
+USART_ClearFlag
+rt_thread_mdelay

@@ -1,0 +1,2531 @@
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"timer.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.rt_list_init,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  23              	rt_list_init:
+  24              	.LFB0:
+  25              		.file 1 "./rt_thread/include/rtservice.h"
+   1:./rt_thread/include/rtservice.h **** /*
+   2:./rt_thread/include/rtservice.h ****  * Copyright (c) 2006-2021, RT-Thread Development Team
+   3:./rt_thread/include/rtservice.h ****  *
+   4:./rt_thread/include/rtservice.h ****  * SPDX-License-Identifier: Apache-2.0
+   5:./rt_thread/include/rtservice.h ****  *
+   6:./rt_thread/include/rtservice.h ****  * Change Logs:
+   7:./rt_thread/include/rtservice.h ****  * Date           Author       Notes
+   8:./rt_thread/include/rtservice.h ****  * 2006-03-16     Bernard      the first version
+   9:./rt_thread/include/rtservice.h ****  * 2006-09-07     Bernard      move the kservice APIs to rtthread.h
+  10:./rt_thread/include/rtservice.h ****  * 2007-06-27     Bernard      fix the rt_list_remove bug
+  11:./rt_thread/include/rtservice.h ****  * 2012-03-22     Bernard      rename kservice.h to rtservice.h
+  12:./rt_thread/include/rtservice.h ****  * 2017-11-15     JasonJia     Modify rt_slist_foreach to rt_slist_for_each_entry.
+  13:./rt_thread/include/rtservice.h ****  *                             Make code cleanup.
+  14:./rt_thread/include/rtservice.h ****  */
+  15:./rt_thread/include/rtservice.h **** 
+  16:./rt_thread/include/rtservice.h **** #ifndef __RT_SERVICE_H__
+  17:./rt_thread/include/rtservice.h **** #define __RT_SERVICE_H__
+  18:./rt_thread/include/rtservice.h **** 
+  19:./rt_thread/include/rtservice.h **** #ifdef __cplusplus
+  20:./rt_thread/include/rtservice.h **** extern "C" {
+  21:./rt_thread/include/rtservice.h **** #endif
+  22:./rt_thread/include/rtservice.h **** 
+  23:./rt_thread/include/rtservice.h **** /**
+  24:./rt_thread/include/rtservice.h ****  * @addtogroup KernelService
+  25:./rt_thread/include/rtservice.h ****  */
+  26:./rt_thread/include/rtservice.h **** 
+  27:./rt_thread/include/rtservice.h **** /**@{*/
+  28:./rt_thread/include/rtservice.h **** 
+  29:./rt_thread/include/rtservice.h **** /**
+  30:./rt_thread/include/rtservice.h ****  * rt_container_of - return the member address of ptr, if the type of ptr is the
+  31:./rt_thread/include/rtservice.h ****  * struct type.
+  32:./rt_thread/include/rtservice.h ****  */
+  33:./rt_thread/include/rtservice.h **** #define rt_container_of(ptr, type, member) \
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 2
+
+
+  34:./rt_thread/include/rtservice.h ****     ((type *)((char *)(ptr) - (unsigned long)(&((type *)0)->member)))
+  35:./rt_thread/include/rtservice.h **** 
+  36:./rt_thread/include/rtservice.h **** 
+  37:./rt_thread/include/rtservice.h **** /**
+  38:./rt_thread/include/rtservice.h ****  * @brief initialize a list object
+  39:./rt_thread/include/rtservice.h ****  */
+  40:./rt_thread/include/rtservice.h **** #define RT_LIST_OBJECT_INIT(object) { &(object), &(object) }
+  41:./rt_thread/include/rtservice.h **** 
+  42:./rt_thread/include/rtservice.h **** /**
+  43:./rt_thread/include/rtservice.h ****  * @brief initialize a list
+  44:./rt_thread/include/rtservice.h ****  *
+  45:./rt_thread/include/rtservice.h ****  * @param l list to be initialized
+  46:./rt_thread/include/rtservice.h ****  */
+  47:./rt_thread/include/rtservice.h **** rt_inline void rt_list_init(rt_list_t *l)
+  48:./rt_thread/include/rtservice.h **** {
+  26              		.loc 1 48 1
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 8
+  29              		@ frame_needed = 1, uses_anonymous_args = 0
+  30              		@ link register save eliminated.
+  31 0000 80B4     		push	{r7}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 4
+  34              		.cfi_offset 7, -4
+  35 0002 83B0     		sub	sp, sp, #12
+  36              	.LCFI1:
+  37              		.cfi_def_cfa_offset 16
+  38 0004 00AF     		add	r7, sp, #0
+  39              	.LCFI2:
+  40              		.cfi_def_cfa_register 7
+  41 0006 7860     		str	r0, [r7, #4]
+  49:./rt_thread/include/rtservice.h ****     l->next = l->prev = l;
+  42              		.loc 1 49 23
+  43 0008 7B68     		ldr	r3, [r7, #4]
+  44 000a 7A68     		ldr	r2, [r7, #4]
+  45 000c 5A60     		str	r2, [r3, #4]
+  46              		.loc 1 49 16
+  47 000e 7B68     		ldr	r3, [r7, #4]
+  48 0010 5A68     		ldr	r2, [r3, #4]
+  49              		.loc 1 49 13
+  50 0012 7B68     		ldr	r3, [r7, #4]
+  51 0014 1A60     		str	r2, [r3]
+  50:./rt_thread/include/rtservice.h **** }
+  52              		.loc 1 50 1
+  53 0016 00BF     		nop
+  54 0018 0C37     		adds	r7, r7, #12
+  55              	.LCFI3:
+  56              		.cfi_def_cfa_offset 4
+  57 001a BD46     		mov	sp, r7
+  58              	.LCFI4:
+  59              		.cfi_def_cfa_register 13
+  60              		@ sp needed
+  61 001c 80BC     		pop	{r7}
+  62              	.LCFI5:
+  63              		.cfi_restore 7
+  64              		.cfi_def_cfa_offset 0
+  65 001e 7047     		bx	lr
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 3
+
+
+  66              		.cfi_endproc
+  67              	.LFE0:
+  69              		.section	.text.rt_list_insert_after,"ax",%progbits
+  70              		.align	1
+  71              		.syntax unified
+  72              		.thumb
+  73              		.thumb_func
+  75              	rt_list_insert_after:
+  76              	.LFB1:
+  51:./rt_thread/include/rtservice.h **** 
+  52:./rt_thread/include/rtservice.h **** /**
+  53:./rt_thread/include/rtservice.h ****  * @brief insert a node after a list
+  54:./rt_thread/include/rtservice.h ****  *
+  55:./rt_thread/include/rtservice.h ****  * @param l list to insert it
+  56:./rt_thread/include/rtservice.h ****  * @param n new node to be inserted
+  57:./rt_thread/include/rtservice.h ****  */
+  58:./rt_thread/include/rtservice.h **** rt_inline void rt_list_insert_after(rt_list_t *l, rt_list_t *n)
+  59:./rt_thread/include/rtservice.h **** {
+  77              		.loc 1 59 1
+  78              		.cfi_startproc
+  79              		@ args = 0, pretend = 0, frame = 8
+  80              		@ frame_needed = 1, uses_anonymous_args = 0
+  81              		@ link register save eliminated.
+  82 0000 80B4     		push	{r7}
+  83              	.LCFI6:
+  84              		.cfi_def_cfa_offset 4
+  85              		.cfi_offset 7, -4
+  86 0002 83B0     		sub	sp, sp, #12
+  87              	.LCFI7:
+  88              		.cfi_def_cfa_offset 16
+  89 0004 00AF     		add	r7, sp, #0
+  90              	.LCFI8:
+  91              		.cfi_def_cfa_register 7
+  92 0006 7860     		str	r0, [r7, #4]
+  93 0008 3960     		str	r1, [r7]
+  60:./rt_thread/include/rtservice.h ****     l->next->prev = n;
+  94              		.loc 1 60 6
+  95 000a 7B68     		ldr	r3, [r7, #4]
+  96 000c 1B68     		ldr	r3, [r3]
+  97              		.loc 1 60 19
+  98 000e 3A68     		ldr	r2, [r7]
+  99 0010 5A60     		str	r2, [r3, #4]
+  61:./rt_thread/include/rtservice.h ****     n->next = l->next;
+ 100              		.loc 1 61 16
+ 101 0012 7B68     		ldr	r3, [r7, #4]
+ 102 0014 1A68     		ldr	r2, [r3]
+ 103              		.loc 1 61 13
+ 104 0016 3B68     		ldr	r3, [r7]
+ 105 0018 1A60     		str	r2, [r3]
+  62:./rt_thread/include/rtservice.h **** 
+  63:./rt_thread/include/rtservice.h ****     l->next = n;
+ 106              		.loc 1 63 13
+ 107 001a 7B68     		ldr	r3, [r7, #4]
+ 108 001c 3A68     		ldr	r2, [r7]
+ 109 001e 1A60     		str	r2, [r3]
+  64:./rt_thread/include/rtservice.h ****     n->prev = l;
+ 110              		.loc 1 64 13
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 4
+
+
+ 111 0020 3B68     		ldr	r3, [r7]
+ 112 0022 7A68     		ldr	r2, [r7, #4]
+ 113 0024 5A60     		str	r2, [r3, #4]
+  65:./rt_thread/include/rtservice.h **** }
+ 114              		.loc 1 65 1
+ 115 0026 00BF     		nop
+ 116 0028 0C37     		adds	r7, r7, #12
+ 117              	.LCFI9:
+ 118              		.cfi_def_cfa_offset 4
+ 119 002a BD46     		mov	sp, r7
+ 120              	.LCFI10:
+ 121              		.cfi_def_cfa_register 13
+ 122              		@ sp needed
+ 123 002c 80BC     		pop	{r7}
+ 124              	.LCFI11:
+ 125              		.cfi_restore 7
+ 126              		.cfi_def_cfa_offset 0
+ 127 002e 7047     		bx	lr
+ 128              		.cfi_endproc
+ 129              	.LFE1:
+ 131              		.section	.text.rt_list_remove,"ax",%progbits
+ 132              		.align	1
+ 133              		.syntax unified
+ 134              		.thumb
+ 135              		.thumb_func
+ 137              	rt_list_remove:
+ 138              	.LFB3:
+  66:./rt_thread/include/rtservice.h **** 
+  67:./rt_thread/include/rtservice.h **** /**
+  68:./rt_thread/include/rtservice.h ****  * @brief insert a node before a list
+  69:./rt_thread/include/rtservice.h ****  *
+  70:./rt_thread/include/rtservice.h ****  * @param n new node to be inserted
+  71:./rt_thread/include/rtservice.h ****  * @param l list to insert it
+  72:./rt_thread/include/rtservice.h ****  */
+  73:./rt_thread/include/rtservice.h **** rt_inline void rt_list_insert_before(rt_list_t *l, rt_list_t *n)
+  74:./rt_thread/include/rtservice.h **** {
+  75:./rt_thread/include/rtservice.h ****     l->prev->next = n;
+  76:./rt_thread/include/rtservice.h ****     n->prev = l->prev;
+  77:./rt_thread/include/rtservice.h **** 
+  78:./rt_thread/include/rtservice.h ****     l->prev = n;
+  79:./rt_thread/include/rtservice.h ****     n->next = l;
+  80:./rt_thread/include/rtservice.h **** }
+  81:./rt_thread/include/rtservice.h **** 
+  82:./rt_thread/include/rtservice.h **** /**
+  83:./rt_thread/include/rtservice.h ****  * @brief remove node from list.
+  84:./rt_thread/include/rtservice.h ****  * @param n the node to remove from the list.
+  85:./rt_thread/include/rtservice.h ****  */
+  86:./rt_thread/include/rtservice.h **** rt_inline void rt_list_remove(rt_list_t *n)
+  87:./rt_thread/include/rtservice.h **** {
+ 139              		.loc 1 87 1
+ 140              		.cfi_startproc
+ 141              		@ args = 0, pretend = 0, frame = 8
+ 142              		@ frame_needed = 1, uses_anonymous_args = 0
+ 143              		@ link register save eliminated.
+ 144 0000 80B4     		push	{r7}
+ 145              	.LCFI12:
+ 146              		.cfi_def_cfa_offset 4
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 5
+
+
+ 147              		.cfi_offset 7, -4
+ 148 0002 83B0     		sub	sp, sp, #12
+ 149              	.LCFI13:
+ 150              		.cfi_def_cfa_offset 16
+ 151 0004 00AF     		add	r7, sp, #0
+ 152              	.LCFI14:
+ 153              		.cfi_def_cfa_register 7
+ 154 0006 7860     		str	r0, [r7, #4]
+  88:./rt_thread/include/rtservice.h ****     n->next->prev = n->prev;
+ 155              		.loc 1 88 6
+ 156 0008 7B68     		ldr	r3, [r7, #4]
+ 157 000a 1B68     		ldr	r3, [r3]
+ 158              		.loc 1 88 22
+ 159 000c 7A68     		ldr	r2, [r7, #4]
+ 160 000e 5268     		ldr	r2, [r2, #4]
+ 161              		.loc 1 88 19
+ 162 0010 5A60     		str	r2, [r3, #4]
+  89:./rt_thread/include/rtservice.h ****     n->prev->next = n->next;
+ 163              		.loc 1 89 6
+ 164 0012 7B68     		ldr	r3, [r7, #4]
+ 165 0014 5B68     		ldr	r3, [r3, #4]
+ 166              		.loc 1 89 22
+ 167 0016 7A68     		ldr	r2, [r7, #4]
+ 168 0018 1268     		ldr	r2, [r2]
+ 169              		.loc 1 89 19
+ 170 001a 1A60     		str	r2, [r3]
+  90:./rt_thread/include/rtservice.h **** 
+  91:./rt_thread/include/rtservice.h ****     n->next = n->prev = n;
+ 171              		.loc 1 91 23
+ 172 001c 7B68     		ldr	r3, [r7, #4]
+ 173 001e 7A68     		ldr	r2, [r7, #4]
+ 174 0020 5A60     		str	r2, [r3, #4]
+ 175              		.loc 1 91 16
+ 176 0022 7B68     		ldr	r3, [r7, #4]
+ 177 0024 5A68     		ldr	r2, [r3, #4]
+ 178              		.loc 1 91 13
+ 179 0026 7B68     		ldr	r3, [r7, #4]
+ 180 0028 1A60     		str	r2, [r3]
+  92:./rt_thread/include/rtservice.h **** }
+ 181              		.loc 1 92 1
+ 182 002a 00BF     		nop
+ 183 002c 0C37     		adds	r7, r7, #12
+ 184              	.LCFI15:
+ 185              		.cfi_def_cfa_offset 4
+ 186 002e BD46     		mov	sp, r7
+ 187              	.LCFI16:
+ 188              		.cfi_def_cfa_register 13
+ 189              		@ sp needed
+ 190 0030 80BC     		pop	{r7}
+ 191              	.LCFI17:
+ 192              		.cfi_restore 7
+ 193              		.cfi_def_cfa_offset 0
+ 194 0032 7047     		bx	lr
+ 195              		.cfi_endproc
+ 196              	.LFE3:
+ 198              		.section	.text.rt_list_isempty,"ax",%progbits
+ 199              		.align	1
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 6
+
+
+ 200              		.syntax unified
+ 201              		.thumb
+ 202              		.thumb_func
+ 204              	rt_list_isempty:
+ 205              	.LFB4:
+  93:./rt_thread/include/rtservice.h **** 
+  94:./rt_thread/include/rtservice.h **** /**
+  95:./rt_thread/include/rtservice.h ****  * @brief tests whether a list is empty
+  96:./rt_thread/include/rtservice.h ****  * @param l the list to test.
+  97:./rt_thread/include/rtservice.h ****  */
+  98:./rt_thread/include/rtservice.h **** rt_inline int rt_list_isempty(const rt_list_t *l)
+  99:./rt_thread/include/rtservice.h **** {
+ 206              		.loc 1 99 1
+ 207              		.cfi_startproc
+ 208              		@ args = 0, pretend = 0, frame = 8
+ 209              		@ frame_needed = 1, uses_anonymous_args = 0
+ 210              		@ link register save eliminated.
+ 211 0000 80B4     		push	{r7}
+ 212              	.LCFI18:
+ 213              		.cfi_def_cfa_offset 4
+ 214              		.cfi_offset 7, -4
+ 215 0002 83B0     		sub	sp, sp, #12
+ 216              	.LCFI19:
+ 217              		.cfi_def_cfa_offset 16
+ 218 0004 00AF     		add	r7, sp, #0
+ 219              	.LCFI20:
+ 220              		.cfi_def_cfa_register 7
+ 221 0006 7860     		str	r0, [r7, #4]
+ 100:./rt_thread/include/rtservice.h ****     return l->next == l;
+ 222              		.loc 1 100 13
+ 223 0008 7B68     		ldr	r3, [r7, #4]
+ 224 000a 1B68     		ldr	r3, [r3]
+ 225              		.loc 1 100 20
+ 226 000c 7A68     		ldr	r2, [r7, #4]
+ 227 000e 9A42     		cmp	r2, r3
+ 228 0010 0CBF     		ite	eq
+ 229 0012 0123     		moveq	r3, #1
+ 230 0014 0023     		movne	r3, #0
+ 231 0016 DBB2     		uxtb	r3, r3
+ 101:./rt_thread/include/rtservice.h **** }
+ 232              		.loc 1 101 1
+ 233 0018 1846     		mov	r0, r3
+ 234 001a 0C37     		adds	r7, r7, #12
+ 235              	.LCFI21:
+ 236              		.cfi_def_cfa_offset 4
+ 237 001c BD46     		mov	sp, r7
+ 238              	.LCFI22:
+ 239              		.cfi_def_cfa_register 13
+ 240              		@ sp needed
+ 241 001e 80BC     		pop	{r7}
+ 242              	.LCFI23:
+ 243              		.cfi_restore 7
+ 244              		.cfi_def_cfa_offset 0
+ 245 0020 7047     		bx	lr
+ 246              		.cfi_endproc
+ 247              	.LFE4:
+ 249              		.section	.bss.rt_timer_list,"aw",%nobits
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 7
+
+
+ 250              		.align	2
+ 253              	rt_timer_list:
+ 254 0000 00000000 		.space	8
+ 254      00000000 
+ 255              		.section	.text._rt_timer_init,"ax",%progbits
+ 256              		.align	1
+ 257              		.syntax unified
+ 258              		.thumb
+ 259              		.thumb_func
+ 261              	_rt_timer_init:
+ 262              	.LFB15:
+ 263              		.file 2 "./rt_thread/src/timer.c"
+   1:./rt_thread/src/timer.c **** /*
+   2:./rt_thread/src/timer.c ****  * Copyright (c) 2006-2021, RT-Thread Development Team
+   3:./rt_thread/src/timer.c ****  *
+   4:./rt_thread/src/timer.c ****  * SPDX-License-Identifier: Apache-2.0
+   5:./rt_thread/src/timer.c ****  *
+   6:./rt_thread/src/timer.c ****  * Change Logs:
+   7:./rt_thread/src/timer.c ****  * Date           Author       Notes
+   8:./rt_thread/src/timer.c ****  * 2006-03-12     Bernard      first version
+   9:./rt_thread/src/timer.c ****  * 2006-04-29     Bernard      implement thread timer
+  10:./rt_thread/src/timer.c ****  * 2006-06-04     Bernard      implement rt_timer_control
+  11:./rt_thread/src/timer.c ****  * 2006-08-10     Bernard      fix the periodic timer bug
+  12:./rt_thread/src/timer.c ****  * 2006-09-03     Bernard      implement rt_timer_detach
+  13:./rt_thread/src/timer.c ****  * 2009-11-11     LiJin        add soft timer
+  14:./rt_thread/src/timer.c ****  * 2010-05-12     Bernard      fix the timer check bug.
+  15:./rt_thread/src/timer.c ****  * 2010-11-02     Charlie      re-implement tick overflow issue
+  16:./rt_thread/src/timer.c ****  * 2012-12-15     Bernard      fix the next timeout issue in soft timer
+  17:./rt_thread/src/timer.c ****  * 2014-07-12     Bernard      does not lock scheduler when invoking soft-timer
+  18:./rt_thread/src/timer.c ****  *                             timeout function.
+  19:./rt_thread/src/timer.c ****  */
+  20:./rt_thread/src/timer.c **** 
+  21:./rt_thread/src/timer.c **** #include <rtthread.h>
+  22:./rt_thread/src/timer.c **** #include <rthw.h>
+  23:./rt_thread/src/timer.c **** 
+  24:./rt_thread/src/timer.c **** /* hard timer list */
+  25:./rt_thread/src/timer.c **** static rt_list_t rt_timer_list[RT_TIMER_SKIP_LIST_LEVEL];
+  26:./rt_thread/src/timer.c **** 
+  27:./rt_thread/src/timer.c **** #ifdef RT_USING_TIMER_SOFT
+  28:./rt_thread/src/timer.c **** 
+  29:./rt_thread/src/timer.c **** #define RT_SOFT_TIMER_IDLE              1
+  30:./rt_thread/src/timer.c **** #define RT_SOFT_TIMER_BUSY              0
+  31:./rt_thread/src/timer.c **** 
+  32:./rt_thread/src/timer.c **** #ifndef RT_TIMER_THREAD_STACK_SIZE
+  33:./rt_thread/src/timer.c **** #define RT_TIMER_THREAD_STACK_SIZE     512
+  34:./rt_thread/src/timer.c **** #endif
+  35:./rt_thread/src/timer.c **** 
+  36:./rt_thread/src/timer.c **** #ifndef RT_TIMER_THREAD_PRIO
+  37:./rt_thread/src/timer.c **** #define RT_TIMER_THREAD_PRIO           0
+  38:./rt_thread/src/timer.c **** #endif
+  39:./rt_thread/src/timer.c **** 
+  40:./rt_thread/src/timer.c **** /* soft timer status */
+  41:./rt_thread/src/timer.c **** static rt_uint8_t soft_timer_status = RT_SOFT_TIMER_IDLE;
+  42:./rt_thread/src/timer.c **** /* soft timer list */
+  43:./rt_thread/src/timer.c **** static rt_list_t rt_soft_timer_list[RT_TIMER_SKIP_LIST_LEVEL];
+  44:./rt_thread/src/timer.c **** static struct rt_thread timer_thread;
+  45:./rt_thread/src/timer.c **** ALIGN(RT_ALIGN_SIZE)
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 8
+
+
+  46:./rt_thread/src/timer.c **** static rt_uint8_t timer_thread_stack[RT_TIMER_THREAD_STACK_SIZE];
+  47:./rt_thread/src/timer.c **** #endif
+  48:./rt_thread/src/timer.c **** 
+  49:./rt_thread/src/timer.c **** #ifdef RT_USING_HOOK
+  50:./rt_thread/src/timer.c **** extern void (*rt_object_take_hook)(struct rt_object *object);
+  51:./rt_thread/src/timer.c **** extern void (*rt_object_put_hook)(struct rt_object *object);
+  52:./rt_thread/src/timer.c **** static void (*rt_timer_enter_hook)(struct rt_timer *timer);
+  53:./rt_thread/src/timer.c **** static void (*rt_timer_exit_hook)(struct rt_timer *timer);
+  54:./rt_thread/src/timer.c **** 
+  55:./rt_thread/src/timer.c **** /**
+  56:./rt_thread/src/timer.c ****  * @addtogroup Hook
+  57:./rt_thread/src/timer.c ****  */
+  58:./rt_thread/src/timer.c **** 
+  59:./rt_thread/src/timer.c **** /**@{*/
+  60:./rt_thread/src/timer.c **** 
+  61:./rt_thread/src/timer.c **** /**
+  62:./rt_thread/src/timer.c ****  * This function will set a hook function, which will be invoked when enter
+  63:./rt_thread/src/timer.c ****  * timer timeout callback function.
+  64:./rt_thread/src/timer.c ****  *
+  65:./rt_thread/src/timer.c ****  * @param hook the hook function
+  66:./rt_thread/src/timer.c ****  */
+  67:./rt_thread/src/timer.c **** void rt_timer_enter_sethook(void (*hook)(struct rt_timer *timer))
+  68:./rt_thread/src/timer.c **** {
+  69:./rt_thread/src/timer.c ****     rt_timer_enter_hook = hook;
+  70:./rt_thread/src/timer.c **** }
+  71:./rt_thread/src/timer.c **** 
+  72:./rt_thread/src/timer.c **** /**
+  73:./rt_thread/src/timer.c ****  * This function will set a hook function, which will be invoked when exit
+  74:./rt_thread/src/timer.c ****  * timer timeout callback function.
+  75:./rt_thread/src/timer.c ****  *
+  76:./rt_thread/src/timer.c ****  * @param hook the hook function
+  77:./rt_thread/src/timer.c ****  */
+  78:./rt_thread/src/timer.c **** void rt_timer_exit_sethook(void (*hook)(struct rt_timer *timer))
+  79:./rt_thread/src/timer.c **** {
+  80:./rt_thread/src/timer.c ****     rt_timer_exit_hook = hook;
+  81:./rt_thread/src/timer.c **** }
+  82:./rt_thread/src/timer.c **** 
+  83:./rt_thread/src/timer.c **** /**@}*/
+  84:./rt_thread/src/timer.c **** #endif
+  85:./rt_thread/src/timer.c **** 
+  86:./rt_thread/src/timer.c **** static void _rt_timer_init(rt_timer_t timer,
+  87:./rt_thread/src/timer.c ****                            void (*timeout)(void *parameter),
+  88:./rt_thread/src/timer.c ****                            void      *parameter,
+  89:./rt_thread/src/timer.c ****                            rt_tick_t  time,
+  90:./rt_thread/src/timer.c ****                            rt_uint8_t flag)
+  91:./rt_thread/src/timer.c **** {
+ 264              		.loc 2 91 1
+ 265              		.cfi_startproc
+ 266              		@ args = 4, pretend = 0, frame = 24
+ 267              		@ frame_needed = 1, uses_anonymous_args = 0
+ 268 0000 80B5     		push	{r7, lr}
+ 269              	.LCFI24:
+ 270              		.cfi_def_cfa_offset 8
+ 271              		.cfi_offset 7, -8
+ 272              		.cfi_offset 14, -4
+ 273 0002 86B0     		sub	sp, sp, #24
+ 274              	.LCFI25:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 9
+
+
+ 275              		.cfi_def_cfa_offset 32
+ 276 0004 00AF     		add	r7, sp, #0
+ 277              	.LCFI26:
+ 278              		.cfi_def_cfa_register 7
+ 279 0006 F860     		str	r0, [r7, #12]
+ 280 0008 B960     		str	r1, [r7, #8]
+ 281 000a 7A60     		str	r2, [r7, #4]
+ 282 000c 3B60     		str	r3, [r7]
+  92:./rt_thread/src/timer.c ****     int i;
+  93:./rt_thread/src/timer.c **** 
+  94:./rt_thread/src/timer.c ****     /* set flag */
+  95:./rt_thread/src/timer.c ****     timer->parent.flag  = flag;
+ 283              		.loc 2 95 25
+ 284 000e FB68     		ldr	r3, [r7, #12]
+ 285 0010 97F82020 		ldrb	r2, [r7, #32]
+ 286 0014 5A72     		strb	r2, [r3, #9]
+  96:./rt_thread/src/timer.c **** 
+  97:./rt_thread/src/timer.c ****     /* set deactivated */
+  98:./rt_thread/src/timer.c ****     timer->parent.flag &= ~RT_TIMER_FLAG_ACTIVATED;
+ 287              		.loc 2 98 24
+ 288 0016 FB68     		ldr	r3, [r7, #12]
+ 289 0018 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 290 001a 23F00103 		bic	r3, r3, #1
+ 291 001e DAB2     		uxtb	r2, r3
+ 292 0020 FB68     		ldr	r3, [r7, #12]
+ 293 0022 5A72     		strb	r2, [r3, #9]
+  99:./rt_thread/src/timer.c **** 
+ 100:./rt_thread/src/timer.c ****     timer->timeout_func = timeout;
+ 294              		.loc 2 100 25
+ 295 0024 FB68     		ldr	r3, [r7, #12]
+ 296 0026 BA68     		ldr	r2, [r7, #8]
+ 297 0028 DA61     		str	r2, [r3, #28]
+ 101:./rt_thread/src/timer.c ****     timer->parameter    = parameter;
+ 298              		.loc 2 101 25
+ 299 002a FB68     		ldr	r3, [r7, #12]
+ 300 002c 7A68     		ldr	r2, [r7, #4]
+ 301 002e 1A62     		str	r2, [r3, #32]
+ 102:./rt_thread/src/timer.c **** 
+ 103:./rt_thread/src/timer.c ****     timer->timeout_tick = 0;
+ 302              		.loc 2 103 25
+ 303 0030 FB68     		ldr	r3, [r7, #12]
+ 304 0032 0022     		movs	r2, #0
+ 305 0034 9A62     		str	r2, [r3, #40]
+ 104:./rt_thread/src/timer.c ****     timer->init_tick    = time;
+ 306              		.loc 2 104 25
+ 307 0036 FB68     		ldr	r3, [r7, #12]
+ 308 0038 3A68     		ldr	r2, [r7]
+ 309 003a 5A62     		str	r2, [r3, #36]
+ 105:./rt_thread/src/timer.c **** 
+ 106:./rt_thread/src/timer.c ****     /* initialize timer list */
+ 107:./rt_thread/src/timer.c ****     for (i = 0; i < RT_TIMER_SKIP_LIST_LEVEL; i++)
+ 310              		.loc 2 107 12
+ 311 003c 0023     		movs	r3, #0
+ 312 003e 7B61     		str	r3, [r7, #20]
+ 313              		.loc 2 107 5
+ 314 0040 0BE0     		b	.L7
+ 315              	.L8:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 10
+
+
+ 108:./rt_thread/src/timer.c ****     {
+ 109:./rt_thread/src/timer.c ****         rt_list_init(&(timer->row[i]));
+ 316              		.loc 2 109 9 discriminator 3
+ 317 0042 7B69     		ldr	r3, [r7, #20]
+ 318 0044 0233     		adds	r3, r3, #2
+ 319 0046 DB00     		lsls	r3, r3, #3
+ 320 0048 FA68     		ldr	r2, [r7, #12]
+ 321 004a 1344     		add	r3, r3, r2
+ 322 004c 0433     		adds	r3, r3, #4
+ 323 004e 1846     		mov	r0, r3
+ 324 0050 FFF7FEFF 		bl	rt_list_init
+ 107:./rt_thread/src/timer.c ****     {
+ 325              		.loc 2 107 48 discriminator 3
+ 326 0054 7B69     		ldr	r3, [r7, #20]
+ 327 0056 0133     		adds	r3, r3, #1
+ 328 0058 7B61     		str	r3, [r7, #20]
+ 329              	.L7:
+ 107:./rt_thread/src/timer.c ****     {
+ 330              		.loc 2 107 5 discriminator 1
+ 331 005a 7B69     		ldr	r3, [r7, #20]
+ 332 005c 002B     		cmp	r3, #0
+ 333 005e F0DD     		ble	.L8
+ 110:./rt_thread/src/timer.c ****     }
+ 111:./rt_thread/src/timer.c **** }
+ 334              		.loc 2 111 1
+ 335 0060 00BF     		nop
+ 336 0062 00BF     		nop
+ 337 0064 1837     		adds	r7, r7, #24
+ 338              	.LCFI27:
+ 339              		.cfi_def_cfa_offset 8
+ 340 0066 BD46     		mov	sp, r7
+ 341              	.LCFI28:
+ 342              		.cfi_def_cfa_register 13
+ 343              		@ sp needed
+ 344 0068 80BD     		pop	{r7, pc}
+ 345              		.cfi_endproc
+ 346              	.LFE15:
+ 348              		.section	.text.rt_timer_list_next_timeout,"ax",%progbits
+ 349              		.align	1
+ 350              		.syntax unified
+ 351              		.thumb
+ 352              		.thumb_func
+ 354              	rt_timer_list_next_timeout:
+ 355              	.LFB16:
+ 112:./rt_thread/src/timer.c **** 
+ 113:./rt_thread/src/timer.c **** /* the fist timer always in the last row */
+ 114:./rt_thread/src/timer.c **** static rt_tick_t rt_timer_list_next_timeout(rt_list_t timer_list[])
+ 115:./rt_thread/src/timer.c **** {
+ 356              		.loc 2 115 1
+ 357              		.cfi_startproc
+ 358              		@ args = 0, pretend = 0, frame = 16
+ 359              		@ frame_needed = 1, uses_anonymous_args = 0
+ 360 0000 90B5     		push	{r4, r7, lr}
+ 361              	.LCFI29:
+ 362              		.cfi_def_cfa_offset 12
+ 363              		.cfi_offset 4, -12
+ 364              		.cfi_offset 7, -8
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 11
+
+
+ 365              		.cfi_offset 14, -4
+ 366 0002 85B0     		sub	sp, sp, #20
+ 367              	.LCFI30:
+ 368              		.cfi_def_cfa_offset 32
+ 369 0004 00AF     		add	r7, sp, #0
+ 370              	.LCFI31:
+ 371              		.cfi_def_cfa_register 7
+ 372 0006 7860     		str	r0, [r7, #4]
+ 116:./rt_thread/src/timer.c ****     struct rt_timer *timer;
+ 117:./rt_thread/src/timer.c ****     register rt_base_t level;
+ 118:./rt_thread/src/timer.c ****     rt_tick_t timeout_tick = RT_TICK_MAX;
+ 373              		.loc 2 118 15
+ 374 0008 4FF0FF33 		mov	r3, #-1
+ 375 000c FB60     		str	r3, [r7, #12]
+ 119:./rt_thread/src/timer.c **** 
+ 120:./rt_thread/src/timer.c ****     /* disable interrupt */
+ 121:./rt_thread/src/timer.c ****     level = rt_hw_interrupt_disable();
+ 376              		.loc 2 121 13
+ 377 000e FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 378 0012 0446     		mov	r4, r0
+ 122:./rt_thread/src/timer.c **** 
+ 123:./rt_thread/src/timer.c ****     if (!rt_list_isempty(&timer_list[RT_TIMER_SKIP_LIST_LEVEL - 1]))
+ 379              		.loc 2 123 10
+ 380 0014 7868     		ldr	r0, [r7, #4]
+ 381 0016 FFF7FEFF 		bl	rt_list_isempty
+ 382 001a 0346     		mov	r3, r0
+ 383              		.loc 2 123 8
+ 384 001c 002B     		cmp	r3, #0
+ 385 001e 06D1     		bne	.L10
+ 124:./rt_thread/src/timer.c ****     {
+ 125:./rt_thread/src/timer.c ****         timer = rt_list_entry(timer_list[RT_TIMER_SKIP_LIST_LEVEL - 1].next,
+ 386              		.loc 2 125 17
+ 387 0020 7B68     		ldr	r3, [r7, #4]
+ 388 0022 1B68     		ldr	r3, [r3]
+ 389              		.loc 2 125 15
+ 390 0024 143B     		subs	r3, r3, #20
+ 391 0026 BB60     		str	r3, [r7, #8]
+ 126:./rt_thread/src/timer.c ****                               struct rt_timer, row[RT_TIMER_SKIP_LIST_LEVEL - 1]);
+ 127:./rt_thread/src/timer.c ****         timeout_tick = timer->timeout_tick;
+ 392              		.loc 2 127 22
+ 393 0028 BB68     		ldr	r3, [r7, #8]
+ 394 002a 9B6A     		ldr	r3, [r3, #40]
+ 395 002c FB60     		str	r3, [r7, #12]
+ 396              	.L10:
+ 128:./rt_thread/src/timer.c ****     }
+ 129:./rt_thread/src/timer.c **** 
+ 130:./rt_thread/src/timer.c ****     /* enable interrupt */
+ 131:./rt_thread/src/timer.c ****     rt_hw_interrupt_enable(level);
+ 397              		.loc 2 131 5
+ 398 002e 2046     		mov	r0, r4
+ 399 0030 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 132:./rt_thread/src/timer.c **** 
+ 133:./rt_thread/src/timer.c ****     return timeout_tick;
+ 400              		.loc 2 133 12
+ 401 0034 FB68     		ldr	r3, [r7, #12]
+ 134:./rt_thread/src/timer.c **** }
+ 402              		.loc 2 134 1
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 12
+
+
+ 403 0036 1846     		mov	r0, r3
+ 404 0038 1437     		adds	r7, r7, #20
+ 405              	.LCFI32:
+ 406              		.cfi_def_cfa_offset 12
+ 407 003a BD46     		mov	sp, r7
+ 408              	.LCFI33:
+ 409              		.cfi_def_cfa_register 13
+ 410              		@ sp needed
+ 411 003c 90BD     		pop	{r4, r7, pc}
+ 412              		.cfi_endproc
+ 413              	.LFE16:
+ 415              		.section	.text._rt_timer_remove,"ax",%progbits
+ 416              		.align	1
+ 417              		.syntax unified
+ 418              		.thumb
+ 419              		.thumb_func
+ 421              	_rt_timer_remove:
+ 422              	.LFB17:
+ 135:./rt_thread/src/timer.c **** 
+ 136:./rt_thread/src/timer.c **** rt_inline void _rt_timer_remove(rt_timer_t timer)
+ 137:./rt_thread/src/timer.c **** {
+ 423              		.loc 2 137 1
+ 424              		.cfi_startproc
+ 425              		@ args = 0, pretend = 0, frame = 16
+ 426              		@ frame_needed = 1, uses_anonymous_args = 0
+ 427 0000 80B5     		push	{r7, lr}
+ 428              	.LCFI34:
+ 429              		.cfi_def_cfa_offset 8
+ 430              		.cfi_offset 7, -8
+ 431              		.cfi_offset 14, -4
+ 432 0002 84B0     		sub	sp, sp, #16
+ 433              	.LCFI35:
+ 434              		.cfi_def_cfa_offset 24
+ 435 0004 00AF     		add	r7, sp, #0
+ 436              	.LCFI36:
+ 437              		.cfi_def_cfa_register 7
+ 438 0006 7860     		str	r0, [r7, #4]
+ 138:./rt_thread/src/timer.c ****     int i;
+ 139:./rt_thread/src/timer.c **** 
+ 140:./rt_thread/src/timer.c ****     for (i = 0; i < RT_TIMER_SKIP_LIST_LEVEL; i++)
+ 439              		.loc 2 140 12
+ 440 0008 0023     		movs	r3, #0
+ 441 000a FB60     		str	r3, [r7, #12]
+ 442              		.loc 2 140 5
+ 443 000c 0BE0     		b	.L13
+ 444              	.L14:
+ 141:./rt_thread/src/timer.c ****     {
+ 142:./rt_thread/src/timer.c ****         rt_list_remove(&timer->row[i]);
+ 445              		.loc 2 142 9 discriminator 3
+ 446 000e FB68     		ldr	r3, [r7, #12]
+ 447 0010 0233     		adds	r3, r3, #2
+ 448 0012 DB00     		lsls	r3, r3, #3
+ 449 0014 7A68     		ldr	r2, [r7, #4]
+ 450 0016 1344     		add	r3, r3, r2
+ 451 0018 0433     		adds	r3, r3, #4
+ 452 001a 1846     		mov	r0, r3
+ 453 001c FFF7FEFF 		bl	rt_list_remove
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 13
+
+
+ 140:./rt_thread/src/timer.c ****     {
+ 454              		.loc 2 140 48 discriminator 3
+ 455 0020 FB68     		ldr	r3, [r7, #12]
+ 456 0022 0133     		adds	r3, r3, #1
+ 457 0024 FB60     		str	r3, [r7, #12]
+ 458              	.L13:
+ 140:./rt_thread/src/timer.c ****     {
+ 459              		.loc 2 140 5 discriminator 1
+ 460 0026 FB68     		ldr	r3, [r7, #12]
+ 461 0028 002B     		cmp	r3, #0
+ 462 002a F0DD     		ble	.L14
+ 143:./rt_thread/src/timer.c ****     }
+ 144:./rt_thread/src/timer.c **** }
+ 463              		.loc 2 144 1
+ 464 002c 00BF     		nop
+ 465 002e 00BF     		nop
+ 466 0030 1037     		adds	r7, r7, #16
+ 467              	.LCFI37:
+ 468              		.cfi_def_cfa_offset 8
+ 469 0032 BD46     		mov	sp, r7
+ 470              	.LCFI38:
+ 471              		.cfi_def_cfa_register 13
+ 472              		@ sp needed
+ 473 0034 80BD     		pop	{r7, pc}
+ 474              		.cfi_endproc
+ 475              	.LFE17:
+ 477              		.section	.text.rt_timer_init,"ax",%progbits
+ 478              		.align	1
+ 479              		.global	rt_timer_init
+ 480              		.syntax unified
+ 481              		.thumb
+ 482              		.thumb_func
+ 484              	rt_timer_init:
+ 485              	.LFB18:
+ 145:./rt_thread/src/timer.c **** 
+ 146:./rt_thread/src/timer.c **** #if RT_DEBUG_TIMER
+ 147:./rt_thread/src/timer.c **** static int rt_timer_count_height(struct rt_timer *timer)
+ 148:./rt_thread/src/timer.c **** {
+ 149:./rt_thread/src/timer.c ****     int i, cnt = 0;
+ 150:./rt_thread/src/timer.c **** 
+ 151:./rt_thread/src/timer.c ****     for (i = 0; i < RT_TIMER_SKIP_LIST_LEVEL; i++)
+ 152:./rt_thread/src/timer.c ****     {
+ 153:./rt_thread/src/timer.c ****         if (!rt_list_isempty(&timer->row[i]))
+ 154:./rt_thread/src/timer.c ****             cnt++;
+ 155:./rt_thread/src/timer.c ****     }
+ 156:./rt_thread/src/timer.c ****     return cnt;
+ 157:./rt_thread/src/timer.c **** }
+ 158:./rt_thread/src/timer.c **** 
+ 159:./rt_thread/src/timer.c **** void rt_timer_dump(rt_list_t timer_heads[])
+ 160:./rt_thread/src/timer.c **** {
+ 161:./rt_thread/src/timer.c ****     rt_list_t *list;
+ 162:./rt_thread/src/timer.c **** 
+ 163:./rt_thread/src/timer.c ****     for (list = timer_heads[RT_TIMER_SKIP_LIST_LEVEL - 1].next;
+ 164:./rt_thread/src/timer.c ****          list != &timer_heads[RT_TIMER_SKIP_LIST_LEVEL - 1];
+ 165:./rt_thread/src/timer.c ****          list = list->next)
+ 166:./rt_thread/src/timer.c ****     {
+ 167:./rt_thread/src/timer.c ****         struct rt_timer *timer = rt_list_entry(list,
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 14
+
+
+ 168:./rt_thread/src/timer.c ****                                                struct rt_timer,
+ 169:./rt_thread/src/timer.c ****                                                row[RT_TIMER_SKIP_LIST_LEVEL - 1]);
+ 170:./rt_thread/src/timer.c ****         rt_kprintf("%d", rt_timer_count_height(timer));
+ 171:./rt_thread/src/timer.c ****     }
+ 172:./rt_thread/src/timer.c ****     rt_kprintf("\n");
+ 173:./rt_thread/src/timer.c **** }
+ 174:./rt_thread/src/timer.c **** #endif
+ 175:./rt_thread/src/timer.c **** 
+ 176:./rt_thread/src/timer.c **** /**
+ 177:./rt_thread/src/timer.c ****  * @addtogroup Clock
+ 178:./rt_thread/src/timer.c ****  */
+ 179:./rt_thread/src/timer.c **** 
+ 180:./rt_thread/src/timer.c **** /**@{*/
+ 181:./rt_thread/src/timer.c **** 
+ 182:./rt_thread/src/timer.c **** /**
+ 183:./rt_thread/src/timer.c ****  * This function will initialize a timer, normally this function is used to
+ 184:./rt_thread/src/timer.c ****  * initialize a static timer object.
+ 185:./rt_thread/src/timer.c ****  *
+ 186:./rt_thread/src/timer.c ****  * @param timer the static timer object
+ 187:./rt_thread/src/timer.c ****  * @param name the name of timer
+ 188:./rt_thread/src/timer.c ****  * @param timeout the timeout function
+ 189:./rt_thread/src/timer.c ****  * @param parameter the parameter of timeout function
+ 190:./rt_thread/src/timer.c ****  * @param time the tick of timer
+ 191:./rt_thread/src/timer.c ****  * @param flag the flag of timer
+ 192:./rt_thread/src/timer.c ****  */
+ 193:./rt_thread/src/timer.c **** void rt_timer_init(rt_timer_t  timer,
+ 194:./rt_thread/src/timer.c ****                    const char *name,
+ 195:./rt_thread/src/timer.c ****                    void (*timeout)(void *parameter),
+ 196:./rt_thread/src/timer.c ****                    void       *parameter,
+ 197:./rt_thread/src/timer.c ****                    rt_tick_t   time,
+ 198:./rt_thread/src/timer.c ****                    rt_uint8_t  flag)
+ 199:./rt_thread/src/timer.c **** {
+ 486              		.loc 2 199 1
+ 487              		.cfi_startproc
+ 488              		@ args = 8, pretend = 0, frame = 16
+ 489              		@ frame_needed = 1, uses_anonymous_args = 0
+ 490 0000 80B5     		push	{r7, lr}
+ 491              	.LCFI39:
+ 492              		.cfi_def_cfa_offset 8
+ 493              		.cfi_offset 7, -8
+ 494              		.cfi_offset 14, -4
+ 495 0002 86B0     		sub	sp, sp, #24
+ 496              	.LCFI40:
+ 497              		.cfi_def_cfa_offset 32
+ 498 0004 02AF     		add	r7, sp, #8
+ 499              	.LCFI41:
+ 500              		.cfi_def_cfa 7, 24
+ 501 0006 F860     		str	r0, [r7, #12]
+ 502 0008 B960     		str	r1, [r7, #8]
+ 503 000a 7A60     		str	r2, [r7, #4]
+ 504 000c 3B60     		str	r3, [r7]
+ 200:./rt_thread/src/timer.c ****     /* timer check */
+ 201:./rt_thread/src/timer.c ****     RT_ASSERT(timer != RT_NULL);
+ 202:./rt_thread/src/timer.c **** 
+ 203:./rt_thread/src/timer.c ****     /* timer object initialization */
+ 204:./rt_thread/src/timer.c ****     rt_object_init((rt_object_t)timer, RT_Object_Class_Timer, name);
+ 505              		.loc 2 204 5
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 15
+
+
+ 506 000e BA68     		ldr	r2, [r7, #8]
+ 507 0010 0A21     		movs	r1, #10
+ 508 0012 F868     		ldr	r0, [r7, #12]
+ 509 0014 FFF7FEFF 		bl	rt_object_init
+ 205:./rt_thread/src/timer.c **** 
+ 206:./rt_thread/src/timer.c ****     _rt_timer_init(timer, timeout, parameter, time, flag);
+ 510              		.loc 2 206 5
+ 511 0018 3B7F     		ldrb	r3, [r7, #28]	@ zero_extendqisi2
+ 512 001a 0093     		str	r3, [sp]
+ 513 001c BB69     		ldr	r3, [r7, #24]
+ 514 001e 3A68     		ldr	r2, [r7]
+ 515 0020 7968     		ldr	r1, [r7, #4]
+ 516 0022 F868     		ldr	r0, [r7, #12]
+ 517 0024 FFF7FEFF 		bl	_rt_timer_init
+ 207:./rt_thread/src/timer.c **** }
+ 518              		.loc 2 207 1
+ 519 0028 00BF     		nop
+ 520 002a 1037     		adds	r7, r7, #16
+ 521              	.LCFI42:
+ 522              		.cfi_def_cfa_offset 8
+ 523 002c BD46     		mov	sp, r7
+ 524              	.LCFI43:
+ 525              		.cfi_def_cfa_register 13
+ 526              		@ sp needed
+ 527 002e 80BD     		pop	{r7, pc}
+ 528              		.cfi_endproc
+ 529              	.LFE18:
+ 531              		.section	.text.rt_timer_detach,"ax",%progbits
+ 532              		.align	1
+ 533              		.global	rt_timer_detach
+ 534              		.syntax unified
+ 535              		.thumb
+ 536              		.thumb_func
+ 538              	rt_timer_detach:
+ 539              	.LFB19:
+ 208:./rt_thread/src/timer.c **** 
+ 209:./rt_thread/src/timer.c **** /**
+ 210:./rt_thread/src/timer.c ****  * This function will detach a timer from timer management.
+ 211:./rt_thread/src/timer.c ****  *
+ 212:./rt_thread/src/timer.c ****  * @param timer the static timer object
+ 213:./rt_thread/src/timer.c ****  *
+ 214:./rt_thread/src/timer.c ****  * @return the operation status, RT_EOK on OK; RT_ERROR on error
+ 215:./rt_thread/src/timer.c ****  */
+ 216:./rt_thread/src/timer.c **** rt_err_t rt_timer_detach(rt_timer_t timer)
+ 217:./rt_thread/src/timer.c **** {
+ 540              		.loc 2 217 1
+ 541              		.cfi_startproc
+ 542              		@ args = 0, pretend = 0, frame = 8
+ 543              		@ frame_needed = 1, uses_anonymous_args = 0
+ 544 0000 90B5     		push	{r4, r7, lr}
+ 545              	.LCFI44:
+ 546              		.cfi_def_cfa_offset 12
+ 547              		.cfi_offset 4, -12
+ 548              		.cfi_offset 7, -8
+ 549              		.cfi_offset 14, -4
+ 550 0002 83B0     		sub	sp, sp, #12
+ 551              	.LCFI45:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 16
+
+
+ 552              		.cfi_def_cfa_offset 24
+ 553 0004 00AF     		add	r7, sp, #0
+ 554              	.LCFI46:
+ 555              		.cfi_def_cfa_register 7
+ 556 0006 7860     		str	r0, [r7, #4]
+ 218:./rt_thread/src/timer.c ****     register rt_base_t level;
+ 219:./rt_thread/src/timer.c **** 
+ 220:./rt_thread/src/timer.c ****     /* timer check */
+ 221:./rt_thread/src/timer.c ****     RT_ASSERT(timer != RT_NULL);
+ 222:./rt_thread/src/timer.c ****     RT_ASSERT(rt_object_get_type(&timer->parent) == RT_Object_Class_Timer);
+ 223:./rt_thread/src/timer.c ****     RT_ASSERT(rt_object_is_systemobject(&timer->parent));
+ 224:./rt_thread/src/timer.c **** 
+ 225:./rt_thread/src/timer.c ****     /* disable interrupt */
+ 226:./rt_thread/src/timer.c ****     level = rt_hw_interrupt_disable();
+ 557              		.loc 2 226 13
+ 558 0008 FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 559 000c 0446     		mov	r4, r0
+ 227:./rt_thread/src/timer.c **** 
+ 228:./rt_thread/src/timer.c ****     _rt_timer_remove(timer);
+ 560              		.loc 2 228 5
+ 561 000e 7868     		ldr	r0, [r7, #4]
+ 562 0010 FFF7FEFF 		bl	_rt_timer_remove
+ 229:./rt_thread/src/timer.c ****     /* stop timer */
+ 230:./rt_thread/src/timer.c ****     timer->parent.flag &= ~RT_TIMER_FLAG_ACTIVATED;
+ 563              		.loc 2 230 24
+ 564 0014 7B68     		ldr	r3, [r7, #4]
+ 565 0016 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 566 0018 23F00103 		bic	r3, r3, #1
+ 567 001c DAB2     		uxtb	r2, r3
+ 568 001e 7B68     		ldr	r3, [r7, #4]
+ 569 0020 5A72     		strb	r2, [r3, #9]
+ 231:./rt_thread/src/timer.c **** 
+ 232:./rt_thread/src/timer.c ****     /* enable interrupt */
+ 233:./rt_thread/src/timer.c ****     rt_hw_interrupt_enable(level);
+ 570              		.loc 2 233 5
+ 571 0022 2046     		mov	r0, r4
+ 572 0024 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 234:./rt_thread/src/timer.c **** 
+ 235:./rt_thread/src/timer.c ****     rt_object_detach((rt_object_t)timer);
+ 573              		.loc 2 235 5
+ 574 0028 7868     		ldr	r0, [r7, #4]
+ 575 002a FFF7FEFF 		bl	rt_object_detach
+ 236:./rt_thread/src/timer.c **** 
+ 237:./rt_thread/src/timer.c ****     return RT_EOK;
+ 576              		.loc 2 237 12
+ 577 002e 0023     		movs	r3, #0
+ 238:./rt_thread/src/timer.c **** }
+ 578              		.loc 2 238 1
+ 579 0030 1846     		mov	r0, r3
+ 580 0032 0C37     		adds	r7, r7, #12
+ 581              	.LCFI47:
+ 582              		.cfi_def_cfa_offset 12
+ 583 0034 BD46     		mov	sp, r7
+ 584              	.LCFI48:
+ 585              		.cfi_def_cfa_register 13
+ 586              		@ sp needed
+ 587 0036 90BD     		pop	{r4, r7, pc}
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 17
+
+
+ 588              		.cfi_endproc
+ 589              	.LFE19:
+ 591              		.section	.text.rt_timer_create,"ax",%progbits
+ 592              		.align	1
+ 593              		.global	rt_timer_create
+ 594              		.syntax unified
+ 595              		.thumb
+ 596              		.thumb_func
+ 598              	rt_timer_create:
+ 599              	.LFB20:
+ 239:./rt_thread/src/timer.c **** 
+ 240:./rt_thread/src/timer.c **** #ifdef RT_USING_HEAP
+ 241:./rt_thread/src/timer.c **** /**
+ 242:./rt_thread/src/timer.c ****  * This function will create a timer
+ 243:./rt_thread/src/timer.c ****  *
+ 244:./rt_thread/src/timer.c ****  * @param name the name of timer
+ 245:./rt_thread/src/timer.c ****  * @param timeout the timeout function
+ 246:./rt_thread/src/timer.c ****  * @param parameter the parameter of timeout function
+ 247:./rt_thread/src/timer.c ****  * @param time the tick of timer
+ 248:./rt_thread/src/timer.c ****  * @param flag the flag of timer
+ 249:./rt_thread/src/timer.c ****  *
+ 250:./rt_thread/src/timer.c ****  * @return the created timer object
+ 251:./rt_thread/src/timer.c ****  */
+ 252:./rt_thread/src/timer.c **** rt_timer_t rt_timer_create(const char *name,
+ 253:./rt_thread/src/timer.c ****                            void (*timeout)(void *parameter),
+ 254:./rt_thread/src/timer.c ****                            void       *parameter,
+ 255:./rt_thread/src/timer.c ****                            rt_tick_t   time,
+ 256:./rt_thread/src/timer.c ****                            rt_uint8_t  flag)
+ 257:./rt_thread/src/timer.c **** {
+ 600              		.loc 2 257 1
+ 601              		.cfi_startproc
+ 602              		@ args = 4, pretend = 0, frame = 24
+ 603              		@ frame_needed = 1, uses_anonymous_args = 0
+ 604 0000 80B5     		push	{r7, lr}
+ 605              	.LCFI49:
+ 606              		.cfi_def_cfa_offset 8
+ 607              		.cfi_offset 7, -8
+ 608              		.cfi_offset 14, -4
+ 609 0002 88B0     		sub	sp, sp, #32
+ 610              	.LCFI50:
+ 611              		.cfi_def_cfa_offset 40
+ 612 0004 02AF     		add	r7, sp, #8
+ 613              	.LCFI51:
+ 614              		.cfi_def_cfa 7, 32
+ 615 0006 F860     		str	r0, [r7, #12]
+ 616 0008 B960     		str	r1, [r7, #8]
+ 617 000a 7A60     		str	r2, [r7, #4]
+ 618 000c 3B60     		str	r3, [r7]
+ 258:./rt_thread/src/timer.c ****     struct rt_timer *timer;
+ 259:./rt_thread/src/timer.c **** 
+ 260:./rt_thread/src/timer.c ****     /* allocate a object */
+ 261:./rt_thread/src/timer.c ****     timer = (struct rt_timer *)rt_object_allocate(RT_Object_Class_Timer, name);
+ 619              		.loc 2 261 32
+ 620 000e F968     		ldr	r1, [r7, #12]
+ 621 0010 0A20     		movs	r0, #10
+ 622 0012 FFF7FEFF 		bl	rt_object_allocate
+ 623 0016 7861     		str	r0, [r7, #20]
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 18
+
+
+ 262:./rt_thread/src/timer.c ****     if (timer == RT_NULL)
+ 624              		.loc 2 262 8
+ 625 0018 7B69     		ldr	r3, [r7, #20]
+ 626 001a 002B     		cmp	r3, #0
+ 627 001c 01D1     		bne	.L19
+ 263:./rt_thread/src/timer.c ****     {
+ 264:./rt_thread/src/timer.c ****         return RT_NULL;
+ 628              		.loc 2 264 16
+ 629 001e 0023     		movs	r3, #0
+ 630 0020 09E0     		b	.L20
+ 631              	.L19:
+ 265:./rt_thread/src/timer.c ****     }
+ 266:./rt_thread/src/timer.c **** 
+ 267:./rt_thread/src/timer.c ****     _rt_timer_init(timer, timeout, parameter, time, flag);
+ 632              		.loc 2 267 5
+ 633 0022 97F82030 		ldrb	r3, [r7, #32]	@ zero_extendqisi2
+ 634 0026 0093     		str	r3, [sp]
+ 635 0028 3B68     		ldr	r3, [r7]
+ 636 002a 7A68     		ldr	r2, [r7, #4]
+ 637 002c B968     		ldr	r1, [r7, #8]
+ 638 002e 7869     		ldr	r0, [r7, #20]
+ 639 0030 FFF7FEFF 		bl	_rt_timer_init
+ 268:./rt_thread/src/timer.c **** 
+ 269:./rt_thread/src/timer.c ****     return timer;
+ 640              		.loc 2 269 12
+ 641 0034 7B69     		ldr	r3, [r7, #20]
+ 642              	.L20:
+ 270:./rt_thread/src/timer.c **** }
+ 643              		.loc 2 270 1
+ 644 0036 1846     		mov	r0, r3
+ 645 0038 1837     		adds	r7, r7, #24
+ 646              	.LCFI52:
+ 647              		.cfi_def_cfa_offset 8
+ 648 003a BD46     		mov	sp, r7
+ 649              	.LCFI53:
+ 650              		.cfi_def_cfa_register 13
+ 651              		@ sp needed
+ 652 003c 80BD     		pop	{r7, pc}
+ 653              		.cfi_endproc
+ 654              	.LFE20:
+ 656              		.section	.text.rt_timer_delete,"ax",%progbits
+ 657              		.align	1
+ 658              		.global	rt_timer_delete
+ 659              		.syntax unified
+ 660              		.thumb
+ 661              		.thumb_func
+ 663              	rt_timer_delete:
+ 664              	.LFB21:
+ 271:./rt_thread/src/timer.c **** 
+ 272:./rt_thread/src/timer.c **** /**
+ 273:./rt_thread/src/timer.c ****  * This function will delete a timer and release timer memory
+ 274:./rt_thread/src/timer.c ****  *
+ 275:./rt_thread/src/timer.c ****  * @param timer the timer to be deleted
+ 276:./rt_thread/src/timer.c ****  *
+ 277:./rt_thread/src/timer.c ****  * @return the operation status, RT_EOK on OK; RT_ERROR on error
+ 278:./rt_thread/src/timer.c ****  */
+ 279:./rt_thread/src/timer.c **** rt_err_t rt_timer_delete(rt_timer_t timer)
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 19
+
+
+ 280:./rt_thread/src/timer.c **** {
+ 665              		.loc 2 280 1
+ 666              		.cfi_startproc
+ 667              		@ args = 0, pretend = 0, frame = 8
+ 668              		@ frame_needed = 1, uses_anonymous_args = 0
+ 669 0000 90B5     		push	{r4, r7, lr}
+ 670              	.LCFI54:
+ 671              		.cfi_def_cfa_offset 12
+ 672              		.cfi_offset 4, -12
+ 673              		.cfi_offset 7, -8
+ 674              		.cfi_offset 14, -4
+ 675 0002 83B0     		sub	sp, sp, #12
+ 676              	.LCFI55:
+ 677              		.cfi_def_cfa_offset 24
+ 678 0004 00AF     		add	r7, sp, #0
+ 679              	.LCFI56:
+ 680              		.cfi_def_cfa_register 7
+ 681 0006 7860     		str	r0, [r7, #4]
+ 281:./rt_thread/src/timer.c ****     register rt_base_t level;
+ 282:./rt_thread/src/timer.c **** 
+ 283:./rt_thread/src/timer.c ****     /* timer check */
+ 284:./rt_thread/src/timer.c ****     RT_ASSERT(timer != RT_NULL);
+ 285:./rt_thread/src/timer.c ****     RT_ASSERT(rt_object_get_type(&timer->parent) == RT_Object_Class_Timer);
+ 286:./rt_thread/src/timer.c ****     RT_ASSERT(rt_object_is_systemobject(&timer->parent) == RT_FALSE);
+ 287:./rt_thread/src/timer.c **** 
+ 288:./rt_thread/src/timer.c ****     /* disable interrupt */
+ 289:./rt_thread/src/timer.c ****     level = rt_hw_interrupt_disable();
+ 682              		.loc 2 289 13
+ 683 0008 FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 684 000c 0446     		mov	r4, r0
+ 290:./rt_thread/src/timer.c **** 
+ 291:./rt_thread/src/timer.c ****     _rt_timer_remove(timer);
+ 685              		.loc 2 291 5
+ 686 000e 7868     		ldr	r0, [r7, #4]
+ 687 0010 FFF7FEFF 		bl	_rt_timer_remove
+ 292:./rt_thread/src/timer.c ****     /* stop timer */
+ 293:./rt_thread/src/timer.c ****     timer->parent.flag &= ~RT_TIMER_FLAG_ACTIVATED;
+ 688              		.loc 2 293 24
+ 689 0014 7B68     		ldr	r3, [r7, #4]
+ 690 0016 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 691 0018 23F00103 		bic	r3, r3, #1
+ 692 001c DAB2     		uxtb	r2, r3
+ 693 001e 7B68     		ldr	r3, [r7, #4]
+ 694 0020 5A72     		strb	r2, [r3, #9]
+ 294:./rt_thread/src/timer.c **** 
+ 295:./rt_thread/src/timer.c ****     /* enable interrupt */
+ 296:./rt_thread/src/timer.c ****     rt_hw_interrupt_enable(level);
+ 695              		.loc 2 296 5
+ 696 0022 2046     		mov	r0, r4
+ 697 0024 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 297:./rt_thread/src/timer.c **** 
+ 298:./rt_thread/src/timer.c ****     rt_object_delete((rt_object_t)timer);
+ 698              		.loc 2 298 5
+ 699 0028 7868     		ldr	r0, [r7, #4]
+ 700 002a FFF7FEFF 		bl	rt_object_delete
+ 299:./rt_thread/src/timer.c **** 
+ 300:./rt_thread/src/timer.c ****     return RT_EOK;
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 20
+
+
+ 701              		.loc 2 300 12
+ 702 002e 0023     		movs	r3, #0
+ 301:./rt_thread/src/timer.c **** }
+ 703              		.loc 2 301 1
+ 704 0030 1846     		mov	r0, r3
+ 705 0032 0C37     		adds	r7, r7, #12
+ 706              	.LCFI57:
+ 707              		.cfi_def_cfa_offset 12
+ 708 0034 BD46     		mov	sp, r7
+ 709              	.LCFI58:
+ 710              		.cfi_def_cfa_register 13
+ 711              		@ sp needed
+ 712 0036 90BD     		pop	{r4, r7, pc}
+ 713              		.cfi_endproc
+ 714              	.LFE21:
+ 716              		.section	.text.rt_timer_start,"ax",%progbits
+ 717              		.align	1
+ 718              		.global	rt_timer_start
+ 719              		.syntax unified
+ 720              		.thumb
+ 721              		.thumb_func
+ 723              	rt_timer_start:
+ 724              	.LFB22:
+ 302:./rt_thread/src/timer.c **** #endif
+ 303:./rt_thread/src/timer.c **** 
+ 304:./rt_thread/src/timer.c **** /**
+ 305:./rt_thread/src/timer.c ****  * This function will start the timer
+ 306:./rt_thread/src/timer.c ****  *
+ 307:./rt_thread/src/timer.c ****  * @param timer the timer to be started
+ 308:./rt_thread/src/timer.c ****  *
+ 309:./rt_thread/src/timer.c ****  * @return the operation status, RT_EOK on OK, -RT_ERROR on error
+ 310:./rt_thread/src/timer.c ****  */
+ 311:./rt_thread/src/timer.c **** rt_err_t rt_timer_start(rt_timer_t timer)
+ 312:./rt_thread/src/timer.c **** {
+ 725              		.loc 2 312 1
+ 726              		.cfi_startproc
+ 727              		@ args = 0, pretend = 0, frame = 32
+ 728              		@ frame_needed = 1, uses_anonymous_args = 0
+ 729 0000 90B5     		push	{r4, r7, lr}
+ 730              	.LCFI59:
+ 731              		.cfi_def_cfa_offset 12
+ 732              		.cfi_offset 4, -12
+ 733              		.cfi_offset 7, -8
+ 734              		.cfi_offset 14, -4
+ 735 0002 89B0     		sub	sp, sp, #36
+ 736              	.LCFI60:
+ 737              		.cfi_def_cfa_offset 48
+ 738 0004 00AF     		add	r7, sp, #0
+ 739              	.LCFI61:
+ 740              		.cfi_def_cfa_register 7
+ 741 0006 7860     		str	r0, [r7, #4]
+ 313:./rt_thread/src/timer.c ****     unsigned int row_lvl;
+ 314:./rt_thread/src/timer.c ****     rt_list_t *timer_list;
+ 315:./rt_thread/src/timer.c ****     register rt_base_t level;
+ 316:./rt_thread/src/timer.c ****     rt_list_t *row_head[RT_TIMER_SKIP_LIST_LEVEL];
+ 317:./rt_thread/src/timer.c ****     unsigned int tst_nr;
+ 318:./rt_thread/src/timer.c ****     static unsigned int random_nr;
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 21
+
+
+ 319:./rt_thread/src/timer.c **** 
+ 320:./rt_thread/src/timer.c ****     /* timer check */
+ 321:./rt_thread/src/timer.c ****     RT_ASSERT(timer != RT_NULL);
+ 322:./rt_thread/src/timer.c ****     RT_ASSERT(rt_object_get_type(&timer->parent) == RT_Object_Class_Timer);
+ 323:./rt_thread/src/timer.c **** 
+ 324:./rt_thread/src/timer.c ****     /* stop timer firstly */
+ 325:./rt_thread/src/timer.c ****     level = rt_hw_interrupt_disable();
+ 742              		.loc 2 325 13
+ 743 0008 FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 744 000c 0446     		mov	r4, r0
+ 326:./rt_thread/src/timer.c ****     /* remove timer from list */
+ 327:./rt_thread/src/timer.c ****     _rt_timer_remove(timer);
+ 745              		.loc 2 327 5
+ 746 000e 7868     		ldr	r0, [r7, #4]
+ 747 0010 FFF7FEFF 		bl	_rt_timer_remove
+ 328:./rt_thread/src/timer.c ****     /* change status of timer */
+ 329:./rt_thread/src/timer.c ****     timer->parent.flag &= ~RT_TIMER_FLAG_ACTIVATED;
+ 748              		.loc 2 329 24
+ 749 0014 7B68     		ldr	r3, [r7, #4]
+ 750 0016 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 751 0018 23F00103 		bic	r3, r3, #1
+ 752 001c DAB2     		uxtb	r2, r3
+ 753 001e 7B68     		ldr	r3, [r7, #4]
+ 754 0020 5A72     		strb	r2, [r3, #9]
+ 330:./rt_thread/src/timer.c **** 
+ 331:./rt_thread/src/timer.c ****     RT_OBJECT_HOOK_CALL(rt_object_take_hook, (&(timer->parent)));
+ 332:./rt_thread/src/timer.c **** 
+ 333:./rt_thread/src/timer.c ****     /*
+ 334:./rt_thread/src/timer.c ****      * get timeout tick,
+ 335:./rt_thread/src/timer.c ****      * the max timeout tick shall not great than RT_TICK_MAX/2
+ 336:./rt_thread/src/timer.c ****      */
+ 337:./rt_thread/src/timer.c ****     RT_ASSERT(timer->init_tick < RT_TICK_MAX / 2);
+ 338:./rt_thread/src/timer.c ****     timer->timeout_tick = rt_tick_get() + timer->init_tick;
+ 755              		.loc 2 338 27
+ 756 0022 FFF7FEFF 		bl	rt_tick_get
+ 757 0026 0246     		mov	r2, r0
+ 758              		.loc 2 338 48
+ 759 0028 7B68     		ldr	r3, [r7, #4]
+ 760 002a 5B6A     		ldr	r3, [r3, #36]
+ 761              		.loc 2 338 41
+ 762 002c 1A44     		add	r2, r2, r3
+ 763              		.loc 2 338 25
+ 764 002e 7B68     		ldr	r3, [r7, #4]
+ 765 0030 9A62     		str	r2, [r3, #40]
+ 339:./rt_thread/src/timer.c **** 
+ 340:./rt_thread/src/timer.c **** #ifdef RT_USING_TIMER_SOFT
+ 341:./rt_thread/src/timer.c ****     if (timer->parent.flag & RT_TIMER_FLAG_SOFT_TIMER)
+ 342:./rt_thread/src/timer.c ****     {
+ 343:./rt_thread/src/timer.c ****         /* insert timer to soft timer list */
+ 344:./rt_thread/src/timer.c ****         timer_list = rt_soft_timer_list;
+ 345:./rt_thread/src/timer.c ****     }
+ 346:./rt_thread/src/timer.c ****     else
+ 347:./rt_thread/src/timer.c **** #endif
+ 348:./rt_thread/src/timer.c ****     {
+ 349:./rt_thread/src/timer.c ****         /* insert timer to system timer list */
+ 350:./rt_thread/src/timer.c ****         timer_list = rt_timer_list;
+ 766              		.loc 2 350 20
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 22
+
+
+ 767 0032 4F4B     		ldr	r3, .L41
+ 768 0034 7B61     		str	r3, [r7, #20]
+ 351:./rt_thread/src/timer.c ****     }
+ 352:./rt_thread/src/timer.c **** 
+ 353:./rt_thread/src/timer.c ****     row_head[0]  = &timer_list[0];
+ 769              		.loc 2 353 18
+ 770 0036 7B69     		ldr	r3, [r7, #20]
+ 771 0038 BB60     		str	r3, [r7, #8]
+ 354:./rt_thread/src/timer.c ****     for (row_lvl = 0; row_lvl < RT_TIMER_SKIP_LIST_LEVEL; row_lvl++)
+ 772              		.loc 2 354 18
+ 773 003a 0023     		movs	r3, #0
+ 774 003c FB61     		str	r3, [r7, #28]
+ 775              		.loc 2 354 5
+ 776 003e 4FE0     		b	.L24
+ 777              	.L29:
+ 778              	.LBB2:
+ 355:./rt_thread/src/timer.c ****     {
+ 356:./rt_thread/src/timer.c ****         for (; row_head[row_lvl] != timer_list[row_lvl].prev;
+ 357:./rt_thread/src/timer.c ****              row_head[row_lvl]  = row_head[row_lvl]->next)
+ 358:./rt_thread/src/timer.c ****         {
+ 359:./rt_thread/src/timer.c ****             struct rt_timer *t;
+ 360:./rt_thread/src/timer.c ****             rt_list_t *p = row_head[row_lvl]->next;
+ 779              		.loc 2 360 36
+ 780 0040 FB69     		ldr	r3, [r7, #28]
+ 781 0042 9B00     		lsls	r3, r3, #2
+ 782 0044 2033     		adds	r3, r3, #32
+ 783 0046 3B44     		add	r3, r3, r7
+ 784 0048 53F8183C 		ldr	r3, [r3, #-24]
+ 785              		.loc 2 360 24
+ 786 004c 1B68     		ldr	r3, [r3]
+ 787 004e 3B61     		str	r3, [r7, #16]
+ 361:./rt_thread/src/timer.c **** 
+ 362:./rt_thread/src/timer.c ****             /* fix up the entry pointer */
+ 363:./rt_thread/src/timer.c ****             t = rt_list_entry(p, struct rt_timer, row[row_lvl]);
+ 788              		.loc 2 363 17
+ 789 0050 FB69     		ldr	r3, [r7, #28]
+ 790 0052 DB00     		lsls	r3, r3, #3
+ 791 0054 1433     		adds	r3, r3, #20
+ 792 0056 5B42     		rsbs	r3, r3, #0
+ 793              		.loc 2 363 15
+ 794 0058 3A69     		ldr	r2, [r7, #16]
+ 795 005a 1344     		add	r3, r3, r2
+ 796 005c FB60     		str	r3, [r7, #12]
+ 364:./rt_thread/src/timer.c **** 
+ 365:./rt_thread/src/timer.c ****             /* If we have two timers that timeout at the same time, it's
+ 366:./rt_thread/src/timer.c ****              * preferred that the timer inserted early get called early.
+ 367:./rt_thread/src/timer.c ****              * So insert the new timer to the end the the some-timeout timer
+ 368:./rt_thread/src/timer.c ****              * list.
+ 369:./rt_thread/src/timer.c ****              */
+ 370:./rt_thread/src/timer.c ****             if ((t->timeout_tick - timer->timeout_tick) == 0)
+ 797              		.loc 2 370 19
+ 798 005e FB68     		ldr	r3, [r7, #12]
+ 799 0060 9A6A     		ldr	r2, [r3, #40]
+ 800              		.loc 2 370 41
+ 801 0062 7B68     		ldr	r3, [r7, #4]
+ 802 0064 9B6A     		ldr	r3, [r3, #40]
+ 803              		.loc 2 370 16
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 23
+
+
+ 804 0066 9A42     		cmp	r2, r3
+ 805 0068 09D0     		beq	.L38
+ 371:./rt_thread/src/timer.c ****             {
+ 372:./rt_thread/src/timer.c ****                 continue;
+ 373:./rt_thread/src/timer.c ****             }
+ 374:./rt_thread/src/timer.c ****             else if ((t->timeout_tick - timer->timeout_tick) < RT_TICK_MAX / 2)
+ 806              		.loc 2 374 24
+ 807 006a FB68     		ldr	r3, [r7, #12]
+ 808 006c 9A6A     		ldr	r2, [r3, #40]
+ 809              		.loc 2 374 46
+ 810 006e 7B68     		ldr	r3, [r7, #4]
+ 811 0070 9B6A     		ldr	r3, [r3, #40]
+ 812              		.loc 2 374 39
+ 813 0072 D31A     		subs	r3, r2, r3
+ 814              		.loc 2 374 21
+ 815 0074 6FF00042 		mvn	r2, #-2147483648
+ 816 0078 9342     		cmp	r3, r2
+ 817 007a 1CD3     		bcc	.L39
+ 818 007c 00E0     		b	.L27
+ 819              	.L38:
+ 372:./rt_thread/src/timer.c ****             }
+ 820              		.loc 2 372 17
+ 821 007e 00BF     		nop
+ 822              	.L27:
+ 823              	.LBE2:
+ 357:./rt_thread/src/timer.c ****         {
+ 824              		.loc 2 357 43
+ 825 0080 FB69     		ldr	r3, [r7, #28]
+ 826 0082 9B00     		lsls	r3, r3, #2
+ 827 0084 2033     		adds	r3, r3, #32
+ 828 0086 3B44     		add	r3, r3, r7
+ 829 0088 53F8183C 		ldr	r3, [r3, #-24]
+ 357:./rt_thread/src/timer.c ****         {
+ 830              		.loc 2 357 52
+ 831 008c 1A68     		ldr	r2, [r3]
+ 357:./rt_thread/src/timer.c ****         {
+ 832              		.loc 2 357 33
+ 833 008e FB69     		ldr	r3, [r7, #28]
+ 834 0090 9B00     		lsls	r3, r3, #2
+ 835 0092 2033     		adds	r3, r3, #32
+ 836 0094 3B44     		add	r3, r3, r7
+ 837 0096 43F8182C 		str	r2, [r3, #-24]
+ 838              	.L25:
+ 356:./rt_thread/src/timer.c ****              row_head[row_lvl]  = row_head[row_lvl]->next)
+ 839              		.loc 2 356 24
+ 840 009a FB69     		ldr	r3, [r7, #28]
+ 841 009c 9B00     		lsls	r3, r3, #2
+ 842 009e 2033     		adds	r3, r3, #32
+ 843 00a0 3B44     		add	r3, r3, r7
+ 844 00a2 53F8182C 		ldr	r2, [r3, #-24]
+ 356:./rt_thread/src/timer.c ****              row_head[row_lvl]  = row_head[row_lvl]->next)
+ 845              		.loc 2 356 47
+ 846 00a6 FB69     		ldr	r3, [r7, #28]
+ 847 00a8 DB00     		lsls	r3, r3, #3
+ 848 00aa 7969     		ldr	r1, [r7, #20]
+ 849 00ac 0B44     		add	r3, r3, r1
+ 356:./rt_thread/src/timer.c ****              row_head[row_lvl]  = row_head[row_lvl]->next)
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 24
+
+
+ 850              		.loc 2 356 56
+ 851 00ae 5B68     		ldr	r3, [r3, #4]
+ 356:./rt_thread/src/timer.c ****              row_head[row_lvl]  = row_head[row_lvl]->next)
+ 852              		.loc 2 356 9
+ 853 00b0 9A42     		cmp	r2, r3
+ 854 00b2 C5D1     		bne	.L29
+ 855 00b4 00E0     		b	.L28
+ 856              	.L39:
+ 857              	.LBB3:
+ 375:./rt_thread/src/timer.c ****             {
+ 376:./rt_thread/src/timer.c ****                 break;
+ 858              		.loc 2 376 17
+ 859 00b6 00BF     		nop
+ 860              	.L28:
+ 861              	.LBE3:
+ 377:./rt_thread/src/timer.c ****             }
+ 378:./rt_thread/src/timer.c ****         }
+ 379:./rt_thread/src/timer.c ****         if (row_lvl != RT_TIMER_SKIP_LIST_LEVEL - 1)
+ 862              		.loc 2 379 12
+ 863 00b8 FB69     		ldr	r3, [r7, #28]
+ 864 00ba 002B     		cmp	r3, #0
+ 865 00bc 0DD0     		beq	.L30
+ 380:./rt_thread/src/timer.c ****             row_head[row_lvl + 1] = row_head[row_lvl] + 1;
+ 866              		.loc 2 380 45
+ 867 00be FB69     		ldr	r3, [r7, #28]
+ 868 00c0 9B00     		lsls	r3, r3, #2
+ 869 00c2 2033     		adds	r3, r3, #32
+ 870 00c4 3B44     		add	r3, r3, r7
+ 871 00c6 53F8182C 		ldr	r2, [r3, #-24]
+ 872              		.loc 2 380 30
+ 873 00ca FB69     		ldr	r3, [r7, #28]
+ 874 00cc 0133     		adds	r3, r3, #1
+ 875              		.loc 2 380 55
+ 876 00ce 0832     		adds	r2, r2, #8
+ 877              		.loc 2 380 35
+ 878 00d0 9B00     		lsls	r3, r3, #2
+ 879 00d2 2033     		adds	r3, r3, #32
+ 880 00d4 3B44     		add	r3, r3, r7
+ 881 00d6 43F8182C 		str	r2, [r3, #-24]
+ 882              	.L30:
+ 354:./rt_thread/src/timer.c ****     {
+ 883              		.loc 2 354 66 discriminator 2
+ 884 00da FB69     		ldr	r3, [r7, #28]
+ 885 00dc 0133     		adds	r3, r3, #1
+ 886 00de FB61     		str	r3, [r7, #28]
+ 887              	.L24:
+ 354:./rt_thread/src/timer.c ****     {
+ 888              		.loc 2 354 5 discriminator 1
+ 889 00e0 FB69     		ldr	r3, [r7, #28]
+ 890 00e2 002B     		cmp	r3, #0
+ 891 00e4 D9D0     		beq	.L25
+ 381:./rt_thread/src/timer.c ****     }
+ 382:./rt_thread/src/timer.c **** 
+ 383:./rt_thread/src/timer.c ****     /* Interestingly, this super simple timer insert counter works very very
+ 384:./rt_thread/src/timer.c ****      * well on distributing the list height uniformly. By means of "very very
+ 385:./rt_thread/src/timer.c ****      * well", I mean it beats the randomness of timer->timeout_tick very easily
+ 386:./rt_thread/src/timer.c ****      * (actually, the timeout_tick is not random and easy to be attacked). */
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 25
+
+
+ 387:./rt_thread/src/timer.c ****     random_nr++;
+ 892              		.loc 2 387 14
+ 893 00e6 234B     		ldr	r3, .L41+4
+ 894 00e8 1B68     		ldr	r3, [r3]
+ 895 00ea 0133     		adds	r3, r3, #1
+ 896 00ec 214A     		ldr	r2, .L41+4
+ 897 00ee 1360     		str	r3, [r2]
+ 388:./rt_thread/src/timer.c ****     tst_nr = random_nr;
+ 898              		.loc 2 388 12
+ 899 00f0 204B     		ldr	r3, .L41+4
+ 900 00f2 1B68     		ldr	r3, [r3]
+ 901 00f4 BB61     		str	r3, [r7, #24]
+ 389:./rt_thread/src/timer.c **** 
+ 390:./rt_thread/src/timer.c ****     rt_list_insert_after(row_head[RT_TIMER_SKIP_LIST_LEVEL - 1],
+ 902              		.loc 2 390 5
+ 903 00f6 BA68     		ldr	r2, [r7, #8]
+ 904 00f8 7B68     		ldr	r3, [r7, #4]
+ 905 00fa 1433     		adds	r3, r3, #20
+ 906 00fc 1946     		mov	r1, r3
+ 907 00fe 1046     		mov	r0, r2
+ 908 0100 FFF7FEFF 		bl	rt_list_insert_after
+ 391:./rt_thread/src/timer.c ****                          &(timer->row[RT_TIMER_SKIP_LIST_LEVEL - 1]));
+ 392:./rt_thread/src/timer.c ****     for (row_lvl = 2; row_lvl <= RT_TIMER_SKIP_LIST_LEVEL; row_lvl++)
+ 909              		.loc 2 392 18
+ 910 0104 0223     		movs	r3, #2
+ 911 0106 FB61     		str	r3, [r7, #28]
+ 912              		.loc 2 392 5
+ 913 0108 1DE0     		b	.L32
+ 914              	.L36:
+ 393:./rt_thread/src/timer.c ****     {
+ 394:./rt_thread/src/timer.c ****         if (!(tst_nr & RT_TIMER_SKIP_LIST_MASK))
+ 915              		.loc 2 394 22
+ 916 010a BB69     		ldr	r3, [r7, #24]
+ 917 010c 03F00303 		and	r3, r3, #3
+ 918              		.loc 2 394 12
+ 919 0110 002B     		cmp	r3, #0
+ 920 0112 1CD1     		bne	.L40
+ 395:./rt_thread/src/timer.c ****             rt_list_insert_after(row_head[RT_TIMER_SKIP_LIST_LEVEL - row_lvl],
+ 921              		.loc 2 395 68
+ 922 0114 FB69     		ldr	r3, [r7, #28]
+ 923 0116 C3F10103 		rsb	r3, r3, #1
+ 924              		.loc 2 395 13
+ 925 011a 9B00     		lsls	r3, r3, #2
+ 926 011c 2033     		adds	r3, r3, #32
+ 927 011e 3B44     		add	r3, r3, r7
+ 928 0120 53F8180C 		ldr	r0, [r3, #-24]
+ 396:./rt_thread/src/timer.c ****                                  &(timer->row[RT_TIMER_SKIP_LIST_LEVEL - row_lvl]));
+ 929              		.loc 2 396 72
+ 930 0124 FB69     		ldr	r3, [r7, #28]
+ 931 0126 C3F10103 		rsb	r3, r3, #1
+ 395:./rt_thread/src/timer.c ****             rt_list_insert_after(row_head[RT_TIMER_SKIP_LIST_LEVEL - row_lvl],
+ 932              		.loc 2 395 13
+ 933 012a 0233     		adds	r3, r3, #2
+ 934 012c DB00     		lsls	r3, r3, #3
+ 935 012e 7A68     		ldr	r2, [r7, #4]
+ 936 0130 1344     		add	r3, r3, r2
+ 937 0132 0433     		adds	r3, r3, #4
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 26
+
+
+ 938 0134 1946     		mov	r1, r3
+ 939 0136 FFF7FEFF 		bl	rt_list_insert_after
+ 397:./rt_thread/src/timer.c ****         else
+ 398:./rt_thread/src/timer.c ****             break;
+ 399:./rt_thread/src/timer.c ****         /* Shift over the bits we have tested. Works well with 1 bit and 2
+ 400:./rt_thread/src/timer.c ****          * bits. */
+ 401:./rt_thread/src/timer.c ****         tst_nr >>= (RT_TIMER_SKIP_LIST_MASK + 1) >> 1;
+ 940              		.loc 2 401 16
+ 941 013a BB69     		ldr	r3, [r7, #24]
+ 942 013c 9B08     		lsrs	r3, r3, #2
+ 943 013e BB61     		str	r3, [r7, #24]
+ 392:./rt_thread/src/timer.c ****     {
+ 944              		.loc 2 392 67
+ 945 0140 FB69     		ldr	r3, [r7, #28]
+ 946 0142 0133     		adds	r3, r3, #1
+ 947 0144 FB61     		str	r3, [r7, #28]
+ 948              	.L32:
+ 392:./rt_thread/src/timer.c ****     {
+ 949              		.loc 2 392 5 discriminator 1
+ 950 0146 FB69     		ldr	r3, [r7, #28]
+ 951 0148 012B     		cmp	r3, #1
+ 952 014a DED9     		bls	.L36
+ 953 014c 00E0     		b	.L35
+ 954              	.L40:
+ 398:./rt_thread/src/timer.c ****         /* Shift over the bits we have tested. Works well with 1 bit and 2
+ 955              		.loc 2 398 13
+ 956 014e 00BF     		nop
+ 957              	.L35:
+ 402:./rt_thread/src/timer.c ****     }
+ 403:./rt_thread/src/timer.c **** 
+ 404:./rt_thread/src/timer.c ****     timer->parent.flag |= RT_TIMER_FLAG_ACTIVATED;
+ 958              		.loc 2 404 24
+ 959 0150 7B68     		ldr	r3, [r7, #4]
+ 960 0152 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 961 0154 43F00103 		orr	r3, r3, #1
+ 962 0158 DAB2     		uxtb	r2, r3
+ 963 015a 7B68     		ldr	r3, [r7, #4]
+ 964 015c 5A72     		strb	r2, [r3, #9]
+ 405:./rt_thread/src/timer.c **** 
+ 406:./rt_thread/src/timer.c ****     /* enable interrupt */
+ 407:./rt_thread/src/timer.c ****     rt_hw_interrupt_enable(level);
+ 965              		.loc 2 407 5
+ 966 015e 2046     		mov	r0, r4
+ 967 0160 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 408:./rt_thread/src/timer.c **** 
+ 409:./rt_thread/src/timer.c **** #ifdef RT_USING_TIMER_SOFT
+ 410:./rt_thread/src/timer.c ****     if (timer->parent.flag & RT_TIMER_FLAG_SOFT_TIMER)
+ 411:./rt_thread/src/timer.c ****     {
+ 412:./rt_thread/src/timer.c ****         /* check whether timer thread is ready */
+ 413:./rt_thread/src/timer.c ****         if ((soft_timer_status == RT_SOFT_TIMER_IDLE) &&
+ 414:./rt_thread/src/timer.c ****            ((timer_thread.stat & RT_THREAD_STAT_MASK) == RT_THREAD_SUSPEND))
+ 415:./rt_thread/src/timer.c ****         {
+ 416:./rt_thread/src/timer.c ****             /* resume timer thread to check soft timer */
+ 417:./rt_thread/src/timer.c ****             rt_thread_resume(&timer_thread);
+ 418:./rt_thread/src/timer.c ****             rt_schedule();
+ 419:./rt_thread/src/timer.c ****         }
+ 420:./rt_thread/src/timer.c ****     }
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 27
+
+
+ 421:./rt_thread/src/timer.c **** #endif
+ 422:./rt_thread/src/timer.c **** 
+ 423:./rt_thread/src/timer.c ****     return RT_EOK;
+ 968              		.loc 2 423 12
+ 969 0164 0023     		movs	r3, #0
+ 424:./rt_thread/src/timer.c **** }
+ 970              		.loc 2 424 1
+ 971 0166 1846     		mov	r0, r3
+ 972 0168 2437     		adds	r7, r7, #36
+ 973              	.LCFI62:
+ 974              		.cfi_def_cfa_offset 12
+ 975 016a BD46     		mov	sp, r7
+ 976              	.LCFI63:
+ 977              		.cfi_def_cfa_register 13
+ 978              		@ sp needed
+ 979 016c 90BD     		pop	{r4, r7, pc}
+ 980              	.L42:
+ 981 016e 00BF     		.align	2
+ 982              	.L41:
+ 983 0170 00000000 		.word	rt_timer_list
+ 984 0174 00000000 		.word	random_nr.0
+ 985              		.cfi_endproc
+ 986              	.LFE22:
+ 988              		.section	.text.rt_timer_stop,"ax",%progbits
+ 989              		.align	1
+ 990              		.global	rt_timer_stop
+ 991              		.syntax unified
+ 992              		.thumb
+ 993              		.thumb_func
+ 995              	rt_timer_stop:
+ 996              	.LFB23:
+ 425:./rt_thread/src/timer.c **** 
+ 426:./rt_thread/src/timer.c **** /**
+ 427:./rt_thread/src/timer.c ****  * This function will stop the timer
+ 428:./rt_thread/src/timer.c ****  *
+ 429:./rt_thread/src/timer.c ****  * @param timer the timer to be stopped
+ 430:./rt_thread/src/timer.c ****  *
+ 431:./rt_thread/src/timer.c ****  * @return the operation status, RT_EOK on OK, -RT_ERROR on error
+ 432:./rt_thread/src/timer.c ****  */
+ 433:./rt_thread/src/timer.c **** rt_err_t rt_timer_stop(rt_timer_t timer)
+ 434:./rt_thread/src/timer.c **** {
+ 997              		.loc 2 434 1
+ 998              		.cfi_startproc
+ 999              		@ args = 0, pretend = 0, frame = 8
+ 1000              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1001 0000 90B5     		push	{r4, r7, lr}
+ 1002              	.LCFI64:
+ 1003              		.cfi_def_cfa_offset 12
+ 1004              		.cfi_offset 4, -12
+ 1005              		.cfi_offset 7, -8
+ 1006              		.cfi_offset 14, -4
+ 1007 0002 83B0     		sub	sp, sp, #12
+ 1008              	.LCFI65:
+ 1009              		.cfi_def_cfa_offset 24
+ 1010 0004 00AF     		add	r7, sp, #0
+ 1011              	.LCFI66:
+ 1012              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 28
+
+
+ 1013 0006 7860     		str	r0, [r7, #4]
+ 435:./rt_thread/src/timer.c ****     register rt_base_t level;
+ 436:./rt_thread/src/timer.c **** 
+ 437:./rt_thread/src/timer.c ****     /* timer check */
+ 438:./rt_thread/src/timer.c ****     RT_ASSERT(timer != RT_NULL);
+ 439:./rt_thread/src/timer.c ****     RT_ASSERT(rt_object_get_type(&timer->parent) == RT_Object_Class_Timer);
+ 440:./rt_thread/src/timer.c **** 
+ 441:./rt_thread/src/timer.c ****     if (!(timer->parent.flag & RT_TIMER_FLAG_ACTIVATED))
+ 1014              		.loc 2 441 24
+ 1015 0008 7B68     		ldr	r3, [r7, #4]
+ 1016 000a 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 1017              		.loc 2 441 30
+ 1018 000c 03F00103 		and	r3, r3, #1
+ 1019              		.loc 2 441 8
+ 1020 0010 002B     		cmp	r3, #0
+ 1021 0012 02D1     		bne	.L44
+ 442:./rt_thread/src/timer.c ****         return -RT_ERROR;
+ 1022              		.loc 2 442 16
+ 1023 0014 4FF0FF33 		mov	r3, #-1
+ 1024 0018 10E0     		b	.L45
+ 1025              	.L44:
+ 443:./rt_thread/src/timer.c **** 
+ 444:./rt_thread/src/timer.c ****     RT_OBJECT_HOOK_CALL(rt_object_put_hook, (&(timer->parent)));
+ 445:./rt_thread/src/timer.c **** 
+ 446:./rt_thread/src/timer.c ****     /* disable interrupt */
+ 447:./rt_thread/src/timer.c ****     level = rt_hw_interrupt_disable();
+ 1026              		.loc 2 447 13
+ 1027 001a FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 1028 001e 0446     		mov	r4, r0
+ 448:./rt_thread/src/timer.c **** 
+ 449:./rt_thread/src/timer.c ****     _rt_timer_remove(timer);
+ 1029              		.loc 2 449 5
+ 1030 0020 7868     		ldr	r0, [r7, #4]
+ 1031 0022 FFF7FEFF 		bl	_rt_timer_remove
+ 450:./rt_thread/src/timer.c ****     /* change status */
+ 451:./rt_thread/src/timer.c ****     timer->parent.flag &= ~RT_TIMER_FLAG_ACTIVATED;
+ 1032              		.loc 2 451 24
+ 1033 0026 7B68     		ldr	r3, [r7, #4]
+ 1034 0028 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 1035 002a 23F00103 		bic	r3, r3, #1
+ 1036 002e DAB2     		uxtb	r2, r3
+ 1037 0030 7B68     		ldr	r3, [r7, #4]
+ 1038 0032 5A72     		strb	r2, [r3, #9]
+ 452:./rt_thread/src/timer.c **** 
+ 453:./rt_thread/src/timer.c ****     /* enable interrupt */
+ 454:./rt_thread/src/timer.c ****     rt_hw_interrupt_enable(level);
+ 1039              		.loc 2 454 5
+ 1040 0034 2046     		mov	r0, r4
+ 1041 0036 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 455:./rt_thread/src/timer.c **** 
+ 456:./rt_thread/src/timer.c ****     return RT_EOK;
+ 1042              		.loc 2 456 12
+ 1043 003a 0023     		movs	r3, #0
+ 1044              	.L45:
+ 457:./rt_thread/src/timer.c **** }
+ 1045              		.loc 2 457 1
+ 1046 003c 1846     		mov	r0, r3
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 29
+
+
+ 1047 003e 0C37     		adds	r7, r7, #12
+ 1048              	.LCFI67:
+ 1049              		.cfi_def_cfa_offset 12
+ 1050 0040 BD46     		mov	sp, r7
+ 1051              	.LCFI68:
+ 1052              		.cfi_def_cfa_register 13
+ 1053              		@ sp needed
+ 1054 0042 90BD     		pop	{r4, r7, pc}
+ 1055              		.cfi_endproc
+ 1056              	.LFE23:
+ 1058              		.section	.text.rt_timer_control,"ax",%progbits
+ 1059              		.align	1
+ 1060              		.global	rt_timer_control
+ 1061              		.syntax unified
+ 1062              		.thumb
+ 1063              		.thumb_func
+ 1065              	rt_timer_control:
+ 1066              	.LFB24:
+ 458:./rt_thread/src/timer.c **** 
+ 459:./rt_thread/src/timer.c **** /**
+ 460:./rt_thread/src/timer.c ****  * This function will get or set some options of the timer
+ 461:./rt_thread/src/timer.c ****  *
+ 462:./rt_thread/src/timer.c ****  * @param timer the timer to be get or set
+ 463:./rt_thread/src/timer.c ****  * @param cmd the control command
+ 464:./rt_thread/src/timer.c ****  * @param arg the argument
+ 465:./rt_thread/src/timer.c ****  *
+ 466:./rt_thread/src/timer.c ****  * @return RT_EOK
+ 467:./rt_thread/src/timer.c ****  */
+ 468:./rt_thread/src/timer.c **** rt_err_t rt_timer_control(rt_timer_t timer, int cmd, void *arg)
+ 469:./rt_thread/src/timer.c **** {
+ 1067              		.loc 2 469 1
+ 1068              		.cfi_startproc
+ 1069              		@ args = 0, pretend = 0, frame = 16
+ 1070              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1071 0000 90B5     		push	{r4, r7, lr}
+ 1072              	.LCFI69:
+ 1073              		.cfi_def_cfa_offset 12
+ 1074              		.cfi_offset 4, -12
+ 1075              		.cfi_offset 7, -8
+ 1076              		.cfi_offset 14, -4
+ 1077 0002 85B0     		sub	sp, sp, #20
+ 1078              	.LCFI70:
+ 1079              		.cfi_def_cfa_offset 32
+ 1080 0004 00AF     		add	r7, sp, #0
+ 1081              	.LCFI71:
+ 1082              		.cfi_def_cfa_register 7
+ 1083 0006 F860     		str	r0, [r7, #12]
+ 1084 0008 B960     		str	r1, [r7, #8]
+ 1085 000a 7A60     		str	r2, [r7, #4]
+ 470:./rt_thread/src/timer.c ****     register rt_base_t level;
+ 471:./rt_thread/src/timer.c **** 
+ 472:./rt_thread/src/timer.c ****     /* timer check */
+ 473:./rt_thread/src/timer.c ****     RT_ASSERT(timer != RT_NULL);
+ 474:./rt_thread/src/timer.c ****     RT_ASSERT(rt_object_get_type(&timer->parent) == RT_Object_Class_Timer);
+ 475:./rt_thread/src/timer.c **** 
+ 476:./rt_thread/src/timer.c ****     level = rt_hw_interrupt_disable();
+ 1086              		.loc 2 476 13
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 30
+
+
+ 1087 000c FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 1088 0010 0446     		mov	r4, r0
+ 477:./rt_thread/src/timer.c ****     switch (cmd)
+ 1089              		.loc 2 477 5
+ 1090 0012 BB68     		ldr	r3, [r7, #8]
+ 1091 0014 042B     		cmp	r3, #4
+ 1092 0016 35D8     		bhi	.L58
+ 1093 0018 01A2     		adr	r2, .L49
+ 1094 001a 52F823F0 		ldr	pc, [r2, r3, lsl #2]
+ 1095 001e 00BF     		.p2align 2
+ 1096              	.L49:
+ 1097 0020 3F000000 		.word	.L53+1
+ 1098 0024 35000000 		.word	.L52+1
+ 1099 0028 49000000 		.word	.L51+1
+ 1100 002c 59000000 		.word	.L50+1
+ 1101 0030 69000000 		.word	.L48+1
+ 1102              		.p2align 1
+ 1103              	.L52:
+ 478:./rt_thread/src/timer.c ****     {
+ 479:./rt_thread/src/timer.c ****     case RT_TIMER_CTRL_GET_TIME:
+ 480:./rt_thread/src/timer.c ****         *(rt_tick_t *)arg = timer->init_tick;
+ 1104              		.loc 2 480 34
+ 1105 0034 FB68     		ldr	r3, [r7, #12]
+ 1106 0036 5A6A     		ldr	r2, [r3, #36]
+ 1107              		.loc 2 480 27
+ 1108 0038 7B68     		ldr	r3, [r7, #4]
+ 1109 003a 1A60     		str	r2, [r3]
+ 481:./rt_thread/src/timer.c ****         break;
+ 1110              		.loc 2 481 9
+ 1111 003c 23E0     		b	.L54
+ 1112              	.L53:
+ 482:./rt_thread/src/timer.c **** 
+ 483:./rt_thread/src/timer.c ****     case RT_TIMER_CTRL_SET_TIME:
+ 484:./rt_thread/src/timer.c ****         timer->init_tick = *(rt_tick_t *)arg;
+ 1113              		.loc 2 484 28
+ 1114 003e 7B68     		ldr	r3, [r7, #4]
+ 1115 0040 1A68     		ldr	r2, [r3]
+ 1116              		.loc 2 484 26
+ 1117 0042 FB68     		ldr	r3, [r7, #12]
+ 1118 0044 5A62     		str	r2, [r3, #36]
+ 485:./rt_thread/src/timer.c ****         break;
+ 1119              		.loc 2 485 9
+ 1120 0046 1EE0     		b	.L54
+ 1121              	.L51:
+ 486:./rt_thread/src/timer.c **** 
+ 487:./rt_thread/src/timer.c ****     case RT_TIMER_CTRL_SET_ONESHOT:
+ 488:./rt_thread/src/timer.c ****         timer->parent.flag &= ~RT_TIMER_FLAG_PERIODIC;
+ 1122              		.loc 2 488 28
+ 1123 0048 FB68     		ldr	r3, [r7, #12]
+ 1124 004a 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 1125 004c 23F00203 		bic	r3, r3, #2
+ 1126 0050 DAB2     		uxtb	r2, r3
+ 1127 0052 FB68     		ldr	r3, [r7, #12]
+ 1128 0054 5A72     		strb	r2, [r3, #9]
+ 489:./rt_thread/src/timer.c ****         break;
+ 1129              		.loc 2 489 9
+ 1130 0056 16E0     		b	.L54
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 31
+
+
+ 1131              	.L50:
+ 490:./rt_thread/src/timer.c **** 
+ 491:./rt_thread/src/timer.c ****     case RT_TIMER_CTRL_SET_PERIODIC:
+ 492:./rt_thread/src/timer.c ****         timer->parent.flag |= RT_TIMER_FLAG_PERIODIC;
+ 1132              		.loc 2 492 28
+ 1133 0058 FB68     		ldr	r3, [r7, #12]
+ 1134 005a 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 1135 005c 43F00203 		orr	r3, r3, #2
+ 1136 0060 DAB2     		uxtb	r2, r3
+ 1137 0062 FB68     		ldr	r3, [r7, #12]
+ 1138 0064 5A72     		strb	r2, [r3, #9]
+ 493:./rt_thread/src/timer.c ****         break;
+ 1139              		.loc 2 493 9
+ 1140 0066 0EE0     		b	.L54
+ 1141              	.L48:
+ 494:./rt_thread/src/timer.c **** 
+ 495:./rt_thread/src/timer.c ****     case RT_TIMER_CTRL_GET_STATE:
+ 496:./rt_thread/src/timer.c ****         if(timer->parent.flag & RT_TIMER_FLAG_ACTIVATED)
+ 1142              		.loc 2 496 25
+ 1143 0068 FB68     		ldr	r3, [r7, #12]
+ 1144 006a 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 1145              		.loc 2 496 31
+ 1146 006c 03F00103 		and	r3, r3, #1
+ 1147              		.loc 2 496 11
+ 1148 0070 002B     		cmp	r3, #0
+ 1149 0072 03D0     		beq	.L55
+ 497:./rt_thread/src/timer.c ****         {
+ 498:./rt_thread/src/timer.c ****             /*timer is start and run*/
+ 499:./rt_thread/src/timer.c ****             *(rt_tick_t *)arg = RT_TIMER_FLAG_ACTIVATED;
+ 1150              		.loc 2 499 31
+ 1151 0074 7B68     		ldr	r3, [r7, #4]
+ 1152 0076 0122     		movs	r2, #1
+ 1153 0078 1A60     		str	r2, [r3]
+ 500:./rt_thread/src/timer.c ****         }
+ 501:./rt_thread/src/timer.c ****         else
+ 502:./rt_thread/src/timer.c ****         {
+ 503:./rt_thread/src/timer.c ****             /*timer is stop*/
+ 504:./rt_thread/src/timer.c ****             *(rt_tick_t *)arg = RT_TIMER_FLAG_DEACTIVATED;
+ 505:./rt_thread/src/timer.c ****         }
+ 506:./rt_thread/src/timer.c ****         break;
+ 1154              		.loc 2 506 9
+ 1155 007a 04E0     		b	.L54
+ 1156              	.L55:
+ 504:./rt_thread/src/timer.c ****         }
+ 1157              		.loc 2 504 31
+ 1158 007c 7B68     		ldr	r3, [r7, #4]
+ 1159 007e 0022     		movs	r2, #0
+ 1160 0080 1A60     		str	r2, [r3]
+ 1161              		.loc 2 506 9
+ 1162 0082 00E0     		b	.L54
+ 1163              	.L58:
+ 507:./rt_thread/src/timer.c **** 
+ 508:./rt_thread/src/timer.c ****     default:
+ 509:./rt_thread/src/timer.c ****         break;
+ 1164              		.loc 2 509 9
+ 1165 0084 00BF     		nop
+ 1166              	.L54:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 32
+
+
+ 510:./rt_thread/src/timer.c ****     }
+ 511:./rt_thread/src/timer.c ****     rt_hw_interrupt_enable(level);
+ 1167              		.loc 2 511 5
+ 1168 0086 2046     		mov	r0, r4
+ 1169 0088 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 512:./rt_thread/src/timer.c **** 
+ 513:./rt_thread/src/timer.c ****     return RT_EOK;
+ 1170              		.loc 2 513 12
+ 1171 008c 0023     		movs	r3, #0
+ 514:./rt_thread/src/timer.c **** }
+ 1172              		.loc 2 514 1
+ 1173 008e 1846     		mov	r0, r3
+ 1174 0090 1437     		adds	r7, r7, #20
+ 1175              	.LCFI72:
+ 1176              		.cfi_def_cfa_offset 12
+ 1177 0092 BD46     		mov	sp, r7
+ 1178              	.LCFI73:
+ 1179              		.cfi_def_cfa_register 13
+ 1180              		@ sp needed
+ 1181 0094 90BD     		pop	{r4, r7, pc}
+ 1182              		.cfi_endproc
+ 1183              	.LFE24:
+ 1185              		.section	.text.rt_timer_check,"ax",%progbits
+ 1186              		.align	1
+ 1187              		.global	rt_timer_check
+ 1188              		.syntax unified
+ 1189              		.thumb
+ 1190              		.thumb_func
+ 1192              	rt_timer_check:
+ 1193              	.LFB25:
+ 515:./rt_thread/src/timer.c **** 
+ 516:./rt_thread/src/timer.c **** /**
+ 517:./rt_thread/src/timer.c ****  * This function will check timer list, if a timeout event happens, the
+ 518:./rt_thread/src/timer.c ****  * corresponding timeout function will be invoked.
+ 519:./rt_thread/src/timer.c ****  *
+ 520:./rt_thread/src/timer.c ****  * @note this function shall be invoked in operating system timer interrupt.
+ 521:./rt_thread/src/timer.c ****  */
+ 522:./rt_thread/src/timer.c **** void rt_timer_check(void)
+ 523:./rt_thread/src/timer.c **** {
+ 1194              		.loc 2 523 1
+ 1195              		.cfi_startproc
+ 1196              		@ args = 0, pretend = 0, frame = 16
+ 1197              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1198 0000 90B5     		push	{r4, r7, lr}
+ 1199              	.LCFI74:
+ 1200              		.cfi_def_cfa_offset 12
+ 1201              		.cfi_offset 4, -12
+ 1202              		.cfi_offset 7, -8
+ 1203              		.cfi_offset 14, -4
+ 1204 0002 85B0     		sub	sp, sp, #20
+ 1205              	.LCFI75:
+ 1206              		.cfi_def_cfa_offset 32
+ 1207 0004 00AF     		add	r7, sp, #0
+ 1208              	.LCFI76:
+ 1209              		.cfi_def_cfa_register 7
+ 524:./rt_thread/src/timer.c ****     struct rt_timer *t;
+ 525:./rt_thread/src/timer.c ****     rt_tick_t current_tick;
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 33
+
+
+ 526:./rt_thread/src/timer.c ****     register rt_base_t level;
+ 527:./rt_thread/src/timer.c ****     rt_list_t list;
+ 528:./rt_thread/src/timer.c **** 
+ 529:./rt_thread/src/timer.c ****     rt_list_init(&list);
+ 1210              		.loc 2 529 5
+ 1211 0006 3B46     		mov	r3, r7
+ 1212 0008 1846     		mov	r0, r3
+ 1213 000a FFF7FEFF 		bl	rt_list_init
+ 530:./rt_thread/src/timer.c **** 
+ 531:./rt_thread/src/timer.c ****     RT_DEBUG_LOG(RT_DEBUG_TIMER, ("timer check enter\n"));
+ 532:./rt_thread/src/timer.c **** 
+ 533:./rt_thread/src/timer.c ****     current_tick = rt_tick_get();
+ 1214              		.loc 2 533 20
+ 1215 000e FFF7FEFF 		bl	rt_tick_get
+ 1216 0012 F860     		str	r0, [r7, #12]
+ 534:./rt_thread/src/timer.c **** 
+ 535:./rt_thread/src/timer.c ****     /* disable interrupt */
+ 536:./rt_thread/src/timer.c ****     level = rt_hw_interrupt_disable();
+ 1217              		.loc 2 536 13
+ 1218 0014 FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 1219 0018 0446     		mov	r4, r0
+ 537:./rt_thread/src/timer.c **** 
+ 538:./rt_thread/src/timer.c ****     while (!rt_list_isempty(&rt_timer_list[RT_TIMER_SKIP_LIST_LEVEL - 1]))
+ 1220              		.loc 2 538 11
+ 1221 001a 4FE0     		b	.L60
+ 1222              	.L65:
+ 539:./rt_thread/src/timer.c ****     {
+ 540:./rt_thread/src/timer.c ****         t = rt_list_entry(rt_timer_list[RT_TIMER_SKIP_LIST_LEVEL - 1].next,
+ 1223              		.loc 2 540 13
+ 1224 001c 2F4B     		ldr	r3, .L67
+ 1225 001e 1B68     		ldr	r3, [r3]
+ 1226              		.loc 2 540 11
+ 1227 0020 143B     		subs	r3, r3, #20
+ 1228 0022 BB60     		str	r3, [r7, #8]
+ 541:./rt_thread/src/timer.c ****                           struct rt_timer, row[RT_TIMER_SKIP_LIST_LEVEL - 1]);
+ 542:./rt_thread/src/timer.c **** 
+ 543:./rt_thread/src/timer.c ****         /*
+ 544:./rt_thread/src/timer.c ****          * It supposes that the new tick shall less than the half duration of
+ 545:./rt_thread/src/timer.c ****          * tick max.
+ 546:./rt_thread/src/timer.c ****          */
+ 547:./rt_thread/src/timer.c ****         if ((current_tick - t->timeout_tick) < RT_TICK_MAX / 2)
+ 1229              		.loc 2 547 30
+ 1230 0024 BB68     		ldr	r3, [r7, #8]
+ 1231 0026 9B6A     		ldr	r3, [r3, #40]
+ 1232              		.loc 2 547 27
+ 1233 0028 FA68     		ldr	r2, [r7, #12]
+ 1234 002a D31A     		subs	r3, r2, r3
+ 1235              		.loc 2 547 12
+ 1236 002c 6FF00042 		mvn	r2, #-2147483648
+ 1237 0030 9342     		cmp	r3, r2
+ 1238 0032 4AD2     		bcs	.L66
+ 548:./rt_thread/src/timer.c ****         {
+ 549:./rt_thread/src/timer.c ****             RT_OBJECT_HOOK_CALL(rt_timer_enter_hook, (t));
+ 550:./rt_thread/src/timer.c **** 
+ 551:./rt_thread/src/timer.c ****             /* remove timer from timer list firstly */
+ 552:./rt_thread/src/timer.c ****             _rt_timer_remove(t);
+ 1239              		.loc 2 552 13
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 34
+
+
+ 1240 0034 B868     		ldr	r0, [r7, #8]
+ 1241 0036 FFF7FEFF 		bl	_rt_timer_remove
+ 553:./rt_thread/src/timer.c ****             if (!(t->parent.flag & RT_TIMER_FLAG_PERIODIC))
+ 1242              		.loc 2 553 28
+ 1243 003a BB68     		ldr	r3, [r7, #8]
+ 1244 003c 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 1245              		.loc 2 553 34
+ 1246 003e 03F00203 		and	r3, r3, #2
+ 1247              		.loc 2 553 16
+ 1248 0042 002B     		cmp	r3, #0
+ 1249 0044 06D1     		bne	.L62
+ 554:./rt_thread/src/timer.c ****             {
+ 555:./rt_thread/src/timer.c ****                 t->parent.flag &= ~RT_TIMER_FLAG_ACTIVATED;
+ 1250              		.loc 2 555 32
+ 1251 0046 BB68     		ldr	r3, [r7, #8]
+ 1252 0048 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 1253 004a 23F00103 		bic	r3, r3, #1
+ 1254 004e DAB2     		uxtb	r2, r3
+ 1255 0050 BB68     		ldr	r3, [r7, #8]
+ 1256 0052 5A72     		strb	r2, [r3, #9]
+ 1257              	.L62:
+ 556:./rt_thread/src/timer.c ****             }
+ 557:./rt_thread/src/timer.c ****             /* add timer to temporary list  */
+ 558:./rt_thread/src/timer.c ****             rt_list_insert_after(&list, &(t->row[RT_TIMER_SKIP_LIST_LEVEL - 1]));
+ 1258              		.loc 2 558 13
+ 1259 0054 BB68     		ldr	r3, [r7, #8]
+ 1260 0056 03F11402 		add	r2, r3, #20
+ 1261 005a 3B46     		mov	r3, r7
+ 1262 005c 1146     		mov	r1, r2
+ 1263 005e 1846     		mov	r0, r3
+ 1264 0060 FFF7FEFF 		bl	rt_list_insert_after
+ 559:./rt_thread/src/timer.c ****             /* call timeout function */
+ 560:./rt_thread/src/timer.c ****             t->timeout_func(t->parameter);
+ 1265              		.loc 2 560 14
+ 1266 0064 BB68     		ldr	r3, [r7, #8]
+ 1267 0066 DB69     		ldr	r3, [r3, #28]
+ 1268              		.loc 2 560 13
+ 1269 0068 BA68     		ldr	r2, [r7, #8]
+ 1270 006a 126A     		ldr	r2, [r2, #32]
+ 1271 006c 1046     		mov	r0, r2
+ 1272 006e 9847     		blx	r3
+ 1273              	.LVL0:
+ 561:./rt_thread/src/timer.c **** 
+ 562:./rt_thread/src/timer.c ****             /* re-get tick */
+ 563:./rt_thread/src/timer.c ****             current_tick = rt_tick_get();
+ 1274              		.loc 2 563 28
+ 1275 0070 FFF7FEFF 		bl	rt_tick_get
+ 1276 0074 F860     		str	r0, [r7, #12]
+ 564:./rt_thread/src/timer.c **** 
+ 565:./rt_thread/src/timer.c ****             RT_OBJECT_HOOK_CALL(rt_timer_exit_hook, (t));
+ 566:./rt_thread/src/timer.c ****             RT_DEBUG_LOG(RT_DEBUG_TIMER, ("current tick: %d\n", current_tick));
+ 567:./rt_thread/src/timer.c **** 
+ 568:./rt_thread/src/timer.c ****             /* Check whether the timer object is detached or started again */
+ 569:./rt_thread/src/timer.c ****             if (rt_list_isempty(&list))
+ 1277              		.loc 2 569 17
+ 1278 0076 3B46     		mov	r3, r7
+ 1279 0078 1846     		mov	r0, r3
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 35
+
+
+ 1280 007a FFF7FEFF 		bl	rt_list_isempty
+ 1281 007e 0346     		mov	r3, r0
+ 1282              		.loc 2 569 16
+ 1283 0080 002B     		cmp	r3, #0
+ 1284 0082 00D0     		beq	.L63
+ 570:./rt_thread/src/timer.c ****             {
+ 571:./rt_thread/src/timer.c ****                 continue;
+ 1285              		.loc 2 571 17
+ 1286 0084 1AE0     		b	.L60
+ 1287              	.L63:
+ 572:./rt_thread/src/timer.c ****             }
+ 573:./rt_thread/src/timer.c ****             rt_list_remove(&(t->row[RT_TIMER_SKIP_LIST_LEVEL - 1]));
+ 1288              		.loc 2 573 13
+ 1289 0086 BB68     		ldr	r3, [r7, #8]
+ 1290 0088 1433     		adds	r3, r3, #20
+ 1291 008a 1846     		mov	r0, r3
+ 1292 008c FFF7FEFF 		bl	rt_list_remove
+ 574:./rt_thread/src/timer.c ****             if ((t->parent.flag & RT_TIMER_FLAG_PERIODIC) &&
+ 1293              		.loc 2 574 27
+ 1294 0090 BB68     		ldr	r3, [r7, #8]
+ 1295 0092 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 1296              		.loc 2 574 33
+ 1297 0094 03F00203 		and	r3, r3, #2
+ 1298              		.loc 2 574 16
+ 1299 0098 002B     		cmp	r3, #0
+ 1300 009a 0FD0     		beq	.L60
+ 575:./rt_thread/src/timer.c ****                 (t->parent.flag & RT_TIMER_FLAG_ACTIVATED))
+ 1301              		.loc 2 575 27 discriminator 1
+ 1302 009c BB68     		ldr	r3, [r7, #8]
+ 1303 009e 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 1304              		.loc 2 575 33 discriminator 1
+ 1305 00a0 03F00103 		and	r3, r3, #1
+ 574:./rt_thread/src/timer.c ****             if ((t->parent.flag & RT_TIMER_FLAG_PERIODIC) &&
+ 1306              		.loc 2 574 59 discriminator 1
+ 1307 00a4 002B     		cmp	r3, #0
+ 1308 00a6 09D0     		beq	.L60
+ 576:./rt_thread/src/timer.c ****             {
+ 577:./rt_thread/src/timer.c ****                 /* start it */
+ 578:./rt_thread/src/timer.c ****                 t->parent.flag &= ~RT_TIMER_FLAG_ACTIVATED;
+ 1309              		.loc 2 578 32
+ 1310 00a8 BB68     		ldr	r3, [r7, #8]
+ 1311 00aa 5B7A     		ldrb	r3, [r3, #9]	@ zero_extendqisi2
+ 1312 00ac 23F00103 		bic	r3, r3, #1
+ 1313 00b0 DAB2     		uxtb	r2, r3
+ 1314 00b2 BB68     		ldr	r3, [r7, #8]
+ 1315 00b4 5A72     		strb	r2, [r3, #9]
+ 579:./rt_thread/src/timer.c ****                 rt_timer_start(t);
+ 1316              		.loc 2 579 17
+ 1317 00b6 B868     		ldr	r0, [r7, #8]
+ 1318 00b8 FFF7FEFF 		bl	rt_timer_start
+ 1319              	.L60:
+ 538:./rt_thread/src/timer.c ****     {
+ 1320              		.loc 2 538 13
+ 1321 00bc 0748     		ldr	r0, .L67
+ 1322 00be FFF7FEFF 		bl	rt_list_isempty
+ 1323 00c2 0346     		mov	r3, r0
+ 538:./rt_thread/src/timer.c ****     {
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 36
+
+
+ 1324              		.loc 2 538 11
+ 1325 00c4 002B     		cmp	r3, #0
+ 1326 00c6 A9D0     		beq	.L65
+ 1327 00c8 00E0     		b	.L64
+ 1328              	.L66:
+ 580:./rt_thread/src/timer.c ****             }
+ 581:./rt_thread/src/timer.c ****         }
+ 582:./rt_thread/src/timer.c ****         else break;
+ 1329              		.loc 2 582 9
+ 1330 00ca 00BF     		nop
+ 1331              	.L64:
+ 583:./rt_thread/src/timer.c ****     }
+ 584:./rt_thread/src/timer.c **** 
+ 585:./rt_thread/src/timer.c ****     /* enable interrupt */
+ 586:./rt_thread/src/timer.c ****     rt_hw_interrupt_enable(level);
+ 1332              		.loc 2 586 5
+ 1333 00cc 2046     		mov	r0, r4
+ 1334 00ce FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 587:./rt_thread/src/timer.c **** 
+ 588:./rt_thread/src/timer.c ****     RT_DEBUG_LOG(RT_DEBUG_TIMER, ("timer check leave\n"));
+ 589:./rt_thread/src/timer.c **** }
+ 1335              		.loc 2 589 1
+ 1336 00d2 00BF     		nop
+ 1337 00d4 1437     		adds	r7, r7, #20
+ 1338              	.LCFI77:
+ 1339              		.cfi_def_cfa_offset 12
+ 1340 00d6 BD46     		mov	sp, r7
+ 1341              	.LCFI78:
+ 1342              		.cfi_def_cfa_register 13
+ 1343              		@ sp needed
+ 1344 00d8 90BD     		pop	{r4, r7, pc}
+ 1345              	.L68:
+ 1346 00da 00BF     		.align	2
+ 1347              	.L67:
+ 1348 00dc 00000000 		.word	rt_timer_list
+ 1349              		.cfi_endproc
+ 1350              	.LFE25:
+ 1352              		.section	.text.rt_timer_next_timeout_tick,"ax",%progbits
+ 1353              		.align	1
+ 1354              		.global	rt_timer_next_timeout_tick
+ 1355              		.syntax unified
+ 1356              		.thumb
+ 1357              		.thumb_func
+ 1359              	rt_timer_next_timeout_tick:
+ 1360              	.LFB26:
+ 590:./rt_thread/src/timer.c **** 
+ 591:./rt_thread/src/timer.c **** /**
+ 592:./rt_thread/src/timer.c ****  * This function will return the next timeout tick in the system.
+ 593:./rt_thread/src/timer.c ****  *
+ 594:./rt_thread/src/timer.c ****  * @return the next timeout tick in the system
+ 595:./rt_thread/src/timer.c ****  */
+ 596:./rt_thread/src/timer.c **** rt_tick_t rt_timer_next_timeout_tick(void)
+ 597:./rt_thread/src/timer.c **** {
+ 1361              		.loc 2 597 1
+ 1362              		.cfi_startproc
+ 1363              		@ args = 0, pretend = 0, frame = 0
+ 1364              		@ frame_needed = 1, uses_anonymous_args = 0
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 37
+
+
+ 1365 0000 80B5     		push	{r7, lr}
+ 1366              	.LCFI79:
+ 1367              		.cfi_def_cfa_offset 8
+ 1368              		.cfi_offset 7, -8
+ 1369              		.cfi_offset 14, -4
+ 1370 0002 00AF     		add	r7, sp, #0
+ 1371              	.LCFI80:
+ 1372              		.cfi_def_cfa_register 7
+ 598:./rt_thread/src/timer.c ****     return rt_timer_list_next_timeout(rt_timer_list);
+ 1373              		.loc 2 598 12
+ 1374 0004 0248     		ldr	r0, .L71
+ 1375 0006 FFF7FEFF 		bl	rt_timer_list_next_timeout
+ 1376 000a 0346     		mov	r3, r0
+ 599:./rt_thread/src/timer.c **** }
+ 1377              		.loc 2 599 1
+ 1378 000c 1846     		mov	r0, r3
+ 1379 000e 80BD     		pop	{r7, pc}
+ 1380              	.L72:
+ 1381              		.align	2
+ 1382              	.L71:
+ 1383 0010 00000000 		.word	rt_timer_list
+ 1384              		.cfi_endproc
+ 1385              	.LFE26:
+ 1387              		.section	.text.rt_system_timer_init,"ax",%progbits
+ 1388              		.align	1
+ 1389              		.global	rt_system_timer_init
+ 1390              		.syntax unified
+ 1391              		.thumb
+ 1392              		.thumb_func
+ 1394              	rt_system_timer_init:
+ 1395              	.LFB27:
+ 600:./rt_thread/src/timer.c **** 
+ 601:./rt_thread/src/timer.c **** #ifdef RT_USING_TIMER_SOFT
+ 602:./rt_thread/src/timer.c **** /**
+ 603:./rt_thread/src/timer.c ****  * This function will check software-timer list, if a timeout event happens, the
+ 604:./rt_thread/src/timer.c ****  * corresponding timeout function will be invoked.
+ 605:./rt_thread/src/timer.c ****  */
+ 606:./rt_thread/src/timer.c **** void rt_soft_timer_check(void)
+ 607:./rt_thread/src/timer.c **** {
+ 608:./rt_thread/src/timer.c ****     rt_tick_t current_tick;
+ 609:./rt_thread/src/timer.c ****     struct rt_timer *t;
+ 610:./rt_thread/src/timer.c ****     register rt_base_t level;
+ 611:./rt_thread/src/timer.c ****     rt_list_t list;
+ 612:./rt_thread/src/timer.c **** 
+ 613:./rt_thread/src/timer.c ****     rt_list_init(&list);
+ 614:./rt_thread/src/timer.c **** 
+ 615:./rt_thread/src/timer.c ****     RT_DEBUG_LOG(RT_DEBUG_TIMER, ("software timer check enter\n"));
+ 616:./rt_thread/src/timer.c **** 
+ 617:./rt_thread/src/timer.c ****     /* disable interrupt */
+ 618:./rt_thread/src/timer.c ****     level = rt_hw_interrupt_disable();
+ 619:./rt_thread/src/timer.c **** 
+ 620:./rt_thread/src/timer.c ****     while (!rt_list_isempty(&rt_soft_timer_list[RT_TIMER_SKIP_LIST_LEVEL - 1]))
+ 621:./rt_thread/src/timer.c ****     {
+ 622:./rt_thread/src/timer.c ****         t = rt_list_entry(rt_soft_timer_list[RT_TIMER_SKIP_LIST_LEVEL - 1].next,
+ 623:./rt_thread/src/timer.c ****                             struct rt_timer, row[RT_TIMER_SKIP_LIST_LEVEL - 1]);
+ 624:./rt_thread/src/timer.c **** 
+ 625:./rt_thread/src/timer.c ****         current_tick = rt_tick_get();
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 38
+
+
+ 626:./rt_thread/src/timer.c **** 
+ 627:./rt_thread/src/timer.c ****         /*
+ 628:./rt_thread/src/timer.c ****          * It supposes that the new tick shall less than the half duration of
+ 629:./rt_thread/src/timer.c ****          * tick max.
+ 630:./rt_thread/src/timer.c ****          */
+ 631:./rt_thread/src/timer.c ****         if ((current_tick - t->timeout_tick) < RT_TICK_MAX / 2)
+ 632:./rt_thread/src/timer.c ****         {
+ 633:./rt_thread/src/timer.c ****             RT_OBJECT_HOOK_CALL(rt_timer_enter_hook, (t));
+ 634:./rt_thread/src/timer.c **** 
+ 635:./rt_thread/src/timer.c ****             /* remove timer from timer list firstly */
+ 636:./rt_thread/src/timer.c ****             _rt_timer_remove(t);
+ 637:./rt_thread/src/timer.c ****             if (!(t->parent.flag & RT_TIMER_FLAG_PERIODIC))
+ 638:./rt_thread/src/timer.c ****             {
+ 639:./rt_thread/src/timer.c ****                 t->parent.flag &= ~RT_TIMER_FLAG_ACTIVATED;
+ 640:./rt_thread/src/timer.c ****             }
+ 641:./rt_thread/src/timer.c ****             /* add timer to temporary list  */
+ 642:./rt_thread/src/timer.c ****             rt_list_insert_after(&list, &(t->row[RT_TIMER_SKIP_LIST_LEVEL - 1]));
+ 643:./rt_thread/src/timer.c **** 
+ 644:./rt_thread/src/timer.c ****             soft_timer_status = RT_SOFT_TIMER_BUSY;
+ 645:./rt_thread/src/timer.c ****             /* enable interrupt */
+ 646:./rt_thread/src/timer.c ****             rt_hw_interrupt_enable(level);
+ 647:./rt_thread/src/timer.c **** 
+ 648:./rt_thread/src/timer.c ****             /* call timeout function */
+ 649:./rt_thread/src/timer.c ****             t->timeout_func(t->parameter);
+ 650:./rt_thread/src/timer.c **** 
+ 651:./rt_thread/src/timer.c ****             RT_OBJECT_HOOK_CALL(rt_timer_exit_hook, (t));
+ 652:./rt_thread/src/timer.c ****             RT_DEBUG_LOG(RT_DEBUG_TIMER, ("current tick: %d\n", current_tick));
+ 653:./rt_thread/src/timer.c **** 
+ 654:./rt_thread/src/timer.c ****             /* disable interrupt */
+ 655:./rt_thread/src/timer.c ****             level = rt_hw_interrupt_disable();
+ 656:./rt_thread/src/timer.c **** 
+ 657:./rt_thread/src/timer.c ****             soft_timer_status = RT_SOFT_TIMER_IDLE;
+ 658:./rt_thread/src/timer.c ****             /* Check whether the timer object is detached or started again */
+ 659:./rt_thread/src/timer.c ****             if (rt_list_isempty(&list))
+ 660:./rt_thread/src/timer.c ****             {
+ 661:./rt_thread/src/timer.c ****                 continue;
+ 662:./rt_thread/src/timer.c ****             }
+ 663:./rt_thread/src/timer.c ****             rt_list_remove(&(t->row[RT_TIMER_SKIP_LIST_LEVEL - 1]));
+ 664:./rt_thread/src/timer.c ****             if ((t->parent.flag & RT_TIMER_FLAG_PERIODIC) &&
+ 665:./rt_thread/src/timer.c ****                 (t->parent.flag & RT_TIMER_FLAG_ACTIVATED))
+ 666:./rt_thread/src/timer.c ****             {
+ 667:./rt_thread/src/timer.c ****                 /* start it */
+ 668:./rt_thread/src/timer.c ****                 t->parent.flag &= ~RT_TIMER_FLAG_ACTIVATED;
+ 669:./rt_thread/src/timer.c ****                 rt_timer_start(t);
+ 670:./rt_thread/src/timer.c ****             }
+ 671:./rt_thread/src/timer.c ****         }
+ 672:./rt_thread/src/timer.c ****         else break; /* not check anymore */
+ 673:./rt_thread/src/timer.c ****     }
+ 674:./rt_thread/src/timer.c ****     /* enable interrupt */
+ 675:./rt_thread/src/timer.c ****     rt_hw_interrupt_enable(level);
+ 676:./rt_thread/src/timer.c **** 
+ 677:./rt_thread/src/timer.c ****     RT_DEBUG_LOG(RT_DEBUG_TIMER, ("software timer check leave\n"));
+ 678:./rt_thread/src/timer.c **** }
+ 679:./rt_thread/src/timer.c **** 
+ 680:./rt_thread/src/timer.c **** /* system timer thread entry */
+ 681:./rt_thread/src/timer.c **** static void rt_thread_timer_entry(void *parameter)
+ 682:./rt_thread/src/timer.c **** {
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 39
+
+
+ 683:./rt_thread/src/timer.c ****     rt_tick_t next_timeout;
+ 684:./rt_thread/src/timer.c **** 
+ 685:./rt_thread/src/timer.c ****     while (1)
+ 686:./rt_thread/src/timer.c ****     {
+ 687:./rt_thread/src/timer.c ****         /* get the next timeout tick */
+ 688:./rt_thread/src/timer.c ****         next_timeout = rt_timer_list_next_timeout(rt_soft_timer_list);
+ 689:./rt_thread/src/timer.c ****         if (next_timeout == RT_TICK_MAX)
+ 690:./rt_thread/src/timer.c ****         {
+ 691:./rt_thread/src/timer.c ****             /* no software timer exist, suspend self. */
+ 692:./rt_thread/src/timer.c ****             rt_thread_suspend(rt_thread_self());
+ 693:./rt_thread/src/timer.c ****             rt_schedule();
+ 694:./rt_thread/src/timer.c ****         }
+ 695:./rt_thread/src/timer.c ****         else
+ 696:./rt_thread/src/timer.c ****         {
+ 697:./rt_thread/src/timer.c ****             rt_tick_t current_tick;
+ 698:./rt_thread/src/timer.c **** 
+ 699:./rt_thread/src/timer.c ****             /* get current tick */
+ 700:./rt_thread/src/timer.c ****             current_tick = rt_tick_get();
+ 701:./rt_thread/src/timer.c **** 
+ 702:./rt_thread/src/timer.c ****             if ((next_timeout - current_tick) < RT_TICK_MAX / 2)
+ 703:./rt_thread/src/timer.c ****             {
+ 704:./rt_thread/src/timer.c ****                 /* get the delta timeout tick */
+ 705:./rt_thread/src/timer.c ****                 next_timeout = next_timeout - current_tick;
+ 706:./rt_thread/src/timer.c ****                 rt_thread_delay(next_timeout);
+ 707:./rt_thread/src/timer.c ****             }
+ 708:./rt_thread/src/timer.c ****         }
+ 709:./rt_thread/src/timer.c **** 
+ 710:./rt_thread/src/timer.c ****         /* check software timer */
+ 711:./rt_thread/src/timer.c ****         rt_soft_timer_check();
+ 712:./rt_thread/src/timer.c ****     }
+ 713:./rt_thread/src/timer.c **** }
+ 714:./rt_thread/src/timer.c **** #endif
+ 715:./rt_thread/src/timer.c **** 
+ 716:./rt_thread/src/timer.c **** /**
+ 717:./rt_thread/src/timer.c ****  * @ingroup SystemInit
+ 718:./rt_thread/src/timer.c ****  *
+ 719:./rt_thread/src/timer.c ****  * This function will initialize system timer
+ 720:./rt_thread/src/timer.c ****  */
+ 721:./rt_thread/src/timer.c **** void rt_system_timer_init(void)
+ 722:./rt_thread/src/timer.c **** {
+ 1396              		.loc 2 722 1
+ 1397              		.cfi_startproc
+ 1398              		@ args = 0, pretend = 0, frame = 8
+ 1399              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1400 0000 80B5     		push	{r7, lr}
+ 1401              	.LCFI81:
+ 1402              		.cfi_def_cfa_offset 8
+ 1403              		.cfi_offset 7, -8
+ 1404              		.cfi_offset 14, -4
+ 1405 0002 82B0     		sub	sp, sp, #8
+ 1406              	.LCFI82:
+ 1407              		.cfi_def_cfa_offset 16
+ 1408 0004 00AF     		add	r7, sp, #0
+ 1409              	.LCFI83:
+ 1410              		.cfi_def_cfa_register 7
+ 723:./rt_thread/src/timer.c ****     int i;
+ 724:./rt_thread/src/timer.c **** 
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 40
+
+
+ 725:./rt_thread/src/timer.c ****     for (i = 0; i < sizeof(rt_timer_list) / sizeof(rt_timer_list[0]); i++)
+ 1411              		.loc 2 725 12
+ 1412 0006 0023     		movs	r3, #0
+ 1413 0008 7B60     		str	r3, [r7, #4]
+ 1414              		.loc 2 725 5
+ 1415 000a 09E0     		b	.L74
+ 1416              	.L75:
+ 726:./rt_thread/src/timer.c ****     {
+ 727:./rt_thread/src/timer.c ****         rt_list_init(rt_timer_list + i);
+ 1417              		.loc 2 727 36 discriminator 3
+ 1418 000c 7B68     		ldr	r3, [r7, #4]
+ 1419 000e DB00     		lsls	r3, r3, #3
+ 1420              		.loc 2 727 9 discriminator 3
+ 1421 0010 074A     		ldr	r2, .L76
+ 1422 0012 1344     		add	r3, r3, r2
+ 1423 0014 1846     		mov	r0, r3
+ 1424 0016 FFF7FEFF 		bl	rt_list_init
+ 725:./rt_thread/src/timer.c ****     {
+ 1425              		.loc 2 725 72 discriminator 3
+ 1426 001a 7B68     		ldr	r3, [r7, #4]
+ 1427 001c 0133     		adds	r3, r3, #1
+ 1428 001e 7B60     		str	r3, [r7, #4]
+ 1429              	.L74:
+ 725:./rt_thread/src/timer.c ****     {
+ 1430              		.loc 2 725 5 discriminator 1
+ 1431 0020 7B68     		ldr	r3, [r7, #4]
+ 1432 0022 002B     		cmp	r3, #0
+ 1433 0024 F2D0     		beq	.L75
+ 728:./rt_thread/src/timer.c ****     }
+ 729:./rt_thread/src/timer.c **** }
+ 1434              		.loc 2 729 1
+ 1435 0026 00BF     		nop
+ 1436 0028 00BF     		nop
+ 1437 002a 0837     		adds	r7, r7, #8
+ 1438              	.LCFI84:
+ 1439              		.cfi_def_cfa_offset 8
+ 1440 002c BD46     		mov	sp, r7
+ 1441              	.LCFI85:
+ 1442              		.cfi_def_cfa_register 13
+ 1443              		@ sp needed
+ 1444 002e 80BD     		pop	{r7, pc}
+ 1445              	.L77:
+ 1446              		.align	2
+ 1447              	.L76:
+ 1448 0030 00000000 		.word	rt_timer_list
+ 1449              		.cfi_endproc
+ 1450              	.LFE27:
+ 1452              		.section	.text.rt_system_timer_thread_init,"ax",%progbits
+ 1453              		.align	1
+ 1454              		.global	rt_system_timer_thread_init
+ 1455              		.syntax unified
+ 1456              		.thumb
+ 1457              		.thumb_func
+ 1459              	rt_system_timer_thread_init:
+ 1460              	.LFB28:
+ 730:./rt_thread/src/timer.c **** 
+ 731:./rt_thread/src/timer.c **** /**
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 41
+
+
+ 732:./rt_thread/src/timer.c ****  * @ingroup SystemInit
+ 733:./rt_thread/src/timer.c ****  *
+ 734:./rt_thread/src/timer.c ****  * This function will initialize system timer thread
+ 735:./rt_thread/src/timer.c ****  */
+ 736:./rt_thread/src/timer.c **** void rt_system_timer_thread_init(void)
+ 737:./rt_thread/src/timer.c **** {
+ 1461              		.loc 2 737 1
+ 1462              		.cfi_startproc
+ 1463              		@ args = 0, pretend = 0, frame = 0
+ 1464              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1465              		@ link register save eliminated.
+ 1466 0000 80B4     		push	{r7}
+ 1467              	.LCFI86:
+ 1468              		.cfi_def_cfa_offset 4
+ 1469              		.cfi_offset 7, -4
+ 1470 0002 00AF     		add	r7, sp, #0
+ 1471              	.LCFI87:
+ 1472              		.cfi_def_cfa_register 7
+ 738:./rt_thread/src/timer.c **** #ifdef RT_USING_TIMER_SOFT
+ 739:./rt_thread/src/timer.c ****     int i;
+ 740:./rt_thread/src/timer.c **** 
+ 741:./rt_thread/src/timer.c ****     for (i = 0;
+ 742:./rt_thread/src/timer.c ****          i < sizeof(rt_soft_timer_list) / sizeof(rt_soft_timer_list[0]);
+ 743:./rt_thread/src/timer.c ****          i++)
+ 744:./rt_thread/src/timer.c ****     {
+ 745:./rt_thread/src/timer.c ****         rt_list_init(rt_soft_timer_list + i);
+ 746:./rt_thread/src/timer.c ****     }
+ 747:./rt_thread/src/timer.c **** 
+ 748:./rt_thread/src/timer.c ****     /* start software timer thread */
+ 749:./rt_thread/src/timer.c ****     rt_thread_init(&timer_thread,
+ 750:./rt_thread/src/timer.c ****                    "timer",
+ 751:./rt_thread/src/timer.c ****                    rt_thread_timer_entry,
+ 752:./rt_thread/src/timer.c ****                    RT_NULL,
+ 753:./rt_thread/src/timer.c ****                    &timer_thread_stack[0],
+ 754:./rt_thread/src/timer.c ****                    sizeof(timer_thread_stack),
+ 755:./rt_thread/src/timer.c ****                    RT_TIMER_THREAD_PRIO,
+ 756:./rt_thread/src/timer.c ****                    10);
+ 757:./rt_thread/src/timer.c **** 
+ 758:./rt_thread/src/timer.c ****     /* startup */
+ 759:./rt_thread/src/timer.c ****     rt_thread_startup(&timer_thread);
+ 760:./rt_thread/src/timer.c **** #endif
+ 761:./rt_thread/src/timer.c **** }
+ 1473              		.loc 2 761 1
+ 1474 0004 00BF     		nop
+ 1475 0006 BD46     		mov	sp, r7
+ 1476              	.LCFI88:
+ 1477              		.cfi_def_cfa_register 13
+ 1478              		@ sp needed
+ 1479 0008 80BC     		pop	{r7}
+ 1480              	.LCFI89:
+ 1481              		.cfi_restore 7
+ 1482              		.cfi_def_cfa_offset 0
+ 1483 000a 7047     		bx	lr
+ 1484              		.cfi_endproc
+ 1485              	.LFE28:
+ 1487              		.section	.bss.random_nr.0,"aw",%nobits
+ 1488              		.align	2
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 42
+
+
+ 1491              	random_nr.0:
+ 1492 0000 00000000 		.space	4
+ 1493              		.text
+ 1494              	.Letext0:
+ 1495              		.file 3 "./rt_thread/include/rtdef.h"
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 43
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 timer.c
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:18     .text.rt_list_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:23     .text.rt_list_init:00000000 rt_list_init
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:70     .text.rt_list_insert_after:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:75     .text.rt_list_insert_after:00000000 rt_list_insert_after
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:132    .text.rt_list_remove:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:137    .text.rt_list_remove:00000000 rt_list_remove
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:199    .text.rt_list_isempty:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:204    .text.rt_list_isempty:00000000 rt_list_isempty
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:250    .bss.rt_timer_list:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:253    .bss.rt_timer_list:00000000 rt_timer_list
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:256    .text._rt_timer_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:261    .text._rt_timer_init:00000000 _rt_timer_init
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:349    .text.rt_timer_list_next_timeout:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:354    .text.rt_timer_list_next_timeout:00000000 rt_timer_list_next_timeout
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:416    .text._rt_timer_remove:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:421    .text._rt_timer_remove:00000000 _rt_timer_remove
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:478    .text.rt_timer_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:484    .text.rt_timer_init:00000000 rt_timer_init
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:532    .text.rt_timer_detach:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:538    .text.rt_timer_detach:00000000 rt_timer_detach
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:592    .text.rt_timer_create:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:598    .text.rt_timer_create:00000000 rt_timer_create
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:657    .text.rt_timer_delete:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:663    .text.rt_timer_delete:00000000 rt_timer_delete
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:717    .text.rt_timer_start:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:723    .text.rt_timer_start:00000000 rt_timer_start
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:983    .text.rt_timer_start:00000170 $d
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1491   .bss.random_nr.0:00000000 random_nr.0
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:989    .text.rt_timer_stop:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:995    .text.rt_timer_stop:00000000 rt_timer_stop
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1059   .text.rt_timer_control:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1065   .text.rt_timer_control:00000000 rt_timer_control
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1097   .text.rt_timer_control:00000020 $d
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1102   .text.rt_timer_control:00000034 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1186   .text.rt_timer_check:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1192   .text.rt_timer_check:00000000 rt_timer_check
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1348   .text.rt_timer_check:000000dc $d
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1353   .text.rt_timer_next_timeout_tick:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1359   .text.rt_timer_next_timeout_tick:00000000 rt_timer_next_timeout_tick
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1383   .text.rt_timer_next_timeout_tick:00000010 $d
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1388   .text.rt_system_timer_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1394   .text.rt_system_timer_init:00000000 rt_system_timer_init
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1448   .text.rt_system_timer_init:00000030 $d
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1453   .text.rt_system_timer_thread_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1459   .text.rt_system_timer_thread_init:00000000 rt_system_timer_thread_init
+C:\Users\hao\AppData\Local\Temp\ccgiplOI.s:1488   .bss.random_nr.0:00000000 $d
+
+UNDEFINED SYMBOLS
+rt_hw_interrupt_disable
+rt_hw_interrupt_enable
+rt_object_init
+rt_object_detach
+rt_object_allocate
+rt_object_delete
+rt_tick_get
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccgiplOI.s 			page 44
+
+

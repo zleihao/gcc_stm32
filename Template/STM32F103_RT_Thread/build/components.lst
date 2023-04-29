@@ -1,0 +1,811 @@
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"components.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.rti_start,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  23              	rti_start:
+  24              	.LFB15:
+  25              		.file 1 "./rt_thread/src/components.c"
+   1:./rt_thread/src/components.c **** /*
+   2:./rt_thread/src/components.c ****  * Copyright (c) 2006-2021, RT-Thread Development Team
+   3:./rt_thread/src/components.c ****  *
+   4:./rt_thread/src/components.c ****  * SPDX-License-Identifier: Apache-2.0
+   5:./rt_thread/src/components.c ****  *
+   6:./rt_thread/src/components.c ****  * Change Logs:
+   7:./rt_thread/src/components.c ****  * Date           Author       Notes
+   8:./rt_thread/src/components.c ****  * 2012-09-20     Bernard      Change the name to components.c
+   9:./rt_thread/src/components.c ****  *                             And all components related header files.
+  10:./rt_thread/src/components.c ****  * 2012-12-23     Bernard      fix the pthread initialization issue.
+  11:./rt_thread/src/components.c ****  * 2013-06-23     Bernard      Add the init_call for components initialization.
+  12:./rt_thread/src/components.c ****  * 2013-07-05     Bernard      Remove initialization feature for MS VC++ compiler
+  13:./rt_thread/src/components.c ****  * 2015-02-06     Bernard      Remove the MS VC++ support and move to the kernel
+  14:./rt_thread/src/components.c ****  * 2015-05-04     Bernard      Rename it to components.c because compiling issue
+  15:./rt_thread/src/components.c ****  *                             in some IDEs.
+  16:./rt_thread/src/components.c ****  * 2015-07-29     Arda.Fu      Add support to use RT_USING_USER_MAIN with IAR
+  17:./rt_thread/src/components.c ****  * 2018-11-22     Jesven       Add secondary cpu boot up
+  18:./rt_thread/src/components.c ****  */
+  19:./rt_thread/src/components.c **** 
+  20:./rt_thread/src/components.c **** #include <rthw.h>
+  21:./rt_thread/src/components.c **** #include <rtthread.h>
+  22:./rt_thread/src/components.c **** 
+  23:./rt_thread/src/components.c **** #ifdef RT_USING_USER_MAIN
+  24:./rt_thread/src/components.c **** #ifndef RT_MAIN_THREAD_STACK_SIZE
+  25:./rt_thread/src/components.c **** #define RT_MAIN_THREAD_STACK_SIZE     2048
+  26:./rt_thread/src/components.c **** #endif
+  27:./rt_thread/src/components.c **** #ifndef RT_MAIN_THREAD_PRIORITY
+  28:./rt_thread/src/components.c **** #define RT_MAIN_THREAD_PRIORITY       (RT_THREAD_PRIORITY_MAX / 3)
+  29:./rt_thread/src/components.c **** #endif
+  30:./rt_thread/src/components.c **** #endif
+  31:./rt_thread/src/components.c **** 
+  32:./rt_thread/src/components.c **** #ifdef RT_USING_COMPONENTS_INIT
+  33:./rt_thread/src/components.c **** /*
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 2
+
+
+  34:./rt_thread/src/components.c ****  * Components Initialization will initialize some driver and components as following
+  35:./rt_thread/src/components.c ****  * order:
+  36:./rt_thread/src/components.c ****  * rti_start         --> 0
+  37:./rt_thread/src/components.c ****  * BOARD_EXPORT      --> 1
+  38:./rt_thread/src/components.c ****  * rti_board_end     --> 1.end
+  39:./rt_thread/src/components.c ****  *
+  40:./rt_thread/src/components.c ****  * DEVICE_EXPORT     --> 2
+  41:./rt_thread/src/components.c ****  * COMPONENT_EXPORT  --> 3
+  42:./rt_thread/src/components.c ****  * FS_EXPORT         --> 4
+  43:./rt_thread/src/components.c ****  * ENV_EXPORT        --> 5
+  44:./rt_thread/src/components.c ****  * APP_EXPORT        --> 6
+  45:./rt_thread/src/components.c ****  *
+  46:./rt_thread/src/components.c ****  * rti_end           --> 6.end
+  47:./rt_thread/src/components.c ****  *
+  48:./rt_thread/src/components.c ****  * These automatically initialization, the driver or component initial function must
+  49:./rt_thread/src/components.c ****  * be defined with:
+  50:./rt_thread/src/components.c ****  * INIT_BOARD_EXPORT(fn);
+  51:./rt_thread/src/components.c ****  * INIT_DEVICE_EXPORT(fn);
+  52:./rt_thread/src/components.c ****  * ...
+  53:./rt_thread/src/components.c ****  * INIT_APP_EXPORT(fn);
+  54:./rt_thread/src/components.c ****  * etc.
+  55:./rt_thread/src/components.c ****  */
+  56:./rt_thread/src/components.c **** static int rti_start(void)
+  57:./rt_thread/src/components.c **** {
+  26              		.loc 1 57 1
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 0
+  29              		@ frame_needed = 1, uses_anonymous_args = 0
+  30              		@ link register save eliminated.
+  31 0000 80B4     		push	{r7}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 4
+  34              		.cfi_offset 7, -4
+  35 0002 00AF     		add	r7, sp, #0
+  36              	.LCFI1:
+  37              		.cfi_def_cfa_register 7
+  58:./rt_thread/src/components.c ****     return 0;
+  38              		.loc 1 58 12
+  39 0004 0023     		movs	r3, #0
+  59:./rt_thread/src/components.c **** }
+  40              		.loc 1 59 1
+  41 0006 1846     		mov	r0, r3
+  42 0008 BD46     		mov	sp, r7
+  43              	.LCFI2:
+  44              		.cfi_def_cfa_register 13
+  45              		@ sp needed
+  46 000a 80BC     		pop	{r7}
+  47              	.LCFI3:
+  48              		.cfi_restore 7
+  49              		.cfi_def_cfa_offset 0
+  50 000c 7047     		bx	lr
+  51              		.cfi_endproc
+  52              	.LFE15:
+  54              		.global	__rt_init_rti_start
+  55              		.section	.rti_fn.0,"a"
+  56              		.align	2
+  59              	__rt_init_rti_start:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 3
+
+
+  60 0000 00000000 		.word	rti_start
+  61              		.section	.text.rti_board_start,"ax",%progbits
+  62              		.align	1
+  63              		.syntax unified
+  64              		.thumb
+  65              		.thumb_func
+  67              	rti_board_start:
+  68              	.LFB16:
+  60:./rt_thread/src/components.c **** INIT_EXPORT(rti_start, "0");
+  61:./rt_thread/src/components.c **** 
+  62:./rt_thread/src/components.c **** static int rti_board_start(void)
+  63:./rt_thread/src/components.c **** {
+  69              		.loc 1 63 1
+  70              		.cfi_startproc
+  71              		@ args = 0, pretend = 0, frame = 0
+  72              		@ frame_needed = 1, uses_anonymous_args = 0
+  73              		@ link register save eliminated.
+  74 0000 80B4     		push	{r7}
+  75              	.LCFI4:
+  76              		.cfi_def_cfa_offset 4
+  77              		.cfi_offset 7, -4
+  78 0002 00AF     		add	r7, sp, #0
+  79              	.LCFI5:
+  80              		.cfi_def_cfa_register 7
+  64:./rt_thread/src/components.c ****     return 0;
+  81              		.loc 1 64 12
+  82 0004 0023     		movs	r3, #0
+  65:./rt_thread/src/components.c **** }
+  83              		.loc 1 65 1
+  84 0006 1846     		mov	r0, r3
+  85 0008 BD46     		mov	sp, r7
+  86              	.LCFI6:
+  87              		.cfi_def_cfa_register 13
+  88              		@ sp needed
+  89 000a 80BC     		pop	{r7}
+  90              	.LCFI7:
+  91              		.cfi_restore 7
+  92              		.cfi_def_cfa_offset 0
+  93 000c 7047     		bx	lr
+  94              		.cfi_endproc
+  95              	.LFE16:
+  97              		.global	__rt_init_rti_board_start
+  98              		.section	.rti_fn.0.end,"a"
+  99              		.align	2
+ 102              	__rt_init_rti_board_start:
+ 103 0000 00000000 		.word	rti_board_start
+ 104              		.section	.text.rti_board_end,"ax",%progbits
+ 105              		.align	1
+ 106              		.syntax unified
+ 107              		.thumb
+ 108              		.thumb_func
+ 110              	rti_board_end:
+ 111              	.LFB17:
+  66:./rt_thread/src/components.c **** INIT_EXPORT(rti_board_start, "0.end");
+  67:./rt_thread/src/components.c **** 
+  68:./rt_thread/src/components.c **** static int rti_board_end(void)
+  69:./rt_thread/src/components.c **** {
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 4
+
+
+ 112              		.loc 1 69 1
+ 113              		.cfi_startproc
+ 114              		@ args = 0, pretend = 0, frame = 0
+ 115              		@ frame_needed = 1, uses_anonymous_args = 0
+ 116              		@ link register save eliminated.
+ 117 0000 80B4     		push	{r7}
+ 118              	.LCFI8:
+ 119              		.cfi_def_cfa_offset 4
+ 120              		.cfi_offset 7, -4
+ 121 0002 00AF     		add	r7, sp, #0
+ 122              	.LCFI9:
+ 123              		.cfi_def_cfa_register 7
+  70:./rt_thread/src/components.c ****     return 0;
+ 124              		.loc 1 70 12
+ 125 0004 0023     		movs	r3, #0
+  71:./rt_thread/src/components.c **** }
+ 126              		.loc 1 71 1
+ 127 0006 1846     		mov	r0, r3
+ 128 0008 BD46     		mov	sp, r7
+ 129              	.LCFI10:
+ 130              		.cfi_def_cfa_register 13
+ 131              		@ sp needed
+ 132 000a 80BC     		pop	{r7}
+ 133              	.LCFI11:
+ 134              		.cfi_restore 7
+ 135              		.cfi_def_cfa_offset 0
+ 136 000c 7047     		bx	lr
+ 137              		.cfi_endproc
+ 138              	.LFE17:
+ 140              		.global	__rt_init_rti_board_end
+ 141              		.section	.rti_fn.1.end,"a"
+ 142              		.align	2
+ 145              	__rt_init_rti_board_end:
+ 146 0000 00000000 		.word	rti_board_end
+ 147              		.section	.text.rti_end,"ax",%progbits
+ 148              		.align	1
+ 149              		.syntax unified
+ 150              		.thumb
+ 151              		.thumb_func
+ 153              	rti_end:
+ 154              	.LFB18:
+  72:./rt_thread/src/components.c **** INIT_EXPORT(rti_board_end, "1.end");
+  73:./rt_thread/src/components.c **** 
+  74:./rt_thread/src/components.c **** static int rti_end(void)
+  75:./rt_thread/src/components.c **** {
+ 155              		.loc 1 75 1
+ 156              		.cfi_startproc
+ 157              		@ args = 0, pretend = 0, frame = 0
+ 158              		@ frame_needed = 1, uses_anonymous_args = 0
+ 159              		@ link register save eliminated.
+ 160 0000 80B4     		push	{r7}
+ 161              	.LCFI12:
+ 162              		.cfi_def_cfa_offset 4
+ 163              		.cfi_offset 7, -4
+ 164 0002 00AF     		add	r7, sp, #0
+ 165              	.LCFI13:
+ 166              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 5
+
+
+  76:./rt_thread/src/components.c ****     return 0;
+ 167              		.loc 1 76 12
+ 168 0004 0023     		movs	r3, #0
+  77:./rt_thread/src/components.c **** }
+ 169              		.loc 1 77 1
+ 170 0006 1846     		mov	r0, r3
+ 171 0008 BD46     		mov	sp, r7
+ 172              	.LCFI14:
+ 173              		.cfi_def_cfa_register 13
+ 174              		@ sp needed
+ 175 000a 80BC     		pop	{r7}
+ 176              	.LCFI15:
+ 177              		.cfi_restore 7
+ 178              		.cfi_def_cfa_offset 0
+ 179 000c 7047     		bx	lr
+ 180              		.cfi_endproc
+ 181              	.LFE18:
+ 183              		.global	__rt_init_rti_end
+ 184              		.section	.rti_fn.6.end,"a"
+ 185              		.align	2
+ 188              	__rt_init_rti_end:
+ 189 0000 00000000 		.word	rti_end
+ 190              		.section	.text.rt_components_board_init,"ax",%progbits
+ 191              		.align	1
+ 192              		.global	rt_components_board_init
+ 193              		.syntax unified
+ 194              		.thumb
+ 195              		.thumb_func
+ 197              	rt_components_board_init:
+ 198              	.LFB19:
+  78:./rt_thread/src/components.c **** INIT_EXPORT(rti_end, "6.end");
+  79:./rt_thread/src/components.c **** 
+  80:./rt_thread/src/components.c **** /**
+  81:./rt_thread/src/components.c ****  * RT-Thread Components Initialization for board
+  82:./rt_thread/src/components.c ****  */
+  83:./rt_thread/src/components.c **** void rt_components_board_init(void)
+  84:./rt_thread/src/components.c **** {
+ 199              		.loc 1 84 1
+ 200              		.cfi_startproc
+ 201              		@ args = 0, pretend = 0, frame = 8
+ 202              		@ frame_needed = 1, uses_anonymous_args = 0
+ 203 0000 80B5     		push	{r7, lr}
+ 204              	.LCFI16:
+ 205              		.cfi_def_cfa_offset 8
+ 206              		.cfi_offset 7, -8
+ 207              		.cfi_offset 14, -4
+ 208 0002 82B0     		sub	sp, sp, #8
+ 209              	.LCFI17:
+ 210              		.cfi_def_cfa_offset 16
+ 211 0004 00AF     		add	r7, sp, #0
+ 212              	.LCFI18:
+ 213              		.cfi_def_cfa_register 7
+  85:./rt_thread/src/components.c **** #if RT_DEBUG_INIT
+  86:./rt_thread/src/components.c ****     int result;
+  87:./rt_thread/src/components.c ****     const struct rt_init_desc *desc;
+  88:./rt_thread/src/components.c ****     for (desc = &__rt_init_desc_rti_board_start; desc < &__rt_init_desc_rti_board_end; desc ++)
+  89:./rt_thread/src/components.c ****     {
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 6
+
+
+  90:./rt_thread/src/components.c ****         rt_kprintf("initialize %s", desc->fn_name);
+  91:./rt_thread/src/components.c ****         result = desc->fn();
+  92:./rt_thread/src/components.c ****         rt_kprintf(":%d done\n", result);
+  93:./rt_thread/src/components.c ****     }
+  94:./rt_thread/src/components.c **** #else
+  95:./rt_thread/src/components.c ****     volatile const init_fn_t *fn_ptr;
+  96:./rt_thread/src/components.c **** 
+  97:./rt_thread/src/components.c ****     for (fn_ptr = &__rt_init_rti_board_start; fn_ptr < &__rt_init_rti_board_end; fn_ptr++)
+ 214              		.loc 1 97 17
+ 215 0006 094B     		ldr	r3, .L12
+ 216 0008 7B60     		str	r3, [r7, #4]
+ 217              		.loc 1 97 5
+ 218 000a 05E0     		b	.L10
+ 219              	.L11:
+  98:./rt_thread/src/components.c ****     {
+  99:./rt_thread/src/components.c ****         (*fn_ptr)();
+ 220              		.loc 1 99 10 discriminator 3
+ 221 000c 7B68     		ldr	r3, [r7, #4]
+ 222 000e 1B68     		ldr	r3, [r3]
+ 223 0010 9847     		blx	r3
+ 224              	.LVL0:
+  97:./rt_thread/src/components.c ****     {
+ 225              		.loc 1 97 88 discriminator 3
+ 226 0012 7B68     		ldr	r3, [r7, #4]
+ 227 0014 0433     		adds	r3, r3, #4
+ 228 0016 7B60     		str	r3, [r7, #4]
+ 229              	.L10:
+  97:./rt_thread/src/components.c ****     {
+ 230              		.loc 1 97 5 discriminator 1
+ 231 0018 7B68     		ldr	r3, [r7, #4]
+ 232 001a 054A     		ldr	r2, .L12+4
+ 233 001c 9342     		cmp	r3, r2
+ 234 001e F5D3     		bcc	.L11
+ 100:./rt_thread/src/components.c ****     }
+ 101:./rt_thread/src/components.c **** #endif
+ 102:./rt_thread/src/components.c **** }
+ 235              		.loc 1 102 1
+ 236 0020 00BF     		nop
+ 237 0022 00BF     		nop
+ 238 0024 0837     		adds	r7, r7, #8
+ 239              	.LCFI19:
+ 240              		.cfi_def_cfa_offset 8
+ 241 0026 BD46     		mov	sp, r7
+ 242              	.LCFI20:
+ 243              		.cfi_def_cfa_register 13
+ 244              		@ sp needed
+ 245 0028 80BD     		pop	{r7, pc}
+ 246              	.L13:
+ 247 002a 00BF     		.align	2
+ 248              	.L12:
+ 249 002c 00000000 		.word	__rt_init_rti_board_start
+ 250 0030 00000000 		.word	__rt_init_rti_board_end
+ 251              		.cfi_endproc
+ 252              	.LFE19:
+ 254              		.section	.text.rt_components_init,"ax",%progbits
+ 255              		.align	1
+ 256              		.global	rt_components_init
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 7
+
+
+ 257              		.syntax unified
+ 258              		.thumb
+ 259              		.thumb_func
+ 261              	rt_components_init:
+ 262              	.LFB20:
+ 103:./rt_thread/src/components.c **** 
+ 104:./rt_thread/src/components.c **** /**
+ 105:./rt_thread/src/components.c ****  * RT-Thread Components Initialization
+ 106:./rt_thread/src/components.c ****  */
+ 107:./rt_thread/src/components.c **** void rt_components_init(void)
+ 108:./rt_thread/src/components.c **** {
+ 263              		.loc 1 108 1
+ 264              		.cfi_startproc
+ 265              		@ args = 0, pretend = 0, frame = 8
+ 266              		@ frame_needed = 1, uses_anonymous_args = 0
+ 267 0000 80B5     		push	{r7, lr}
+ 268              	.LCFI21:
+ 269              		.cfi_def_cfa_offset 8
+ 270              		.cfi_offset 7, -8
+ 271              		.cfi_offset 14, -4
+ 272 0002 82B0     		sub	sp, sp, #8
+ 273              	.LCFI22:
+ 274              		.cfi_def_cfa_offset 16
+ 275 0004 00AF     		add	r7, sp, #0
+ 276              	.LCFI23:
+ 277              		.cfi_def_cfa_register 7
+ 109:./rt_thread/src/components.c **** #if RT_DEBUG_INIT
+ 110:./rt_thread/src/components.c ****     int result;
+ 111:./rt_thread/src/components.c ****     const struct rt_init_desc *desc;
+ 112:./rt_thread/src/components.c **** 
+ 113:./rt_thread/src/components.c ****     rt_kprintf("do components initialization.\n");
+ 114:./rt_thread/src/components.c ****     for (desc = &__rt_init_desc_rti_board_end; desc < &__rt_init_desc_rti_end; desc ++)
+ 115:./rt_thread/src/components.c ****     {
+ 116:./rt_thread/src/components.c ****         rt_kprintf("initialize %s", desc->fn_name);
+ 117:./rt_thread/src/components.c ****         result = desc->fn();
+ 118:./rt_thread/src/components.c ****         rt_kprintf(":%d done\n", result);
+ 119:./rt_thread/src/components.c ****     }
+ 120:./rt_thread/src/components.c **** #else
+ 121:./rt_thread/src/components.c ****     volatile const init_fn_t *fn_ptr;
+ 122:./rt_thread/src/components.c **** 
+ 123:./rt_thread/src/components.c ****     for (fn_ptr = &__rt_init_rti_board_end; fn_ptr < &__rt_init_rti_end; fn_ptr ++)
+ 278              		.loc 1 123 17
+ 279 0006 094B     		ldr	r3, .L17
+ 280 0008 7B60     		str	r3, [r7, #4]
+ 281              		.loc 1 123 5
+ 282 000a 05E0     		b	.L15
+ 283              	.L16:
+ 124:./rt_thread/src/components.c ****     {
+ 125:./rt_thread/src/components.c ****         (*fn_ptr)();
+ 284              		.loc 1 125 10 discriminator 3
+ 285 000c 7B68     		ldr	r3, [r7, #4]
+ 286 000e 1B68     		ldr	r3, [r3]
+ 287 0010 9847     		blx	r3
+ 288              	.LVL1:
+ 123:./rt_thread/src/components.c ****     {
+ 289              		.loc 1 123 81 discriminator 3
+ 290 0012 7B68     		ldr	r3, [r7, #4]
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 8
+
+
+ 291 0014 0433     		adds	r3, r3, #4
+ 292 0016 7B60     		str	r3, [r7, #4]
+ 293              	.L15:
+ 123:./rt_thread/src/components.c ****     {
+ 294              		.loc 1 123 5 discriminator 1
+ 295 0018 7B68     		ldr	r3, [r7, #4]
+ 296 001a 054A     		ldr	r2, .L17+4
+ 297 001c 9342     		cmp	r3, r2
+ 298 001e F5D3     		bcc	.L16
+ 126:./rt_thread/src/components.c ****     }
+ 127:./rt_thread/src/components.c **** #endif
+ 128:./rt_thread/src/components.c **** }
+ 299              		.loc 1 128 1
+ 300 0020 00BF     		nop
+ 301 0022 00BF     		nop
+ 302 0024 0837     		adds	r7, r7, #8
+ 303              	.LCFI24:
+ 304              		.cfi_def_cfa_offset 8
+ 305 0026 BD46     		mov	sp, r7
+ 306              	.LCFI25:
+ 307              		.cfi_def_cfa_register 13
+ 308              		@ sp needed
+ 309 0028 80BD     		pop	{r7, pc}
+ 310              	.L18:
+ 311 002a 00BF     		.align	2
+ 312              	.L17:
+ 313 002c 00000000 		.word	__rt_init_rti_board_end
+ 314 0030 00000000 		.word	__rt_init_rti_end
+ 315              		.cfi_endproc
+ 316              	.LFE20:
+ 318              		.section	.text.entry,"ax",%progbits
+ 319              		.align	1
+ 320              		.global	entry
+ 321              		.syntax unified
+ 322              		.thumb
+ 323              		.thumb_func
+ 325              	entry:
+ 326              	.LFB21:
+ 129:./rt_thread/src/components.c **** #endif   /* RT_USING_COMPONENTS_INIT */
+ 130:./rt_thread/src/components.c **** 
+ 131:./rt_thread/src/components.c **** #ifdef RT_USING_USER_MAIN
+ 132:./rt_thread/src/components.c **** 
+ 133:./rt_thread/src/components.c **** void rt_application_init(void);
+ 134:./rt_thread/src/components.c **** void rt_hw_board_init(void);
+ 135:./rt_thread/src/components.c **** int rtthread_startup(void);
+ 136:./rt_thread/src/components.c **** 
+ 137:./rt_thread/src/components.c **** #if defined(__CC_ARM) || defined(__CLANG_ARM)
+ 138:./rt_thread/src/components.c **** extern int $Super$$main(void);
+ 139:./rt_thread/src/components.c **** /* re-define main function */
+ 140:./rt_thread/src/components.c **** int $Sub$$main(void)
+ 141:./rt_thread/src/components.c **** {
+ 142:./rt_thread/src/components.c ****     rtthread_startup();
+ 143:./rt_thread/src/components.c ****     return 0;
+ 144:./rt_thread/src/components.c **** }
+ 145:./rt_thread/src/components.c **** #elif defined(__ICCARM__)
+ 146:./rt_thread/src/components.c **** extern int main(void);
+ 147:./rt_thread/src/components.c **** /* __low_level_init will auto called by IAR cstartup */
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 9
+
+
+ 148:./rt_thread/src/components.c **** extern void __iar_data_init3(void);
+ 149:./rt_thread/src/components.c **** int __low_level_init(void)
+ 150:./rt_thread/src/components.c **** {
+ 151:./rt_thread/src/components.c ****     // call IAR table copy function.
+ 152:./rt_thread/src/components.c ****     __iar_data_init3();
+ 153:./rt_thread/src/components.c ****     rtthread_startup();
+ 154:./rt_thread/src/components.c ****     return 0;
+ 155:./rt_thread/src/components.c **** }
+ 156:./rt_thread/src/components.c **** #elif defined(__GNUC__)
+ 157:./rt_thread/src/components.c **** /* Add -eentry to arm-none-eabi-gcc argument */
+ 158:./rt_thread/src/components.c **** int entry(void)
+ 159:./rt_thread/src/components.c **** {
+ 327              		.loc 1 159 1
+ 328              		.cfi_startproc
+ 329              		@ args = 0, pretend = 0, frame = 0
+ 330              		@ frame_needed = 1, uses_anonymous_args = 0
+ 331 0000 80B5     		push	{r7, lr}
+ 332              	.LCFI26:
+ 333              		.cfi_def_cfa_offset 8
+ 334              		.cfi_offset 7, -8
+ 335              		.cfi_offset 14, -4
+ 336 0002 00AF     		add	r7, sp, #0
+ 337              	.LCFI27:
+ 338              		.cfi_def_cfa_register 7
+ 160:./rt_thread/src/components.c ****     rtthread_startup();
+ 339              		.loc 1 160 5
+ 340 0004 FFF7FEFF 		bl	rtthread_startup
+ 161:./rt_thread/src/components.c ****     return 0;
+ 341              		.loc 1 161 12
+ 342 0008 0023     		movs	r3, #0
+ 162:./rt_thread/src/components.c **** }
+ 343              		.loc 1 162 1
+ 344 000a 1846     		mov	r0, r3
+ 345 000c 80BD     		pop	{r7, pc}
+ 346              		.cfi_endproc
+ 347              	.LFE21:
+ 349              		.section	.text.main_thread_entry,"ax",%progbits
+ 350              		.align	1
+ 351              		.global	main_thread_entry
+ 352              		.syntax unified
+ 353              		.thumb
+ 354              		.thumb_func
+ 356              	main_thread_entry:
+ 357              	.LFB22:
+ 163:./rt_thread/src/components.c **** #endif
+ 164:./rt_thread/src/components.c **** 
+ 165:./rt_thread/src/components.c **** #ifndef RT_USING_HEAP
+ 166:./rt_thread/src/components.c **** /* if there is not enable heap, we should use static thread and stack. */
+ 167:./rt_thread/src/components.c **** ALIGN(8)
+ 168:./rt_thread/src/components.c **** static rt_uint8_t main_stack[RT_MAIN_THREAD_STACK_SIZE];
+ 169:./rt_thread/src/components.c **** struct rt_thread main_thread;
+ 170:./rt_thread/src/components.c **** #endif
+ 171:./rt_thread/src/components.c **** 
+ 172:./rt_thread/src/components.c **** /* the system main thread */
+ 173:./rt_thread/src/components.c **** void main_thread_entry(void *parameter)
+ 174:./rt_thread/src/components.c **** {
+ 358              		.loc 1 174 1
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 10
+
+
+ 359              		.cfi_startproc
+ 360              		@ args = 0, pretend = 0, frame = 8
+ 361              		@ frame_needed = 1, uses_anonymous_args = 0
+ 362 0000 80B5     		push	{r7, lr}
+ 363              	.LCFI28:
+ 364              		.cfi_def_cfa_offset 8
+ 365              		.cfi_offset 7, -8
+ 366              		.cfi_offset 14, -4
+ 367 0002 82B0     		sub	sp, sp, #8
+ 368              	.LCFI29:
+ 369              		.cfi_def_cfa_offset 16
+ 370 0004 00AF     		add	r7, sp, #0
+ 371              	.LCFI30:
+ 372              		.cfi_def_cfa_register 7
+ 373 0006 7860     		str	r0, [r7, #4]
+ 175:./rt_thread/src/components.c ****     extern int main(void);
+ 176:./rt_thread/src/components.c ****     extern int $Super$$main(void);
+ 177:./rt_thread/src/components.c **** 
+ 178:./rt_thread/src/components.c **** #ifdef RT_USING_COMPONENTS_INIT
+ 179:./rt_thread/src/components.c ****     /* RT-Thread components initialization */
+ 180:./rt_thread/src/components.c ****     rt_components_init();
+ 374              		.loc 1 180 5
+ 375 0008 FFF7FEFF 		bl	rt_components_init
+ 181:./rt_thread/src/components.c **** #endif
+ 182:./rt_thread/src/components.c ****     /* invoke system main function */
+ 183:./rt_thread/src/components.c **** #if defined(__CC_ARM) || defined(__CLANG_ARM)
+ 184:./rt_thread/src/components.c ****     $Super$$main(); /* for ARMCC. */
+ 185:./rt_thread/src/components.c **** #elif defined(__ICCARM__) || defined(__GNUC__)
+ 186:./rt_thread/src/components.c ****     main();
+ 376              		.loc 1 186 5
+ 377 000c FFF7FEFF 		bl	main
+ 187:./rt_thread/src/components.c **** #endif
+ 188:./rt_thread/src/components.c **** }
+ 378              		.loc 1 188 1
+ 379 0010 00BF     		nop
+ 380 0012 0837     		adds	r7, r7, #8
+ 381              	.LCFI31:
+ 382              		.cfi_def_cfa_offset 8
+ 383 0014 BD46     		mov	sp, r7
+ 384              	.LCFI32:
+ 385              		.cfi_def_cfa_register 13
+ 386              		@ sp needed
+ 387 0016 80BD     		pop	{r7, pc}
+ 388              		.cfi_endproc
+ 389              	.LFE22:
+ 391              		.section	.rodata
+ 392              		.align	2
+ 393              	.LC0:
+ 394 0000 6D61696E 		.ascii	"main\000"
+ 394      00
+ 395              		.section	.text.rt_application_init,"ax",%progbits
+ 396              		.align	1
+ 397              		.global	rt_application_init
+ 398              		.syntax unified
+ 399              		.thumb
+ 400              		.thumb_func
+ 402              	rt_application_init:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 11
+
+
+ 403              	.LFB23:
+ 189:./rt_thread/src/components.c **** 
+ 190:./rt_thread/src/components.c **** void rt_application_init(void)
+ 191:./rt_thread/src/components.c **** {
+ 404              		.loc 1 191 1
+ 405              		.cfi_startproc
+ 406              		@ args = 0, pretend = 0, frame = 8
+ 407              		@ frame_needed = 1, uses_anonymous_args = 0
+ 408 0000 80B5     		push	{r7, lr}
+ 409              	.LCFI33:
+ 410              		.cfi_def_cfa_offset 8
+ 411              		.cfi_offset 7, -8
+ 412              		.cfi_offset 14, -4
+ 413 0002 84B0     		sub	sp, sp, #16
+ 414              	.LCFI34:
+ 415              		.cfi_def_cfa_offset 24
+ 416 0004 02AF     		add	r7, sp, #8
+ 417              	.LCFI35:
+ 418              		.cfi_def_cfa 7, 16
+ 192:./rt_thread/src/components.c ****     rt_thread_t tid;
+ 193:./rt_thread/src/components.c **** 
+ 194:./rt_thread/src/components.c **** #ifdef RT_USING_HEAP
+ 195:./rt_thread/src/components.c ****     tid = rt_thread_create("main", main_thread_entry, RT_NULL,
+ 419              		.loc 1 195 11
+ 420 0006 1423     		movs	r3, #20
+ 421 0008 0193     		str	r3, [sp, #4]
+ 422 000a 0223     		movs	r3, #2
+ 423 000c 0093     		str	r3, [sp]
+ 424 000e 4FF40073 		mov	r3, #512
+ 425 0012 0022     		movs	r2, #0
+ 426 0014 0549     		ldr	r1, .L23
+ 427 0016 0648     		ldr	r0, .L23+4
+ 428 0018 FFF7FEFF 		bl	rt_thread_create
+ 429 001c 7860     		str	r0, [r7, #4]
+ 196:./rt_thread/src/components.c ****                            RT_MAIN_THREAD_STACK_SIZE, RT_MAIN_THREAD_PRIORITY, 20);
+ 197:./rt_thread/src/components.c ****     RT_ASSERT(tid != RT_NULL);
+ 198:./rt_thread/src/components.c **** #else
+ 199:./rt_thread/src/components.c ****     rt_err_t result;
+ 200:./rt_thread/src/components.c **** 
+ 201:./rt_thread/src/components.c ****     tid = &main_thread;
+ 202:./rt_thread/src/components.c ****     result = rt_thread_init(tid, "main", main_thread_entry, RT_NULL,
+ 203:./rt_thread/src/components.c ****                             main_stack, sizeof(main_stack), RT_MAIN_THREAD_PRIORITY, 20);
+ 204:./rt_thread/src/components.c ****     RT_ASSERT(result == RT_EOK);
+ 205:./rt_thread/src/components.c **** 
+ 206:./rt_thread/src/components.c ****     /* if not define RT_USING_HEAP, using to eliminate the warning */
+ 207:./rt_thread/src/components.c ****     (void)result;
+ 208:./rt_thread/src/components.c **** #endif
+ 209:./rt_thread/src/components.c **** 
+ 210:./rt_thread/src/components.c ****     rt_thread_startup(tid);
+ 430              		.loc 1 210 5
+ 431 001e 7868     		ldr	r0, [r7, #4]
+ 432 0020 FFF7FEFF 		bl	rt_thread_startup
+ 211:./rt_thread/src/components.c **** }
+ 433              		.loc 1 211 1
+ 434 0024 00BF     		nop
+ 435 0026 0837     		adds	r7, r7, #8
+ 436              	.LCFI36:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 12
+
+
+ 437              		.cfi_def_cfa_offset 8
+ 438 0028 BD46     		mov	sp, r7
+ 439              	.LCFI37:
+ 440              		.cfi_def_cfa_register 13
+ 441              		@ sp needed
+ 442 002a 80BD     		pop	{r7, pc}
+ 443              	.L24:
+ 444              		.align	2
+ 445              	.L23:
+ 446 002c 00000000 		.word	main_thread_entry
+ 447 0030 00000000 		.word	.LC0
+ 448              		.cfi_endproc
+ 449              	.LFE23:
+ 451              		.section	.text.rtthread_startup,"ax",%progbits
+ 452              		.align	1
+ 453              		.global	rtthread_startup
+ 454              		.syntax unified
+ 455              		.thumb
+ 456              		.thumb_func
+ 458              	rtthread_startup:
+ 459              	.LFB24:
+ 212:./rt_thread/src/components.c **** 
+ 213:./rt_thread/src/components.c **** int rtthread_startup(void)
+ 214:./rt_thread/src/components.c **** {
+ 460              		.loc 1 214 1
+ 461              		.cfi_startproc
+ 462              		@ args = 0, pretend = 0, frame = 0
+ 463              		@ frame_needed = 1, uses_anonymous_args = 0
+ 464 0000 80B5     		push	{r7, lr}
+ 465              	.LCFI38:
+ 466              		.cfi_def_cfa_offset 8
+ 467              		.cfi_offset 7, -8
+ 468              		.cfi_offset 14, -4
+ 469 0002 00AF     		add	r7, sp, #0
+ 470              	.LCFI39:
+ 471              		.cfi_def_cfa_register 7
+ 215:./rt_thread/src/components.c ****     rt_hw_interrupt_disable();
+ 472              		.loc 1 215 5
+ 473 0004 FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 216:./rt_thread/src/components.c **** 
+ 217:./rt_thread/src/components.c ****     /* board level initialization
+ 218:./rt_thread/src/components.c ****      * NOTE: please initialize heap inside board initialization.
+ 219:./rt_thread/src/components.c ****      */
+ 220:./rt_thread/src/components.c ****     rt_hw_board_init();
+ 474              		.loc 1 220 5
+ 475 0008 FFF7FEFF 		bl	rt_hw_board_init
+ 221:./rt_thread/src/components.c **** 
+ 222:./rt_thread/src/components.c ****     /* show RT-Thread version */
+ 223:./rt_thread/src/components.c ****     rt_show_version();
+ 476              		.loc 1 223 5
+ 477 000c FFF7FEFF 		bl	rt_show_version
+ 224:./rt_thread/src/components.c **** 
+ 225:./rt_thread/src/components.c ****     /* timer system initialization */
+ 226:./rt_thread/src/components.c ****     rt_system_timer_init();
+ 478              		.loc 1 226 5
+ 479 0010 FFF7FEFF 		bl	rt_system_timer_init
+ 227:./rt_thread/src/components.c **** 
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 13
+
+
+ 228:./rt_thread/src/components.c ****     /* scheduler system initialization */
+ 229:./rt_thread/src/components.c ****     rt_system_scheduler_init();
+ 480              		.loc 1 229 5
+ 481 0014 FFF7FEFF 		bl	rt_system_scheduler_init
+ 230:./rt_thread/src/components.c **** 
+ 231:./rt_thread/src/components.c ****     /* create init_thread */
+ 232:./rt_thread/src/components.c ****     rt_application_init();
+ 482              		.loc 1 232 5
+ 483 0018 FFF7FEFF 		bl	rt_application_init
+ 233:./rt_thread/src/components.c **** 
+ 234:./rt_thread/src/components.c ****     /* timer thread initialization */
+ 235:./rt_thread/src/components.c ****     rt_system_timer_thread_init();
+ 484              		.loc 1 235 5
+ 485 001c FFF7FEFF 		bl	rt_system_timer_thread_init
+ 236:./rt_thread/src/components.c **** 
+ 237:./rt_thread/src/components.c ****     /* idle thread initialization */
+ 238:./rt_thread/src/components.c ****     rt_thread_idle_init();
+ 486              		.loc 1 238 5
+ 487 0020 FFF7FEFF 		bl	rt_thread_idle_init
+ 239:./rt_thread/src/components.c **** 
+ 240:./rt_thread/src/components.c ****     /* start scheduler */
+ 241:./rt_thread/src/components.c ****     rt_system_scheduler_start();
+ 488              		.loc 1 241 5
+ 489 0024 FFF7FEFF 		bl	rt_system_scheduler_start
+ 242:./rt_thread/src/components.c **** 
+ 243:./rt_thread/src/components.c ****     /* never reach here */
+ 244:./rt_thread/src/components.c ****     return 0;
+ 490              		.loc 1 244 12
+ 491 0028 0023     		movs	r3, #0
+ 245:./rt_thread/src/components.c **** }
+ 492              		.loc 1 245 1
+ 493 002a 1846     		mov	r0, r3
+ 494 002c 80BD     		pop	{r7, pc}
+ 495              		.cfi_endproc
+ 496              	.LFE24:
+ 498              		.text
+ 499              	.Letext0:
+ 500              		.file 2 "./rt_thread/include/rtdef.h"
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 components.c
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:18     .text.rti_start:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:23     .text.rti_start:00000000 rti_start
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:59     .rti_fn.0:00000000 __rt_init_rti_start
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:56     .rti_fn.0:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:62     .text.rti_board_start:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:67     .text.rti_board_start:00000000 rti_board_start
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:102    .rti_fn.0.end:00000000 __rt_init_rti_board_start
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:99     .rti_fn.0.end:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:105    .text.rti_board_end:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:110    .text.rti_board_end:00000000 rti_board_end
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:145    .rti_fn.1.end:00000000 __rt_init_rti_board_end
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:142    .rti_fn.1.end:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:148    .text.rti_end:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:153    .text.rti_end:00000000 rti_end
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:188    .rti_fn.6.end:00000000 __rt_init_rti_end
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:185    .rti_fn.6.end:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:191    .text.rt_components_board_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:197    .text.rt_components_board_init:00000000 rt_components_board_init
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:249    .text.rt_components_board_init:0000002c $d
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:255    .text.rt_components_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:261    .text.rt_components_init:00000000 rt_components_init
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:313    .text.rt_components_init:0000002c $d
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:319    .text.entry:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:325    .text.entry:00000000 entry
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:458    .text.rtthread_startup:00000000 rtthread_startup
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:350    .text.main_thread_entry:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:356    .text.main_thread_entry:00000000 main_thread_entry
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:392    .rodata:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:396    .text.rt_application_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:402    .text.rt_application_init:00000000 rt_application_init
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:446    .text.rt_application_init:0000002c $d
+C:\Users\hao\AppData\Local\Temp\ccSyyCIb.s:452    .text.rtthread_startup:00000000 $t
+
+UNDEFINED SYMBOLS
+main
+rt_thread_create
+rt_thread_startup
+rt_hw_interrupt_disable
+rt_hw_board_init
+rt_show_version
+rt_system_timer_init
+rt_system_scheduler_init
+rt_system_timer_thread_init
+rt_thread_idle_init
+rt_system_scheduler_start

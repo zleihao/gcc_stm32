@@ -1,0 +1,1801 @@
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"object.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.rt_list_insert_after,"ax",%progbits
+  18              		.align	1
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  23              	rt_list_insert_after:
+  24              	.LFB1:
+  25              		.file 1 "./rt_thread/include/rtservice.h"
+   1:./rt_thread/include/rtservice.h **** /*
+   2:./rt_thread/include/rtservice.h ****  * Copyright (c) 2006-2021, RT-Thread Development Team
+   3:./rt_thread/include/rtservice.h ****  *
+   4:./rt_thread/include/rtservice.h ****  * SPDX-License-Identifier: Apache-2.0
+   5:./rt_thread/include/rtservice.h ****  *
+   6:./rt_thread/include/rtservice.h ****  * Change Logs:
+   7:./rt_thread/include/rtservice.h ****  * Date           Author       Notes
+   8:./rt_thread/include/rtservice.h ****  * 2006-03-16     Bernard      the first version
+   9:./rt_thread/include/rtservice.h ****  * 2006-09-07     Bernard      move the kservice APIs to rtthread.h
+  10:./rt_thread/include/rtservice.h ****  * 2007-06-27     Bernard      fix the rt_list_remove bug
+  11:./rt_thread/include/rtservice.h ****  * 2012-03-22     Bernard      rename kservice.h to rtservice.h
+  12:./rt_thread/include/rtservice.h ****  * 2017-11-15     JasonJia     Modify rt_slist_foreach to rt_slist_for_each_entry.
+  13:./rt_thread/include/rtservice.h ****  *                             Make code cleanup.
+  14:./rt_thread/include/rtservice.h ****  */
+  15:./rt_thread/include/rtservice.h **** 
+  16:./rt_thread/include/rtservice.h **** #ifndef __RT_SERVICE_H__
+  17:./rt_thread/include/rtservice.h **** #define __RT_SERVICE_H__
+  18:./rt_thread/include/rtservice.h **** 
+  19:./rt_thread/include/rtservice.h **** #ifdef __cplusplus
+  20:./rt_thread/include/rtservice.h **** extern "C" {
+  21:./rt_thread/include/rtservice.h **** #endif
+  22:./rt_thread/include/rtservice.h **** 
+  23:./rt_thread/include/rtservice.h **** /**
+  24:./rt_thread/include/rtservice.h ****  * @addtogroup KernelService
+  25:./rt_thread/include/rtservice.h ****  */
+  26:./rt_thread/include/rtservice.h **** 
+  27:./rt_thread/include/rtservice.h **** /**@{*/
+  28:./rt_thread/include/rtservice.h **** 
+  29:./rt_thread/include/rtservice.h **** /**
+  30:./rt_thread/include/rtservice.h ****  * rt_container_of - return the member address of ptr, if the type of ptr is the
+  31:./rt_thread/include/rtservice.h ****  * struct type.
+  32:./rt_thread/include/rtservice.h ****  */
+  33:./rt_thread/include/rtservice.h **** #define rt_container_of(ptr, type, member) \
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 2
+
+
+  34:./rt_thread/include/rtservice.h ****     ((type *)((char *)(ptr) - (unsigned long)(&((type *)0)->member)))
+  35:./rt_thread/include/rtservice.h **** 
+  36:./rt_thread/include/rtservice.h **** 
+  37:./rt_thread/include/rtservice.h **** /**
+  38:./rt_thread/include/rtservice.h ****  * @brief initialize a list object
+  39:./rt_thread/include/rtservice.h ****  */
+  40:./rt_thread/include/rtservice.h **** #define RT_LIST_OBJECT_INIT(object) { &(object), &(object) }
+  41:./rt_thread/include/rtservice.h **** 
+  42:./rt_thread/include/rtservice.h **** /**
+  43:./rt_thread/include/rtservice.h ****  * @brief initialize a list
+  44:./rt_thread/include/rtservice.h ****  *
+  45:./rt_thread/include/rtservice.h ****  * @param l list to be initialized
+  46:./rt_thread/include/rtservice.h ****  */
+  47:./rt_thread/include/rtservice.h **** rt_inline void rt_list_init(rt_list_t *l)
+  48:./rt_thread/include/rtservice.h **** {
+  49:./rt_thread/include/rtservice.h ****     l->next = l->prev = l;
+  50:./rt_thread/include/rtservice.h **** }
+  51:./rt_thread/include/rtservice.h **** 
+  52:./rt_thread/include/rtservice.h **** /**
+  53:./rt_thread/include/rtservice.h ****  * @brief insert a node after a list
+  54:./rt_thread/include/rtservice.h ****  *
+  55:./rt_thread/include/rtservice.h ****  * @param l list to insert it
+  56:./rt_thread/include/rtservice.h ****  * @param n new node to be inserted
+  57:./rt_thread/include/rtservice.h ****  */
+  58:./rt_thread/include/rtservice.h **** rt_inline void rt_list_insert_after(rt_list_t *l, rt_list_t *n)
+  59:./rt_thread/include/rtservice.h **** {
+  26              		.loc 1 59 1
+  27              		.cfi_startproc
+  28              		@ args = 0, pretend = 0, frame = 8
+  29              		@ frame_needed = 1, uses_anonymous_args = 0
+  30              		@ link register save eliminated.
+  31 0000 80B4     		push	{r7}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 4
+  34              		.cfi_offset 7, -4
+  35 0002 83B0     		sub	sp, sp, #12
+  36              	.LCFI1:
+  37              		.cfi_def_cfa_offset 16
+  38 0004 00AF     		add	r7, sp, #0
+  39              	.LCFI2:
+  40              		.cfi_def_cfa_register 7
+  41 0006 7860     		str	r0, [r7, #4]
+  42 0008 3960     		str	r1, [r7]
+  60:./rt_thread/include/rtservice.h ****     l->next->prev = n;
+  43              		.loc 1 60 6
+  44 000a 7B68     		ldr	r3, [r7, #4]
+  45 000c 1B68     		ldr	r3, [r3]
+  46              		.loc 1 60 19
+  47 000e 3A68     		ldr	r2, [r7]
+  48 0010 5A60     		str	r2, [r3, #4]
+  61:./rt_thread/include/rtservice.h ****     n->next = l->next;
+  49              		.loc 1 61 16
+  50 0012 7B68     		ldr	r3, [r7, #4]
+  51 0014 1A68     		ldr	r2, [r3]
+  52              		.loc 1 61 13
+  53 0016 3B68     		ldr	r3, [r7]
+  54 0018 1A60     		str	r2, [r3]
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 3
+
+
+  62:./rt_thread/include/rtservice.h **** 
+  63:./rt_thread/include/rtservice.h ****     l->next = n;
+  55              		.loc 1 63 13
+  56 001a 7B68     		ldr	r3, [r7, #4]
+  57 001c 3A68     		ldr	r2, [r7]
+  58 001e 1A60     		str	r2, [r3]
+  64:./rt_thread/include/rtservice.h ****     n->prev = l;
+  59              		.loc 1 64 13
+  60 0020 3B68     		ldr	r3, [r7]
+  61 0022 7A68     		ldr	r2, [r7, #4]
+  62 0024 5A60     		str	r2, [r3, #4]
+  65:./rt_thread/include/rtservice.h **** }
+  63              		.loc 1 65 1
+  64 0026 00BF     		nop
+  65 0028 0C37     		adds	r7, r7, #12
+  66              	.LCFI3:
+  67              		.cfi_def_cfa_offset 4
+  68 002a BD46     		mov	sp, r7
+  69              	.LCFI4:
+  70              		.cfi_def_cfa_register 13
+  71              		@ sp needed
+  72 002c 80BC     		pop	{r7}
+  73              	.LCFI5:
+  74              		.cfi_restore 7
+  75              		.cfi_def_cfa_offset 0
+  76 002e 7047     		bx	lr
+  77              		.cfi_endproc
+  78              	.LFE1:
+  80              		.section	.text.rt_list_remove,"ax",%progbits
+  81              		.align	1
+  82              		.syntax unified
+  83              		.thumb
+  84              		.thumb_func
+  86              	rt_list_remove:
+  87              	.LFB3:
+  66:./rt_thread/include/rtservice.h **** 
+  67:./rt_thread/include/rtservice.h **** /**
+  68:./rt_thread/include/rtservice.h ****  * @brief insert a node before a list
+  69:./rt_thread/include/rtservice.h ****  *
+  70:./rt_thread/include/rtservice.h ****  * @param n new node to be inserted
+  71:./rt_thread/include/rtservice.h ****  * @param l list to insert it
+  72:./rt_thread/include/rtservice.h ****  */
+  73:./rt_thread/include/rtservice.h **** rt_inline void rt_list_insert_before(rt_list_t *l, rt_list_t *n)
+  74:./rt_thread/include/rtservice.h **** {
+  75:./rt_thread/include/rtservice.h ****     l->prev->next = n;
+  76:./rt_thread/include/rtservice.h ****     n->prev = l->prev;
+  77:./rt_thread/include/rtservice.h **** 
+  78:./rt_thread/include/rtservice.h ****     l->prev = n;
+  79:./rt_thread/include/rtservice.h ****     n->next = l;
+  80:./rt_thread/include/rtservice.h **** }
+  81:./rt_thread/include/rtservice.h **** 
+  82:./rt_thread/include/rtservice.h **** /**
+  83:./rt_thread/include/rtservice.h ****  * @brief remove node from list.
+  84:./rt_thread/include/rtservice.h ****  * @param n the node to remove from the list.
+  85:./rt_thread/include/rtservice.h ****  */
+  86:./rt_thread/include/rtservice.h **** rt_inline void rt_list_remove(rt_list_t *n)
+  87:./rt_thread/include/rtservice.h **** {
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 4
+
+
+  88              		.loc 1 87 1
+  89              		.cfi_startproc
+  90              		@ args = 0, pretend = 0, frame = 8
+  91              		@ frame_needed = 1, uses_anonymous_args = 0
+  92              		@ link register save eliminated.
+  93 0000 80B4     		push	{r7}
+  94              	.LCFI6:
+  95              		.cfi_def_cfa_offset 4
+  96              		.cfi_offset 7, -4
+  97 0002 83B0     		sub	sp, sp, #12
+  98              	.LCFI7:
+  99              		.cfi_def_cfa_offset 16
+ 100 0004 00AF     		add	r7, sp, #0
+ 101              	.LCFI8:
+ 102              		.cfi_def_cfa_register 7
+ 103 0006 7860     		str	r0, [r7, #4]
+  88:./rt_thread/include/rtservice.h ****     n->next->prev = n->prev;
+ 104              		.loc 1 88 6
+ 105 0008 7B68     		ldr	r3, [r7, #4]
+ 106 000a 1B68     		ldr	r3, [r3]
+ 107              		.loc 1 88 22
+ 108 000c 7A68     		ldr	r2, [r7, #4]
+ 109 000e 5268     		ldr	r2, [r2, #4]
+ 110              		.loc 1 88 19
+ 111 0010 5A60     		str	r2, [r3, #4]
+  89:./rt_thread/include/rtservice.h ****     n->prev->next = n->next;
+ 112              		.loc 1 89 6
+ 113 0012 7B68     		ldr	r3, [r7, #4]
+ 114 0014 5B68     		ldr	r3, [r3, #4]
+ 115              		.loc 1 89 22
+ 116 0016 7A68     		ldr	r2, [r7, #4]
+ 117 0018 1268     		ldr	r2, [r2]
+ 118              		.loc 1 89 19
+ 119 001a 1A60     		str	r2, [r3]
+  90:./rt_thread/include/rtservice.h **** 
+  91:./rt_thread/include/rtservice.h ****     n->next = n->prev = n;
+ 120              		.loc 1 91 23
+ 121 001c 7B68     		ldr	r3, [r7, #4]
+ 122 001e 7A68     		ldr	r2, [r7, #4]
+ 123 0020 5A60     		str	r2, [r3, #4]
+ 124              		.loc 1 91 16
+ 125 0022 7B68     		ldr	r3, [r7, #4]
+ 126 0024 5A68     		ldr	r2, [r3, #4]
+ 127              		.loc 1 91 13
+ 128 0026 7B68     		ldr	r3, [r7, #4]
+ 129 0028 1A60     		str	r2, [r3]
+  92:./rt_thread/include/rtservice.h **** }
+ 130              		.loc 1 92 1
+ 131 002a 00BF     		nop
+ 132 002c 0C37     		adds	r7, r7, #12
+ 133              	.LCFI9:
+ 134              		.cfi_def_cfa_offset 4
+ 135 002e BD46     		mov	sp, r7
+ 136              	.LCFI10:
+ 137              		.cfi_def_cfa_register 13
+ 138              		@ sp needed
+ 139 0030 80BC     		pop	{r7}
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 5
+
+
+ 140              	.LCFI11:
+ 141              		.cfi_restore 7
+ 142              		.cfi_def_cfa_offset 0
+ 143 0032 7047     		bx	lr
+ 144              		.cfi_endproc
+ 145              	.LFE3:
+ 147              		.section	.data.rt_object_container,"aw"
+ 148              		.align	2
+ 151              	rt_object_container:
+ 152 0000 01       		.byte	1
+ 153 0001 000000   		.space	3
+ 154 0004 04000000 		.word	rt_object_container+4
+ 155 0008 04000000 		.word	rt_object_container+4
+ 156 000c 78000000 		.word	120
+ 157 0010 02       		.byte	2
+ 158 0011 000000   		.space	3
+ 159 0014 14000000 		.word	rt_object_container+20
+ 160 0018 14000000 		.word	rt_object_container+20
+ 161 001c 20000000 		.word	32
+ 162 0020 05       		.byte	5
+ 163 0021 000000   		.space	3
+ 164 0024 24000000 		.word	rt_object_container+36
+ 165 0028 24000000 		.word	rt_object_container+36
+ 166 002c 30000000 		.word	48
+ 167 0030 0A       		.byte	10
+ 168 0031 000000   		.space	3
+ 169 0034 34000000 		.word	rt_object_container+52
+ 170 0038 34000000 		.word	rt_object_container+52
+ 171 003c 2C000000 		.word	44
+ 172              		.section	.text.rt_system_object_init,"ax",%progbits
+ 173              		.align	1
+ 174              		.global	rt_system_object_init
+ 175              		.syntax unified
+ 176              		.thumb
+ 177              		.thumb_func
+ 179              	rt_system_object_init:
+ 180              	.LFB15:
+ 181              		.file 2 "./rt_thread/src/object.c"
+   1:./rt_thread/src/object.c **** /*
+   2:./rt_thread/src/object.c ****  * Copyright (c) 2006-2021, RT-Thread Development Team
+   3:./rt_thread/src/object.c ****  *
+   4:./rt_thread/src/object.c ****  * SPDX-License-Identifier: Apache-2.0
+   5:./rt_thread/src/object.c ****  *
+   6:./rt_thread/src/object.c ****  * Change Logs:
+   7:./rt_thread/src/object.c ****  * Date           Author       Notes
+   8:./rt_thread/src/object.c ****  * 2006-03-14     Bernard      the first version
+   9:./rt_thread/src/object.c ****  * 2006-04-21     Bernard      change the scheduler lock to interrupt lock
+  10:./rt_thread/src/object.c ****  * 2006-05-18     Bernard      fix the object init bug
+  11:./rt_thread/src/object.c ****  * 2006-08-03     Bernard      add hook support
+  12:./rt_thread/src/object.c ****  * 2007-01-28     Bernard      rename RT_OBJECT_Class_Static to RT_Object_Class_Static
+  13:./rt_thread/src/object.c ****  * 2010-10-26     yi.qiu       add module support in rt_object_allocate and rt_object_free
+  14:./rt_thread/src/object.c ****  * 2017-12-10     Bernard      Add object_info enum.
+  15:./rt_thread/src/object.c ****  * 2018-01-25     Bernard      Fix the object find issue when enable MODULE.
+  16:./rt_thread/src/object.c ****  */
+  17:./rt_thread/src/object.c **** 
+  18:./rt_thread/src/object.c **** #include <rtthread.h>
+  19:./rt_thread/src/object.c **** #include <rthw.h>
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 6
+
+
+  20:./rt_thread/src/object.c **** 
+  21:./rt_thread/src/object.c **** /*
+  22:./rt_thread/src/object.c ****  * define object_info for the number of rt_object_container items.
+  23:./rt_thread/src/object.c ****  */
+  24:./rt_thread/src/object.c **** enum rt_object_info_type
+  25:./rt_thread/src/object.c **** {
+  26:./rt_thread/src/object.c ****     RT_Object_Info_Thread = 0,                         /**< The object is a thread. */
+  27:./rt_thread/src/object.c **** #ifdef RT_USING_SEMAPHORE
+  28:./rt_thread/src/object.c ****     RT_Object_Info_Semaphore,                          /**< The object is a semaphore. */
+  29:./rt_thread/src/object.c **** #endif
+  30:./rt_thread/src/object.c **** #ifdef RT_USING_MUTEX
+  31:./rt_thread/src/object.c ****     RT_Object_Info_Mutex,                              /**< The object is a mutex. */
+  32:./rt_thread/src/object.c **** #endif
+  33:./rt_thread/src/object.c **** #ifdef RT_USING_EVENT
+  34:./rt_thread/src/object.c ****     RT_Object_Info_Event,                              /**< The object is a event. */
+  35:./rt_thread/src/object.c **** #endif
+  36:./rt_thread/src/object.c **** #ifdef RT_USING_MAILBOX
+  37:./rt_thread/src/object.c ****     RT_Object_Info_MailBox,                            /**< The object is a mail box. */
+  38:./rt_thread/src/object.c **** #endif
+  39:./rt_thread/src/object.c **** #ifdef RT_USING_MESSAGEQUEUE
+  40:./rt_thread/src/object.c ****     RT_Object_Info_MessageQueue,                       /**< The object is a message queue. */
+  41:./rt_thread/src/object.c **** #endif
+  42:./rt_thread/src/object.c **** #ifdef RT_USING_MEMHEAP
+  43:./rt_thread/src/object.c ****     RT_Object_Info_MemHeap,                            /**< The object is a memory heap */
+  44:./rt_thread/src/object.c **** #endif
+  45:./rt_thread/src/object.c **** #ifdef RT_USING_MEMPOOL
+  46:./rt_thread/src/object.c ****     RT_Object_Info_MemPool,                            /**< The object is a memory pool. */
+  47:./rt_thread/src/object.c **** #endif
+  48:./rt_thread/src/object.c **** #ifdef RT_USING_DEVICE
+  49:./rt_thread/src/object.c ****     RT_Object_Info_Device,                             /**< The object is a device */
+  50:./rt_thread/src/object.c **** #endif
+  51:./rt_thread/src/object.c ****     RT_Object_Info_Timer,                              /**< The object is a timer. */
+  52:./rt_thread/src/object.c ****     RT_Object_Info_Unknown,                            /**< The object is unknown. */
+  53:./rt_thread/src/object.c **** };
+  54:./rt_thread/src/object.c **** 
+  55:./rt_thread/src/object.c **** #define _OBJ_CONTAINER_LIST_INIT(c)     \
+  56:./rt_thread/src/object.c ****     {&(rt_object_container[c].object_list), &(rt_object_container[c].object_list)}
+  57:./rt_thread/src/object.c **** static struct rt_object_information rt_object_container[RT_Object_Info_Unknown] =
+  58:./rt_thread/src/object.c **** {
+  59:./rt_thread/src/object.c ****     /* initialize object container - thread */
+  60:./rt_thread/src/object.c ****     {RT_Object_Class_Thread, _OBJ_CONTAINER_LIST_INIT(RT_Object_Info_Thread), sizeof(struct rt_thre
+  61:./rt_thread/src/object.c **** #ifdef RT_USING_SEMAPHORE
+  62:./rt_thread/src/object.c ****     /* initialize object container - semaphore */
+  63:./rt_thread/src/object.c ****     {RT_Object_Class_Semaphore, _OBJ_CONTAINER_LIST_INIT(RT_Object_Info_Semaphore), sizeof(struct r
+  64:./rt_thread/src/object.c **** #endif
+  65:./rt_thread/src/object.c **** #ifdef RT_USING_MUTEX
+  66:./rt_thread/src/object.c ****     /* initialize object container - mutex */
+  67:./rt_thread/src/object.c ****     {RT_Object_Class_Mutex, _OBJ_CONTAINER_LIST_INIT(RT_Object_Info_Mutex), sizeof(struct rt_mutex)
+  68:./rt_thread/src/object.c **** #endif
+  69:./rt_thread/src/object.c **** #ifdef RT_USING_EVENT
+  70:./rt_thread/src/object.c ****     /* initialize object container - event */
+  71:./rt_thread/src/object.c ****     {RT_Object_Class_Event, _OBJ_CONTAINER_LIST_INIT(RT_Object_Info_Event), sizeof(struct rt_event)
+  72:./rt_thread/src/object.c **** #endif
+  73:./rt_thread/src/object.c **** #ifdef RT_USING_MAILBOX
+  74:./rt_thread/src/object.c ****     /* initialize object container - mailbox */
+  75:./rt_thread/src/object.c ****     {RT_Object_Class_MailBox, _OBJ_CONTAINER_LIST_INIT(RT_Object_Info_MailBox), sizeof(struct rt_ma
+  76:./rt_thread/src/object.c **** #endif
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 7
+
+
+  77:./rt_thread/src/object.c **** #ifdef RT_USING_MESSAGEQUEUE
+  78:./rt_thread/src/object.c ****     /* initialize object container - message queue */
+  79:./rt_thread/src/object.c ****     {RT_Object_Class_MessageQueue, _OBJ_CONTAINER_LIST_INIT(RT_Object_Info_MessageQueue), sizeof(st
+  80:./rt_thread/src/object.c **** #endif
+  81:./rt_thread/src/object.c **** #ifdef RT_USING_MEMHEAP
+  82:./rt_thread/src/object.c ****     /* initialize object container - memory heap */
+  83:./rt_thread/src/object.c ****     {RT_Object_Class_MemHeap, _OBJ_CONTAINER_LIST_INIT(RT_Object_Info_MemHeap), sizeof(struct rt_me
+  84:./rt_thread/src/object.c **** #endif
+  85:./rt_thread/src/object.c **** #ifdef RT_USING_MEMPOOL
+  86:./rt_thread/src/object.c ****     /* initialize object container - memory pool */
+  87:./rt_thread/src/object.c ****     {RT_Object_Class_MemPool, _OBJ_CONTAINER_LIST_INIT(RT_Object_Info_MemPool), sizeof(struct rt_me
+  88:./rt_thread/src/object.c **** #endif
+  89:./rt_thread/src/object.c **** #ifdef RT_USING_DEVICE
+  90:./rt_thread/src/object.c ****     /* initialize object container - device */
+  91:./rt_thread/src/object.c ****     {RT_Object_Class_Device, _OBJ_CONTAINER_LIST_INIT(RT_Object_Info_Device), sizeof(struct rt_devi
+  92:./rt_thread/src/object.c **** #endif
+  93:./rt_thread/src/object.c ****     /* initialize object container - timer */
+  94:./rt_thread/src/object.c ****     {RT_Object_Class_Timer, _OBJ_CONTAINER_LIST_INIT(RT_Object_Info_Timer), sizeof(struct rt_timer)
+  95:./rt_thread/src/object.c **** };
+  96:./rt_thread/src/object.c **** 
+  97:./rt_thread/src/object.c **** #ifdef RT_USING_HOOK
+  98:./rt_thread/src/object.c **** static void (*rt_object_attach_hook)(struct rt_object *object);
+  99:./rt_thread/src/object.c **** static void (*rt_object_detach_hook)(struct rt_object *object);
+ 100:./rt_thread/src/object.c **** void (*rt_object_trytake_hook)(struct rt_object *object);
+ 101:./rt_thread/src/object.c **** void (*rt_object_take_hook)(struct rt_object *object);
+ 102:./rt_thread/src/object.c **** void (*rt_object_put_hook)(struct rt_object *object);
+ 103:./rt_thread/src/object.c **** 
+ 104:./rt_thread/src/object.c **** /**
+ 105:./rt_thread/src/object.c ****  * @addtogroup Hook
+ 106:./rt_thread/src/object.c ****  */
+ 107:./rt_thread/src/object.c **** 
+ 108:./rt_thread/src/object.c **** /**@{*/
+ 109:./rt_thread/src/object.c **** 
+ 110:./rt_thread/src/object.c **** /**
+ 111:./rt_thread/src/object.c ****  * This function will set a hook function, which will be invoked when object
+ 112:./rt_thread/src/object.c ****  * attaches to kernel object system.
+ 113:./rt_thread/src/object.c ****  *
+ 114:./rt_thread/src/object.c ****  * @param hook the hook function
+ 115:./rt_thread/src/object.c ****  */
+ 116:./rt_thread/src/object.c **** void rt_object_attach_sethook(void (*hook)(struct rt_object *object))
+ 117:./rt_thread/src/object.c **** {
+ 118:./rt_thread/src/object.c ****     rt_object_attach_hook = hook;
+ 119:./rt_thread/src/object.c **** }
+ 120:./rt_thread/src/object.c **** 
+ 121:./rt_thread/src/object.c **** /**
+ 122:./rt_thread/src/object.c ****  * This function will set a hook function, which will be invoked when object
+ 123:./rt_thread/src/object.c ****  * detaches from kernel object system.
+ 124:./rt_thread/src/object.c ****  *
+ 125:./rt_thread/src/object.c ****  * @param hook the hook function
+ 126:./rt_thread/src/object.c ****  */
+ 127:./rt_thread/src/object.c **** void rt_object_detach_sethook(void (*hook)(struct rt_object *object))
+ 128:./rt_thread/src/object.c **** {
+ 129:./rt_thread/src/object.c ****     rt_object_detach_hook = hook;
+ 130:./rt_thread/src/object.c **** }
+ 131:./rt_thread/src/object.c **** 
+ 132:./rt_thread/src/object.c **** /**
+ 133:./rt_thread/src/object.c ****  * This function will set a hook function, which will be invoked when object
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 8
+
+
+ 134:./rt_thread/src/object.c ****  * is taken from kernel object system.
+ 135:./rt_thread/src/object.c ****  *
+ 136:./rt_thread/src/object.c ****  * The object is taken means:
+ 137:./rt_thread/src/object.c ****  * semaphore - semaphore is taken by thread
+ 138:./rt_thread/src/object.c ****  * mutex - mutex is taken by thread
+ 139:./rt_thread/src/object.c ****  * event - event is received by thread
+ 140:./rt_thread/src/object.c ****  * mailbox - mail is received by thread
+ 141:./rt_thread/src/object.c ****  * message queue - message is received by thread
+ 142:./rt_thread/src/object.c ****  *
+ 143:./rt_thread/src/object.c ****  * @param hook the hook function
+ 144:./rt_thread/src/object.c ****  */
+ 145:./rt_thread/src/object.c **** void rt_object_trytake_sethook(void (*hook)(struct rt_object *object))
+ 146:./rt_thread/src/object.c **** {
+ 147:./rt_thread/src/object.c ****     rt_object_trytake_hook = hook;
+ 148:./rt_thread/src/object.c **** }
+ 149:./rt_thread/src/object.c **** 
+ 150:./rt_thread/src/object.c **** /**
+ 151:./rt_thread/src/object.c ****  * This function will set a hook function, which will be invoked when object
+ 152:./rt_thread/src/object.c ****  * have been taken from kernel object system.
+ 153:./rt_thread/src/object.c ****  *
+ 154:./rt_thread/src/object.c ****  * The object have been taken means:
+ 155:./rt_thread/src/object.c ****  * semaphore - semaphore have been taken by thread
+ 156:./rt_thread/src/object.c ****  * mutex - mutex have been taken by thread
+ 157:./rt_thread/src/object.c ****  * event - event have been received by thread
+ 158:./rt_thread/src/object.c ****  * mailbox - mail have been received by thread
+ 159:./rt_thread/src/object.c ****  * message queue - message have been received by thread
+ 160:./rt_thread/src/object.c ****  * timer - timer is started
+ 161:./rt_thread/src/object.c ****  *
+ 162:./rt_thread/src/object.c ****  * @param hook the hook function
+ 163:./rt_thread/src/object.c ****  */
+ 164:./rt_thread/src/object.c **** void rt_object_take_sethook(void (*hook)(struct rt_object *object))
+ 165:./rt_thread/src/object.c **** {
+ 166:./rt_thread/src/object.c ****     rt_object_take_hook = hook;
+ 167:./rt_thread/src/object.c **** }
+ 168:./rt_thread/src/object.c **** 
+ 169:./rt_thread/src/object.c **** /**
+ 170:./rt_thread/src/object.c ****  * This function will set a hook function, which will be invoked when object
+ 171:./rt_thread/src/object.c ****  * is put to kernel object system.
+ 172:./rt_thread/src/object.c ****  *
+ 173:./rt_thread/src/object.c ****  * @param hook the hook function
+ 174:./rt_thread/src/object.c ****  */
+ 175:./rt_thread/src/object.c **** void rt_object_put_sethook(void (*hook)(struct rt_object *object))
+ 176:./rt_thread/src/object.c **** {
+ 177:./rt_thread/src/object.c ****     rt_object_put_hook = hook;
+ 178:./rt_thread/src/object.c **** }
+ 179:./rt_thread/src/object.c **** 
+ 180:./rt_thread/src/object.c **** /**@}*/
+ 181:./rt_thread/src/object.c **** #endif
+ 182:./rt_thread/src/object.c **** 
+ 183:./rt_thread/src/object.c **** /**
+ 184:./rt_thread/src/object.c ****  * @ingroup SystemInit
+ 185:./rt_thread/src/object.c ****  *
+ 186:./rt_thread/src/object.c ****  * This function will initialize system object management.
+ 187:./rt_thread/src/object.c ****  *
+ 188:./rt_thread/src/object.c ****  * @deprecated since 0.3.0, this function does not need to be invoked
+ 189:./rt_thread/src/object.c ****  * in the system initialization.
+ 190:./rt_thread/src/object.c ****  */
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 9
+
+
+ 191:./rt_thread/src/object.c **** void rt_system_object_init(void)
+ 192:./rt_thread/src/object.c **** {
+ 182              		.loc 2 192 1
+ 183              		.cfi_startproc
+ 184              		@ args = 0, pretend = 0, frame = 0
+ 185              		@ frame_needed = 1, uses_anonymous_args = 0
+ 186              		@ link register save eliminated.
+ 187 0000 80B4     		push	{r7}
+ 188              	.LCFI12:
+ 189              		.cfi_def_cfa_offset 4
+ 190              		.cfi_offset 7, -4
+ 191 0002 00AF     		add	r7, sp, #0
+ 192              	.LCFI13:
+ 193              		.cfi_def_cfa_register 7
+ 193:./rt_thread/src/object.c **** }
+ 194              		.loc 2 193 1
+ 195 0004 00BF     		nop
+ 196 0006 BD46     		mov	sp, r7
+ 197              	.LCFI14:
+ 198              		.cfi_def_cfa_register 13
+ 199              		@ sp needed
+ 200 0008 80BC     		pop	{r7}
+ 201              	.LCFI15:
+ 202              		.cfi_restore 7
+ 203              		.cfi_def_cfa_offset 0
+ 204 000a 7047     		bx	lr
+ 205              		.cfi_endproc
+ 206              	.LFE15:
+ 208              		.section	.text.rt_object_get_information,"ax",%progbits
+ 209              		.align	1
+ 210              		.global	rt_object_get_information
+ 211              		.syntax unified
+ 212              		.thumb
+ 213              		.thumb_func
+ 215              	rt_object_get_information:
+ 216              	.LFB16:
+ 194:./rt_thread/src/object.c **** 
+ 195:./rt_thread/src/object.c **** /**
+ 196:./rt_thread/src/object.c ****  * @addtogroup KernelObject
+ 197:./rt_thread/src/object.c ****  */
+ 198:./rt_thread/src/object.c **** 
+ 199:./rt_thread/src/object.c **** /**@{*/
+ 200:./rt_thread/src/object.c **** 
+ 201:./rt_thread/src/object.c **** /**
+ 202:./rt_thread/src/object.c ****  * This function will return the specified type of object information.
+ 203:./rt_thread/src/object.c ****  *
+ 204:./rt_thread/src/object.c ****  * @param type the type of object, which can be
+ 205:./rt_thread/src/object.c ****  *             RT_Object_Class_Thread/Semaphore/Mutex... etc
+ 206:./rt_thread/src/object.c ****  *
+ 207:./rt_thread/src/object.c ****  * @return the object type information or RT_NULL
+ 208:./rt_thread/src/object.c ****  */
+ 209:./rt_thread/src/object.c **** struct rt_object_information *
+ 210:./rt_thread/src/object.c **** rt_object_get_information(enum rt_object_class_type type)
+ 211:./rt_thread/src/object.c **** {
+ 217              		.loc 2 211 1
+ 218              		.cfi_startproc
+ 219              		@ args = 0, pretend = 0, frame = 16
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 10
+
+
+ 220              		@ frame_needed = 1, uses_anonymous_args = 0
+ 221              		@ link register save eliminated.
+ 222 0000 80B4     		push	{r7}
+ 223              	.LCFI16:
+ 224              		.cfi_def_cfa_offset 4
+ 225              		.cfi_offset 7, -4
+ 226 0002 85B0     		sub	sp, sp, #20
+ 227              	.LCFI17:
+ 228              		.cfi_def_cfa_offset 24
+ 229 0004 00AF     		add	r7, sp, #0
+ 230              	.LCFI18:
+ 231              		.cfi_def_cfa_register 7
+ 232 0006 0346     		mov	r3, r0
+ 233 0008 FB71     		strb	r3, [r7, #7]
+ 212:./rt_thread/src/object.c ****     int index;
+ 213:./rt_thread/src/object.c **** 
+ 214:./rt_thread/src/object.c ****     for (index = 0; index < RT_Object_Info_Unknown; index ++)
+ 234              		.loc 2 214 16
+ 235 000a 0023     		movs	r3, #0
+ 236 000c FB60     		str	r3, [r7, #12]
+ 237              		.loc 2 214 5
+ 238 000e 0FE0     		b	.L5
+ 239              	.L8:
+ 215:./rt_thread/src/object.c ****         if (rt_object_container[index].type == type) return &rt_object_container[index];
+ 240              		.loc 2 215 39
+ 241 0010 0C4A     		ldr	r2, .L9
+ 242 0012 FB68     		ldr	r3, [r7, #12]
+ 243 0014 1B01     		lsls	r3, r3, #4
+ 244 0016 1344     		add	r3, r3, r2
+ 245 0018 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 246              		.loc 2 215 12
+ 247 001a FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 248 001c 9A42     		cmp	r2, r3
+ 249 001e 04D1     		bne	.L6
+ 250              		.loc 2 215 61 discriminator 1
+ 251 0020 FB68     		ldr	r3, [r7, #12]
+ 252 0022 1B01     		lsls	r3, r3, #4
+ 253 0024 074A     		ldr	r2, .L9
+ 254 0026 1344     		add	r3, r3, r2
+ 255 0028 06E0     		b	.L7
+ 256              	.L6:
+ 214:./rt_thread/src/object.c ****         if (rt_object_container[index].type == type) return &rt_object_container[index];
+ 257              		.loc 2 214 59 discriminator 2
+ 258 002a FB68     		ldr	r3, [r7, #12]
+ 259 002c 0133     		adds	r3, r3, #1
+ 260 002e FB60     		str	r3, [r7, #12]
+ 261              	.L5:
+ 214:./rt_thread/src/object.c ****         if (rt_object_container[index].type == type) return &rt_object_container[index];
+ 262              		.loc 2 214 5 discriminator 1
+ 263 0030 FB68     		ldr	r3, [r7, #12]
+ 264 0032 032B     		cmp	r3, #3
+ 265 0034 ECDD     		ble	.L8
+ 216:./rt_thread/src/object.c **** 
+ 217:./rt_thread/src/object.c ****     return RT_NULL;
+ 266              		.loc 2 217 12
+ 267 0036 0023     		movs	r3, #0
+ 268              	.L7:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 11
+
+
+ 218:./rt_thread/src/object.c **** }
+ 269              		.loc 2 218 1
+ 270 0038 1846     		mov	r0, r3
+ 271 003a 1437     		adds	r7, r7, #20
+ 272              	.LCFI19:
+ 273              		.cfi_def_cfa_offset 4
+ 274 003c BD46     		mov	sp, r7
+ 275              	.LCFI20:
+ 276              		.cfi_def_cfa_register 13
+ 277              		@ sp needed
+ 278 003e 80BC     		pop	{r7}
+ 279              	.LCFI21:
+ 280              		.cfi_restore 7
+ 281              		.cfi_def_cfa_offset 0
+ 282 0040 7047     		bx	lr
+ 283              	.L10:
+ 284 0042 00BF     		.align	2
+ 285              	.L9:
+ 286 0044 00000000 		.word	rt_object_container
+ 287              		.cfi_endproc
+ 288              	.LFE16:
+ 290              		.section	.text.rt_object_get_length,"ax",%progbits
+ 291              		.align	1
+ 292              		.global	rt_object_get_length
+ 293              		.syntax unified
+ 294              		.thumb
+ 295              		.thumb_func
+ 297              	rt_object_get_length:
+ 298              	.LFB17:
+ 219:./rt_thread/src/object.c **** 
+ 220:./rt_thread/src/object.c **** /**
+ 221:./rt_thread/src/object.c ****  * This function will return the length of object list in object container.
+ 222:./rt_thread/src/object.c ****  *
+ 223:./rt_thread/src/object.c ****  * @param type the type of object, which can be
+ 224:./rt_thread/src/object.c ****  *             RT_Object_Class_Thread/Semaphore/Mutex... etc
+ 225:./rt_thread/src/object.c ****  * @return the length of object list
+ 226:./rt_thread/src/object.c ****  */
+ 227:./rt_thread/src/object.c **** int rt_object_get_length(enum rt_object_class_type type)
+ 228:./rt_thread/src/object.c **** {
+ 299              		.loc 2 228 1
+ 300              		.cfi_startproc
+ 301              		@ args = 0, pretend = 0, frame = 24
+ 302              		@ frame_needed = 1, uses_anonymous_args = 0
+ 303 0000 80B5     		push	{r7, lr}
+ 304              	.LCFI22:
+ 305              		.cfi_def_cfa_offset 8
+ 306              		.cfi_offset 7, -8
+ 307              		.cfi_offset 14, -4
+ 308 0002 86B0     		sub	sp, sp, #24
+ 309              	.LCFI23:
+ 310              		.cfi_def_cfa_offset 32
+ 311 0004 00AF     		add	r7, sp, #0
+ 312              	.LCFI24:
+ 313              		.cfi_def_cfa_register 7
+ 314 0006 0346     		mov	r3, r0
+ 315 0008 FB71     		strb	r3, [r7, #7]
+ 229:./rt_thread/src/object.c ****     int count = 0;
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 12
+
+
+ 316              		.loc 2 229 9
+ 317 000a 0023     		movs	r3, #0
+ 318 000c 7B61     		str	r3, [r7, #20]
+ 230:./rt_thread/src/object.c ****     rt_ubase_t level;
+ 231:./rt_thread/src/object.c ****     struct rt_list_node *node = RT_NULL;
+ 319              		.loc 2 231 26
+ 320 000e 0023     		movs	r3, #0
+ 321 0010 3B61     		str	r3, [r7, #16]
+ 232:./rt_thread/src/object.c ****     struct rt_object_information *information = RT_NULL;
+ 322              		.loc 2 232 35
+ 323 0012 0023     		movs	r3, #0
+ 324 0014 FB60     		str	r3, [r7, #12]
+ 233:./rt_thread/src/object.c **** 
+ 234:./rt_thread/src/object.c ****     information = rt_object_get_information((enum rt_object_class_type)type);
+ 325              		.loc 2 234 19
+ 326 0016 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 327 0018 1846     		mov	r0, r3
+ 328 001a FFF7FEFF 		bl	rt_object_get_information
+ 329 001e F860     		str	r0, [r7, #12]
+ 235:./rt_thread/src/object.c ****     if (information == RT_NULL) return 0;
+ 330              		.loc 2 235 8
+ 331 0020 FB68     		ldr	r3, [r7, #12]
+ 332 0022 002B     		cmp	r3, #0
+ 333 0024 01D1     		bne	.L12
+ 334              		.loc 2 235 40 discriminator 1
+ 335 0026 0023     		movs	r3, #0
+ 336 0028 17E0     		b	.L13
+ 337              	.L12:
+ 236:./rt_thread/src/object.c **** 
+ 237:./rt_thread/src/object.c ****     level = rt_hw_interrupt_disable();
+ 338              		.loc 2 237 13
+ 339 002a FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 340 002e 0346     		mov	r3, r0
+ 341              		.loc 2 237 11
+ 342 0030 BB60     		str	r3, [r7, #8]
+ 238:./rt_thread/src/object.c ****     /* get the count of objects */
+ 239:./rt_thread/src/object.c ****     rt_list_for_each(node, &(information->object_list))
+ 343              		.loc 2 239 5
+ 344 0032 FB68     		ldr	r3, [r7, #12]
+ 345 0034 5B68     		ldr	r3, [r3, #4]
+ 346 0036 3B61     		str	r3, [r7, #16]
+ 347 0038 05E0     		b	.L14
+ 348              	.L15:
+ 240:./rt_thread/src/object.c ****     {
+ 241:./rt_thread/src/object.c ****         count ++;
+ 349              		.loc 2 241 15 discriminator 3
+ 350 003a 7B69     		ldr	r3, [r7, #20]
+ 351 003c 0133     		adds	r3, r3, #1
+ 352 003e 7B61     		str	r3, [r7, #20]
+ 239:./rt_thread/src/object.c ****     {
+ 353              		.loc 2 239 5 discriminator 3
+ 354 0040 3B69     		ldr	r3, [r7, #16]
+ 355 0042 1B68     		ldr	r3, [r3]
+ 356 0044 3B61     		str	r3, [r7, #16]
+ 357              	.L14:
+ 239:./rt_thread/src/object.c ****     {
+ 358              		.loc 2 239 5 is_stmt 0 discriminator 1
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 13
+
+
+ 359 0046 FB68     		ldr	r3, [r7, #12]
+ 360 0048 0433     		adds	r3, r3, #4
+ 361 004a 3A69     		ldr	r2, [r7, #16]
+ 362 004c 9A42     		cmp	r2, r3
+ 363 004e F4D1     		bne	.L15
+ 242:./rt_thread/src/object.c ****     }
+ 243:./rt_thread/src/object.c ****     rt_hw_interrupt_enable(level);
+ 364              		.loc 2 243 5 is_stmt 1
+ 365 0050 BB68     		ldr	r3, [r7, #8]
+ 366 0052 1846     		mov	r0, r3
+ 367 0054 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 244:./rt_thread/src/object.c **** 
+ 245:./rt_thread/src/object.c ****     return count;
+ 368              		.loc 2 245 12
+ 369 0058 7B69     		ldr	r3, [r7, #20]
+ 370              	.L13:
+ 246:./rt_thread/src/object.c **** }
+ 371              		.loc 2 246 1
+ 372 005a 1846     		mov	r0, r3
+ 373 005c 1837     		adds	r7, r7, #24
+ 374              	.LCFI25:
+ 375              		.cfi_def_cfa_offset 8
+ 376 005e BD46     		mov	sp, r7
+ 377              	.LCFI26:
+ 378              		.cfi_def_cfa_register 13
+ 379              		@ sp needed
+ 380 0060 80BD     		pop	{r7, pc}
+ 381              		.cfi_endproc
+ 382              	.LFE17:
+ 384              		.section	.text.rt_object_get_pointers,"ax",%progbits
+ 385              		.align	1
+ 386              		.global	rt_object_get_pointers
+ 387              		.syntax unified
+ 388              		.thumb
+ 389              		.thumb_func
+ 391              	rt_object_get_pointers:
+ 392              	.LFB18:
+ 247:./rt_thread/src/object.c **** 
+ 248:./rt_thread/src/object.c **** /**
+ 249:./rt_thread/src/object.c ****  * This function will copy the object pointer of the specified type,
+ 250:./rt_thread/src/object.c ****  * with the maximum size specified by maxlen.
+ 251:./rt_thread/src/object.c ****  *
+ 252:./rt_thread/src/object.c ****  * @param type the type of object, which can be
+ 253:./rt_thread/src/object.c ****  *             RT_Object_Class_Thread/Semaphore/Mutex... etc
+ 254:./rt_thread/src/object.c ****  * @param pointers the pointers will be saved to
+ 255:./rt_thread/src/object.c ****  * @param maxlen the maximum number of pointers can be saved
+ 256:./rt_thread/src/object.c ****  *
+ 257:./rt_thread/src/object.c ****  * @return the copied number of object pointers
+ 258:./rt_thread/src/object.c ****  */
+ 259:./rt_thread/src/object.c **** int rt_object_get_pointers(enum rt_object_class_type type, rt_object_t *pointers, int maxlen)
+ 260:./rt_thread/src/object.c **** {
+ 393              		.loc 2 260 1
+ 394              		.cfi_startproc
+ 395              		@ args = 0, pretend = 0, frame = 40
+ 396              		@ frame_needed = 1, uses_anonymous_args = 0
+ 397 0000 80B5     		push	{r7, lr}
+ 398              	.LCFI27:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 14
+
+
+ 399              		.cfi_def_cfa_offset 8
+ 400              		.cfi_offset 7, -8
+ 401              		.cfi_offset 14, -4
+ 402 0002 8AB0     		sub	sp, sp, #40
+ 403              	.LCFI28:
+ 404              		.cfi_def_cfa_offset 48
+ 405 0004 00AF     		add	r7, sp, #0
+ 406              	.LCFI29:
+ 407              		.cfi_def_cfa_register 7
+ 408 0006 0346     		mov	r3, r0
+ 409 0008 B960     		str	r1, [r7, #8]
+ 410 000a 7A60     		str	r2, [r7, #4]
+ 411 000c FB73     		strb	r3, [r7, #15]
+ 261:./rt_thread/src/object.c ****     int index = 0;
+ 412              		.loc 2 261 9
+ 413 000e 0023     		movs	r3, #0
+ 414 0010 7B62     		str	r3, [r7, #36]
+ 262:./rt_thread/src/object.c ****     rt_ubase_t level;
+ 263:./rt_thread/src/object.c **** 
+ 264:./rt_thread/src/object.c ****     struct rt_object *object;
+ 265:./rt_thread/src/object.c ****     struct rt_list_node *node = RT_NULL;
+ 415              		.loc 2 265 26
+ 416 0012 0023     		movs	r3, #0
+ 417 0014 3B62     		str	r3, [r7, #32]
+ 266:./rt_thread/src/object.c ****     struct rt_object_information *information = RT_NULL;
+ 418              		.loc 2 266 35
+ 419 0016 0023     		movs	r3, #0
+ 420 0018 FB61     		str	r3, [r7, #28]
+ 267:./rt_thread/src/object.c **** 
+ 268:./rt_thread/src/object.c ****     if (maxlen <= 0) return 0;
+ 421              		.loc 2 268 8
+ 422 001a 7B68     		ldr	r3, [r7, #4]
+ 423 001c 002B     		cmp	r3, #0
+ 424 001e 01DC     		bgt	.L17
+ 425              		.loc 2 268 29 discriminator 1
+ 426 0020 0023     		movs	r3, #0
+ 427 0022 30E0     		b	.L18
+ 428              	.L17:
+ 269:./rt_thread/src/object.c **** 
+ 270:./rt_thread/src/object.c ****     information = rt_object_get_information((enum rt_object_class_type)type);
+ 429              		.loc 2 270 19
+ 430 0024 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 431 0026 1846     		mov	r0, r3
+ 432 0028 FFF7FEFF 		bl	rt_object_get_information
+ 433 002c F861     		str	r0, [r7, #28]
+ 271:./rt_thread/src/object.c ****     if (information == RT_NULL) return 0;
+ 434              		.loc 2 271 8
+ 435 002e FB69     		ldr	r3, [r7, #28]
+ 436 0030 002B     		cmp	r3, #0
+ 437 0032 01D1     		bne	.L19
+ 438              		.loc 2 271 40 discriminator 1
+ 439 0034 0023     		movs	r3, #0
+ 440 0036 26E0     		b	.L18
+ 441              	.L19:
+ 272:./rt_thread/src/object.c **** 
+ 273:./rt_thread/src/object.c ****     level = rt_hw_interrupt_disable();
+ 442              		.loc 2 273 13
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 15
+
+
+ 443 0038 FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 444 003c 0346     		mov	r3, r0
+ 445              		.loc 2 273 11
+ 446 003e BB61     		str	r3, [r7, #24]
+ 274:./rt_thread/src/object.c ****     /* retrieve pointer of object */
+ 275:./rt_thread/src/object.c ****     rt_list_for_each(node, &(information->object_list))
+ 447              		.loc 2 275 5
+ 448 0040 FB69     		ldr	r3, [r7, #28]
+ 449 0042 5B68     		ldr	r3, [r3, #4]
+ 450 0044 3B62     		str	r3, [r7, #32]
+ 451 0046 12E0     		b	.L20
+ 452              	.L23:
+ 276:./rt_thread/src/object.c ****     {
+ 277:./rt_thread/src/object.c ****         object = rt_list_entry(node, struct rt_object, list);
+ 453              		.loc 2 277 16
+ 454 0048 3B6A     		ldr	r3, [r7, #32]
+ 455 004a 0C3B     		subs	r3, r3, #12
+ 456 004c 7B61     		str	r3, [r7, #20]
+ 278:./rt_thread/src/object.c **** 
+ 279:./rt_thread/src/object.c ****         pointers[index] = object;
+ 457              		.loc 2 279 17
+ 458 004e 7B6A     		ldr	r3, [r7, #36]
+ 459 0050 9B00     		lsls	r3, r3, #2
+ 460 0052 BA68     		ldr	r2, [r7, #8]
+ 461 0054 1344     		add	r3, r3, r2
+ 462              		.loc 2 279 25
+ 463 0056 7A69     		ldr	r2, [r7, #20]
+ 464 0058 1A60     		str	r2, [r3]
+ 280:./rt_thread/src/object.c ****         index ++;
+ 465              		.loc 2 280 15
+ 466 005a 7B6A     		ldr	r3, [r7, #36]
+ 467 005c 0133     		adds	r3, r3, #1
+ 468 005e 7B62     		str	r3, [r7, #36]
+ 281:./rt_thread/src/object.c **** 
+ 282:./rt_thread/src/object.c ****         if (index >= maxlen) break;
+ 469              		.loc 2 282 12
+ 470 0060 7A6A     		ldr	r2, [r7, #36]
+ 471 0062 7B68     		ldr	r3, [r7, #4]
+ 472 0064 9A42     		cmp	r2, r3
+ 473 0066 08DA     		bge	.L24
+ 275:./rt_thread/src/object.c ****     {
+ 474              		.loc 2 275 5 discriminator 2
+ 475 0068 3B6A     		ldr	r3, [r7, #32]
+ 476 006a 1B68     		ldr	r3, [r3]
+ 477 006c 3B62     		str	r3, [r7, #32]
+ 478              	.L20:
+ 275:./rt_thread/src/object.c ****     {
+ 479              		.loc 2 275 5 is_stmt 0 discriminator 1
+ 480 006e FB69     		ldr	r3, [r7, #28]
+ 481 0070 0433     		adds	r3, r3, #4
+ 482 0072 3A6A     		ldr	r2, [r7, #32]
+ 483 0074 9A42     		cmp	r2, r3
+ 484 0076 E7D1     		bne	.L23
+ 485 0078 00E0     		b	.L22
+ 486              	.L24:
+ 487              		.loc 2 282 9 is_stmt 1
+ 488 007a 00BF     		nop
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 16
+
+
+ 489              	.L22:
+ 283:./rt_thread/src/object.c ****     }
+ 284:./rt_thread/src/object.c ****     rt_hw_interrupt_enable(level);
+ 490              		.loc 2 284 5
+ 491 007c BB69     		ldr	r3, [r7, #24]
+ 492 007e 1846     		mov	r0, r3
+ 493 0080 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 285:./rt_thread/src/object.c **** 
+ 286:./rt_thread/src/object.c ****     return index;
+ 494              		.loc 2 286 12
+ 495 0084 7B6A     		ldr	r3, [r7, #36]
+ 496              	.L18:
+ 287:./rt_thread/src/object.c **** }
+ 497              		.loc 2 287 1
+ 498 0086 1846     		mov	r0, r3
+ 499 0088 2837     		adds	r7, r7, #40
+ 500              	.LCFI30:
+ 501              		.cfi_def_cfa_offset 8
+ 502 008a BD46     		mov	sp, r7
+ 503              	.LCFI31:
+ 504              		.cfi_def_cfa_register 13
+ 505              		@ sp needed
+ 506 008c 80BD     		pop	{r7, pc}
+ 507              		.cfi_endproc
+ 508              	.LFE18:
+ 510              		.section	.text.rt_object_init,"ax",%progbits
+ 511              		.align	1
+ 512              		.global	rt_object_init
+ 513              		.syntax unified
+ 514              		.thumb
+ 515              		.thumb_func
+ 517              	rt_object_init:
+ 518              	.LFB19:
+ 288:./rt_thread/src/object.c **** 
+ 289:./rt_thread/src/object.c **** /**
+ 290:./rt_thread/src/object.c ****  * This function will initialize an object and add it to object system
+ 291:./rt_thread/src/object.c ****  * management.
+ 292:./rt_thread/src/object.c ****  *
+ 293:./rt_thread/src/object.c ****  * @param object the specified object to be initialized.
+ 294:./rt_thread/src/object.c ****  * @param type the object type.
+ 295:./rt_thread/src/object.c ****  * @param name the object name. In system, the object's name must be unique.
+ 296:./rt_thread/src/object.c ****  */
+ 297:./rt_thread/src/object.c **** void rt_object_init(struct rt_object         *object,
+ 298:./rt_thread/src/object.c ****                     enum rt_object_class_type type,
+ 299:./rt_thread/src/object.c ****                     const char               *name)
+ 300:./rt_thread/src/object.c **** {
+ 519              		.loc 2 300 1
+ 520              		.cfi_startproc
+ 521              		@ args = 0, pretend = 0, frame = 32
+ 522              		@ frame_needed = 1, uses_anonymous_args = 0
+ 523 0000 90B5     		push	{r4, r7, lr}
+ 524              	.LCFI32:
+ 525              		.cfi_def_cfa_offset 12
+ 526              		.cfi_offset 4, -12
+ 527              		.cfi_offset 7, -8
+ 528              		.cfi_offset 14, -4
+ 529 0002 89B0     		sub	sp, sp, #36
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 17
+
+
+ 530              	.LCFI33:
+ 531              		.cfi_def_cfa_offset 48
+ 532 0004 00AF     		add	r7, sp, #0
+ 533              	.LCFI34:
+ 534              		.cfi_def_cfa_register 7
+ 535 0006 F860     		str	r0, [r7, #12]
+ 536 0008 0B46     		mov	r3, r1
+ 537 000a 7A60     		str	r2, [r7, #4]
+ 538 000c FB72     		strb	r3, [r7, #11]
+ 301:./rt_thread/src/object.c ****     register rt_base_t temp;
+ 302:./rt_thread/src/object.c ****     struct rt_list_node *node = RT_NULL;
+ 539              		.loc 2 302 26
+ 540 000e 0023     		movs	r3, #0
+ 541 0010 FB61     		str	r3, [r7, #28]
+ 303:./rt_thread/src/object.c ****     struct rt_object_information *information;
+ 304:./rt_thread/src/object.c **** 
+ 305:./rt_thread/src/object.c ****     /* get object information */
+ 306:./rt_thread/src/object.c ****     information = rt_object_get_information(type);
+ 542              		.loc 2 306 19
+ 543 0012 FB7A     		ldrb	r3, [r7, #11]	@ zero_extendqisi2
+ 544 0014 1846     		mov	r0, r3
+ 545 0016 FFF7FEFF 		bl	rt_object_get_information
+ 546 001a B861     		str	r0, [r7, #24]
+ 307:./rt_thread/src/object.c ****     RT_ASSERT(information != RT_NULL);
+ 308:./rt_thread/src/object.c **** 
+ 309:./rt_thread/src/object.c ****     /* check object type to avoid re-initialization */
+ 310:./rt_thread/src/object.c **** 
+ 311:./rt_thread/src/object.c ****     /* enter critical */
+ 312:./rt_thread/src/object.c ****     rt_enter_critical();
+ 547              		.loc 2 312 5
+ 548 001c FFF7FEFF 		bl	rt_enter_critical
+ 313:./rt_thread/src/object.c ****     /* try to find object */
+ 314:./rt_thread/src/object.c ****     for (node  = information->object_list.next;
+ 549              		.loc 2 314 16
+ 550 0020 BB69     		ldr	r3, [r7, #24]
+ 551 0022 5B68     		ldr	r3, [r3, #4]
+ 552 0024 FB61     		str	r3, [r7, #28]
+ 553              		.loc 2 314 5
+ 554 0026 05E0     		b	.L26
+ 555              	.L27:
+ 556              	.LBB2:
+ 315:./rt_thread/src/object.c ****             node != &(information->object_list);
+ 316:./rt_thread/src/object.c ****             node  = node->next)
+ 317:./rt_thread/src/object.c ****     {
+ 318:./rt_thread/src/object.c ****         struct rt_object *obj;
+ 319:./rt_thread/src/object.c **** 
+ 320:./rt_thread/src/object.c ****         obj = rt_list_entry(node, struct rt_object, list);
+ 557              		.loc 2 320 13
+ 558 0028 FB69     		ldr	r3, [r7, #28]
+ 559 002a 0C3B     		subs	r3, r3, #12
+ 560 002c 7B61     		str	r3, [r7, #20]
+ 561              	.LBE2:
+ 316:./rt_thread/src/object.c ****     {
+ 562              		.loc 2 316 19
+ 563 002e FB69     		ldr	r3, [r7, #28]
+ 564 0030 1B68     		ldr	r3, [r3]
+ 565 0032 FB61     		str	r3, [r7, #28]
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 18
+
+
+ 566              	.L26:
+ 315:./rt_thread/src/object.c ****             node != &(information->object_list);
+ 567              		.loc 2 315 21 discriminator 1
+ 568 0034 BB69     		ldr	r3, [r7, #24]
+ 569 0036 0433     		adds	r3, r3, #4
+ 314:./rt_thread/src/object.c ****             node != &(information->object_list);
+ 570              		.loc 2 314 5 discriminator 1
+ 571 0038 FA69     		ldr	r2, [r7, #28]
+ 572 003a 9A42     		cmp	r2, r3
+ 573 003c F4D1     		bne	.L27
+ 321:./rt_thread/src/object.c ****         if (obj) /* skip warning when disable debug */
+ 322:./rt_thread/src/object.c ****         {
+ 323:./rt_thread/src/object.c ****             RT_ASSERT(obj != object);
+ 324:./rt_thread/src/object.c ****         }
+ 325:./rt_thread/src/object.c ****     }
+ 326:./rt_thread/src/object.c ****     /* leave critical */
+ 327:./rt_thread/src/object.c ****     rt_exit_critical();
+ 574              		.loc 2 327 5
+ 575 003e FFF7FEFF 		bl	rt_exit_critical
+ 328:./rt_thread/src/object.c **** 
+ 329:./rt_thread/src/object.c ****     /* initialize object's parameters */
+ 330:./rt_thread/src/object.c ****     /* set object type to static */
+ 331:./rt_thread/src/object.c ****     object->type = type | RT_Object_Class_Static;
+ 576              		.loc 2 331 18
+ 577 0042 FB7A     		ldrb	r3, [r7, #11]
+ 578 0044 63F07F03 		orn	r3, r3, #127
+ 579 0048 DAB2     		uxtb	r2, r3
+ 580 004a FB68     		ldr	r3, [r7, #12]
+ 581 004c 1A72     		strb	r2, [r3, #8]
+ 332:./rt_thread/src/object.c ****     /* copy name */
+ 333:./rt_thread/src/object.c ****     rt_strncpy(object->name, name, RT_NAME_MAX);
+ 582              		.loc 2 333 22
+ 583 004e FB68     		ldr	r3, [r7, #12]
+ 584              		.loc 2 333 5
+ 585 0050 0822     		movs	r2, #8
+ 586 0052 7968     		ldr	r1, [r7, #4]
+ 587 0054 1846     		mov	r0, r3
+ 588 0056 FFF7FEFF 		bl	rt_strncpy
+ 334:./rt_thread/src/object.c **** 
+ 335:./rt_thread/src/object.c ****     RT_OBJECT_HOOK_CALL(rt_object_attach_hook, (object));
+ 336:./rt_thread/src/object.c **** 
+ 337:./rt_thread/src/object.c ****     /* lock interrupt */
+ 338:./rt_thread/src/object.c ****     temp = rt_hw_interrupt_disable();
+ 589              		.loc 2 338 12
+ 590 005a FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 591 005e 0446     		mov	r4, r0
+ 339:./rt_thread/src/object.c **** 
+ 340:./rt_thread/src/object.c ****     /* insert object into information object list */
+ 341:./rt_thread/src/object.c ****     rt_list_insert_after(&(information->object_list), &(object->list));
+ 592              		.loc 2 341 5
+ 593 0060 BB69     		ldr	r3, [r7, #24]
+ 594 0062 1A1D     		adds	r2, r3, #4
+ 595 0064 FB68     		ldr	r3, [r7, #12]
+ 596 0066 0C33     		adds	r3, r3, #12
+ 597 0068 1946     		mov	r1, r3
+ 598 006a 1046     		mov	r0, r2
+ 599 006c FFF7FEFF 		bl	rt_list_insert_after
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 19
+
+
+ 342:./rt_thread/src/object.c **** 
+ 343:./rt_thread/src/object.c ****     /* unlock interrupt */
+ 344:./rt_thread/src/object.c ****     rt_hw_interrupt_enable(temp);
+ 600              		.loc 2 344 5
+ 601 0070 2046     		mov	r0, r4
+ 602 0072 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 345:./rt_thread/src/object.c **** }
+ 603              		.loc 2 345 1
+ 604 0076 00BF     		nop
+ 605 0078 2437     		adds	r7, r7, #36
+ 606              	.LCFI35:
+ 607              		.cfi_def_cfa_offset 12
+ 608 007a BD46     		mov	sp, r7
+ 609              	.LCFI36:
+ 610              		.cfi_def_cfa_register 13
+ 611              		@ sp needed
+ 612 007c 90BD     		pop	{r4, r7, pc}
+ 613              		.cfi_endproc
+ 614              	.LFE19:
+ 616              		.section	.text.rt_object_detach,"ax",%progbits
+ 617              		.align	1
+ 618              		.global	rt_object_detach
+ 619              		.syntax unified
+ 620              		.thumb
+ 621              		.thumb_func
+ 623              	rt_object_detach:
+ 624              	.LFB20:
+ 346:./rt_thread/src/object.c **** 
+ 347:./rt_thread/src/object.c **** /**
+ 348:./rt_thread/src/object.c ****  * This function will detach a static object from object system,
+ 349:./rt_thread/src/object.c ****  * and the memory of static object is not freed.
+ 350:./rt_thread/src/object.c ****  *
+ 351:./rt_thread/src/object.c ****  * @param object the specified object to be detached.
+ 352:./rt_thread/src/object.c ****  */
+ 353:./rt_thread/src/object.c **** void rt_object_detach(rt_object_t object)
+ 354:./rt_thread/src/object.c **** {
+ 625              		.loc 2 354 1
+ 626              		.cfi_startproc
+ 627              		@ args = 0, pretend = 0, frame = 8
+ 628              		@ frame_needed = 1, uses_anonymous_args = 0
+ 629 0000 90B5     		push	{r4, r7, lr}
+ 630              	.LCFI37:
+ 631              		.cfi_def_cfa_offset 12
+ 632              		.cfi_offset 4, -12
+ 633              		.cfi_offset 7, -8
+ 634              		.cfi_offset 14, -4
+ 635 0002 83B0     		sub	sp, sp, #12
+ 636              	.LCFI38:
+ 637              		.cfi_def_cfa_offset 24
+ 638 0004 00AF     		add	r7, sp, #0
+ 639              	.LCFI39:
+ 640              		.cfi_def_cfa_register 7
+ 641 0006 7860     		str	r0, [r7, #4]
+ 355:./rt_thread/src/object.c ****     register rt_base_t temp;
+ 356:./rt_thread/src/object.c **** 
+ 357:./rt_thread/src/object.c ****     /* object check */
+ 358:./rt_thread/src/object.c ****     RT_ASSERT(object != RT_NULL);
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 20
+
+
+ 359:./rt_thread/src/object.c **** 
+ 360:./rt_thread/src/object.c ****     RT_OBJECT_HOOK_CALL(rt_object_detach_hook, (object));
+ 361:./rt_thread/src/object.c **** 
+ 362:./rt_thread/src/object.c ****     /* reset object type */
+ 363:./rt_thread/src/object.c ****     object->type = 0;
+ 642              		.loc 2 363 18
+ 643 0008 7B68     		ldr	r3, [r7, #4]
+ 644 000a 0022     		movs	r2, #0
+ 645 000c 1A72     		strb	r2, [r3, #8]
+ 364:./rt_thread/src/object.c **** 
+ 365:./rt_thread/src/object.c ****     /* lock interrupt */
+ 366:./rt_thread/src/object.c ****     temp = rt_hw_interrupt_disable();
+ 646              		.loc 2 366 12
+ 647 000e FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 648 0012 0446     		mov	r4, r0
+ 367:./rt_thread/src/object.c **** 
+ 368:./rt_thread/src/object.c ****     /* remove from old list */
+ 369:./rt_thread/src/object.c ****     rt_list_remove(&(object->list));
+ 649              		.loc 2 369 5
+ 650 0014 7B68     		ldr	r3, [r7, #4]
+ 651 0016 0C33     		adds	r3, r3, #12
+ 652 0018 1846     		mov	r0, r3
+ 653 001a FFF7FEFF 		bl	rt_list_remove
+ 370:./rt_thread/src/object.c **** 
+ 371:./rt_thread/src/object.c ****     /* unlock interrupt */
+ 372:./rt_thread/src/object.c ****     rt_hw_interrupt_enable(temp);
+ 654              		.loc 2 372 5
+ 655 001e 2046     		mov	r0, r4
+ 656 0020 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 373:./rt_thread/src/object.c **** }
+ 657              		.loc 2 373 1
+ 658 0024 00BF     		nop
+ 659 0026 0C37     		adds	r7, r7, #12
+ 660              	.LCFI40:
+ 661              		.cfi_def_cfa_offset 12
+ 662 0028 BD46     		mov	sp, r7
+ 663              	.LCFI41:
+ 664              		.cfi_def_cfa_register 13
+ 665              		@ sp needed
+ 666 002a 90BD     		pop	{r4, r7, pc}
+ 667              		.cfi_endproc
+ 668              	.LFE20:
+ 670              		.section	.text.rt_object_allocate,"ax",%progbits
+ 671              		.align	1
+ 672              		.global	rt_object_allocate
+ 673              		.syntax unified
+ 674              		.thumb
+ 675              		.thumb_func
+ 677              	rt_object_allocate:
+ 678              	.LFB21:
+ 374:./rt_thread/src/object.c **** 
+ 375:./rt_thread/src/object.c **** #ifdef RT_USING_HEAP
+ 376:./rt_thread/src/object.c **** /**
+ 377:./rt_thread/src/object.c ****  * This function will allocate an object from object system
+ 378:./rt_thread/src/object.c ****  *
+ 379:./rt_thread/src/object.c ****  * @param type the type of object
+ 380:./rt_thread/src/object.c ****  * @param name the object name. In system, the object's name must be unique.
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 21
+
+
+ 381:./rt_thread/src/object.c ****  *
+ 382:./rt_thread/src/object.c ****  * @return object
+ 383:./rt_thread/src/object.c ****  */
+ 384:./rt_thread/src/object.c **** rt_object_t rt_object_allocate(enum rt_object_class_type type, const char *name)
+ 385:./rt_thread/src/object.c **** {
+ 679              		.loc 2 385 1
+ 680              		.cfi_startproc
+ 681              		@ args = 0, pretend = 0, frame = 16
+ 682              		@ frame_needed = 1, uses_anonymous_args = 0
+ 683 0000 90B5     		push	{r4, r7, lr}
+ 684              	.LCFI42:
+ 685              		.cfi_def_cfa_offset 12
+ 686              		.cfi_offset 4, -12
+ 687              		.cfi_offset 7, -8
+ 688              		.cfi_offset 14, -4
+ 689 0002 85B0     		sub	sp, sp, #20
+ 690              	.LCFI43:
+ 691              		.cfi_def_cfa_offset 32
+ 692 0004 00AF     		add	r7, sp, #0
+ 693              	.LCFI44:
+ 694              		.cfi_def_cfa_register 7
+ 695 0006 0346     		mov	r3, r0
+ 696 0008 3960     		str	r1, [r7]
+ 697 000a FB71     		strb	r3, [r7, #7]
+ 386:./rt_thread/src/object.c ****     struct rt_object *object;
+ 387:./rt_thread/src/object.c ****     register rt_base_t temp;
+ 388:./rt_thread/src/object.c ****     struct rt_object_information *information;
+ 389:./rt_thread/src/object.c **** 
+ 390:./rt_thread/src/object.c ****     RT_DEBUG_NOT_IN_INTERRUPT;
+ 391:./rt_thread/src/object.c **** 
+ 392:./rt_thread/src/object.c ****     /* get object information */
+ 393:./rt_thread/src/object.c ****     information = rt_object_get_information(type);
+ 698              		.loc 2 393 19
+ 699 000c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 700 000e 1846     		mov	r0, r3
+ 701 0010 FFF7FEFF 		bl	rt_object_get_information
+ 702 0014 F860     		str	r0, [r7, #12]
+ 394:./rt_thread/src/object.c ****     RT_ASSERT(information != RT_NULL);
+ 395:./rt_thread/src/object.c **** 
+ 396:./rt_thread/src/object.c ****     object = (struct rt_object *)RT_KERNEL_MALLOC(information->object_size);
+ 703              		.loc 2 396 34
+ 704 0016 FB68     		ldr	r3, [r7, #12]
+ 705 0018 DB68     		ldr	r3, [r3, #12]
+ 706 001a 1846     		mov	r0, r3
+ 707 001c FFF7FEFF 		bl	rt_malloc
+ 708 0020 B860     		str	r0, [r7, #8]
+ 397:./rt_thread/src/object.c ****     if (object == RT_NULL)
+ 709              		.loc 2 397 8
+ 710 0022 BB68     		ldr	r3, [r7, #8]
+ 711 0024 002B     		cmp	r3, #0
+ 712 0026 01D1     		bne	.L30
+ 398:./rt_thread/src/object.c ****     {
+ 399:./rt_thread/src/object.c ****         /* no memory can be allocated */
+ 400:./rt_thread/src/object.c ****         return RT_NULL;
+ 713              		.loc 2 400 16
+ 714 0028 0023     		movs	r3, #0
+ 715 002a 21E0     		b	.L31
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 22
+
+
+ 716              	.L30:
+ 401:./rt_thread/src/object.c ****     }
+ 402:./rt_thread/src/object.c **** 
+ 403:./rt_thread/src/object.c ****     /* clean memory data of object */
+ 404:./rt_thread/src/object.c ****     rt_memset(object, 0x0, information->object_size);
+ 717              		.loc 2 404 5
+ 718 002c FB68     		ldr	r3, [r7, #12]
+ 719 002e DB68     		ldr	r3, [r3, #12]
+ 720 0030 1A46     		mov	r2, r3
+ 721 0032 0021     		movs	r1, #0
+ 722 0034 B868     		ldr	r0, [r7, #8]
+ 723 0036 FFF7FEFF 		bl	rt_memset
+ 405:./rt_thread/src/object.c **** 
+ 406:./rt_thread/src/object.c ****     /* initialize object's parameters */
+ 407:./rt_thread/src/object.c **** 
+ 408:./rt_thread/src/object.c ****     /* set object type */
+ 409:./rt_thread/src/object.c ****     object->type = type;
+ 724              		.loc 2 409 18
+ 725 003a BB68     		ldr	r3, [r7, #8]
+ 726 003c FA79     		ldrb	r2, [r7, #7]
+ 727 003e 1A72     		strb	r2, [r3, #8]
+ 410:./rt_thread/src/object.c **** 
+ 411:./rt_thread/src/object.c ****     /* set object flag */
+ 412:./rt_thread/src/object.c ****     object->flag = 0;
+ 728              		.loc 2 412 18
+ 729 0040 BB68     		ldr	r3, [r7, #8]
+ 730 0042 0022     		movs	r2, #0
+ 731 0044 5A72     		strb	r2, [r3, #9]
+ 413:./rt_thread/src/object.c **** 
+ 414:./rt_thread/src/object.c ****     /* copy name */
+ 415:./rt_thread/src/object.c ****     rt_strncpy(object->name, name, RT_NAME_MAX);
+ 732              		.loc 2 415 22
+ 733 0046 BB68     		ldr	r3, [r7, #8]
+ 734              		.loc 2 415 5
+ 735 0048 0822     		movs	r2, #8
+ 736 004a 3968     		ldr	r1, [r7]
+ 737 004c 1846     		mov	r0, r3
+ 738 004e FFF7FEFF 		bl	rt_strncpy
+ 416:./rt_thread/src/object.c **** 
+ 417:./rt_thread/src/object.c ****     RT_OBJECT_HOOK_CALL(rt_object_attach_hook, (object));
+ 418:./rt_thread/src/object.c **** 
+ 419:./rt_thread/src/object.c ****     /* lock interrupt */
+ 420:./rt_thread/src/object.c ****     temp = rt_hw_interrupt_disable();
+ 739              		.loc 2 420 12
+ 740 0052 FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 741 0056 0446     		mov	r4, r0
+ 421:./rt_thread/src/object.c **** 
+ 422:./rt_thread/src/object.c ****     /* insert object into information object list */
+ 423:./rt_thread/src/object.c ****     rt_list_insert_after(&(information->object_list), &(object->list));
+ 742              		.loc 2 423 5
+ 743 0058 FB68     		ldr	r3, [r7, #12]
+ 744 005a 1A1D     		adds	r2, r3, #4
+ 745 005c BB68     		ldr	r3, [r7, #8]
+ 746 005e 0C33     		adds	r3, r3, #12
+ 747 0060 1946     		mov	r1, r3
+ 748 0062 1046     		mov	r0, r2
+ 749 0064 FFF7FEFF 		bl	rt_list_insert_after
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 23
+
+
+ 424:./rt_thread/src/object.c **** 
+ 425:./rt_thread/src/object.c ****     /* unlock interrupt */
+ 426:./rt_thread/src/object.c ****     rt_hw_interrupt_enable(temp);
+ 750              		.loc 2 426 5
+ 751 0068 2046     		mov	r0, r4
+ 752 006a FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 427:./rt_thread/src/object.c **** 
+ 428:./rt_thread/src/object.c ****     /* return object */
+ 429:./rt_thread/src/object.c ****     return object;
+ 753              		.loc 2 429 12
+ 754 006e BB68     		ldr	r3, [r7, #8]
+ 755              	.L31:
+ 430:./rt_thread/src/object.c **** }
+ 756              		.loc 2 430 1
+ 757 0070 1846     		mov	r0, r3
+ 758 0072 1437     		adds	r7, r7, #20
+ 759              	.LCFI45:
+ 760              		.cfi_def_cfa_offset 12
+ 761 0074 BD46     		mov	sp, r7
+ 762              	.LCFI46:
+ 763              		.cfi_def_cfa_register 13
+ 764              		@ sp needed
+ 765 0076 90BD     		pop	{r4, r7, pc}
+ 766              		.cfi_endproc
+ 767              	.LFE21:
+ 769              		.section	.text.rt_object_delete,"ax",%progbits
+ 770              		.align	1
+ 771              		.global	rt_object_delete
+ 772              		.syntax unified
+ 773              		.thumb
+ 774              		.thumb_func
+ 776              	rt_object_delete:
+ 777              	.LFB22:
+ 431:./rt_thread/src/object.c **** 
+ 432:./rt_thread/src/object.c **** /**
+ 433:./rt_thread/src/object.c ****  * This function will delete an object and release object memory.
+ 434:./rt_thread/src/object.c ****  *
+ 435:./rt_thread/src/object.c ****  * @param object the specified object to be deleted.
+ 436:./rt_thread/src/object.c ****  */
+ 437:./rt_thread/src/object.c **** void rt_object_delete(rt_object_t object)
+ 438:./rt_thread/src/object.c **** {
+ 778              		.loc 2 438 1
+ 779              		.cfi_startproc
+ 780              		@ args = 0, pretend = 0, frame = 8
+ 781              		@ frame_needed = 1, uses_anonymous_args = 0
+ 782 0000 90B5     		push	{r4, r7, lr}
+ 783              	.LCFI47:
+ 784              		.cfi_def_cfa_offset 12
+ 785              		.cfi_offset 4, -12
+ 786              		.cfi_offset 7, -8
+ 787              		.cfi_offset 14, -4
+ 788 0002 83B0     		sub	sp, sp, #12
+ 789              	.LCFI48:
+ 790              		.cfi_def_cfa_offset 24
+ 791 0004 00AF     		add	r7, sp, #0
+ 792              	.LCFI49:
+ 793              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 24
+
+
+ 794 0006 7860     		str	r0, [r7, #4]
+ 439:./rt_thread/src/object.c ****     register rt_base_t temp;
+ 440:./rt_thread/src/object.c **** 
+ 441:./rt_thread/src/object.c ****     /* object check */
+ 442:./rt_thread/src/object.c ****     RT_ASSERT(object != RT_NULL);
+ 443:./rt_thread/src/object.c ****     RT_ASSERT(!(object->type & RT_Object_Class_Static));
+ 444:./rt_thread/src/object.c **** 
+ 445:./rt_thread/src/object.c ****     RT_OBJECT_HOOK_CALL(rt_object_detach_hook, (object));
+ 446:./rt_thread/src/object.c **** 
+ 447:./rt_thread/src/object.c ****     /* reset object type */
+ 448:./rt_thread/src/object.c ****     object->type = RT_Object_Class_Null;
+ 795              		.loc 2 448 18
+ 796 0008 7B68     		ldr	r3, [r7, #4]
+ 797 000a 0022     		movs	r2, #0
+ 798 000c 1A72     		strb	r2, [r3, #8]
+ 449:./rt_thread/src/object.c **** 
+ 450:./rt_thread/src/object.c ****     /* lock interrupt */
+ 451:./rt_thread/src/object.c ****     temp = rt_hw_interrupt_disable();
+ 799              		.loc 2 451 12
+ 800 000e FFF7FEFF 		bl	rt_hw_interrupt_disable
+ 801 0012 0446     		mov	r4, r0
+ 452:./rt_thread/src/object.c **** 
+ 453:./rt_thread/src/object.c ****     /* remove from old list */
+ 454:./rt_thread/src/object.c ****     rt_list_remove(&(object->list));
+ 802              		.loc 2 454 5
+ 803 0014 7B68     		ldr	r3, [r7, #4]
+ 804 0016 0C33     		adds	r3, r3, #12
+ 805 0018 1846     		mov	r0, r3
+ 806 001a FFF7FEFF 		bl	rt_list_remove
+ 455:./rt_thread/src/object.c **** 
+ 456:./rt_thread/src/object.c ****     /* unlock interrupt */
+ 457:./rt_thread/src/object.c ****     rt_hw_interrupt_enable(temp);
+ 807              		.loc 2 457 5
+ 808 001e 2046     		mov	r0, r4
+ 809 0020 FFF7FEFF 		bl	rt_hw_interrupt_enable
+ 458:./rt_thread/src/object.c **** 
+ 459:./rt_thread/src/object.c ****     /* free the memory of object */
+ 460:./rt_thread/src/object.c ****     RT_KERNEL_FREE(object);
+ 810              		.loc 2 460 5
+ 811 0024 7868     		ldr	r0, [r7, #4]
+ 812 0026 FFF7FEFF 		bl	rt_free
+ 461:./rt_thread/src/object.c **** }
+ 813              		.loc 2 461 1
+ 814 002a 00BF     		nop
+ 815 002c 0C37     		adds	r7, r7, #12
+ 816              	.LCFI50:
+ 817              		.cfi_def_cfa_offset 12
+ 818 002e BD46     		mov	sp, r7
+ 819              	.LCFI51:
+ 820              		.cfi_def_cfa_register 13
+ 821              		@ sp needed
+ 822 0030 90BD     		pop	{r4, r7, pc}
+ 823              		.cfi_endproc
+ 824              	.LFE22:
+ 826              		.section	.text.rt_object_is_systemobject,"ax",%progbits
+ 827              		.align	1
+ 828              		.global	rt_object_is_systemobject
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 25
+
+
+ 829              		.syntax unified
+ 830              		.thumb
+ 831              		.thumb_func
+ 833              	rt_object_is_systemobject:
+ 834              	.LFB23:
+ 462:./rt_thread/src/object.c **** #endif
+ 463:./rt_thread/src/object.c **** 
+ 464:./rt_thread/src/object.c **** /**
+ 465:./rt_thread/src/object.c ****  * This function will judge the object is system object or not.
+ 466:./rt_thread/src/object.c ****  * Normally, the system object is a static object and the type
+ 467:./rt_thread/src/object.c ****  * of object set to RT_Object_Class_Static.
+ 468:./rt_thread/src/object.c ****  *
+ 469:./rt_thread/src/object.c ****  * @param object the specified object to be judged.
+ 470:./rt_thread/src/object.c ****  *
+ 471:./rt_thread/src/object.c ****  * @return RT_TRUE if a system object, RT_FALSE for others.
+ 472:./rt_thread/src/object.c ****  */
+ 473:./rt_thread/src/object.c **** rt_bool_t rt_object_is_systemobject(rt_object_t object)
+ 474:./rt_thread/src/object.c **** {
+ 835              		.loc 2 474 1
+ 836              		.cfi_startproc
+ 837              		@ args = 0, pretend = 0, frame = 8
+ 838              		@ frame_needed = 1, uses_anonymous_args = 0
+ 839              		@ link register save eliminated.
+ 840 0000 80B4     		push	{r7}
+ 841              	.LCFI52:
+ 842              		.cfi_def_cfa_offset 4
+ 843              		.cfi_offset 7, -4
+ 844 0002 83B0     		sub	sp, sp, #12
+ 845              	.LCFI53:
+ 846              		.cfi_def_cfa_offset 16
+ 847 0004 00AF     		add	r7, sp, #0
+ 848              	.LCFI54:
+ 849              		.cfi_def_cfa_register 7
+ 850 0006 7860     		str	r0, [r7, #4]
+ 475:./rt_thread/src/object.c ****     /* object check */
+ 476:./rt_thread/src/object.c ****     RT_ASSERT(object != RT_NULL);
+ 477:./rt_thread/src/object.c **** 
+ 478:./rt_thread/src/object.c ****     if (object->type & RT_Object_Class_Static)
+ 851              		.loc 2 478 15
+ 852 0008 7B68     		ldr	r3, [r7, #4]
+ 853 000a 1B7A     		ldrb	r3, [r3, #8]	@ zero_extendqisi2
+ 854              		.loc 2 478 9
+ 855 000c 5BB2     		sxtb	r3, r3
+ 856              		.loc 2 478 8
+ 857 000e 002B     		cmp	r3, #0
+ 858 0010 01DA     		bge	.L34
+ 479:./rt_thread/src/object.c ****         return RT_TRUE;
+ 859              		.loc 2 479 16
+ 860 0012 0123     		movs	r3, #1
+ 861 0014 00E0     		b	.L35
+ 862              	.L34:
+ 480:./rt_thread/src/object.c **** 
+ 481:./rt_thread/src/object.c ****     return RT_FALSE;
+ 863              		.loc 2 481 12
+ 864 0016 0023     		movs	r3, #0
+ 865              	.L35:
+ 482:./rt_thread/src/object.c **** }
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 26
+
+
+ 866              		.loc 2 482 1
+ 867 0018 1846     		mov	r0, r3
+ 868 001a 0C37     		adds	r7, r7, #12
+ 869              	.LCFI55:
+ 870              		.cfi_def_cfa_offset 4
+ 871 001c BD46     		mov	sp, r7
+ 872              	.LCFI56:
+ 873              		.cfi_def_cfa_register 13
+ 874              		@ sp needed
+ 875 001e 80BC     		pop	{r7}
+ 876              	.LCFI57:
+ 877              		.cfi_restore 7
+ 878              		.cfi_def_cfa_offset 0
+ 879 0020 7047     		bx	lr
+ 880              		.cfi_endproc
+ 881              	.LFE23:
+ 883              		.section	.text.rt_object_get_type,"ax",%progbits
+ 884              		.align	1
+ 885              		.global	rt_object_get_type
+ 886              		.syntax unified
+ 887              		.thumb
+ 888              		.thumb_func
+ 890              	rt_object_get_type:
+ 891              	.LFB24:
+ 483:./rt_thread/src/object.c **** 
+ 484:./rt_thread/src/object.c **** /**
+ 485:./rt_thread/src/object.c ****  * This function will return the type of object without
+ 486:./rt_thread/src/object.c ****  * RT_Object_Class_Static flag.
+ 487:./rt_thread/src/object.c ****  *
+ 488:./rt_thread/src/object.c ****  * @param object the specified object to be get type.
+ 489:./rt_thread/src/object.c ****  *
+ 490:./rt_thread/src/object.c ****  * @return the type of object.
+ 491:./rt_thread/src/object.c ****  */
+ 492:./rt_thread/src/object.c **** rt_uint8_t rt_object_get_type(rt_object_t object)
+ 493:./rt_thread/src/object.c **** {
+ 892              		.loc 2 493 1
+ 893              		.cfi_startproc
+ 894              		@ args = 0, pretend = 0, frame = 8
+ 895              		@ frame_needed = 1, uses_anonymous_args = 0
+ 896              		@ link register save eliminated.
+ 897 0000 80B4     		push	{r7}
+ 898              	.LCFI58:
+ 899              		.cfi_def_cfa_offset 4
+ 900              		.cfi_offset 7, -4
+ 901 0002 83B0     		sub	sp, sp, #12
+ 902              	.LCFI59:
+ 903              		.cfi_def_cfa_offset 16
+ 904 0004 00AF     		add	r7, sp, #0
+ 905              	.LCFI60:
+ 906              		.cfi_def_cfa_register 7
+ 907 0006 7860     		str	r0, [r7, #4]
+ 494:./rt_thread/src/object.c ****     /* object check */
+ 495:./rt_thread/src/object.c ****     RT_ASSERT(object != RT_NULL);
+ 496:./rt_thread/src/object.c **** 
+ 497:./rt_thread/src/object.c ****     return object->type & ~RT_Object_Class_Static;
+ 908              		.loc 2 497 18
+ 909 0008 7B68     		ldr	r3, [r7, #4]
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 27
+
+
+ 910 000a 1B7A     		ldrb	r3, [r3, #8]	@ zero_extendqisi2
+ 911              		.loc 2 497 25
+ 912 000c 03F07F03 		and	r3, r3, #127
+ 913 0010 DBB2     		uxtb	r3, r3
+ 498:./rt_thread/src/object.c **** }
+ 914              		.loc 2 498 1
+ 915 0012 1846     		mov	r0, r3
+ 916 0014 0C37     		adds	r7, r7, #12
+ 917              	.LCFI61:
+ 918              		.cfi_def_cfa_offset 4
+ 919 0016 BD46     		mov	sp, r7
+ 920              	.LCFI62:
+ 921              		.cfi_def_cfa_register 13
+ 922              		@ sp needed
+ 923 0018 80BC     		pop	{r7}
+ 924              	.LCFI63:
+ 925              		.cfi_restore 7
+ 926              		.cfi_def_cfa_offset 0
+ 927 001a 7047     		bx	lr
+ 928              		.cfi_endproc
+ 929              	.LFE24:
+ 931              		.section	.text.rt_object_find,"ax",%progbits
+ 932              		.align	1
+ 933              		.global	rt_object_find
+ 934              		.syntax unified
+ 935              		.thumb
+ 936              		.thumb_func
+ 938              	rt_object_find:
+ 939              	.LFB25:
+ 499:./rt_thread/src/object.c **** 
+ 500:./rt_thread/src/object.c **** /**
+ 501:./rt_thread/src/object.c ****  * This function will find specified name object from object
+ 502:./rt_thread/src/object.c ****  * container.
+ 503:./rt_thread/src/object.c ****  *
+ 504:./rt_thread/src/object.c ****  * @param name the specified name of object.
+ 505:./rt_thread/src/object.c ****  * @param type the type of object
+ 506:./rt_thread/src/object.c ****  *
+ 507:./rt_thread/src/object.c ****  * @return the found object or RT_NULL if there is no this object
+ 508:./rt_thread/src/object.c ****  * in object container.
+ 509:./rt_thread/src/object.c ****  *
+ 510:./rt_thread/src/object.c ****  * @note this function shall not be invoked in interrupt status.
+ 511:./rt_thread/src/object.c ****  */
+ 512:./rt_thread/src/object.c **** rt_object_t rt_object_find(const char *name, rt_uint8_t type)
+ 513:./rt_thread/src/object.c **** {
+ 940              		.loc 2 513 1
+ 941              		.cfi_startproc
+ 942              		@ args = 0, pretend = 0, frame = 24
+ 943              		@ frame_needed = 1, uses_anonymous_args = 0
+ 944 0000 80B5     		push	{r7, lr}
+ 945              	.LCFI64:
+ 946              		.cfi_def_cfa_offset 8
+ 947              		.cfi_offset 7, -8
+ 948              		.cfi_offset 14, -4
+ 949 0002 86B0     		sub	sp, sp, #24
+ 950              	.LCFI65:
+ 951              		.cfi_def_cfa_offset 32
+ 952 0004 00AF     		add	r7, sp, #0
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 28
+
+
+ 953              	.LCFI66:
+ 954              		.cfi_def_cfa_register 7
+ 955 0006 7860     		str	r0, [r7, #4]
+ 956 0008 0B46     		mov	r3, r1
+ 957 000a FB70     		strb	r3, [r7, #3]
+ 514:./rt_thread/src/object.c ****     struct rt_object *object = RT_NULL;
+ 958              		.loc 2 514 23
+ 959 000c 0023     		movs	r3, #0
+ 960 000e 3B61     		str	r3, [r7, #16]
+ 515:./rt_thread/src/object.c ****     struct rt_list_node *node = RT_NULL;
+ 961              		.loc 2 515 26
+ 962 0010 0023     		movs	r3, #0
+ 963 0012 7B61     		str	r3, [r7, #20]
+ 516:./rt_thread/src/object.c ****     struct rt_object_information *information = RT_NULL;
+ 964              		.loc 2 516 35
+ 965 0014 0023     		movs	r3, #0
+ 966 0016 FB60     		str	r3, [r7, #12]
+ 517:./rt_thread/src/object.c **** 
+ 518:./rt_thread/src/object.c ****     information = rt_object_get_information((enum rt_object_class_type)type);
+ 967              		.loc 2 518 19
+ 968 0018 FB78     		ldrb	r3, [r7, #3]	@ zero_extendqisi2
+ 969 001a 1846     		mov	r0, r3
+ 970 001c FFF7FEFF 		bl	rt_object_get_information
+ 971 0020 F860     		str	r0, [r7, #12]
+ 519:./rt_thread/src/object.c **** 
+ 520:./rt_thread/src/object.c ****     /* parameter check */
+ 521:./rt_thread/src/object.c ****     if ((name == RT_NULL) || (information == RT_NULL)) return RT_NULL;
+ 972              		.loc 2 521 8
+ 973 0022 7B68     		ldr	r3, [r7, #4]
+ 974 0024 002B     		cmp	r3, #0
+ 975 0026 02D0     		beq	.L39
+ 976              		.loc 2 521 27 discriminator 2
+ 977 0028 FB68     		ldr	r3, [r7, #12]
+ 978 002a 002B     		cmp	r3, #0
+ 979 002c 01D1     		bne	.L40
+ 980              	.L39:
+ 981              		.loc 2 521 63 discriminator 3
+ 982 002e 0023     		movs	r3, #0
+ 983 0030 20E0     		b	.L41
+ 984              	.L40:
+ 522:./rt_thread/src/object.c **** 
+ 523:./rt_thread/src/object.c ****     /* which is invoke in interrupt status */
+ 524:./rt_thread/src/object.c ****     RT_DEBUG_NOT_IN_INTERRUPT;
+ 525:./rt_thread/src/object.c **** 
+ 526:./rt_thread/src/object.c ****     /* enter critical */
+ 527:./rt_thread/src/object.c ****     rt_enter_critical();
+ 985              		.loc 2 527 5
+ 986 0032 FFF7FEFF 		bl	rt_enter_critical
+ 528:./rt_thread/src/object.c **** 
+ 529:./rt_thread/src/object.c ****     /* try to find object */
+ 530:./rt_thread/src/object.c ****     rt_list_for_each(node, &(information->object_list))
+ 987              		.loc 2 530 5
+ 988 0036 FB68     		ldr	r3, [r7, #12]
+ 989 0038 5B68     		ldr	r3, [r3, #4]
+ 990 003a 7B61     		str	r3, [r7, #20]
+ 991 003c 12E0     		b	.L42
+ 992              	.L44:
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 29
+
+
+ 531:./rt_thread/src/object.c ****     {
+ 532:./rt_thread/src/object.c ****         object = rt_list_entry(node, struct rt_object, list);
+ 993              		.loc 2 532 16
+ 994 003e 7B69     		ldr	r3, [r7, #20]
+ 995 0040 0C3B     		subs	r3, r3, #12
+ 996 0042 3B61     		str	r3, [r7, #16]
+ 533:./rt_thread/src/object.c ****         if (rt_strncmp(object->name, name, RT_NAME_MAX) == 0)
+ 997              		.loc 2 533 30
+ 998 0044 3B69     		ldr	r3, [r7, #16]
+ 999              		.loc 2 533 13
+ 1000 0046 0822     		movs	r2, #8
+ 1001 0048 7968     		ldr	r1, [r7, #4]
+ 1002 004a 1846     		mov	r0, r3
+ 1003 004c FFF7FEFF 		bl	rt_strncmp
+ 1004 0050 0346     		mov	r3, r0
+ 1005              		.loc 2 533 12
+ 1006 0052 002B     		cmp	r3, #0
+ 1007 0054 03D1     		bne	.L43
+ 534:./rt_thread/src/object.c ****         {
+ 535:./rt_thread/src/object.c ****             /* leave critical */
+ 536:./rt_thread/src/object.c ****             rt_exit_critical();
+ 1008              		.loc 2 536 13
+ 1009 0056 FFF7FEFF 		bl	rt_exit_critical
+ 537:./rt_thread/src/object.c **** 
+ 538:./rt_thread/src/object.c ****             return object;
+ 1010              		.loc 2 538 20
+ 1011 005a 3B69     		ldr	r3, [r7, #16]
+ 1012 005c 0AE0     		b	.L41
+ 1013              	.L43:
+ 530:./rt_thread/src/object.c ****     {
+ 1014              		.loc 2 530 5 discriminator 2
+ 1015 005e 7B69     		ldr	r3, [r7, #20]
+ 1016 0060 1B68     		ldr	r3, [r3]
+ 1017 0062 7B61     		str	r3, [r7, #20]
+ 1018              	.L42:
+ 530:./rt_thread/src/object.c ****     {
+ 1019              		.loc 2 530 5 is_stmt 0 discriminator 1
+ 1020 0064 FB68     		ldr	r3, [r7, #12]
+ 1021 0066 0433     		adds	r3, r3, #4
+ 1022 0068 7A69     		ldr	r2, [r7, #20]
+ 1023 006a 9A42     		cmp	r2, r3
+ 1024 006c E7D1     		bne	.L44
+ 539:./rt_thread/src/object.c ****         }
+ 540:./rt_thread/src/object.c ****     }
+ 541:./rt_thread/src/object.c **** 
+ 542:./rt_thread/src/object.c ****     /* leave critical */
+ 543:./rt_thread/src/object.c ****     rt_exit_critical();
+ 1025              		.loc 2 543 5 is_stmt 1
+ 1026 006e FFF7FEFF 		bl	rt_exit_critical
+ 544:./rt_thread/src/object.c **** 
+ 545:./rt_thread/src/object.c ****     return RT_NULL;
+ 1027              		.loc 2 545 12
+ 1028 0072 0023     		movs	r3, #0
+ 1029              	.L41:
+ 546:./rt_thread/src/object.c **** }
+ 1030              		.loc 2 546 1
+ 1031 0074 1846     		mov	r0, r3
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 30
+
+
+ 1032 0076 1837     		adds	r7, r7, #24
+ 1033              	.LCFI67:
+ 1034              		.cfi_def_cfa_offset 8
+ 1035 0078 BD46     		mov	sp, r7
+ 1036              	.LCFI68:
+ 1037              		.cfi_def_cfa_register 13
+ 1038              		@ sp needed
+ 1039 007a 80BD     		pop	{r7, pc}
+ 1040              		.cfi_endproc
+ 1041              	.LFE25:
+ 1043              		.text
+ 1044              	.Letext0:
+ 1045              		.file 3 "./rt_thread/include/rtdef.h"
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccT8E365.s 			page 31
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 object.c
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:18     .text.rt_list_insert_after:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:23     .text.rt_list_insert_after:00000000 rt_list_insert_after
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:81     .text.rt_list_remove:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:86     .text.rt_list_remove:00000000 rt_list_remove
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:148    .data.rt_object_container:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:151    .data.rt_object_container:00000000 rt_object_container
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:173    .text.rt_system_object_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:179    .text.rt_system_object_init:00000000 rt_system_object_init
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:209    .text.rt_object_get_information:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:215    .text.rt_object_get_information:00000000 rt_object_get_information
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:286    .text.rt_object_get_information:00000044 $d
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:291    .text.rt_object_get_length:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:297    .text.rt_object_get_length:00000000 rt_object_get_length
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:385    .text.rt_object_get_pointers:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:391    .text.rt_object_get_pointers:00000000 rt_object_get_pointers
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:511    .text.rt_object_init:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:517    .text.rt_object_init:00000000 rt_object_init
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:617    .text.rt_object_detach:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:623    .text.rt_object_detach:00000000 rt_object_detach
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:671    .text.rt_object_allocate:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:677    .text.rt_object_allocate:00000000 rt_object_allocate
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:770    .text.rt_object_delete:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:776    .text.rt_object_delete:00000000 rt_object_delete
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:827    .text.rt_object_is_systemobject:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:833    .text.rt_object_is_systemobject:00000000 rt_object_is_systemobject
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:884    .text.rt_object_get_type:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:890    .text.rt_object_get_type:00000000 rt_object_get_type
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:932    .text.rt_object_find:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccT8E365.s:938    .text.rt_object_find:00000000 rt_object_find
+
+UNDEFINED SYMBOLS
+rt_hw_interrupt_disable
+rt_hw_interrupt_enable
+rt_enter_critical
+rt_exit_critical
+rt_strncpy
+rt_malloc
+rt_memset
+rt_free
+rt_strncmp

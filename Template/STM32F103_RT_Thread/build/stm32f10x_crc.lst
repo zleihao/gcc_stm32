@@ -1,0 +1,525 @@
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cchgZiOo.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32f10x_crc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.CRC_ResetDR,"ax",%progbits
+  18              		.align	1
+  19              		.global	CRC_ResetDR
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  24              	CRC_ResetDR:
+  25              	.LFB29:
+  26              		.file 1 "./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c"
+   1:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /**
+   2:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   ******************************************************************************
+   3:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @file    stm32f10x_crc.c
+   4:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @author  MCD Application Team
+   5:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @version V3.5.0
+   6:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @date    11-March-2011
+   7:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @brief   This file provides all the CRC firmware functions.
+   8:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   ******************************************************************************
+   9:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @attention
+  10:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   *
+  11:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+  12:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
+  13:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
+  14:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
+  15:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
+  16:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  17:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   *
+  18:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * <h2><center>&copy; COPYRIGHT 2011 STMicroelectronics</center></h2>
+  19:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   ******************************************************************************
+  20:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  21:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  22:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /* Includes ------------------------------------------------------------------*/
+  23:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** #include "stm32f10x_crc.h"
+  24:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  25:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /** @addtogroup STM32F10x_StdPeriph_Driver
+  26:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @{
+  27:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  28:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  29:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /** @defgroup CRC 
+  30:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @brief CRC driver modules
+  31:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @{
+  32:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cchgZiOo.s 			page 2
+
+
+  33:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  34:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /** @defgroup CRC_Private_TypesDefinitions
+  35:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @{
+  36:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  37:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  38:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /**
+  39:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @}
+  40:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  41:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  42:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /** @defgroup CRC_Private_Defines
+  43:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @{
+  44:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  45:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  46:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /**
+  47:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @}
+  48:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  49:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  50:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /** @defgroup CRC_Private_Macros
+  51:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @{
+  52:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  53:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  54:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /**
+  55:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @}
+  56:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  57:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  58:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /** @defgroup CRC_Private_Variables
+  59:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @{
+  60:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  61:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  62:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /**
+  63:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @}
+  64:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  65:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  66:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /** @defgroup CRC_Private_FunctionPrototypes
+  67:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @{
+  68:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  69:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  70:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /**
+  71:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @}
+  72:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  73:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  74:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /** @defgroup CRC_Private_Functions
+  75:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @{
+  76:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  77:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  78:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /**
+  79:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @brief  Resets the CRC Data register (DR).
+  80:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @param  None
+  81:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @retval None
+  82:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  83:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** void CRC_ResetDR(void)
+  84:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** {
+  27              		.loc 1 84 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cchgZiOo.s 			page 3
+
+
+  32 0000 80B4     		push	{r7}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 4
+  35              		.cfi_offset 7, -4
+  36 0002 00AF     		add	r7, sp, #0
+  37              	.LCFI1:
+  38              		.cfi_def_cfa_register 7
+  85:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   /* Reset CRC generator */
+  86:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   CRC->CR = CRC_CR_RESET;
+  39              		.loc 1 86 6
+  40 0004 034B     		ldr	r3, .L2
+  41              		.loc 1 86 11
+  42 0006 0122     		movs	r2, #1
+  43 0008 9A60     		str	r2, [r3, #8]
+  87:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** }
+  44              		.loc 1 87 1
+  45 000a 00BF     		nop
+  46 000c BD46     		mov	sp, r7
+  47              	.LCFI2:
+  48              		.cfi_def_cfa_register 13
+  49              		@ sp needed
+  50 000e 80BC     		pop	{r7}
+  51              	.LCFI3:
+  52              		.cfi_restore 7
+  53              		.cfi_def_cfa_offset 0
+  54 0010 7047     		bx	lr
+  55              	.L3:
+  56 0012 00BF     		.align	2
+  57              	.L2:
+  58 0014 00300240 		.word	1073885184
+  59              		.cfi_endproc
+  60              	.LFE29:
+  62              		.section	.text.CRC_CalcCRC,"ax",%progbits
+  63              		.align	1
+  64              		.global	CRC_CalcCRC
+  65              		.syntax unified
+  66              		.thumb
+  67              		.thumb_func
+  69              	CRC_CalcCRC:
+  70              	.LFB30:
+  88:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+  89:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /**
+  90:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @brief  Computes the 32-bit CRC of a given data word(32-bit).
+  91:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @param  Data: data word(32-bit) to compute its CRC
+  92:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @retval 32-bit CRC
+  93:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+  94:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** uint32_t CRC_CalcCRC(uint32_t Data)
+  95:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** {
+  71              		.loc 1 95 1
+  72              		.cfi_startproc
+  73              		@ args = 0, pretend = 0, frame = 8
+  74              		@ frame_needed = 1, uses_anonymous_args = 0
+  75              		@ link register save eliminated.
+  76 0000 80B4     		push	{r7}
+  77              	.LCFI4:
+  78              		.cfi_def_cfa_offset 4
+  79              		.cfi_offset 7, -4
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cchgZiOo.s 			page 4
+
+
+  80 0002 83B0     		sub	sp, sp, #12
+  81              	.LCFI5:
+  82              		.cfi_def_cfa_offset 16
+  83 0004 00AF     		add	r7, sp, #0
+  84              	.LCFI6:
+  85              		.cfi_def_cfa_register 7
+  86 0006 7860     		str	r0, [r7, #4]
+  96:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   CRC->DR = Data;
+  87              		.loc 1 96 6
+  88 0008 044A     		ldr	r2, .L6
+  89              		.loc 1 96 11
+  90 000a 7B68     		ldr	r3, [r7, #4]
+  91 000c 1360     		str	r3, [r2]
+  97:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   
+  98:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   return (CRC->DR);
+  92              		.loc 1 98 14
+  93 000e 034B     		ldr	r3, .L6
+  94 0010 1B68     		ldr	r3, [r3]
+  99:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** }
+  95              		.loc 1 99 1
+  96 0012 1846     		mov	r0, r3
+  97 0014 0C37     		adds	r7, r7, #12
+  98              	.LCFI7:
+  99              		.cfi_def_cfa_offset 4
+ 100 0016 BD46     		mov	sp, r7
+ 101              	.LCFI8:
+ 102              		.cfi_def_cfa_register 13
+ 103              		@ sp needed
+ 104 0018 80BC     		pop	{r7}
+ 105              	.LCFI9:
+ 106              		.cfi_restore 7
+ 107              		.cfi_def_cfa_offset 0
+ 108 001a 7047     		bx	lr
+ 109              	.L7:
+ 110              		.align	2
+ 111              	.L6:
+ 112 001c 00300240 		.word	1073885184
+ 113              		.cfi_endproc
+ 114              	.LFE30:
+ 116              		.section	.text.CRC_CalcBlockCRC,"ax",%progbits
+ 117              		.align	1
+ 118              		.global	CRC_CalcBlockCRC
+ 119              		.syntax unified
+ 120              		.thumb
+ 121              		.thumb_func
+ 123              	CRC_CalcBlockCRC:
+ 124              	.LFB31:
+ 100:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+ 101:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /**
+ 102:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @brief  Computes the 32-bit CRC of a given buffer of data word(32-bit).
+ 103:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @param  pBuffer: pointer to the buffer containing the data to be computed
+ 104:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @param  BufferLength: length of the buffer to be computed					
+ 105:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @retval 32-bit CRC
+ 106:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+ 107:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** uint32_t CRC_CalcBlockCRC(uint32_t pBuffer[], uint32_t BufferLength)
+ 108:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** {
+ 125              		.loc 1 108 1
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cchgZiOo.s 			page 5
+
+
+ 126              		.cfi_startproc
+ 127              		@ args = 0, pretend = 0, frame = 16
+ 128              		@ frame_needed = 1, uses_anonymous_args = 0
+ 129              		@ link register save eliminated.
+ 130 0000 80B4     		push	{r7}
+ 131              	.LCFI10:
+ 132              		.cfi_def_cfa_offset 4
+ 133              		.cfi_offset 7, -4
+ 134 0002 85B0     		sub	sp, sp, #20
+ 135              	.LCFI11:
+ 136              		.cfi_def_cfa_offset 24
+ 137 0004 00AF     		add	r7, sp, #0
+ 138              	.LCFI12:
+ 139              		.cfi_def_cfa_register 7
+ 140 0006 7860     		str	r0, [r7, #4]
+ 141 0008 3960     		str	r1, [r7]
+ 109:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   uint32_t index = 0;
+ 142              		.loc 1 109 12
+ 143 000a 0023     		movs	r3, #0
+ 144 000c FB60     		str	r3, [r7, #12]
+ 110:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   
+ 111:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   for(index = 0; index < BufferLength; index++)
+ 145              		.loc 1 111 13
+ 146 000e 0023     		movs	r3, #0
+ 147 0010 FB60     		str	r3, [r7, #12]
+ 148              		.loc 1 111 3
+ 149 0012 09E0     		b	.L9
+ 150              	.L10:
+ 112:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   {
+ 113:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****     CRC->DR = pBuffer[index];
+ 151              		.loc 1 113 22 discriminator 3
+ 152 0014 FB68     		ldr	r3, [r7, #12]
+ 153 0016 9B00     		lsls	r3, r3, #2
+ 154 0018 7A68     		ldr	r2, [r7, #4]
+ 155 001a 1344     		add	r3, r3, r2
+ 156              		.loc 1 113 8 discriminator 3
+ 157 001c 084A     		ldr	r2, .L12
+ 158              		.loc 1 113 22 discriminator 3
+ 159 001e 1B68     		ldr	r3, [r3]
+ 160              		.loc 1 113 13 discriminator 3
+ 161 0020 1360     		str	r3, [r2]
+ 111:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   {
+ 162              		.loc 1 111 45 discriminator 3
+ 163 0022 FB68     		ldr	r3, [r7, #12]
+ 164 0024 0133     		adds	r3, r3, #1
+ 165 0026 FB60     		str	r3, [r7, #12]
+ 166              	.L9:
+ 111:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   {
+ 167              		.loc 1 111 3 discriminator 1
+ 168 0028 FA68     		ldr	r2, [r7, #12]
+ 169 002a 3B68     		ldr	r3, [r7]
+ 170 002c 9A42     		cmp	r2, r3
+ 171 002e F1D3     		bcc	.L10
+ 114:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   }
+ 115:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   return (CRC->DR);
+ 172              		.loc 1 115 14
+ 173 0030 034B     		ldr	r3, .L12
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cchgZiOo.s 			page 6
+
+
+ 174 0032 1B68     		ldr	r3, [r3]
+ 116:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** }
+ 175              		.loc 1 116 1
+ 176 0034 1846     		mov	r0, r3
+ 177 0036 1437     		adds	r7, r7, #20
+ 178              	.LCFI13:
+ 179              		.cfi_def_cfa_offset 4
+ 180 0038 BD46     		mov	sp, r7
+ 181              	.LCFI14:
+ 182              		.cfi_def_cfa_register 13
+ 183              		@ sp needed
+ 184 003a 80BC     		pop	{r7}
+ 185              	.LCFI15:
+ 186              		.cfi_restore 7
+ 187              		.cfi_def_cfa_offset 0
+ 188 003c 7047     		bx	lr
+ 189              	.L13:
+ 190 003e 00BF     		.align	2
+ 191              	.L12:
+ 192 0040 00300240 		.word	1073885184
+ 193              		.cfi_endproc
+ 194              	.LFE31:
+ 196              		.section	.text.CRC_GetCRC,"ax",%progbits
+ 197              		.align	1
+ 198              		.global	CRC_GetCRC
+ 199              		.syntax unified
+ 200              		.thumb
+ 201              		.thumb_func
+ 203              	CRC_GetCRC:
+ 204              	.LFB32:
+ 117:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+ 118:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /**
+ 119:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @brief  Returns the current CRC value.
+ 120:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @param  None
+ 121:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @retval 32-bit CRC
+ 122:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+ 123:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** uint32_t CRC_GetCRC(void)
+ 124:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** {
+ 205              		.loc 1 124 1
+ 206              		.cfi_startproc
+ 207              		@ args = 0, pretend = 0, frame = 0
+ 208              		@ frame_needed = 1, uses_anonymous_args = 0
+ 209              		@ link register save eliminated.
+ 210 0000 80B4     		push	{r7}
+ 211              	.LCFI16:
+ 212              		.cfi_def_cfa_offset 4
+ 213              		.cfi_offset 7, -4
+ 214 0002 00AF     		add	r7, sp, #0
+ 215              	.LCFI17:
+ 216              		.cfi_def_cfa_register 7
+ 125:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   return (CRC->DR);
+ 217              		.loc 1 125 14
+ 218 0004 024B     		ldr	r3, .L16
+ 219 0006 1B68     		ldr	r3, [r3]
+ 126:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** }
+ 220              		.loc 1 126 1
+ 221 0008 1846     		mov	r0, r3
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cchgZiOo.s 			page 7
+
+
+ 222 000a BD46     		mov	sp, r7
+ 223              	.LCFI18:
+ 224              		.cfi_def_cfa_register 13
+ 225              		@ sp needed
+ 226 000c 80BC     		pop	{r7}
+ 227              	.LCFI19:
+ 228              		.cfi_restore 7
+ 229              		.cfi_def_cfa_offset 0
+ 230 000e 7047     		bx	lr
+ 231              	.L17:
+ 232              		.align	2
+ 233              	.L16:
+ 234 0010 00300240 		.word	1073885184
+ 235              		.cfi_endproc
+ 236              	.LFE32:
+ 238              		.section	.text.CRC_SetIDRegister,"ax",%progbits
+ 239              		.align	1
+ 240              		.global	CRC_SetIDRegister
+ 241              		.syntax unified
+ 242              		.thumb
+ 243              		.thumb_func
+ 245              	CRC_SetIDRegister:
+ 246              	.LFB33:
+ 127:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+ 128:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /**
+ 129:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @brief  Stores a 8-bit data in the Independent Data(ID) register.
+ 130:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @param  IDValue: 8-bit value to be stored in the ID register 					
+ 131:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @retval None
+ 132:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+ 133:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** void CRC_SetIDRegister(uint8_t IDValue)
+ 134:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** {
+ 247              		.loc 1 134 1
+ 248              		.cfi_startproc
+ 249              		@ args = 0, pretend = 0, frame = 8
+ 250              		@ frame_needed = 1, uses_anonymous_args = 0
+ 251              		@ link register save eliminated.
+ 252 0000 80B4     		push	{r7}
+ 253              	.LCFI20:
+ 254              		.cfi_def_cfa_offset 4
+ 255              		.cfi_offset 7, -4
+ 256 0002 83B0     		sub	sp, sp, #12
+ 257              	.LCFI21:
+ 258              		.cfi_def_cfa_offset 16
+ 259 0004 00AF     		add	r7, sp, #0
+ 260              	.LCFI22:
+ 261              		.cfi_def_cfa_register 7
+ 262 0006 0346     		mov	r3, r0
+ 263 0008 FB71     		strb	r3, [r7, #7]
+ 135:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   CRC->IDR = IDValue;
+ 264              		.loc 1 135 6
+ 265 000a 044A     		ldr	r2, .L19
+ 266              		.loc 1 135 12
+ 267 000c FB79     		ldrb	r3, [r7, #7]
+ 268 000e 1371     		strb	r3, [r2, #4]
+ 136:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** }
+ 269              		.loc 1 136 1
+ 270 0010 00BF     		nop
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cchgZiOo.s 			page 8
+
+
+ 271 0012 0C37     		adds	r7, r7, #12
+ 272              	.LCFI23:
+ 273              		.cfi_def_cfa_offset 4
+ 274 0014 BD46     		mov	sp, r7
+ 275              	.LCFI24:
+ 276              		.cfi_def_cfa_register 13
+ 277              		@ sp needed
+ 278 0016 80BC     		pop	{r7}
+ 279              	.LCFI25:
+ 280              		.cfi_restore 7
+ 281              		.cfi_def_cfa_offset 0
+ 282 0018 7047     		bx	lr
+ 283              	.L20:
+ 284 001a 00BF     		.align	2
+ 285              	.L19:
+ 286 001c 00300240 		.word	1073885184
+ 287              		.cfi_endproc
+ 288              	.LFE33:
+ 290              		.section	.text.CRC_GetIDRegister,"ax",%progbits
+ 291              		.align	1
+ 292              		.global	CRC_GetIDRegister
+ 293              		.syntax unified
+ 294              		.thumb
+ 295              		.thumb_func
+ 297              	CRC_GetIDRegister:
+ 298              	.LFB34:
+ 137:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** 
+ 138:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** /**
+ 139:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @brief  Returns the 8-bit data stored in the Independent Data(ID) register
+ 140:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @param  None
+ 141:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   * @retval 8-bit value of the ID register 
+ 142:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   */
+ 143:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** uint8_t CRC_GetIDRegister(void)
+ 144:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** {
+ 299              		.loc 1 144 1
+ 300              		.cfi_startproc
+ 301              		@ args = 0, pretend = 0, frame = 0
+ 302              		@ frame_needed = 1, uses_anonymous_args = 0
+ 303              		@ link register save eliminated.
+ 304 0000 80B4     		push	{r7}
+ 305              	.LCFI26:
+ 306              		.cfi_def_cfa_offset 4
+ 307              		.cfi_offset 7, -4
+ 308 0002 00AF     		add	r7, sp, #0
+ 309              	.LCFI27:
+ 310              		.cfi_def_cfa_register 7
+ 145:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c ****   return (CRC->IDR);
+ 311              		.loc 1 145 14
+ 312 0004 034B     		ldr	r3, .L23
+ 313 0006 1B79     		ldrb	r3, [r3, #4]
+ 314 0008 DBB2     		uxtb	r3, r3
+ 146:./Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c **** }
+ 315              		.loc 1 146 1
+ 316 000a 1846     		mov	r0, r3
+ 317 000c BD46     		mov	sp, r7
+ 318              	.LCFI28:
+ 319              		.cfi_def_cfa_register 13
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cchgZiOo.s 			page 9
+
+
+ 320              		@ sp needed
+ 321 000e 80BC     		pop	{r7}
+ 322              	.LCFI29:
+ 323              		.cfi_restore 7
+ 324              		.cfi_def_cfa_offset 0
+ 325 0010 7047     		bx	lr
+ 326              	.L24:
+ 327 0012 00BF     		.align	2
+ 328              	.L23:
+ 329 0014 00300240 		.word	1073885184
+ 330              		.cfi_endproc
+ 331              	.LFE34:
+ 333              		.text
+ 334              	.Letext0:
+ 335              		.file 2 "c:\\gcc-arm-none-eabi\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 336              		.file 3 "c:\\gcc-arm-none-eabi\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 337              		.file 4 "./Libraries/CMSIS/stm32f10x.h"
+ARM GAS  C:\Users\hao\AppData\Local\Temp\cchgZiOo.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f10x_crc.c
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:18     .text.CRC_ResetDR:00000000 $t
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:24     .text.CRC_ResetDR:00000000 CRC_ResetDR
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:58     .text.CRC_ResetDR:00000014 $d
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:63     .text.CRC_CalcCRC:00000000 $t
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:69     .text.CRC_CalcCRC:00000000 CRC_CalcCRC
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:112    .text.CRC_CalcCRC:0000001c $d
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:117    .text.CRC_CalcBlockCRC:00000000 $t
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:123    .text.CRC_CalcBlockCRC:00000000 CRC_CalcBlockCRC
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:192    .text.CRC_CalcBlockCRC:00000040 $d
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:197    .text.CRC_GetCRC:00000000 $t
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:203    .text.CRC_GetCRC:00000000 CRC_GetCRC
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:234    .text.CRC_GetCRC:00000010 $d
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:239    .text.CRC_SetIDRegister:00000000 $t
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:245    .text.CRC_SetIDRegister:00000000 CRC_SetIDRegister
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:286    .text.CRC_SetIDRegister:0000001c $d
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:291    .text.CRC_GetIDRegister:00000000 $t
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:297    .text.CRC_GetIDRegister:00000000 CRC_GetIDRegister
+C:\Users\hao\AppData\Local\Temp\cchgZiOo.s:329    .text.CRC_GetIDRegister:00000014 $d
+
+NO UNDEFINED SYMBOLS

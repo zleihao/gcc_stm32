@@ -1,0 +1,281 @@
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccshiguI.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.arch armv7-m
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.led1_thread,"aw",%nobits
+  18              		.align	2
+  21              	led1_thread:
+  22 0000 00000000 		.space	4
+  23              		.section	.rodata
+  24              		.align	2
+  25              	.LC0:
+  26 0000 6C656431 		.ascii	"led1\000"
+  26      00
+  27              		.section	.text.main,"ax",%progbits
+  28              		.align	1
+  29              		.global	main
+  30              		.syntax unified
+  31              		.thumb
+  32              		.thumb_func
+  34              	main:
+  35              	.LFB47:
+  36              		.file 1 "./User/Src/main.c"
+   1:./User/Src/main.c **** #if defined(RT_USING_USER_MAIN) && defined(RT_USING_HEAP)
+   2:./User/Src/main.c **** #define RT_HEAP_SIZE 1024
+   3:./User/Src/main.c **** /* 从内部SRAM里面分配一部分静态内存来作为rtt的堆空间，这里配置为4KB */
+   4:./User/Src/main.c **** static uint32_t rt_heap[RT_HEAP_SIZE];
+   5:./User/Src/main.c **** RT_WEAK void *rt_heap_begin_get(void)
+   6:./User/Src/main.c **** {
+   7:./User/Src/main.c ****     return rt_heap;
+   8:./User/Src/main.c **** }
+   9:./User/Src/main.c **** 
+  10:./User/Src/main.c **** RT_WEAK void *rt_heap_end_get(void)
+  11:./User/Src/main.c **** {
+  12:./User/Src/main.c ****     return rt_heap + RT_HEAP_SIZE;
+  13:./User/Src/main.c **** }
+  14:./User/Src/main.c **** #endif
+  15:./User/Src/main.c **** 
+  16:./User/Src/main.c **** /* 该部分代码截取自函数rt_hw_board_init() */
+  17:./User/Src/main.c **** #if defined(RT_USING_USER_MAIN) && defined(RT_USING_HEAP)
+  18:./User/Src/main.c **** //rt_system_heap_init((void*)HEAP_BEGIN, (void*)SRAM_END);
+  19:./User/Src/main.c **** rt_system_heap_init(rt_heap_begin_get(), rt_heap_end_get());
+  20:./User/Src/main.c **** #endif
+  21:./User/Src/main.c **** 
+  22:./User/Src/main.c **** 
+  23:./User/Src/main.c **** /*
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccshiguI.s 			page 2
+
+
+  24:./User/Src/main.c **** *************************************************************************
+  25:./User/Src/main.c **** *                             包含的头文件
+  26:./User/Src/main.c **** *************************************************************************
+  27:./User/Src/main.c **** */
+  28:./User/Src/main.c **** #include "board.h"
+  29:./User/Src/main.c **** #include "rtthread.h"
+  30:./User/Src/main.c **** 
+  31:./User/Src/main.c **** 
+  32:./User/Src/main.c **** /*
+  33:./User/Src/main.c **** *************************************************************************
+  34:./User/Src/main.c **** *                               变量
+  35:./User/Src/main.c **** *************************************************************************
+  36:./User/Src/main.c **** */
+  37:./User/Src/main.c **** /* 定义线程控制块指针 */
+  38:./User/Src/main.c **** static rt_thread_t led1_thread = RT_NULL;
+  39:./User/Src/main.c **** 
+  40:./User/Src/main.c **** /*
+  41:./User/Src/main.c **** *************************************************************************
+  42:./User/Src/main.c **** *                             函数声明
+  43:./User/Src/main.c **** *************************************************************************
+  44:./User/Src/main.c **** */
+  45:./User/Src/main.c **** static void led1_thread_entry(void* parameter);
+  46:./User/Src/main.c **** 
+  47:./User/Src/main.c **** 
+  48:./User/Src/main.c **** /*
+  49:./User/Src/main.c **** *************************************************************************
+  50:./User/Src/main.c **** *                             main 函数
+  51:./User/Src/main.c **** *************************************************************************
+  52:./User/Src/main.c **** */
+  53:./User/Src/main.c **** /**
+  54:./User/Src/main.c **** * @brief  主函数
+  55:./User/Src/main.c **** * @param  无
+  56:./User/Src/main.c **** * @retval 无
+  57:./User/Src/main.c **** */
+  58:./User/Src/main.c **** int main(void)
+  59:./User/Src/main.c **** {
+  37              		.loc 1 59 1
+  38              		.cfi_startproc
+  39              		@ args = 0, pretend = 0, frame = 0
+  40              		@ frame_needed = 1, uses_anonymous_args = 0
+  41 0000 80B5     		push	{r7, lr}
+  42              	.LCFI0:
+  43              		.cfi_def_cfa_offset 8
+  44              		.cfi_offset 7, -8
+  45              		.cfi_offset 14, -4
+  46 0002 82B0     		sub	sp, sp, #8
+  47              	.LCFI1:
+  48              		.cfi_def_cfa_offset 16
+  49 0004 02AF     		add	r7, sp, #8
+  50              	.LCFI2:
+  51              		.cfi_def_cfa 7, 8
+  60:./User/Src/main.c ****     /*
+  61:./User/Src/main.c ****     * 开发板硬件初始化，RTT系统初始化已经在main函数之前完成，
+  62:./User/Src/main.c ****     * 即在component.c文件中的rtthread_startup()函数中完成了。
+  63:./User/Src/main.c ****     * 所以在main函数中，只需要创建线程和启动线程即可。
+  64:./User/Src/main.c ****     */
+  65:./User/Src/main.c **** 
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccshiguI.s 			page 3
+
+
+  66:./User/Src/main.c ****     led1_thread =                          /* 线程控制块指针 */
+  67:./User/Src/main.c ****     rt_thread_create( "led1",              /* 线程名字 */
+  52              		.loc 1 67 5
+  53 0006 1423     		movs	r3, #20
+  54 0008 0193     		str	r3, [sp, #4]
+  55 000a 0323     		movs	r3, #3
+  56 000c 0093     		str	r3, [sp]
+  57 000e 4FF40073 		mov	r3, #512
+  58 0012 0022     		movs	r2, #0
+  59 0014 0B49     		ldr	r1, .L5
+  60 0016 0C48     		ldr	r0, .L5+4
+  61 0018 FFF7FEFF 		bl	rt_thread_create
+  62 001c 0346     		mov	r3, r0
+  66:./User/Src/main.c ****     rt_thread_create( "led1",              /* 线程名字 */
+  63              		.loc 1 66 17
+  64 001e 0B4A     		ldr	r2, .L5+8
+  65 0020 1360     		str	r3, [r2]
+  68:./User/Src/main.c ****                     led1_thread_entry,   /* 线程入口函数 */
+  69:./User/Src/main.c ****                     RT_NULL,             /* 线程入口函数参数 */
+  70:./User/Src/main.c ****                     512,                 /* 线程栈大小 */
+  71:./User/Src/main.c ****                     3,                   /* 线程的优先级 */
+  72:./User/Src/main.c ****                     20);                 /* 线程时间片 */
+  73:./User/Src/main.c **** 
+  74:./User/Src/main.c ****     /* 启动线程，开启调度 */
+  75:./User/Src/main.c ****     if (led1_thread != RT_NULL)
+  66              		.loc 1 75 21
+  67 0022 0A4B     		ldr	r3, .L5+8
+  68 0024 1B68     		ldr	r3, [r3]
+  69              		.loc 1 75 8
+  70 0026 002B     		cmp	r3, #0
+  71 0028 06D0     		beq	.L2
+  76:./User/Src/main.c ****         rt_thread_startup(led1_thread);
+  72              		.loc 1 76 9
+  73 002a 084B     		ldr	r3, .L5+8
+  74 002c 1B68     		ldr	r3, [r3]
+  75 002e 1846     		mov	r0, r3
+  76 0030 FFF7FEFF 		bl	rt_thread_startup
+  77 0034 0023     		movs	r3, #0
+  78 0036 01E0     		b	.L4
+  79              	.L2:
+  77:./User/Src/main.c ****     else
+  78:./User/Src/main.c ****         return -1;
+  80              		.loc 1 78 16
+  81 0038 4FF0FF33 		mov	r3, #-1
+  82              	.L4:
+  79:./User/Src/main.c **** }
+  83              		.loc 1 79 1
+  84 003c 1846     		mov	r0, r3
+  85 003e BD46     		mov	sp, r7
+  86              	.LCFI3:
+  87              		.cfi_def_cfa_register 13
+  88              		@ sp needed
+  89 0040 80BD     		pop	{r7, pc}
+  90              	.L6:
+  91 0042 00BF     		.align	2
+  92              	.L5:
+  93 0044 00000000 		.word	led1_thread_entry
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccshiguI.s 			page 4
+
+
+  94 0048 00000000 		.word	.LC0
+  95 004c 00000000 		.word	led1_thread
+  96              		.cfi_endproc
+  97              	.LFE47:
+  99              		.section	.text.led1_thread_entry,"ax",%progbits
+ 100              		.align	1
+ 101              		.syntax unified
+ 102              		.thumb
+ 103              		.thumb_func
+ 105              	led1_thread_entry:
+ 106              	.LFB48:
+  80:./User/Src/main.c **** 
+  81:./User/Src/main.c **** /*
+  82:./User/Src/main.c **** *************************************************************************
+  83:./User/Src/main.c **** *                             线程定义
+  84:./User/Src/main.c **** *************************************************************************
+  85:./User/Src/main.c **** */
+  86:./User/Src/main.c **** 
+  87:./User/Src/main.c **** static void led1_thread_entry(void* parameter)
+  88:./User/Src/main.c **** {
+ 107              		.loc 1 88 1
+ 108              		.cfi_startproc
+ 109              		@ args = 0, pretend = 0, frame = 8
+ 110              		@ frame_needed = 1, uses_anonymous_args = 0
+ 111 0000 80B5     		push	{r7, lr}
+ 112              	.LCFI4:
+ 113              		.cfi_def_cfa_offset 8
+ 114              		.cfi_offset 7, -8
+ 115              		.cfi_offset 14, -4
+ 116 0002 82B0     		sub	sp, sp, #8
+ 117              	.LCFI5:
+ 118              		.cfi_def_cfa_offset 16
+ 119 0004 00AF     		add	r7, sp, #0
+ 120              	.LCFI6:
+ 121              		.cfi_def_cfa_register 7
+ 122 0006 7860     		str	r0, [r7, #4]
+ 123              	.L8:
+  89:./User/Src/main.c ****     while (1)
+  90:./User/Src/main.c ****     {
+  91:./User/Src/main.c ****         LED_G(OFF);
+ 124              		.loc 1 91 9
+ 125 0008 0121     		movs	r1, #1
+ 126 000a 0848     		ldr	r0, .L9
+ 127 000c FFF7FEFF 		bl	GPIO_SetBits
+  92:./User/Src/main.c ****         rt_thread_delay(500);   /* 延时500个tick */
+ 128              		.loc 1 92 9
+ 129 0010 4FF4FA70 		mov	r0, #500
+ 130 0014 FFF7FEFF 		bl	rt_thread_delay
+  93:./User/Src/main.c ****         //rt_kprintf("led1_thread running,LED1_OFF\r\n");
+  94:./User/Src/main.c **** 
+  95:./User/Src/main.c ****         LED_G(ON);
+ 131              		.loc 1 95 9
+ 132 0018 0121     		movs	r1, #1
+ 133 001a 0448     		ldr	r0, .L9
+ 134 001c FFF7FEFF 		bl	GPIO_ResetBits
+  96:./User/Src/main.c ****         rt_thread_delay(500);   /* 延时500个tick */
+ 135              		.loc 1 96 9
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccshiguI.s 			page 5
+
+
+ 136 0020 4FF4FA70 		mov	r0, #500
+ 137 0024 FFF7FEFF 		bl	rt_thread_delay
+  91:./User/Src/main.c ****         rt_thread_delay(500);   /* 延时500个tick */
+ 138              		.loc 1 91 9
+ 139 0028 EEE7     		b	.L8
+ 140              	.L10:
+ 141 002a 00BF     		.align	2
+ 142              	.L9:
+ 143 002c 000C0140 		.word	1073810432
+ 144              		.cfi_endproc
+ 145              	.LFE48:
+ 147              		.text
+ 148              	.Letext0:
+ 149              		.file 2 "c:\\gcc-arm-none-eabi\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 150              		.file 3 "c:\\gcc-arm-none-eabi\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 151              		.file 4 "./Libraries/CMSIS/stm32f10x.h"
+ 152              		.file 5 "./rt_thread/include/rtdef.h"
+ARM GAS  C:\Users\hao\AppData\Local\Temp\ccshiguI.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\hao\AppData\Local\Temp\ccshiguI.s:18     .bss.led1_thread:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccshiguI.s:21     .bss.led1_thread:00000000 led1_thread
+C:\Users\hao\AppData\Local\Temp\ccshiguI.s:24     .rodata:00000000 $d
+C:\Users\hao\AppData\Local\Temp\ccshiguI.s:28     .text.main:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccshiguI.s:34     .text.main:00000000 main
+C:\Users\hao\AppData\Local\Temp\ccshiguI.s:93     .text.main:00000044 $d
+C:\Users\hao\AppData\Local\Temp\ccshiguI.s:105    .text.led1_thread_entry:00000000 led1_thread_entry
+C:\Users\hao\AppData\Local\Temp\ccshiguI.s:100    .text.led1_thread_entry:00000000 $t
+C:\Users\hao\AppData\Local\Temp\ccshiguI.s:143    .text.led1_thread_entry:0000002c $d
+
+UNDEFINED SYMBOLS
+rt_thread_create
+rt_thread_startup
+GPIO_SetBits
+rt_thread_delay
+GPIO_ResetBits
