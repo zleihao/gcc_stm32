@@ -31,8 +31,8 @@ $(wildcard $(SYS_SOURCE)/*/*.c)
 
 ######################################
 #openocd路径配置 
-OPENOCD_DOWN_PATH = /usr/share/openocd/scripts/interface/cmsis-dap.cfg
-OPENOCD_CHIP_PATH = /usr/share/openocd/scripts/target/stm32f1x.cfg
+OPENOCD_DOWN_PATH = C:/openocd/scripts/interface/cmsis-dap.cfg
+OPENOCD_CHIP_PATH = C:/openocd/scripts/target/stm32f1x.cfg
 
 ######################################
 #芯片flash大小选择
